@@ -1,0 +1,6 @@
+package-lock.json
+node_modules/
+/.idea
+.DS_Store
+Thumbs.db
+public/assets
