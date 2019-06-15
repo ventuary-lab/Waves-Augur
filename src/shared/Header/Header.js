@@ -22,7 +22,7 @@ export default class Header extends React.PureComponent {
     };
 
     render() {
-        console.log(this.props.navItems);
+        console.log(11, this.props.navItems);
         return (
             <header className={bem.block()}>
                 {this.props.navItems.map((navItem, index) => (
