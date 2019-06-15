@@ -8,6 +8,8 @@ import {html} from 'components';
 import NavItemSchema from './../../types/NavItemSchema';
 import RoutesEnum from '../../enums/RoutesEnum';
 
+import './Header.scss';
+
 const bem = html.bem('Header');
 
 @connect(
@@ -27,6 +29,7 @@ export default class Header extends React.PureComponent {
             <header className={bem.block()}>
                 {this.props.navItems.map((navItem, index) => (
                     <Link
+                        className={bem.element('link')}
                         to={navItem.url}
                         label={navItem.label}
                         key={index}
