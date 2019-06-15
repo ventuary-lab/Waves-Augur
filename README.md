@@ -2,7 +2,7 @@
 Prediction Markets based on Waves RIDE for dApps DEMO case
  
 ## Установка
-1. Убедитесь что у вас установлен [nodejs](https://nodejs.org) и [yarn](https://yarnpkg.com)
+1. Убедитесь что у вас установлен [nodejs](https://nodejs.org) и [npm](https://yarnpkg.com)
 
 2. Клонируйте репозиторий
     ```sh
@@ -16,7 +16,7 @@ Prediction Markets based on Waves RIDE for dApps DEMO case
 
 4. Установите зависимости
     ```sh
-    $ yarn
+    $ npm install
     ```
 
 5. Запустите проект.
@@ -31,7 +31,7 @@ Prediction Markets based on Waves RIDE for dApps DEMO case
  - сборка в статичном виде
  
  ```
- $ yarn node webpack production
+ $ npm node webpack production
  ```
 
 
