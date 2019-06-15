@@ -28,14 +28,6 @@ module.exports = {
                         loader: 'css-loader'
                     },
                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: [
-                                autoprefixer({browsers: ['ie >= 10', 'last 4 version']}),
-                            ],
-                        }
-                    },
-                    {
                         loader: 'sass-loader'
                     },
                 ]
