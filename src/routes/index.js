@@ -2,35 +2,43 @@ import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
 import CommunityPage from './CommunityPage';
-import UserRole from 'enums/UserRole';
+import RoutesEnum from '../enums/RoutesEnum';
 
 export default {
-    label: __('Главная'),
+    id: RoutesEnum.MAIN,
     exact: true,
+    isVisible: true,
     path: '/',
     component: IndexPage,
-    roles: UserRole.getKeys(),
-    items: {
-        catalog: {
-            label: __('О проекте'),
+    label: RoutesEnum.MAIN,
+    title: RoutesEnum.getLabel(RoutesEnum.MAIN),
+    items: [
+        {
+            id: RoutesEnum.ABOUT,
             exact: true,
+            isVisible: true,
             path: '/about',
             component: AboutPage,
-            roles: UserRole.getKeys()
+            label: RoutesEnum.ABOUT,
+            title: RoutesEnum.getLabel(RoutesEnum.ABOUT),
         },
-        news: {
-            label: __('Новости'),
+        {
+            id: RoutesEnum.NEWS,
             exact: true,
+            isVisible: true,
             path: '/news',
             component: NewsPage,
-            roles: UserRole.getKeys()
+            label: RoutesEnum.NEWS,
+            title: RoutesEnum.getLabel(RoutesEnum.NEWS),
         },
-        community: {
-            label: __('Сообщество'),
+        {
+            id: RoutesEnum.COMMUNITY,
             exact: true,
+            isVisible: true,
             path: '/community',
             component: CommunityPage,
-            roles: UserRole.getKeys()
+            label: RoutesEnum.COMMUNITY,
+            title: RoutesEnum.getLabel(RoutesEnum.COMMUNITY),
         },
-    }
+    ],
 };

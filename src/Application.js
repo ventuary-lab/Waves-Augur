@@ -16,11 +16,21 @@ ui.addFormatters(require.context('yii-steroids/ui', true, /Formatter.js$/));
 @hot(module)
 export default class Application extends React.PureComponent {
 
+    static treeToList(item) {
+        let items = [item];
+        if (item.items) {
+            item.items.forEach(sub => {
+                items = items.concat(Application.treeToList(sub));
+            });
+        }
+        return items;
+    }
+
     render() {
         return (
             <Router
                 wrapperView={Layout}
-                routes={routes}
+                routes={Application.treeToList(routes)}
             />
         );
     }
