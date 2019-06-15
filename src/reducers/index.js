@@ -1,4 +1,4 @@
-import { combineReducers, ReducersMapObject } from 'redux';
+import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import fields from 'yii-steroids/reducers/fields';
 import list from 'yii-steroids/reducers/list';

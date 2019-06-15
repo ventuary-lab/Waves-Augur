@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
-import { NavLink } from 'react-router-dom';
+import Link from 'yii-steroids/ui/nav/Link';
 
 import {html} from 'components';
 import NavItemSchema from './../../types/NavItemSchema';
@@ -26,12 +26,11 @@ export default class Header extends React.PureComponent {
         return (
             <header className={bem.block()}>
                 {this.props.navItems.map((navItem, index) => (
-                    <NavLink
+                    <Link
                         to={navItem.url}
+                        label={navItem.label}
                         key={index}
-                    >
-                        {navItem.label}
-                    </NavLink>
+                    />
                 ))}
             </header>
         );

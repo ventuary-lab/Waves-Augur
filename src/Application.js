@@ -4,7 +4,7 @@ import Router from 'yii-steroids/ui/nav/Router';
 
 import {ui} from 'components';
 import Layout from 'shared/Layout';
-import routes from './routes';
+import routesTree from './routes/index';
 
 // Automatically import all views from yii-steroids
 ui.addViews(require.context('yii-steroids/ui', true, /View.js$/));
@@ -30,7 +30,7 @@ export default class Application extends React.PureComponent {
         return (
             <Router
                 wrapperView={Layout}
-                routes={Application.treeToList(routes)}
+                routes={Application.treeToList(routesTree)}
             />
         );
     }
