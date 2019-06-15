@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {getNavItems} from 'yii-steroids/reducers/navigation';
-import Link from 'yii-steroids/ui/nav/Link';
+import {getNavItems} from 'reducers/navigation';
+import Link from 'ui/nav/Link';
 
 import {html} from 'components';
 import NavItemSchema from './../../types/NavItemSchema';

@@ -1,14 +1,15 @@
-import { combineReducers } from 'redux';
-import { reducer as form } from 'redux-form';
-import fields from 'yii-steroids/reducers/fields';
-import list from 'yii-steroids/reducers/list';
-import config from 'yii-steroids/reducers/config';
-import notifications from 'yii-steroids/reducers/notifications';
-import navigation from 'yii-steroids/reducers/navigation';
-import modal from 'yii-steroids/reducers/modal';
-import routing from 'yii-steroids/reducers/routing';
+import {combineReducers} from 'redux';
+import {reducer as form} from 'redux-form';
 
-export default asyncReducers => combineReducers({
+import fields from './fields';
+import list from './list';
+import config from './config';
+import notifications from './notifications';
+import modal from './modal';
+import routing from './routing';
+import navigation from './navigation';
+
+export {
     form,
     fields,
     list,
@@ -17,5 +18,15 @@ export default asyncReducers => combineReducers({
     modal,
     routing,
     navigation,
-    ...asyncReducers
+};
+
+export default combineReducers({
+    form,
+    fields,
+    list,
+    config,
+    notifications,
+    modal,
+    routing,
+    navigation,
 });

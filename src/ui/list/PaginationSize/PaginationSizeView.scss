@@ -1,0 +1,13 @@
+.PaginationSizeView {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &__label {
+    margin-right: 5px;
+  }
+
+  &__sizes {
+    margin-bottom: 0;
+  }
+}

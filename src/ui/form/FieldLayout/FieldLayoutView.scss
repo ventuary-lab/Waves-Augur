@@ -1,0 +1,21 @@
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+
+.FieldLayoutView {
+  &__label {
+    &_required:after {
+      display: inline-block;
+      content: '*';
+      color: $danger;
+      margin: 0 0 0 3px;
+    }
+  }
+  &__invalid-feedback {
+    display: block !important;
+  }
+  &__hint {
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+  }
+}

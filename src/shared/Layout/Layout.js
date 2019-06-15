@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
+import ModalWrapper from 'ui/modal/ModalWrapper';
 
 import {html, http} from 'components';
 import Header from 'shared/Header';

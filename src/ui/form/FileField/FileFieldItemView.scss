@@ -1,0 +1,36 @@
+.FileFieldItemView {
+  width: 200px;
+  font-size: $font-size-sm;
+
+  &__blank-img {
+    font-size: 48px;
+    text-align: center;
+    padding: 25px 0;
+    width: 100%;
+  }
+
+  &__text {
+    max-height: 80px;
+    overflow: hidden;
+  }
+
+  &__remove {
+    position: absolute;
+    top: 0;
+    righT: 0;
+    display: none;
+    cursor: pointer;
+    padding: .5em;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 1;
+    margin: 0;
+    font-size: 24px;
+
+    > span {
+      text-shadow: 0 0 1px #fff;
+    }
+  }
+  &:hover &__remove {
+    display: block;
+  }
+}

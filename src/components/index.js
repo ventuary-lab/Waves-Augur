@@ -1,32 +1,42 @@
 import _merge from 'lodash-es/merge';
 
-import ClientStorageComponent from 'yii-steroids/components/ClientStorageComponent';
-import HtmlComponent from 'yii-steroids/components/HtmlComponent';
-import HttpComponent from 'yii-steroids/components/HttpComponent';
-import LocaleComponent from 'yii-steroids/components/LocaleComponent';
-import ResourceComponent from 'yii-steroids/components/ResourceComponent';
-import StoreComponent from 'yii-steroids/components/StoreComponent';
-import UiComponent from 'yii-steroids/components/UiComponent';
+import ClientStorageComponent from './ClientStorageComponent';
+import HtmlComponent from './HtmlComponent';
+import HttpComponent from './HttpComponent';
+import LocaleComponent from './LocaleComponent';
+import ResourceComponent from './ResourceComponent';
+import StoreComponent from './StoreComponent';
+import UiComponent from './UiComponent';
+import WidgetComponent from './WidgetComponent';
 
 // Create instances
-export const clientStorage = new ClientStorageComponent();
-export const html = new HtmlComponent();
-export const http = new HttpComponent();
-export const locale = new LocaleComponent();
-export const resource = new ResourceComponent();
-export const store = new StoreComponent();
-export const ui = new UiComponent();
+const clientStorage = new ClientStorageComponent();
+const html = new HtmlComponent();
+const http = new HttpComponent();
+const locale = new LocaleComponent();
+const resource = new ResourceComponent();
+const store = new StoreComponent();
+const ui = new UiComponent();
+const widget = new WidgetComponent();
 
-const instances = {
+// Apply configuration
+const customConfig = store.getState().config || {};
+_merge(clientStorage, customConfig.clientStorage);
+_merge(html, customConfig.html);
+_merge(http, customConfig.http);
+_merge(locale, customConfig.locale);
+_merge(resource, customConfig.resource);
+_merge(store, customConfig.store);
+_merge(ui, customConfig.ui);
+_merge(widget, customConfig.widget);
+
+export {
     clientStorage,
     html,
     http,
     locale,
     resource,
     store,
-    ui
+    ui,
+    widget,
 };
-
-Object.keys(instances).forEach(name => {
-    _merge( instances[name] || {});
-});

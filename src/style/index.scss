@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
 html {
     position: relative;
     height: 100%;
@@ -7,3 +9,28 @@ body {
     height: 100%;
 }
 
+/* Material Icons */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../static/fonts/Material-Icons.woff2') format('woff2');
+}
+
+.Icon, .material-icons {
+    position: relative;
+    top: 4px;
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 112.5%;
+    line-height: 10px;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}

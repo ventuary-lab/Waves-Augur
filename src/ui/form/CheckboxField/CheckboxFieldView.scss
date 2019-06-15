@@ -1,0 +1,15 @@
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+
+.CheckboxFieldView {
+  display: inline-block;
+
+  &__label-text {
+    &_required:after {
+      display: inline-block;
+      content: '*';
+      color: $danger;
+      margin: 0 0 0 3px;
+    }
+  }
+}
