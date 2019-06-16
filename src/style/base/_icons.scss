@@ -1,0 +1,11 @@
+@import '../../../../Waves-Augur/src/style/helpers/mixins';
+
+$icons-dir: '../static/icons';
+
+.Icon {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 16px;
+  min-height: 16px;
+}

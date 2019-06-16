@@ -1,0 +1,187 @@
+@import 'vars';
+@import 'mixins';
+
+$col-length: 12;
+$col-width: percentage(100/$col-length)/100;
+
+.row {
+  @include clearfix;
+  margin-left: -($grid-offset-mobile / 2);
+  margin-right: -($grid-offset-mobile / 2);
+  display: flex;
+  flex-wrap: wrap;
+
+  @include tablet {
+    margin-left: -($grid-offset-tablet / 2);
+    margin-right: -($grid-offset-tablet / 2);
+  }
+
+  @include desktop {
+    margin-left: -($grid-offset-desktop / 2);
+    margin-right: -($grid-offset-desktop / 2);
+  }
+
+  &_without-push {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.col {
+  float: left;
+  width: 100%;
+  padding-left: $grid-offset-mobile / 2;
+  padding-right: $grid-offset-mobile / 2;
+  box-sizing: border-box;
+
+  @include desktop {
+    padding-left: $grid-offset-desktop / 2;
+    padding-right: $grid-offset-desktop / 2;
+  }
+
+  @include tablet {
+    padding-left: $grid-offset-tablet / 2;
+    padding-right: $grid-offset-tablet / 2;
+  }
+
+  &_zero {
+    &-left {
+      padding-left: 0;
+    }
+
+    &-right {
+      padding-right: 0;
+    }
+
+    &-both {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  &_full-width {
+    padding-left: 0;
+    padding-right: 0;
+
+  }
+  &_reverse {
+    float: right;
+    order: 2;
+  }
+
+  @include desktop {
+    &_unique {
+      padding-left: 3 * ($grid-offset-desktop / 2);
+    }
+    &_full-width {
+      margin-left: -($grid-offset-desktop / 2);
+      margin-right: -($grid-offset-desktop / 2);
+      width: calc(100% + #{$grid-offset-desktop});
+    }
+  }
+  @include tablet {
+    &_full-width {
+      margin-left: -($grid-offset-tablet / 2);
+      margin-right: -($grid-offset-tablet / 2);
+      width: calc(100% + #{$grid-offset-tablet});
+    }
+  }
+  @include phone {
+    &_full-width {
+      margin-left: -($grid-offset-mobile / 2);
+      margin-right: -($grid-offset-mobile / 2);
+      width: calc(100% + #{$grid-offset-mobile});
+    }
+  }
+}
+
+// Cols Count
+@for $i from 1 through 12 {
+  .col_count-#{$i} {
+    width: $col-width * $i;
+  }
+
+  .col_coffset-#{$i} {
+    margin-left: $col-width * $i;
+  }
+
+  .col_push-#{$i} {
+    position: relative;
+    left: $col-width * $i;
+  }
+
+  .col_pull-#{$i} {
+    position: relative;
+    right: $col-width * $i;
+  }
+}
+
+// Cols Count - Tablet
+@for $i from 1 through 12 {
+  @include tablet {
+    .col_tablet-count-#{$i} {
+      width: $col-width * $i;
+    }
+
+    .col_tablet-coffset-#{$i} {
+      margin-left: $col-width * $i;
+    }
+
+    .col_tablet-push-#{$i} {
+      position: relative;
+      left: $col-width * $i;
+    }
+
+    .col_tablet-pull-#{$i} {
+      position: relative;
+      right: $col-width * $i;
+    }
+  }
+}
+//TO DO find normal solution
+//fix safari bug
+@include tablet {
+  .col_tablet-count-6 {
+    width: 49.9%;
+  }
+}
+
+// Cols Count - Desktop
+@for $i from 1 through 12 {
+  $half-col: (100/12)/2;
+  @include desktop {
+    .col_desk-count-#{$i} {
+      width: $col-width * $i;
+    }
+
+    .col_desk-count-#{$i}-half {
+      width: ($col-width * $i) + $half-col;
+    }
+
+    .col_desk-coffset-#{$i} {
+      margin-left: $col-width * $i;
+    }
+
+    .col_desk-push-#{$i} {
+      position: relative;
+      left: $col-width * $i;
+    }
+
+    .col_desk-pull-#{$i} {
+      position: relative;
+      right: $col-width * $i;
+    }
+  }
+}
+
+@include tablet {
+  .col_tablet-reverse {
+    order: 2;
+  }
+}
+
+@include desktop {
+  .col_desk-reverse {
+    order: 2;
+    flex: 1;
+  }
+}

@@ -1,0 +1,50 @@
+// Color Scheme
+// Color Scheme - Brand
+$color-base         : #fff;
+$color-brand        : #00a0e3;
+$color-base-revert  : #000;
+$color-brand-green  : #0bc91f;
+$color-brand-red    : #cf2a2a;
+
+// Color Scheme - Gray Gradation
+$color-gg-1 : #333;
+$color-gg-2 : #5b6268;
+$color-gg-3 : #97a0a7;
+$color-gg-4 : #adb2ba;
+$color-gg-5 : #e3e4e6;
+$color-gg-6 : #f5f6f7;
+$color-gg-7 : #fafafa;
+$color-gg-8: #f4f4f4;
+$color-gg-9: #cacbcc;
+$color-gg-10: #fafbfc;
+$color-gg-12: #d9d9d9;
+
+// Font Color
+$fc-main: #111111;
+$fc-alter: #5B6268;
+$fc-gray: #5B6268;
+
+// Opacity
+$hover-opacity: 0.7;
+$disabled-opacity: 0.4;
+
+// Media Query Width
+$mqw-mobile  : 320px;
+$mqw-tablet  : 768px;
+$mqw-desktop : 1024px;
+$mqw-wrapper : 1200px;
+
+// Font Family
+$ff-roboto : 'Roboto', sans-serif;
+
+// Z-index
+$zi-sticky: 80;
+$zi-header: 90;
+$zi-popup: 100;
+$zi-modal: 110;
+
+// Grid Sized
+$grid-size           : 1104px;
+$grid-offset-mobile  : 20px;
+$grid-offset-tablet  : 48px;
+$grid-offset-desktop : 48px;

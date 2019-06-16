@@ -1,21 +1,12 @@
-@import '~bootstrap/scss/bootstrap.scss';
+// Helpers
+@import './helpers/vars';
+@import './helpers/mixins';
+@import './helpers/grid';
 
-html {
-    position: relative;
-    height: 100%;
-}
-
-body {
-    height: 100%;
-}
-
-/* Material Icons */
-@font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../static/fonts/Material-Icons.woff2') format('woff2');
-}
+// Base
+@import './base/typography';
+@import './base/icons';
+@import './base/overall';
 
 .Icon, .material-icons {
     position: relative;
