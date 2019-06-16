@@ -8,6 +8,7 @@ module.exports = {
         main: './src/index.js'
     },
     output: {
+        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js'
     },
@@ -55,6 +56,7 @@ module.exports = {
     },
     devServer: {
         contentBase: './src',
+        historyApiFallback: true,
     },
 
     resolve: {
