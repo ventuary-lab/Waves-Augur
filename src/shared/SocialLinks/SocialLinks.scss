@@ -1,0 +1,17 @@
+.SocialLinks {
+  margin: 15px 0;
+  display: flex;
+
+  &__item {
+    opacity: 0.4;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+}

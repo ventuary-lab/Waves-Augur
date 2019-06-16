@@ -1,0 +1,13 @@
+@import '../../style/helpers/mixins';
+
+.TestPage {
+  &__image-line {
+    height: 91px;
+    background-image: url('../../static/images/cover.png');
+    background-size: cover;
+
+    @include desktop {
+      height: 160px;
+    }
+  }
+}

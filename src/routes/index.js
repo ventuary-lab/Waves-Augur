@@ -1,6 +1,7 @@
 import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
+import TestPage from './TestPage';
 import CommunityPage from './CommunityPage';
 import RoutesEnum from '../enums/RoutesEnum';
 
@@ -39,6 +40,15 @@ export default {
             component: CommunityPage,
             label: RoutesEnum.COMMUNITY,
             title: RoutesEnum.getLabel(RoutesEnum.COMMUNITY),
+        },
+        {
+            id: RoutesEnum.TEST,
+            exact: true,
+            isVisible: true,
+            path: '/test',
+            component: TestPage,
+            label: RoutesEnum.TEST,
+            title: RoutesEnum.getLabel(RoutesEnum.TEST),
         },
     ],
 };

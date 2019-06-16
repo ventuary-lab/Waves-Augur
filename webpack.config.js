@@ -43,7 +43,7 @@ module.exports = {
                 }]
             },
             {
-                test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+                test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
                     loader: 'file-loader',
                     options: {
@@ -51,7 +51,6 @@ module.exports = {
                     }
                 }]
             },
-
         ]
     },
     devServer: {
@@ -68,7 +67,8 @@ module.exports = {
             shared: __dirname + '/src/shared',
             ui: __dirname + '/src/ui',
             style: __dirname + '/src/style',
-
+            types: __dirname + '/src/types',
+            static: __dirname + '/src/static',
         },
     },
 
