@@ -71,7 +71,7 @@ export default class Header extends React.PureComponent {
                     </Form>
                 </div>
                 <button
-                    className={bem(bem.element('menu-toggle'), 'Icon')}
+                    className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
                     onClick={this.toggleMenu}
                 >
                     {this.state.isMenuOpen ? 'close' : 'menu'}

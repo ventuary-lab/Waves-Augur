@@ -76,7 +76,7 @@
     border: none;
     background-color: transparent;
     outline: none;
-    color: $color-gg-13;
+    color: $color-gg-4;
 
     &:active {
       color: $color-brand-green;
@@ -113,7 +113,7 @@
       height: 1px;
       width: 100%;
       left: 0;
-      background-color: $color-gg-14;
+      background-color: $color-gg-10;
     }
   }
 
@@ -147,7 +147,7 @@
   }
 
   &__notification-icon {
-    color: $color-gg-13;
+    color: $color-gg-4;
     position: relative;
     top: 3px;
 

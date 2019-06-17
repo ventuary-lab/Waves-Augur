@@ -6,7 +6,7 @@ import Link from 'ui/nav/Link';
 import Button from 'ui/form/Button';
 
 import {html} from 'components';
-import NavItemSchema from '../../types/NavItemSchema';
+import NavItemSchema from 'types/NavItemSchema';
 
 import './ProfileBlock.scss';
 
@@ -54,7 +54,7 @@ export default class ProfileBlock extends React.PureComponent {
                             {this.props.user.name}
                         </div>
                         <button
-                            className={bem(bem.element('menu-toggle'), 'Icon')}
+                            className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
                             onClick={this.toggleMenu}
                         >
                             {this.state.isMenuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}
@@ -89,7 +89,7 @@ export default class ProfileBlock extends React.PureComponent {
                     className={bem.element('notification')}
                     to={'/'}
                 >
-                    <span className={bem(bem.element('notification-icon'), 'Icon')}>notifications</span>
+                    <span className={bem(bem.element('notification-icon'), 'MaterialIcon')}>notifications</span>
                 </Link>
             </div>
         );

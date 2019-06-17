@@ -74,7 +74,7 @@ export default class ProfileSidebar extends React.PureComponent {
                     )}
                     {this.props.country && (
                         <div className={bem.element('country')}>
-                            <span className={'Material-icon'}>location_on</span>
+                            <span className={'MaterialIcon'}>location_on</span>
                             &nbsp;
                             <span>{this.props.country}</span>
                         </div>

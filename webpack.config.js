@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer'); //TODO
 
 module.exports = {
     entry: {
@@ -15,7 +15,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader'
