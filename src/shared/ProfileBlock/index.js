@@ -1,2 +1,2 @@
-import ProfileBlock from './ProfileBlock';
+import ProfileBlock from './ProfileBlock.jsx';
 export default ProfileBlock;

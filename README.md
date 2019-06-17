@@ -39,7 +39,7 @@ Prediction Markets based on Waves RIDE for dApps DEMO case
 
   ├── public                                # Каталог с содержимым результатов сборки
   ├── src                                   # Каталог исходных файлов
-  │   ├── Application.js                    # Корневой компонент приложения
+  │   ├── Application.jsx                   # Корневой компонент приложения
   │   ├── actions                           # Redux actions 
   │   ├── index.js                          # Входная точка приложения
   │   ├── components                        # Каталог вспомогательных компонентов

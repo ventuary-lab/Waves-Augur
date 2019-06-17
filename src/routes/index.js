@@ -2,6 +2,9 @@ import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
 import CommunityPage from './CommunityPage';
+import CampaignsPage from './CampaignsPage';
+import ProfilePage from './ProfilePage';
+import InboxPage from './InboxPage';
 import RoutesEnum from '../enums/RoutesEnum';
 
 export default {
@@ -23,13 +26,13 @@ export default {
             title: RoutesEnum.getLabel(RoutesEnum.ABOUT),
         },
         {
-            id: RoutesEnum.NEWS,
+            id: RoutesEnum.CAMPAIGNS,
             exact: true,
             isVisible: true,
-            path: '/news',
-            component: NewsPage,
-            label: RoutesEnum.NEWS,
-            title: RoutesEnum.getLabel(RoutesEnum.NEWS),
+            path: '/campaigns',
+            component: CampaignsPage,
+            label: RoutesEnum.CAMPAIGNS,
+            title: RoutesEnum.getLabel(RoutesEnum.CAMPAIGNS),
         },
         {
             id: RoutesEnum.COMMUNITY,
@@ -39,6 +42,33 @@ export default {
             component: CommunityPage,
             label: RoutesEnum.COMMUNITY,
             title: RoutesEnum.getLabel(RoutesEnum.COMMUNITY),
+        },
+        {
+            id: RoutesEnum.FEED,
+            exact: true,
+            isVisible: true,
+            path: '/feed',
+            component: NewsPage,
+            label: RoutesEnum.FEED,
+            title: RoutesEnum.getLabel(RoutesEnum.FEED),
+        },
+        {
+            id: RoutesEnum.PROFILE,
+            exact: true,
+            isVisible: true,
+            path: '/profile',
+            component: ProfilePage,
+            label: RoutesEnum.PROFILE,
+            title: RoutesEnum.getLabel(RoutesEnum.PROFILE),
+        },
+        {
+            id: RoutesEnum.INBOX,
+            exact: true,
+            isVisible: true,
+            path: '/inbox',
+            component: InboxPage,
+            label: RoutesEnum.INBOX,
+            title: RoutesEnum.getLabel(RoutesEnum.INBOX),
         },
     ],
 };

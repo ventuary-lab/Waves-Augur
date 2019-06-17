@@ -8,4 +8,8 @@ $icons-dir: '../static/icons';
   background-position: center;
   min-width: 16px;
   min-height: 16px;
+
+  &__logo {
+    background-image: url('#{$icons-dir}/logo.svg');
+  }
 }

@@ -17,6 +17,7 @@ class InputField extends React.PureComponent {
         ]),
         hint: PropTypes.string,
         attribute: PropTypes.string,
+        formStyle: PropTypes.oneOf(['search', 'short-search']),
         input: PropTypes.shape({
             name: PropTypes.string,
             value: PropTypes.any,
