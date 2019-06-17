@@ -12,6 +12,7 @@ import HeaderNav from './views/HeaderNav';
 import NavItemSchema from './../../types/NavItemSchema';
 import RoutesEnum from '../../enums/RoutesEnum';
 import user from '../../static/data/user';
+import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView.jsx';
 
 import './Header.scss';
 
@@ -49,34 +50,36 @@ export default class Header extends React.PureComponent {
 
         return (
             <header className={bem.block()}>
-                <div className={bem.element('profile')}>
-                    <ProfileBlock
-                        user={user}
-                        menuItems={[].concat(this.props.inboxPageNavItem, this.props.profilePageNavItem)}
-                    />
-                </div>
-                <div className={bem.element('logo')}>
-                    <span className='Icon Icon__logo'/>
-                </div>
-                <div className={bem.element('nav')}>
-                    <HeaderNav navItems={navItems}/>
-                </div>
-                <div className={bem.element('form')}>
-                    <Form formId={FORM_ID}>
-                        <InputField
-                            attribute='search'
-                            placeholder={__('Search')}
-                            formStyle='search'
+                <div className={bem.element('inner')}>
+                    <div className={bem.element('profile')}>
+                        <ProfileBlock
+                            user={user}
+                            menuItems={[].concat(this.props.inboxPageNavItem, this.props.profilePageNavItem)}
                         />
-                    </Form>
+                    </div>
+                    <div className={bem.element('logo')}>
+                        <span className='Icon Icon__logo'/>
+                    </div>
+                    <div className={bem.element('nav')}>
+                        <HeaderNav navItems={navItems}/>
+                    </div>
+                    <div className={bem.element('form')}>
+                        <Form formId={FORM_ID}>
+                            <InputField
+                                attribute='search'
+                                placeholder={__('Search')}
+                                view={InputFieldSearchView}
+                            />
+                        </Form>
+                    </div>
+                    <button
+                        className={bem(bem.element('menu-toggle'), 'Icon')}
+                        onClick={this.toggleMenu}
+                    >
+                        {this.state.isMenuOpen ? 'close' : 'menu'}
+                    </button>
+                    {this.renderMenu()}
                 </div>
-                <button
-                    className={bem(bem.element('menu-toggle'), 'Icon')}
-                    onClick={this.toggleMenu}
-                >
-                    {this.state.isMenuOpen ? 'close' : 'menu'}
-                </button>
-                {this.renderMenu()}
             </header>
         );
     }
