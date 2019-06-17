@@ -7,11 +7,11 @@ import Layout from 'shared/Layout';
 import routesTree from './routes';
 
 // Automatically import all views from yii-steroids
-ui.addViews(require.context('ui', true, /View.js$/));
+ui.addViews(require.context('./ui', true, /View.jsx?$/));
 
 // Automatically import all fields and formatters from yii-steroids
-ui.addFields(require.context('ui', true, /Field.js$/));
-ui.addFormatters(require.context('ui', true, /Formatter.js$/));
+ui.addFields(require.context('./ui', true, /Field.js$/));
+ui.addFormatters(require.context('./ui', true, /Formatter.js$/));
 
 
 @navigationHoc(routesTree)

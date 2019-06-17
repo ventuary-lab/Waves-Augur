@@ -1,9 +1,164 @@
-.Header {
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
 
-  &__link {
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 40px;
+.Header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding-left: 22px;
+  padding-right: 22px;
+  background-color: $color-base;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+  @include tablet {
+    min-height: 70px;
   }
 
+  @include desktop {
+    min-height: 80px;
+  }
+
+  &__profile {
+    margin-right: 20px;
+
+    @include desktop {
+      order: 1;
+      margin-left: auto;
+    }
+  }
+
+  &__nav {
+    display: none;
+
+    @include desktop {
+      display: flex;
+      align-self: stretch;
+    }
+  }
+
+  &__form {
+    display: none;
+
+    @include desktop {
+      display: block;
+    }
+  }
+
+  &__menu-toggle {
+    margin-left: auto;
+    padding: 5px;
+    color: $color-gg-13;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    @include desktop {
+      display: none !important;
+    }
+
+    &:active {
+      color: $color-brand-green;
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: 102%;
+    left: 0;
+    width: 100%;
+    padding-left: 22px;
+    padding-right: 22px;
+    z-index: $zi-popup;
+    background-color: $color-base;
+
+    &_hidden {
+      display: none;
+    }
+  }
+
+  &__menu-list {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+
+    &_profile {
+      margin-bottom: 50px;
+
+      @include tablet {
+        display: none;
+      }
+    }
+  }
+
+  &__menu-item {
+
+  }
+
+  &__menu-link {
+    position: relative;
+    display: block;
+    width: 100%;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-base-revert;
+    text-decoration: none;
+    border: none;
+    padding: 13px 0;
+    background-color: transparent;
+    text-align: left;
+    outline: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      bottom: 0;
+      left: -10px;
+      width: calc(100% + 20px);
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+      &::after {
+        height: 3px;
+        background-color: $color-brand-light-green;
+      }
+    }
+
+    &_active {
+      &::after {
+        height: 3px;
+        background-color: $color-brand-green;
+      }
+    }
+
+    &_logout {
+      color: $color-gg-13;
+      cursor: pointer;
+    }
+
+    &:hover {
+
+    }
+  }
+
+  &__logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 135px;
+    height: 100%;
+
+    @include desktop {
+      position: static;
+      width: 215px;
+      transform: none;
+    }
+  }
 }

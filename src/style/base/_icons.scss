@@ -7,6 +7,10 @@ $icons-dir: '../static/icons';
   min-width: 16px;
   min-height: 16px;
 
+  &__logo {
+    background-image: url('#{$icons-dir}/logo.svg');
+  }
+
   &__twitter {
     background-image: url('#{$icons-dir}/twitter.svg');
   }

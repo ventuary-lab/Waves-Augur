@@ -59,7 +59,7 @@ export default class UiComponent {
         // require.context()
         if (_isFunction(items) && _isFunction(items.keys)) {
             items.keys().forEach(fileName => {
-                const matches = fileName.match(/^\.\/(.*\/)?[^\/]+\/([^\/]+)\.js$/);
+                const matches = fileName.match(/^\.\/(.*\/)?[^\/]+\/([^\/]+)\.jsx?$/);
                 const path = (matches[1] || '').replace(/\//g, '.') + matches[2];
 
                 this._components[group] = this._components[group] || {};
