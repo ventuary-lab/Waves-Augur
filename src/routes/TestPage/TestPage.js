@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {html} from 'components';
-import ProfileSidebar from 'shared/ProfileSidebar';
+import ProfileSidebar from 'shared/ProfileLayout/views/ProfileSidebar';
 import data from 'static/data/profile-sidebar';
 
 import './TestPage.scss';

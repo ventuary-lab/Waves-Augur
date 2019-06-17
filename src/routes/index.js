@@ -1,12 +1,14 @@
+import {Redirect} from 'react-router';
+
+import RoutesEnum from '../enums/RoutesEnum';
 import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
 import TestPage from './TestPage';
 import CommunityPage from './CommunityPage';
 import CampaignsPage from './CampaignsPage';
-import ProfilePage from './ProfilePage';
 import ProfileInboxPage from './ProfileInboxPage';
-import RoutesEnum from '../enums/RoutesEnum';
+import ProfileDonationPage from './ProfileDonationPage';
 
 export default {
     id: RoutesEnum.MAIN,
@@ -67,7 +69,10 @@ export default {
             exact: true,
             isVisible: true,
             path: '/profile',
-            component: ProfilePage,
+            component: Redirect,
+            componentProps: {
+                to: '/profile/donation',
+            },
             label: RoutesEnum.PROFILE,
             title: RoutesEnum.getLabel(RoutesEnum.PROFILE),
             items: [
@@ -85,7 +90,7 @@ export default {
                     exact: true,
                     isVisible: true,
                     path: '/profile/donation',
-                    component: ProfileInboxPage,
+                    component: ProfileDonationPage,
                     label: RoutesEnum.PROFILE_DONATION,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_DONATION),
                 },

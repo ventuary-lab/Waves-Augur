@@ -5,11 +5,11 @@ import ProfileLayout from 'shared/ProfileLayout';
 
 import {html} from 'components';
 
-import './ProfileInboxPage.scss';
+import './ProfileDonationPage.scss';
 
-const bem = html.bem('ProfileInboxPage');
+const bem = html.bem('ProfileDonationPage');
 
-export default class ProfileInboxPage extends React.PureComponent {
+export default class ProfileDonationPage extends React.PureComponent {
 
     static propTypes = {
 
@@ -19,7 +19,7 @@ export default class ProfileInboxPage extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <ProfileLayout>
-                    InboxPage
+                    DonationPage
                 </ProfileLayout>
             </div>
         );

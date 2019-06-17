@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {html} from 'components';
-import ProfileSidebar from 'shared/ProfileSidebar';
 import {getNavItems} from 'reducers/navigation';
 import data from 'static/data/profile-sidebar';
 import RoutesEnum from 'enums/RoutesEnum';
+import ProfileSidebar from './views/ProfileSidebar';
 import ProfileContentFilter from './views/ProfileContentFilter';
 
-import './ProfilePage.scss';
+import './ProfileLayout.scss';
 
-const bem = html.bem('ProfilePage');
+const bem = html.bem('ProfileLayout');
 
 @connect(
     (state) => ({
         profileFilterNavItems: getNavItems(state, RoutesEnum.PROFILE),
     })
 )
-export default class ProfilePage extends React.PureComponent {
+export default class ProfileLayout extends React.PureComponent {
 
     static propTypes = {
 
@@ -38,13 +38,13 @@ export default class ProfilePage extends React.PureComponent {
                         </div>
                         <div className='col col_tablet-count-8'>
                             <div className={bem.element('content')}>
-                                {/*<ProfileContentFilter
+                                <ProfileContentFilter
                                     navItems={this.props.profileFilterNavItems}
                                 >
                                     <div>
-                                        123
+                                        {this.props.children}
                                     </div>
-                                </ProfileContentFilter>*/}
+                                </ProfileContentFilter>
                             </div>
                         </div>
                     </div>

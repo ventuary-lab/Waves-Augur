@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {push} from 'react-router-redux';
 import _get from 'lodash-es/get';
+import Link from 'ui/nav/Link';
 
 import {html} from 'components';
 import Nav from 'ui/nav/Nav';
 
 import './ProfileContentFilter.scss';
+import Layout from "shared/Layout";
 
 const bem = html.bem('ProfileContentFilter');
 
@@ -16,9 +18,6 @@ export default class ProfileContentFilter extends React.PureComponent {
 
     static propTypes = {
         navItems: PropTypes.array,
-        title: PropTypes.string,
-        isCurrentCompany: PropTypes.bool,
-        navigation: PropTypes.bool,
     };
 
     render() {
@@ -36,22 +35,18 @@ export default class ProfileContentFilter extends React.PureComponent {
         }
 
         return (
-            <>
-                <Nav
-                    layout='tabs'
-                    activeTab={_get(this.props.navItems.find(item => item.isActive), 'id')}
-                    onChange={id => {
-                        const item = this.props.navItems.find(item => item.id === id);
-                        // Timeout for fix setState() call in Nav component
-                        setTimeout(() => this.props.dispatch(push(item.url)));
-                    }}
-                    items={this.props.navItems.map(item => ({
-                        id: item.id,
-                        label: item.label,
-                        url: item.url,
-                    }))}
-                />
-            </>
+            <div className={bem.element('nav')}>
+                {this.props.navItems.map(item => (
+                    <span className={bem.element('nav-item', {
+                        'is-active': item.isActive,
+                    })}>
+                        <Link
+                            label={item.title}
+                            to={item.url}
+                        />
+                    </span>
+                ))}
+            </div>
         );
     }
 }
