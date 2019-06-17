@@ -31,7 +31,7 @@ export default class ProfileBlock extends React.PureComponent {
         this.onMenuClick = this.onMenuClick.bind(this);
 
         this.state = {
-            isMenuOpen: true,
+            isMenuOpen: false,
         }
     }
 
@@ -68,7 +68,9 @@ export default class ProfileBlock extends React.PureComponent {
                                     key={menuItem.id}
                                 >
                                     <Link
-                                        className={bem.element('menu-link')}
+                                        className={bem.element('menu-link', {
+                                            active: menuItem.isActive,
+                                        })}
                                         to={menuItem.url}
                                         label={menuItem.title}
                                         onClick={() => this.onMenuClick(menuItem.url)}

@@ -81,6 +81,13 @@
     &:active {
       color: $color-brand-green;
     }
+
+    @include desktop {
+      &:hover, &:focus {
+        cursor: pointer;
+        color: $color-brand-green;
+      }
+    }
   }
 
   &__menu {
@@ -143,6 +150,10 @@
 
     &_logout {
       padding-top: 15px;
+    }
+
+    &_active {
+      color: $color-brand-green;
     }
   }
 
