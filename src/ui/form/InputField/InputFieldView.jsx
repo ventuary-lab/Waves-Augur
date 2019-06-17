@@ -13,7 +13,6 @@ export default class InputFieldView extends React.PureComponent {
             PropTypes.bool,
         ]),
         hint: PropTypes.string,
-        formStyle: PropTypes.oneOf(['search', 'short-search']),
         required: PropTypes.bool,
         size: PropTypes.oneOf(['sm', 'md', 'lg']),
         type: PropTypes.oneOf(['text', 'email', 'hidden', 'phone', 'password']),
@@ -36,7 +35,6 @@ export default class InputFieldView extends React.PureComponent {
                     className={bem(
                         bem.block({
                             size: this.props.size,
-                            form: this.props.formStyle
                         }),
                         this.props.isInvalid && 'is-invalid',
                         this.props.className,
