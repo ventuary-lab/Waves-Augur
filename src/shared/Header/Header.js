@@ -21,7 +21,7 @@ const FORM_ID = 'search';
 @connect(
     state => ({
         navItems: getNavItems(state, RoutesEnum.MAIN),
-        inboxPageNavItem: getNavItem(state, RoutesEnum.INBOX),
+        inboxPageNavItem: getNavItem(state, RoutesEnum.PROFILE_INBOX),
         profilePageNavItem: getNavItem(state, RoutesEnum.PROFILE),
     })
 )
@@ -45,7 +45,7 @@ export default class Header extends React.PureComponent {
     }
 
     render() {
-        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.INBOX].includes(item.id));
+        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX].includes(item.id));
 
         return (
             <header className={bem.block()}>
@@ -88,7 +88,7 @@ export default class Header extends React.PureComponent {
     }
 
     renderMenu() {
-        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.INBOX].includes(item.id));
+        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX].includes(item.id));
 
         return (
             <div className={bem.element('menu', {

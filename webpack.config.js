@@ -8,7 +8,7 @@ module.exports = {
         main: './src/index.js'
     },
     output: {
-        // publicPath: '/',
+        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js'
     },

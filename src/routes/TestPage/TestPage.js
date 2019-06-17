@@ -19,20 +19,22 @@ export default class TestPage extends React.PureComponent {
 
         return (
             <section className={bem.block()}>
-                <div className={bem.element('image-line')}/>
                 <div className={'wrapper'}>
                     <div className={'row'}>
-                        <div className={'col col_count-12 col_tablet-count-4 col_desk-count-3'}>
+                        <div className={'col col_tablet-count-4'}>
                             <ProfileSidebar
                                 {...data.user}
                             />
+                        </div>
+                        <div className='col col_tablet-count-8'>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aperiam dicta eius nam omnis quasi quia repellendus rerum tenetur, velit? Alias delectus deleniti dolore harum ipsam porro quasi quo velit.
                         </div>
                     </div>
                 </div>
                 <div className={bem.element('image-line')}/>
                 <div className={'wrapper'}>
                     <div className={'row'}>
-                        <div className={'col col_count-12 col_tablet-count-4 col_desk-count-3'}>
+                        <div className={'col col_tablet-count-4'}>
                             <ProfileSidebar
                                 {...data.project}
                                 isProject={true}

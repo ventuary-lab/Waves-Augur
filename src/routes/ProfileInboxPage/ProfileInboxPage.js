@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 
-import './InboxPage.scss';
+import './ProfileInboxPage.scss';
 
-const bem = html.bem('InboxPage');
+const bem = html.bem('ProfileInboxPage');
 
-export default class InboxPage extends React.PureComponent {
+export default class ProfileInboxPage extends React.PureComponent {
 
     static propTypes = {
 
@@ -16,7 +16,7 @@ export default class InboxPage extends React.PureComponent {
     render() {
         return (
             <section className={bem.block()}>
-                InboxPage page
+                ProfileInboxPage page
             </section>
         );
     }

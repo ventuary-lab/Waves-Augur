@@ -102,16 +102,18 @@ export default class ProfileSidebar extends React.PureComponent {
                     )}
                     {this.props.isProject && this.props.crowdfunding && (
                         <table className={bem.element('crowdfunding')}>
-                            <tr>
-                                <td>{__('Crowdfunding')}</td>
-                                <td>
-                                    {moment(this.props.crowdfunding.startDate).format('DD.MM.YYYY')}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{__('Finish')}</td>
-                                <td>{moment(this.props.crowdfunding.finishDate).format('DD.MM.YYYY')}</td>
-                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td>{__('Crowdfunding')}</td>
+                                    <td>
+                                        {moment(this.props.crowdfunding.startDate).format('DD.MM.YYYY')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{__('Finish')}</td>
+                                    <td>{moment(this.props.crowdfunding.finishDate).format('DD.MM.YYYY')}</td>
+                                </tr>
+                            </tbody>
                         </table>
                     )}
                     {!this.props.isProject && this.props.balance && (

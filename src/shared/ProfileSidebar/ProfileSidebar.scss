@@ -26,6 +26,7 @@
   }
 
   &__avatar {
+    box-sizing: content-box;
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -118,7 +119,7 @@
   }
 
   &__crowdfunding {
-    & > tr > td {
+    & > tbody > tr > td {
       &:first-child {
         text-align: right;
       }

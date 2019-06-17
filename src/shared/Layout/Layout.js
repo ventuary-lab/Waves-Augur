@@ -21,6 +21,7 @@ export default class Layout extends React.PureComponent {
             <div className={bem.block()}>
                 <Header/>
                 <main>
+                    <div className={bem.element('image-line')}/>
                     {this.props.children}
                 </main>
                 <Footer/>
