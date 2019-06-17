@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {html} from 'components';
-const bem = html.bem('InputFieldView');
-import './InputFieldView.scss';
 
-export default class InputFieldView extends React.PureComponent {
+import './InputFieldSearchView.scss';
+
+const bem = html.bem('InputFieldSearchView');
+
+export default class InputFieldSearchView extends React.PureComponent {
 
     static propTypes = {
         label: PropTypes.oneOfType([
@@ -25,28 +27,23 @@ export default class InputFieldView extends React.PureComponent {
 
     render() {
         return (
-            <>
-                {this.props.label && (
-                    <label className={bem.element('label')}>
-                        {this.props.label}
-                    </label>
-                )}
+            <div className={bem.block()}>
+                <span className={bem(bem.element('icon'), 'Icon')}>
+                    search
+                </span>
                 <input
                     className={bem(
-                        bem.block({
-                            size: this.props.size,
-                        }),
+                        bem.element('input'),
                         this.props.isInvalid && 'is-invalid',
                         this.props.className,
                     )}
                     {...this.props.inputProps}
                     type={this.props.type}
-                    placeholder={this.props.placeholder}
+                    placeholder={__('Search')}
                     disabled={this.props.disabled}
                     required={this.props.required}
                 />
-            </>
+            </div>
         );
     }
-
 }
