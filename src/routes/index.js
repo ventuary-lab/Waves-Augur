@@ -1,7 +1,7 @@
 import {Redirect} from 'react-router';
 
 import RoutesEnum from '../enums/RoutesEnum';
-import IndexPage from './IndexPage';
+//import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
 import TestPage from './TestPage';
@@ -19,7 +19,10 @@ export default {
     exact: true,
     isVisible: true,
     path: '/',
-    component: IndexPage,
+    component: Redirect,
+    componentProps: {
+        to: '/profile',
+    },
     label: RoutesEnum.MAIN,
     title: RoutesEnum.getLabel(RoutesEnum.MAIN),
     items: [
@@ -75,7 +78,7 @@ export default {
             path: '/profile',
             component: Redirect,
             componentProps: {
-                to: '/profile/donation',
+                to: '/profile/projects',
             },
             label: RoutesEnum.PROFILE,
             title: RoutesEnum.getLabel(RoutesEnum.PROFILE),
