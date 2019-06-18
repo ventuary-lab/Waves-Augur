@@ -13,6 +13,7 @@ import NavItemSchema from './../../types/NavItemSchema';
 import RoutesEnum from '../../enums/RoutesEnum';
 import user from '../../static/data/user';
 import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView.jsx';
+import InputFieldHamburgerSearchView from 'ui/form/InputField/InputFieldHamburgerSearchView.jsx';
 
 import './Header.scss';
 
@@ -140,6 +141,7 @@ export default class Header extends React.PureComponent {
                         <InputField
                             attribute='search'
                             placeholder={__('Search')}
+                            view={InputFieldHamburgerSearchView}
                         />
                     </Form>
                 </div>

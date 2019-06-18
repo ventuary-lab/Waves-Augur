@@ -185,6 +185,21 @@
     }
   }
 
+  &__menu-form {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      bottom: 0;
+      left: -10px;
+      width: calc(100% + 20px);
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
   &__logo {
     position: absolute;
     left: 50%;
