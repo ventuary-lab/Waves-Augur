@@ -35,17 +35,27 @@ export default class ProfileContentFilter extends React.PureComponent {
         }
 
         return (
-            <div className={bem.element('nav')}>
-                {this.props.navItems.map(item => (
-                    <span className={bem.element('nav-item', {
-                        'is-active': item.isActive,
-                    })}>
+
+            <div className={bem.element('nav-container')}>
+                <div className={bem.element('nav')}>
+                    {this.props.navItems.map(item => (
+                        <span
+                            key={item.id}
+                            className={bem.element('nav-item', {
+                                'is-active': item.isActive,
+                            })}
+                        >
                         <Link
-                            label={item.title}
                             to={item.url}
-                        />
+                        >
+                            <div className={bem.element('nav-icon')}>
+                                <span className={`Icon ${item.isActive ? item.icon + '_green' : item.icon}`}/>
+                            </div>
+                            {item.title}
+                        </Link>
                     </span>
-                ))}
+                    ))}
+                </div>
             </div>
         );
     }

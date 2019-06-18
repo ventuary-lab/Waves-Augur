@@ -16,7 +16,13 @@ export default class CampaignsPage extends React.PureComponent {
     render() {
         return (
             <section className={bem.block()}>
-                CampaignsPage page
+                <div className={'wrapper'}>
+                    <div className={'row'}>
+                        <div className={'col'}>
+                            CampaignsPage page
+                        </div>
+                    </div>
+                </div>
             </section>
         );
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ProfileLayout from 'shared/ProfileLayout';
+import ActionButtonBlock from 'shared/ActionButtonBlock';
 
 import {html} from 'components';
 
@@ -19,7 +20,10 @@ export default class ProfileProjectsPage extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <ProfileLayout>
-                    ProjectsPage
+                    <ActionButtonBlock
+                        title={__('Add New Project')}
+                        iconClass={'Icon__new-project'}
+                    />
                 </ProfileLayout>
             </div>
         );

@@ -16,7 +16,13 @@ export default class NewsPage extends React.PureComponent {
     render() {
         return (
             <section className={bem.block()}>
-                NewsPage page
+                <div className={'wrapper'}>
+                    <div className={'row'}>
+                        <div className={'col'}>
+                            NewsPage page
+                        </div>
+                    </div>
+                </div>
             </section>
         );
     }
