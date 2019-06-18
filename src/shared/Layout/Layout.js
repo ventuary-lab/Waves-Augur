@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ModalWrapper from 'ui/modal/ModalWrapper';
 
-import {html, http} from 'components';
+import {html} from 'components';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 
@@ -20,7 +20,8 @@ export default class Layout extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <Header/>
-                <main className={bem.block()}>
+                <main>
+                    <div className={bem.element('image-line')}/>
                     {this.props.children}
                 </main>
                 <Footer/>

@@ -1,20 +1,21 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer'); //TODO
 
 module.exports = {
     entry: {
         main: './src/index.js'
     },
     output: {
+        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'app.js'
+        filename: 'app.js',
     },
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader'
@@ -42,7 +43,7 @@ module.exports = {
                 }]
             },
             {
-                test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+                test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
                     loader: 'file-loader',
                     options: {
@@ -50,11 +51,11 @@ module.exports = {
                     }
                 }]
             },
-
         ]
     },
     devServer: {
         contentBase: './src',
+        historyApiFallback: true,
     },
 
     resolve: {
@@ -66,7 +67,8 @@ module.exports = {
             shared: __dirname + '/src/shared',
             ui: __dirname + '/src/ui',
             style: __dirname + '/src/style',
-
+            types: __dirname + '/src/types',
+            static: __dirname + '/src/static',
         },
     },
 

@@ -1,5 +1,3 @@
-@import '../../../../Waves-Augur/src/style/helpers/mixins';
-
 $icons-dir: '../static/icons';
 
 .Icon {
@@ -11,5 +9,21 @@ $icons-dir: '../static/icons';
 
   &__logo {
     background-image: url('#{$icons-dir}/logo.svg');
+  }
+
+  &__twitter {
+    background-image: url('#{$icons-dir}/twitter.svg');
+  }
+
+  &__facebook {
+    background-image: url('#{$icons-dir}/facebook.svg');
+  }
+
+  &__instagram {
+    background-image: url('#{$icons-dir}/instagram.svg');
+  }
+
+  &__telegram {
+    background-image: url('#{$icons-dir}/telegram.svg');
   }
 }

@@ -14,7 +14,7 @@
   outline: none;
 
   &::placeholder {
-    color: $color-gg-13;
+    color: $color-gg-4;
   }
 
   &:hover {
@@ -32,8 +32,8 @@
   }
 
   &:disabled {
-    background-color: $color-gg-14;
-    color: $color-gg-13;
+    background-color: $color-gg-10;
+    color: $color-gg-4;
 
     &:hover {
       border-color: $color-brand-light-green;

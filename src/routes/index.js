@@ -1,11 +1,14 @@
+import {Redirect} from 'react-router';
+
+import RoutesEnum from '../enums/RoutesEnum';
 import IndexPage from './IndexPage';
 import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
+import TestPage from './TestPage';
 import CommunityPage from './CommunityPage';
 import CampaignsPage from './CampaignsPage';
-import ProfilePage from './ProfilePage';
-import InboxPage from './InboxPage';
-import RoutesEnum from '../enums/RoutesEnum';
+import ProfileInboxPage from './ProfileInboxPage';
+import ProfileDonationPage from './ProfileDonationPage';
 
 export default {
     id: RoutesEnum.MAIN,
@@ -44,6 +47,15 @@ export default {
             title: RoutesEnum.getLabel(RoutesEnum.COMMUNITY),
         },
         {
+            id: RoutesEnum.TEST,
+            exact: true,
+            isVisible: true,
+            path: '/test',
+            component: TestPage,
+            label: RoutesEnum.TEST,
+            title: RoutesEnum.getLabel(RoutesEnum.TEST),
+        },
+        {
             id: RoutesEnum.FEED,
             exact: true,
             isVisible: true,
@@ -57,18 +69,59 @@ export default {
             exact: true,
             isVisible: true,
             path: '/profile',
-            component: ProfilePage,
+            component: Redirect,
+            componentProps: {
+                to: '/profile/donation',
+            },
             label: RoutesEnum.PROFILE,
             title: RoutesEnum.getLabel(RoutesEnum.PROFILE),
-        },
-        {
-            id: RoutesEnum.INBOX,
-            exact: true,
-            isVisible: true,
-            path: '/inbox',
-            component: InboxPage,
-            label: RoutesEnum.INBOX,
-            title: RoutesEnum.getLabel(RoutesEnum.INBOX),
+            items: [
+                {
+                    id: RoutesEnum.PROFILE_INBOX,
+                    exact: true,
+                    isVisible: true,
+                    path: '/profile/inbox',
+                    component: ProfileInboxPage,
+                    label: RoutesEnum.PROFILE_INBOX,
+                    title: RoutesEnum.getLabel(RoutesEnum.PROFILE_INBOX),
+                },
+                {
+                    id: RoutesEnum.PROFILE_DONATION,
+                    exact: true,
+                    isVisible: true,
+                    path: '/profile/donation',
+                    component: ProfileDonationPage,
+                    label: RoutesEnum.PROFILE_DONATION,
+                    title: RoutesEnum.getLabel(RoutesEnum.PROFILE_DONATION),
+                },
+                {
+                    id: RoutesEnum.PROFILE_PROJECTS,
+                    exact: true,
+                    isVisible: true,
+                    path: '/profile/projects',
+                    component: ProfileInboxPage,
+                    label: RoutesEnum.PROFILE_PROJECTS,
+                    title: RoutesEnum.getLabel(RoutesEnum.PROFILE_PROJECTS),
+                },
+                {
+                    id: RoutesEnum.PROFILE_VOTING,
+                    exact: true,
+                    isVisible: true,
+                    path: '/profile/voiting',
+                    component: ProfileInboxPage,
+                    label: RoutesEnum.PROFILE_VOTING,
+                    title: RoutesEnum.getLabel(RoutesEnum.PROFILE_VOTING),
+                },
+                {
+                    id: RoutesEnum.PROFILE_INVITED,
+                    exact: true,
+                    isVisible: true,
+                    path: '/profile/invited-users',
+                    component: ProfileInboxPage,
+                    label: RoutesEnum.PROFILE_INVITED,
+                    title: RoutesEnum.getLabel(RoutesEnum.PROFILE_INVITED),
+                },
+            ],
         },
     ],
 };
