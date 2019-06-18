@@ -2,24 +2,68 @@
 @import '../../../style/helpers/mixins';
 
 .ProfileContentFilter {
+
+  &__nav-container {
+    display: flex;
+    justify-content: center;
+
+    @include tablet {
+      justify-content: flex-start;
+    }
+  }
+
   &__nav {
+    width: 100%;
+    max-width: 400px;
     padding: 40px 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    @include tablet {
+      justify-content: flex-start;
+      max-width: 100%;
+    }
+  }
+
+  &__nav-icon {
+    margin-bottom: 3px;
+
+    @include tablet {
+      display: none;
+    }
   }
 
   &__nav-item {
+    font-size: 12px;
+    line-height: 14px;
+    color: $color-gg-4;
+
+    @include tablet {
+      color: #000;
+      font-size: 16px;
+    }
     &_is-active {
-      font-weight: 500;
+      color: $color-brand-green;
+
+      @include tablet {
+        color: #000;
+        font-weight: 500;
+      }
     }
 
-    &:not(:last-child) {
-      margin-right: 41px;
+    @include tablet {
+      &:not(:last-child) {
+        margin-right: 40px;
+      }
     }
 
     & > a {
       text-decoration: none;
-      color: #000;
+
+      &:visited {
+        color: inherit;
+      }
     }
   }
 

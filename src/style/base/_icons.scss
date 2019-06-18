@@ -1,3 +1,4 @@
+@import '../../style/helpers/mixins';
 $icons-dir: '../static/icons';
 
 .Icon {
@@ -26,6 +27,67 @@ $icons-dir: '../static/icons';
   &__telegram {
     background-image: url('#{$icons-dir}/telegram.svg');
   }
+
+  &__notification {
+    background-image: url('#{$icons-dir}/notification.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/notification_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/notification_green.svg');
+    }
+  }
+
+  &__invite {
+    background-image: url('#{$icons-dir}/invite.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/invite_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/invite_green.svg');
+    }
+  }
+
+  &__rhombus {
+    background-image: url('#{$icons-dir}/rhombus.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/rhombus_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/rhombus_green.svg');
+    }
+  }
+
+  &__rocket {
+    background-image: url('#{$icons-dir}/rocket.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/rocket_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/rocket_green.svg');
+    }
+  }
+
+  &__voting {
+    background-image: url('#{$icons-dir}/voting.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/voting_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/voting_green.svg');
+    }
+  }
+
 
   &__explore-ideas {
     min-width: 69px;

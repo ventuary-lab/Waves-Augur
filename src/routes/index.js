@@ -88,6 +88,7 @@ export default {
                     component: ProfileInboxPage,
                     label: RoutesEnum.PROFILE_INBOX,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_INBOX),
+                    icon: 'Icon__notification'
                 },
                 {
                     id: RoutesEnum.PROFILE_DONATION,
@@ -97,6 +98,7 @@ export default {
                     component: ProfileDonationPage,
                     label: RoutesEnum.PROFILE_DONATION,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_DONATION),
+                    icon: 'Icon__rhombus'
                 },
                 {
                     id: RoutesEnum.PROFILE_PROJECTS,
@@ -106,6 +108,7 @@ export default {
                     component: ProfileProjectsPage,
                     label: RoutesEnum.PROFILE_PROJECTS,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_PROJECTS),
+                    icon: 'Icon__rocket'
                 },
                 {
                     id: RoutesEnum.PROFILE_VOTING,
@@ -115,6 +118,7 @@ export default {
                     component: ProfileVotingPage,
                     label: RoutesEnum.PROFILE_VOTING,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_VOTING),
+                    icon: 'Icon__voting'
                 },
                 {
                     id: RoutesEnum.PROFILE_INVITED,
@@ -124,6 +128,7 @@ export default {
                     component: ProfileInvitedPage,
                     label: RoutesEnum.PROFILE_INVITED,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_INVITED),
+                    icon: 'Icon__invite'
                 },
             ],
         },
