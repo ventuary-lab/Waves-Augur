@@ -26,4 +26,16 @@ $icons-dir: '../static/icons';
   &__telegram {
     background-image: url('#{$icons-dir}/telegram.svg');
   }
+
+  &__explore-ideas {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/explore-ideas.svg');
+  }
+
+  &__new-project {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/new-project.svg');
+  }
 }

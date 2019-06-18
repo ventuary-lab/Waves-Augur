@@ -9,6 +9,10 @@ import CommunityPage from './CommunityPage';
 import CampaignsPage from './CampaignsPage';
 import ProfileInboxPage from './ProfileInboxPage';
 import ProfileDonationPage from './ProfileDonationPage';
+import ProfileProjectsPage from './ProfileProjectsPage';
+import ProfileVotingPage from './ProfileVotingPage';
+import ProfileInvitedPage from './ProfileInvitedPage';
+
 
 export default {
     id: RoutesEnum.MAIN,
@@ -99,7 +103,7 @@ export default {
                     exact: true,
                     isVisible: true,
                     path: '/profile/projects',
-                    component: ProfileInboxPage,
+                    component: ProfileProjectsPage,
                     label: RoutesEnum.PROFILE_PROJECTS,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_PROJECTS),
                 },
@@ -108,7 +112,7 @@ export default {
                     exact: true,
                     isVisible: true,
                     path: '/profile/voiting',
-                    component: ProfileInboxPage,
+                    component: ProfileVotingPage,
                     label: RoutesEnum.PROFILE_VOTING,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_VOTING),
                 },
@@ -117,7 +121,7 @@ export default {
                     exact: true,
                     isVisible: true,
                     path: '/profile/invited-users',
-                    component: ProfileInboxPage,
+                    component: ProfileInvitedPage,
                     label: RoutesEnum.PROFILE_INVITED,
                     title: RoutesEnum.getLabel(RoutesEnum.PROFILE_INVITED),
                 },

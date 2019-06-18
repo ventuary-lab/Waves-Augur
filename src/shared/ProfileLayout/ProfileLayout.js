@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {html} from 'components';
 import {getNavItems} from 'reducers/navigation';
-import data from 'static/data/profile-sidebar';
+import sidebarData from 'static/data/profile-sidebar';
 import RoutesEnum from 'enums/RoutesEnum';
 import ProfileSidebar from './views/ProfileSidebar';
 import ProfileContentFilter from './views/ProfileContentFilter';
@@ -32,7 +32,7 @@ export default class ProfileLayout extends React.PureComponent {
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
                                 <ProfileSidebar
-                                    {...data.user}
+                                    {...sidebarData.user}
                                 />
                             </div>
                         </div>

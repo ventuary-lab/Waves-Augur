@@ -39,7 +39,7 @@ export default class ProfileSidebar extends React.PureComponent {
             })}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.avatarUrl}
+                    src={this.props.avatarUrl || '../../../static/images/avatar-stub.png'}
                     alt={this.props.name}
                 />
                 <div className={bem.element('inner')}>
