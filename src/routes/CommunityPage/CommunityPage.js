@@ -16,7 +16,13 @@ export default class CommunityPage extends React.PureComponent {
     render() {
         return (
             <section className={bem.block()}>
-                CommunityPage page
+                <div className={'wrapper'}>
+                    <div className={'row'}>
+                        <div className={'col'}>
+                            CommunityPage page
+                        </div>
+                    </div>
+                </div>
             </section>
         );
     }
