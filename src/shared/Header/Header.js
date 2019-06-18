@@ -12,8 +12,8 @@ import HeaderNav from './views/HeaderNav';
 import NavItemSchema from './../../types/NavItemSchema';
 import RoutesEnum from '../../enums/RoutesEnum';
 import user from '../../static/data/user';
-import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView.jsx';
-import InputFieldHamburgerSearchView from 'ui/form/InputField/InputFieldHamburgerSearchView.jsx';
+import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView';
+import InputFieldHamburgerSearchView from 'ui/form/InputField/InputFieldHamburgerSearchView';
 
 import './Header.scss';
 
@@ -47,7 +47,7 @@ export default class Header extends React.PureComponent {
     }
 
     render() {
-        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX].includes(item.id));
+        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX, RoutesEnum.TEST].includes(item.id));
 
         return (
             <header className={bem.block()}>
@@ -74,7 +74,7 @@ export default class Header extends React.PureComponent {
                         </Form>
                     </div>
                     <button
-                        className={bem(bem.element('menu-toggle'), 'Icon')}
+                        className={bem(bem.element('menu-toggle'), 'material-icons')}
                         onClick={this.toggleMenu}
                     >
                         {this.state.isMenuOpen ? 'close' : 'menu'}

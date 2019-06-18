@@ -208,10 +208,24 @@
     width: 135px;
     height: 100%;
 
-    @include desktop {
-      position: static;
+    @include tablet {
       width: 215px;
+    }
+
+    @include desktop {
+      flex-shrink: 0;
+      position: static;
       transform: none;
+      margin-right: 25px;
+    }
+
+    @include desktop-mid {
+      margin-right: 20px;
+    }
+
+    .Icon__logo {
+      background-size: cover;
+      height: 100%;
     }
   }
 }

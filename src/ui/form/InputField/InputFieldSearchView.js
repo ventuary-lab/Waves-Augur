@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 
-import './InputFieldHamburgerSearchView.scss';
+import './InputFieldSearchView.scss';
 
-const bem = html.bem('InputFieldHamburgerSearchView');
+const bem = html.bem('InputFieldSearchView');
 
-export default class InputFieldHamburgerSearchView extends React.PureComponent {
+export default class InputFieldSearchView extends React.PureComponent {
 
     static propTypes = {
         label: PropTypes.oneOfType([
@@ -40,7 +40,7 @@ export default class InputFieldHamburgerSearchView extends React.PureComponent {
     render() {
         return (
             <div className={bem.block({focused: this.state.isFocused})}>
-                <span className={bem(bem.element('icon'), 'Icon')}>search</span>
+                <span className={bem(bem.element('icon'), 'material-icons')}>search</span>
                 <input
                     className={bem(
                         bem.element('input'),
