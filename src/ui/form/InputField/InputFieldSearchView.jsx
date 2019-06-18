@@ -25,12 +25,22 @@ export default class InputFieldSearchView extends React.PureComponent {
         className: PropTypes.string,
     };
 
+    constructor() {
+        super(...arguments);
+
+        this.state = {
+            isFocused: false,
+        };
+
+        this._onBlur = this._onBlur.bind(this);
+        this._onFocus = this._onFocus.bind(this);
+    }
+
+
     render() {
         return (
-            <div className={bem.block()}>
-                <span className={bem(bem.element('icon'), 'Icon')}>
-                    search
-                </span>
+            <div className={bem.block({focused: this.state.isFocused})}>
+                <span className={bem(bem.element('icon'), 'Icon')}>search</span>
                 <input
                     className={bem(
                         bem.element('input'),
@@ -42,8 +52,26 @@ export default class InputFieldSearchView extends React.PureComponent {
                     placeholder={__('Search')}
                     disabled={this.props.disabled}
                     required={this.props.required}
+                    onFocus={this._onFocus}
+                    onBlur={this._onBlur}
                 />
             </div>
         );
+    }
+
+    _onBlur() {
+        if (!this.state.isFocused) {
+            return null;
+        }
+
+        this.setState({isFocused: false})
+    }
+
+    _onFocus() {
+        if (this.state.isFocused) {
+            return null;
+        }
+
+        this.setState({isFocused: true})
     }
 }

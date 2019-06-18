@@ -3,9 +3,43 @@
 
 .InputFieldSearchView {
   $root: &;
+  position: relative;
 
   display: flex;
   align-items: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: none;
+    bottom: -1px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 3px;
+    background-color: $color-brand-light-green;
+  }
+
+  &:hover {
+    &::after {
+      display: block;
+      background-color: $color-brand-green;
+    }
+
+    #{$root}__icon {
+      color: $color-brand-green;
+    }
+  }
+
+  &_focused {
+    #{$root}__icon {
+      color: $color-brand-green;
+    }
+
+    &::after {
+      display: block;
+      background-color: $color-brand-green;
+    }
+  }
 
   &__input {
     font-family: $ff-roboto;
@@ -18,6 +52,10 @@
     outline: none;
     padding: 0;
     max-width: 70%;
+
+    @include desktop-mid {
+      max-width: 55%;
+    }
 
     &::placeholder {
       color: $color-gg-4;
