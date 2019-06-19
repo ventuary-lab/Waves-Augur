@@ -1,3 +1,6 @@
-last 1 version
+# Browsers that we support
+
+last 2 version
 > 1%
-IE 10
+maintained node versions
+not dead
