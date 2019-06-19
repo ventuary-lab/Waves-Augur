@@ -39,12 +39,11 @@ export default class ProfileBlock extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <div className={bem.element('avatar')}>
-                    <img
-                        src={this.props.user.avatar}
-                        alt={this.props.user.name}
-                    />
-                </div>
+                <img
+                    className={bem.element('avatar')}
+                    src={this.props.user.avatar || '/images/avatar-stub.png'}
+                    alt={this.props.user.name}
+                />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('balance')}>
                         {this.props.user.balance}
