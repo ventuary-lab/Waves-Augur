@@ -1,0 +1,57 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.InputFieldHamburgerSearchView {
+  $root: &;
+  position: relative;
+  background-color: $color-base;
+  padding: 13px 0;
+  display: flex;
+  align-items: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: none;
+    bottom: -1px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 3px;
+    background-color: $color-brand-light-green;
+  }
+
+  &_focused {
+    #{$root}__icon {
+      color: $color-brand-green;
+    }
+
+    &::after {
+      display: block;
+      background-color: $color-brand-green;
+    }
+  }
+
+  &__input {
+    font-family: $ff-roboto;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-base-revert;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    padding: 0;
+    width: 100%;
+
+    &::placeholder {
+      color: $color-gg-4;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: $color-gg-4;
+    font-size: 20px;
+    margin-right: 22px;
+  }
+}

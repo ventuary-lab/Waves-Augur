@@ -1,8 +1,7 @@
 export default {
 
     user: {
-        // avatarUrl: 'https://cdn1.thr.com/sites/default/files/imagecache/scale_crop_768_433/2019/03/avatar-publicity_still-h_2019.jpg',
-        avatarUrl: '',
+        avatarUrl: 'https://cdn1.thr.com/sites/default/files/imagecache/scale_crop_768_433/2019/03/avatar-publicity_still-h_2019.jpg',
         name: 'Aleksei Pupyshev',
         description: 'Founder & CEO @Ventuary',
         socialLinks: [

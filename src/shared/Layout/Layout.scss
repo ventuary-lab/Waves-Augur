@@ -1,6 +1,14 @@
 @import '../../style/helpers/mixins';
 
 .Layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__content {
+    flex-grow: 1;
+  }
+
   &__image-line {
     height: 91px;
     background-image: url('../../static/images/cover.png');

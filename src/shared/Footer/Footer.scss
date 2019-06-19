@@ -1,3 +1,124 @@
-.Footer {
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
 
+.Footer {
+  background-color: #292929;
+  color: #e3e3e3;
+  padding-top: 49px;
+  padding-bottom: 25px;
+
+  @include desktop {
+    padding-bottom: 50px;
+  }
+
+  &__inner {
+    padding-right: 22px;
+    padding-left: 22px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__info {
+    @include tablet {
+      display: flex;
+    }
+
+    @include desktop {
+      justify-content: space-between;
+    }
+  }
+
+  &__company {
+    @include tablet {
+      margin-right: 100px;
+    }
+  }
+
+  &__company-name {
+    display: block;
+    margin-bottom: 30px;
+    font-size: 29px;
+  }
+
+  &__address {
+    margin-bottom: 50px;
+    line-height: 27px;
+    color: #bfbfbf;
+
+    @include desktop {
+      margin-bottom: 35px;
+    }
+  }
+
+  &__helpers {
+    display: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+      display: block;
+    }
+
+    @include desktop {
+      display: flex;
+    }
+  }
+
+  &__helpers-item {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include desktop {
+      margin-right: 0;
+      margin-bottom: 0;
+
+      &:first-child {
+        margin-right: 65px;
+      }
+
+      &:nth-child(2) {
+        margin-right: 115px;
+      }
+    }
+  }
+
+  &__helpers-label {
+    @include desktop {
+      font-weight: 300;
+      margin-bottom: 27px;
+      display: block;
+    }
+  }
+
+  &__helper {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__helper-item {
+    @include desktop {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__helper-link {
+    color: #bfbfbf;
+    text-decoration: none;
+
+    &:active {
+      color: #e3e3e3;
+    }
+
+    @include desktop {
+      &:hover {
+        color: #e3e3e3;
+      }
+    }
+  }
 }
