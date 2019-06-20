@@ -16,6 +16,12 @@
   }
 }
 
+@mixin phone-horizontal {
+  @media screen and (min-width: 576px) {
+    @content;
+  }
+}
+
 @mixin tablet {
   @media screen and (min-width: #{$mqw-tablet}) {
     @content;
