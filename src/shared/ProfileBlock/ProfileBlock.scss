@@ -16,15 +16,12 @@
     margin-right: 20px;
     border-radius: 50%;
     background-color: $color-gg-3;
+    object-fit: cover;
 
     @include desktop {
       width: 41px;
       height: 41px;
       margin-right: 14px;
-    }
-
-    img {
-      object-fit: cover;
     }
   }
 
