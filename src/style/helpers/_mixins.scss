@@ -40,6 +40,12 @@
   }
 }
 
+@mixin tablet-horizontal {
+  @media screen and (min-width: 991px) {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media screen and (min-width: #{$mqw-desktop}) {
     @content;

@@ -1,5 +1,6 @@
 @import '../../style/helpers/vars';
 @import '../../style/helpers/mixins';
+
 $icons-dir: '../../static/icons';
 
 .IndexPage {
@@ -10,6 +11,13 @@ $icons-dir: '../../static/icons';
     flex-direction: column;
     padding-left: 22px;
     padding-right: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @include tablet-horizontal {
+      flex-direction: row;
+      padding-top: 48px;
+    }
   }
 
   &__hero-image {
@@ -19,6 +27,22 @@ $icons-dir: '../../static/icons';
 
     @include phone-horizontal {
       margin-bottom: 16px;
+    }
+
+    @include tablet-horizontal {
+      order: 1;
+      flex-basis: 50%;
+      flex-shrink: 0;
+      align-self: center;
+    }
+  }
+
+  &__hero-info {
+    display: flex;
+    flex-direction: column;
+
+    @include tablet-horizontal {
+      padding-right: 48px;
     }
   }
 
@@ -36,11 +60,10 @@ $icons-dir: '../../static/icons';
       line-height: 48px;
       margin-bottom: 48px;
     }
-  }
 
-  &__hero-info {
-    display: flex;
-    flex-direction: column;
+    @include tablet-horizontal {
+      text-align: left;
+    }
   }
 
   &__hero-text {
@@ -51,6 +74,10 @@ $icons-dir: '../../static/icons';
       order: 0;
       margin-bottom: 48px;
     }
+
+    @include tablet-horizontal {
+      text-align: left;
+    }
   }
 
   &__hero-actions {
@@ -59,6 +86,10 @@ $icons-dir: '../../static/icons';
     @include phone-horizontal {
       text-align: center;
       margin-bottom: 0;
+    }
+
+    @include tablet-horizontal {
+      text-align: left;
     }
   }
 
@@ -106,8 +137,16 @@ $icons-dir: '../../static/icons';
 
       &:active {
         color: $color-base;
-        background-color: #BCD5FF;
-        border-color: #BCD5FF;
+        background-color: #bcd5ff;
+        border-color: #bcd5ff;
+      }
+
+      &:hover {
+        @include desktop {
+          color: $color-base;
+          background-color: #bcd5ff;
+          border-color: #bcd5ff;
+        }
       }
     }
 
@@ -130,6 +169,13 @@ $icons-dir: '../../static/icons';
 
         @include phone-horizontal {
           background-color: transparent;
+          border-bottom-color: transparent;
+        }
+      }
+
+      &:hover {
+        @include desktop {
+          color: #bcd5ff;
           border-bottom-color: transparent;
         }
       }
@@ -186,6 +232,8 @@ $icons-dir: '../../static/icons';
   &__features-inner {
     padding-left: 22px;
     padding-right: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   &__features-title {
@@ -219,6 +267,11 @@ $icons-dir: '../../static/icons';
       width: 33%;
     }
 
+    @include desktop-mid {
+      width: 16.6%;
+      margin-bottom: 0;
+    }
+
     &:nth-last-child(-n+2) {
       @include phone-horizontal {
         margin-bottom: 0;
@@ -248,6 +301,13 @@ $icons-dir: '../../static/icons';
   &__process {
     background-color: #f1f1f1;
     padding-bottom: 28px;
+  }
+
+  &__process-inner {
+    padding-left: 22px;
+    padding-right: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   &__process-title {
@@ -285,6 +345,15 @@ $icons-dir: '../../static/icons';
       padding-bottom: 0;
     }
 
+    @include tablet-horizontal {
+      width: 25%;
+    }
+
+    @include desktop-mid {
+      width: 16.6%;
+      margin-bottom: 0;
+    }
+
     &::after {
       content: '';
       position: absolute;
@@ -302,7 +371,11 @@ $icons-dir: '../../static/icons';
         bottom: auto;
         top: 33%;
         right: -26px;
-        transform: rotate(0) translateX(0) translateX(-50%) ;
+        transform: rotate(0) translateX(0) translateX(-50%);
+      }
+
+      @include desktop-mid {
+        right: -30px;
       }
     }
 
@@ -311,6 +384,48 @@ $icons-dir: '../../static/icons';
         @include tablet {
           right: 0;
         }
+
+        @include tablet-horizontal {
+          right: -26px;
+        }
+      }
+    }
+
+    &:nth-child(4) {
+      @include tablet-horizontal {
+        &::after {
+          right: 0;
+        }
+      }
+
+      @include desktop-mid {
+        &::after {
+          right: -30px;
+        }
+      }
+    }
+
+    &:nth-child(5) {
+      @include tablet-horizontal {
+        &::after {
+          right: -7%;
+        }
+      }
+
+      @include desktop-mid {
+        &::after {
+          right: -30px;
+        }
+      }
+    }
+
+    &:nth-last-child(-n+2) {
+      @include tablet-horizontal {
+        width: 50%;
+      }
+
+      @include desktop-mid {
+        width: 16.6%;
       }
     }
 
@@ -358,6 +473,8 @@ $icons-dir: '../../static/icons';
   &__partners-inner {
     padding-left: 22px;
     padding-right: 22px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   &__partners-list {
@@ -366,6 +483,12 @@ $icons-dir: '../../static/icons';
     margin: 0;
     padding: 0;
     list-style: none;
+
+    @include tablet {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 
   &__partners-item {
@@ -377,6 +500,45 @@ $icons-dir: '../../static/icons';
 
     @include phone-horizontal {
       min-height: 102px;
+    }
+
+    @include tablet {
+      min-height: 90px;
+      width: 33%;
+    }
+
+    @include phone-horizontal {
+      min-height: 125px;
+    }
+
+    @include desktop-mid {
+      width: 222px;
+    }
+
+    @include desktop-mid {
+      min-height: 115px;
+      width: 270px;
+    }
+  }
+
+  &__partners-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__partners-logo {
+
+    @include tablet {
+      width: 162px;
+    }
+
+    @include phone-horizontal {
+      width: 240px;
+    }
+
+    @include desktop-mid {
+      width: 222px;
     }
   }
 }

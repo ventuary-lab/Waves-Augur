@@ -167,6 +167,7 @@ export default class IndexPage extends React.PureComponent {
                                         href='https://wavesplatform.com/'
                                     >
                                         <img
+                                            className={bem.element('partners-logo', 'waves')}
                                             src='static/icons/landing-waves-logo.svg'
                                             alt='waves'
                                         />
@@ -179,6 +180,7 @@ export default class IndexPage extends React.PureComponent {
                                         href='https://www.tradisys.com/'
                                     >
                                         <img
+                                            className={bem.element('partners-logo', 'tradisvs')}
                                             src='static/icons/landing-tradisys-logo.svg'
                                             alt='tradisys'
                                         />
@@ -191,6 +193,7 @@ export default class IndexPage extends React.PureComponent {
                                         href='https://www.blockdata.tech/'
                                     >
                                         <img
+                                            className={bem.element('partners-logo', 'blockdata')}
                                             src='static/icons/landing-blockdata-logo.png'
                                             alt='blockdata'
                                         />
@@ -203,6 +206,7 @@ export default class IndexPage extends React.PureComponent {
                                         href='https://waveslabs.com/grants'
                                     >
                                         <img
+                                            className={bem.element('partners-logo', 'waves-labs')}
                                             src='static/icons/landing-waves-labs-logo.svg'
                                             alt='waves-labs'
                                         />
