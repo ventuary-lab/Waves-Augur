@@ -73,6 +73,7 @@ module.exports = {
             types: __dirname + '/src/types',
             static: __dirname + '/src/static',
         },
+        extensions: ['.js', '.jsx', '.scss', '.css', '.json'],
     },
 
     plugins: [
