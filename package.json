@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "build": "webpack --mode production",
-        "watch": "webpack-dev-server --mode development"
+        "watch": "webpack-dev-server --mode development",
+        "server": "node server.js"
     },
     "dependencies": {
         "express": "^4.16.4",
