@@ -1,34 +1,72 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
+import Link from 'ui/nav/Link';
+import RoutesEnum from 'enums/RoutesEnum';
+import { getNavUrl } from 'reducers/navigation';
 
 import './Footer.scss';
 
 const bem = html.bem('Footer');
 
+// TODO replace page id when create project page will be reade
+@connect(
+    state => ({
+        createProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+        findProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+        indexPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+    })
+)
 export default class Footer extends React.PureComponent {
 
     static propTypes = {
-
+        createProjectPageUrl: PropTypes.string,
+        findProjectPageUrl: PropTypes.string,
+        indexPageUrl: PropTypes.string,
     };
 
     render() {
         return (
             <footer className={bem.block()}>
                 <div className={bem.element('inner')}>
-                    <div className={bem.element('info')}>
-                        <div className={bem.element('company')}>
-                            <strong className={bem.element('company-name')}>ventuary</strong>
-                            <div className={bem.element('address')}>
-                                © Ventuary Inc.<br/>
-                                251 Little Falls Drive,<br/>
-                                Wilmington, New Castle Country,<br/>
-                                Delaware USA <br/>
-                                19808-1674
-                            </div>
+                    <div className={bem.element('left')}>
+                        <Link
+                            className={bem.element('logo')}
+                            to={this.props.indexPageUrl}
+                        >
+                            <img
+                                className={bem.element('logo-image')}
+                                src='static/icons/ventuary-logo-white.svg'
+                                alt='ventuary dao'
+                            />
+                        </Link>
+                        <div className={bem.element('socials')}>
+                            <SocialLinks
+                                items={[
+                                    {
+                                        id: 'twitter',
+                                        link: ''
+                                    },
+                                    {
+                                        id: 'facebook',
+                                        link: ''
+                                    },
+                                    {
+                                        id: 'instagram',
+                                        link: ''
+                                    },
+                                    {
+                                        id: 'telegram',
+                                        link: ''
+                                    },
+                                ]}
+                            />
                         </div>
+                    </div>
+                    <div className={bem.element('right')}>
                         <ul className={bem.element('helpers')}>
                             <li className={bem.element('helpers-item')}>
                                 <strong className={bem.element('helpers-label')}>
@@ -36,20 +74,20 @@ export default class Footer extends React.PureComponent {
                                 </strong>
                                 <ul className={bem.element('helper')}>
                                     <li className={bem.element('helper-item')}>
-                                        <a
+                                        <Link
                                             className={bem.element('helper-link')}
-                                            href='javascript:void(0);'
+                                            to={this.props.createProjectPageUrl}
                                         >
-                                            {__('Join as a customer')}
-                                        </a>
+                                            {__('Add project')}
+                                        </Link>
                                     </li>
                                     <li className={bem.element('helper-item')}>
-                                        <a
+                                        <Link
                                             className={bem.element('helper-link')}
-                                            href='javascript:void(0);'
+                                            to={this.props.findProjectPageUrl}
                                         >
-                                            {__('Join as a analyst')}
-                                        </a>
+                                            {__('Find project')}
+                                        </Link>
                                     </li>
                                 </ul>
                             </li>
@@ -61,7 +99,8 @@ export default class Footer extends React.PureComponent {
                                     <li className={bem.element('helper-item')}>
                                         <a
                                             className={bem.element('helper-link')}
-                                            href='javascript:void(0);'
+                                            target='_blank'
+                                            href='https://github.com/AlekseiPupyshev'
                                         >
                                             GitHub
                                         </a>
@@ -76,36 +115,24 @@ export default class Footer extends React.PureComponent {
                                     <li className={bem.element('helper-item')}>
                                         <a
                                             className={bem.element('helper-link')}
-                                            href='javascript:void(0);'
+                                            target='_blank'
+                                            href='https://t.me/adventuary'
                                         >
                                             {__('Contact')}
+                                        </a>
+                                    </li>
+                                    <li className={bem.element('helper-item')}>
+                                        <a
+                                            className={bem.element('helper-link')}
+                                            target='_blank'
+                                            href='https://drive.google.com/file/d/1UB4NjUb5yDA__IV9bMSh-40JPMqkb4ZG/view'
+                                        >
+                                            {__('PDF')}
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
-                    </div>
-                    <div className={bem.element('socials')}>
-                        <SocialLinks
-                            items={[
-                                {
-                                    id: 'twitter',
-                                    link: ''
-                                },
-                                {
-                                    id: 'facebook',
-                                    link: ''
-                                },
-                                {
-                                    id: 'instagram',
-                                    link: ''
-                                },
-                                {
-                                    id: 'telegram',
-                                    link: ''
-                                },
-                            ]}
-                        />
                     </div>
                 </div>
             </footer>

@@ -2,26 +2,42 @@
 @import '../../style/helpers/mixins';
 
 .Footer {
-  background-color: #292929;
-  color: #e3e3e3;
-  padding-top: 49px;
+  background-color: $color-base-revert;
+  color: rgba(255, 255, 255, 0.87);
+  padding-top: 42px;
   padding-bottom: 25px;
+
+  @include phone-horizontal {
+    padding-top: 48px;
+  }
 
   @include desktop {
     padding-bottom: 50px;
   }
 
   &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     padding-right: 22px;
     padding-left: 22px;
     max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
-  &__info {
+  &__left {
+    order: 1;
+
     @include tablet {
       display: flex;
+      flex-direction: column;
+      order: 0;
     }
 
     @include desktop {
@@ -29,69 +45,83 @@
     }
   }
 
-  &__company {
+  &__right {
+    margin-bottom: 35px;
+
+    @include phone-horizontal {
+      margin-bottom: 48px;
+    }
+
     @include tablet {
-      margin-right: 100px;
+      margin-bottom: 0;
     }
   }
 
-  &__company-name {
-    display: block;
-    margin-bottom: 30px;
-    font-size: 29px;
+  &__logo {
+    display: flex;
+    margin-bottom: 14px;
+
+    .ButtonView__label {
+      display: flex;
+    }
+
+    @include phone-horizontal {
+      margin-bottom: 16px;
+    }
   }
 
-  &__address {
-    margin-bottom: 50px;
-    line-height: 27px;
-    color: #bfbfbf;
-
-    @include desktop {
-      margin-bottom: 35px;
-    }
+  &__logo-image {
+    width: 348px;
   }
 
   &__helpers {
-    display: none;
     margin: 0;
     padding: 0;
     list-style: none;
 
-    @include tablet {
-      display: block;
-    }
-
-    @include desktop {
+    @include phone-horizontal {
       display: flex;
     }
   }
 
   &__helpers-item {
-    margin-bottom: 20px;
+    margin-bottom: 21px;
 
     &:last-child {
       margin-bottom: 0;
+
+      @include phone-horizontal {
+        margin-right: 0;
+      }
+    }
+
+    @include phone-horizontal {
+      margin-bottom: 0;
+      margin-right: 100px;
+    }
+
+    @include tablet {
+      margin-right: 50px;
     }
 
     @include desktop {
-      margin-right: 0;
-      margin-bottom: 0;
-
-      &:first-child {
-        margin-right: 65px;
-      }
-
-      &:nth-child(2) {
-        margin-right: 115px;
-      }
+      margin-right: 120px;
     }
   }
 
   &__helpers-label {
-    @include desktop {
-      font-weight: 300;
-      margin-bottom: 27px;
-      display: block;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 100;
+    margin-bottom: 25px;
+    display: block;
+    letter-spacing: -0.28px;
+
+    @include phone-horizontal {
+      margin-bottom: 28px;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: -0.32px;
     }
   }
 
@@ -102,21 +132,38 @@
   }
 
   &__helper-item {
-    @include desktop {
-      margin-bottom: 10px;
+    margin-bottom: 7px;
+
+    @include phone-horizontal {
+      margin-bottom: 8px;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
   &__helper-link {
-    color: #bfbfbf;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 100;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
 
     &:active {
+      text-decoration: underline;
       color: #e3e3e3;
+    }
+
+    @include phone-horizontal {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 24px;
     }
 
     @include desktop {
       &:hover {
+        text-decoration: underline;
         color: #e3e3e3;
       }
     }
