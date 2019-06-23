@@ -155,7 +155,7 @@
     "yup": "^0.26.6"
   },
   "scripts": {
-    "start": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack-dev-server --colors --config ./webpack/webpack.config.dev.ts",
+    "start": "node_modules/cross-env/dist/bin/cross-env.js TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack-dev-server --colors --config ./webpack/webpack.config.dev.ts",
     "ts:check": "tsc -p tsconfig-lint.json --noEmit",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
