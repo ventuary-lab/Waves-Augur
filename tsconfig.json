@@ -1,0 +1,51 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "allowJs": true,
+        "target": "es5",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "pretty": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "noUnusedLocals": false,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./src",
+        "outDir": "./dist/",
+        "typeRoots": [
+          "node_modules/@types",
+          "src/types"
+        ],
+        "lib": [
+          "dom",
+          "es2018"
+        ],
+        "skipLibCheck": true,
+    },
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin",
+        "tags": [
+          "styled",
+          "styled<",
+          "css"
+        ]
+      }
+    ],
+    "extensions": [".ts", ".tsx", ".js", ".jsx"],
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx", "src/dal/DataAccessLayer.js"
+    ],
+    "exclude": [
+      "node_modules",
+      "bower_components",
+      "static",
+      "tmp"
+    ]
+  }
+  

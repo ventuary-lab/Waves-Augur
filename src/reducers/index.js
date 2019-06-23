@@ -1,5 +1,5 @@
-import {combineReducers} from 'redux';
-import {reducer as form} from 'redux-form';
+import { combineReducers } from 'redux';
+import { reducer as form } from 'redux-form';
 
 import fields from './fields';
 import list from './list';
@@ -18,7 +18,7 @@ export {
     modal,
     routing,
     navigation,
-};
+}; 
 
 export default combineReducers({
     form,

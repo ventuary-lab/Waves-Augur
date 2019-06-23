@@ -22,6 +22,7 @@ class InputField extends React.PureComponent {
             name: PropTypes.string,
             value: PropTypes.any,
             onChange: PropTypes.func,
+            onKeyDown: PropTypes.func
         }),
         required: PropTypes.bool,
         size: PropTypes.oneOf(['sm', 'md', 'lg']),
@@ -58,6 +59,7 @@ class InputField extends React.PureComponent {
                     name: this.props.input.name,
                     value: this.props.input.value || '',
                     onChange: e => this.props.input.onChange(e.target.value),
+                    onKeydown: e => this.props.input.onKeydown(e.target.value),
                     type: this.props.type,
                     placeholder: this.props.placeholder,
                     disabled: this.props.disabled,
@@ -68,3 +70,27 @@ class InputField extends React.PureComponent {
     }
 
 }
+// const TextFieldAdapter = ({ input, meta, ...rest }) => (
+//     <TextField
+//       {...input}
+//       {...rest}
+//       onChange={(event, value) => input.onChange(value)}
+//       errorText={meta.touched ? meta.error : ''}
+//     />
+//   )
+
+export const InputFormField = ({ input, meta, ...restProps }) => {
+    const inputProps = {
+        ...input,
+        ...restProps,
+        onChange: (event, value) => input.onChange(value),
+    }
+
+    return (
+        <InputField
+            {...inputProps}
+            inputProps={inputProps}
+            onChange={(event, value) => input.onChange(value)}
+        />
+    )
+};
