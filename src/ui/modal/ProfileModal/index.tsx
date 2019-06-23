@@ -20,6 +20,7 @@ class ProfilePopup extends React.Component {
         isOpened: boolean;
         currentTab: number;
         formState: any;
+        isSendingAllowed: boolean;
     };
     tabs: React.ReactNode[];
 
@@ -66,7 +67,9 @@ class ProfilePopup extends React.Component {
 
             (async () => {
                 try {
+                    // @ts-ignore
                     const tx = await window.DAL.setUserRegisterOrUpdate(formState);
+                    // @ts-ignore
                     const signResponse = await window.WavesKeeper.signAndPublishTransaction(tx);
                     console.log({ signResponse });
                     window.alert(JSON.stringify({ signResponse }));

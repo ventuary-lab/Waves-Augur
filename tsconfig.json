@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "allowJs": true,
+        "allowJs": false,
         "target": "es5",
         "module": "esnext",
         "moduleResolution": "node",
         "jsx": "react",
         "pretty": true,
-        "strict": true,
-        "noImplicitAny": true,
+        "strict": false,
+        "noImplicitAny": false,
         "experimentalDecorators": true,
         "noUnusedLocals": false,
         "resolveJsonModule": true,
@@ -25,6 +25,7 @@
           "es2018"
         ],
         "skipLibCheck": true,
+        "noEmitOnError": true
     },
     "plugins": [
       {
@@ -39,13 +40,13 @@
     "extensions": [".ts", ".tsx", ".js", ".jsx"],
     "include": [
       "src/**/*.ts",
-      "src/**/*.tsx", "src/dal/DataAccessLayer.js"
+      "src/**/*.tsx", 
     ],
     "exclude": [
       "node_modules",
       "bower_components",
       "static",
       "tmp"
-    ]
+    ],
   }
   

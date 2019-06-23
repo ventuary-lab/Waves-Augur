@@ -17,10 +17,10 @@ import DAL from './dal/DataAccessLayer';
 
 class Application extends React.PureComponent {
 
-    static treeToList(item) {
+    static treeToList(item: any) {
         let items = [item];
         if (item.items) {
-            item.items.forEach(sub => {
+            item.items.forEach((sub: any) => {
                 items = items.concat(Application.treeToList(sub));
             });
         }

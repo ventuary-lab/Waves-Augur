@@ -4,5 +4,8 @@
       "module": "commonjs",
       "target": "es5",
       "esModuleInterop": true
-    }
+    },
+    "exclude": [
+        "src/ui/**/"
+    ]
   }
