@@ -1,0 +1,18 @@
+
+.InputTag {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    padding: 6px;
+    background-color: rgba(11, 201, 31, 0.1);
+    border-radius: 3px;
+    display: inline-block;
+    margin: 5px 5px 5px 0;
+
+    & > :nth-child(1) {
+        display: inline-block;
+    }
+    & > :nth-child(2) {
+        padding-left: 3px;
+    }
+}

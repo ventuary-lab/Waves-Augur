@@ -16,12 +16,6 @@
   }
 }
 
-@mixin phone-horizontal {
-  @media screen and (min-width: 576px) {
-    @content;
-  }
-}
-
 @mixin tablet {
   @media screen and (min-width: #{$mqw-tablet}) {
     @content;
@@ -36,12 +30,6 @@
 
 @mixin only-tablet {
   @media screen and (min-width: #{$mqw-tablet}) and (max-width: #{$mqw-desktop - 1px}) {
-    @content;
-  }
-}
-
-@mixin tablet-horizontal {
-  @media screen and (min-width: 991px) {
     @content;
   }
 }
@@ -87,3 +75,6 @@
     }
   }
 }
+
+@mixin tablet-horizontal { @content; }
+@mixin phone-horizontal { @content; }

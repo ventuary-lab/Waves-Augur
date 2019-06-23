@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import domready from 'domready';
 import loadJs from 'load-js';
 import _trimStart from 'lodash-es/trimStart';
@@ -50,6 +50,7 @@ export default class WidgetComponent {
 
         const store = require('components').store;
         const WidgetComponent = this._widgets[name];
+        
         if (!WidgetComponent) {
             throw new Error(`Not found widget component '${name}'`);
         }
