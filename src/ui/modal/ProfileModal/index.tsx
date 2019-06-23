@@ -15,24 +15,29 @@ import FormContext from './context';
 
 import './ProfileModal.scss';
 
+type InitialState = {
+    isOpened: boolean;
+    currentTab: number;
+    formState: any;
+    isSendingAllowed: boolean;
+}
+
 class ProfilePopup extends React.Component {
-    state: {
-        isOpened: boolean;
-        currentTab: number;
-        formState: any;
-        isSendingAllowed: boolean;
-    };
+    initialState: InitialState;
+    state: InitialState;
     tabs: React.ReactNode[];
 
     constructor (props: any) {
         super(props);
 
-        this.state = {
+        this.initialState = {
             isOpened: false,
             formState: {},
             currentTab: 0,
             isSendingAllowed: false
-        }
+        };
+
+        this.state = { ...this.initialState };
 
         this.tabs = [
             <WaitingTab className={bem.element('body-inner')} />,
@@ -42,7 +47,7 @@ class ProfilePopup extends React.Component {
     }
 
     onClose = () => {
-        this.setState({ isOpened: false });
+        this.setState({ ...this.initialState });
     }
 
     onOpen = () => {
