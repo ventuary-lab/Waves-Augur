@@ -4,9 +4,9 @@
 .InputFieldSearchView {
   $root: &;
   position: relative;
-
+  max-width: 100%;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   &::after {
     content: '';
@@ -51,11 +51,8 @@
     background-color: transparent;
     outline: none;
     padding: 0;
+    padding-right: 10px;
     max-width: 70%;
-
-    @include desktop-mid {
-      max-width: 55%;
-    }
 
     &::placeholder {
       color: $color-gg-4;
@@ -65,7 +62,12 @@
   &__icon {
     flex-shrink: 0;
     color: $color-gg-4;
-    font-size: 20px;
     margin-right: 22px;
+    display: flex !important;
+    align-items: center;
+    font-size: 25px !important;
+    min-height: 25px !important;
+    line-height: 25px !important;
+    top: 0 !important;
   }
 }

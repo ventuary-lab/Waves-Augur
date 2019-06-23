@@ -8,12 +8,8 @@
   background-color: $color-base;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
-  @include tablet {
-    min-height: 70px;
-  }
-
-  @include desktop {
-    min-height: 80px;
+  @include phone-horizontal {
+    min-height: 60px;
   }
 
   &__inner {
@@ -22,18 +18,21 @@
     align-items: center;
     padding-left: 22px;
     padding-right: 22px;
-    max-width: 1100px;
+    max-width: 1200px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 
   &__profile {
-    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: auto;
 
     @include desktop {
       order: 1;
-      margin-left: auto;
+      margin-left: 0;
       margin-right: 0;
     }
   }
@@ -41,14 +40,14 @@
   &__nav {
     display: none;
 
-    @include desktop {
+    @include tablet-horizontal {
       display: flex;
       align-self: stretch;
       margin-right: 30px;
     }
 
-    @include desktop-mid {
-      margin-right: 57px;
+    @include desktop {
+      margin-right: auto;
     }
   }
 
@@ -59,40 +58,46 @@
     .FormView {
       display: flex;
       align-self: stretch;
+      max-width: 100%;
 
       .FieldLayoutView {
         display: flex;
         align-self: stretch;
+        max-width: 100%;
 
         &__field {
           display: flex;
           align-self: stretch;
+          max-width: 100%;
         }
       }
     }
 
-    @include desktop {
+    @include tablet-horizontal {
       display: flex;
       width: 170px;
       overflow: hidden;
+      margin-right: auto;
     }
 
     @include desktop-mid {
-      width: 180px;
-      margin-right: 20px;
+      width: 242px;
     }
   }
 
   &__menu-toggle {
-    margin-left: auto;
-    padding: 5px;
-    color: $color-gg-4;
+    top: 1px !important;
+    order: -1;
+    margin-right: 5px;
+    font-size: 40px !important;
+    color: $color-base-revert;
+    padding: 5px 5px 5px 0;
     background-color: transparent;
     border: none;
     outline: none;
     cursor: pointer;
 
-    @include desktop {
+    @include tablet-horizontal {
       display: none !important;
     }
 
@@ -110,6 +115,7 @@
     padding-right: 22px;
     z-index: $zi-popup;
     background-color: $color-base;
+    padding-bottom: 22px;
 
     &_hidden {
       display: none;
@@ -201,31 +207,60 @@
   }
 
   &__logo {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 135px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100%;
 
-    @include tablet {
-      width: 215px;
+    .ButtonView__label {
+      display: flex;
+    }
+  }
+
+  &__logo-image {
+    width: 135px;
+
+    @include phone-horizontal {
+      width: 165px;
+    }
+  }
+
+  &__login-link {
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+    font-size: 14px;
+    line-height: 25px;
+    color: $color-brand-green;
+    text-decoration: none;
+    font-weight: 100;
+
+    @include phone-horizontal {
+      font-size: 16px;
+      line-height: 28px;
     }
 
-    @include desktop {
-      flex-shrink: 0;
-      position: static;
-      transform: none;
-      margin-right: 25px;
+    .ButtonView__label {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      &::after {
+        content: '';
+        position: absolute;
+        display: none;
+        height: 3px;
+        width: calc(100% + 10px);
+        bottom: -1px;
+        left: -5px;
+        background-color: $color-brand-light-green;
+      }
     }
 
-    @include desktop-mid {
-      margin-right: 20px;
-    }
-
-    .Icon__logo {
-      background-size: cover;
-      height: 100%;
+    &:hover {
+      .ButtonView__label::after {
+        display: block;
+      }
     }
   }
 }

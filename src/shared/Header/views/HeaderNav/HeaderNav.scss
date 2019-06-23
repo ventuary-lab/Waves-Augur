@@ -29,7 +29,7 @@
     color: $color-base-revert;
     text-decoration: none;
 
-    @include desktop-mid {
+    @include tablet-horizontal {
       padding: 0 20px;
     }
 

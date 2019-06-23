@@ -11,6 +11,7 @@ import NavItemSchema from 'types/NavItemSchema';
 import './ProfileBlock.scss';
 
 const bem = html.bem('ProfileBlock');
+const DEFAULT_AVATAR_PATH = './static/images/avatar-stub.png';
 
 @connect()
 export default class ProfileBlock extends React.PureComponent {
@@ -41,7 +42,7 @@ export default class ProfileBlock extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.avatar || '/images/avatar-stub.png'}
+                    src={this.props.user.avatar || DEFAULT_AVATAR_PATH}
                     alt={this.props.user.name}
                 />
                 <div className={bem.element('inner')}>

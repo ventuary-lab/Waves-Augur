@@ -74,6 +74,10 @@
     background-color: transparent;
     outline: none;
     color: $color-gg-4;
+    font-size: 25px !important;
+    line-height: 25px !important;
+    min-height: 25px !important;
+    top: 0 !important;
 
     &:active {
       color: $color-brand-green;
@@ -89,8 +93,8 @@
 
   &__menu {
     position: absolute;
-    top: 47px;
-    left: 0;
+    top: 42px;
+    left: -60px;
     z-index: $zi-popup;
     margin: 0;
     padding: 20px 40px;
@@ -157,7 +161,11 @@
   &__notification-icon {
     color: $color-gg-4;
     position: relative;
-    top: 3px;
+    font-size: 25px !important;
+    min-height: 25px !important;
+    top: 1px;
+    line-height: 25px !important;
+
 
     &:active {
       color: $color-brand-green;
