@@ -155,8 +155,6 @@
     "yup": "^0.26.6"
   },
   "scripts": {
-    "start": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack-dev-server --colors --config ./webpack/webpack.config.dev.ts",
-    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --colors --config ./webpack/webpack.config.prod.ts",
     "heroku-postbuild": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --colors --config ./webpack/webpack.config.prod.ts",
     "ts:check": "tsc -p tsconfig-lint.json --noEmit",
     "test": "react-scripts test",
