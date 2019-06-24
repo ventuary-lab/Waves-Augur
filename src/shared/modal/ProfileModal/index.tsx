@@ -2,14 +2,13 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import Button from 'yii-steroids/ui/form/Button/Button';
 import { Form, Field } from 'react-final-form';
-import DAL from 'dal/DataAccessLayer';
 
 import AboutTab from './AboutTab';
 import LinksTab from './LinksTab';
 import WaitingTab from './WaitingTab';
 import ProgressLine from './ProgressLine';
 
-import { html } from 'components';
+import { html, dal } from 'components';
 const bem: any = html.bem('ProfileModal');
 
 import FormContext from './context';
@@ -58,7 +57,7 @@ class ProfilePopup extends React.Component {
             };
 
             // @ts-ignore
-            const userData = await DAL.getCheckStatusRegisteredUser(onUnregistered);
+            const userData = await dal.getCheckStatusRegisteredUser(onUnregistered);
 
             // @ts-ignore
             this.setState({ initialForm: userData.bio });
@@ -94,7 +93,7 @@ class ProfilePopup extends React.Component {
             (async () => {
                 try {
                     // @ts-ignore
-                    const tx = await window.DAL.setUserRegisterOrUpdate(formState);
+                    const tx = await dal.setUserRegisterOrUpdate(formState);
                     // @ts-ignore
                     const signResponse = await window.WavesKeeper.signAndPublishTransaction(tx);
                     console.log({ signResponse });

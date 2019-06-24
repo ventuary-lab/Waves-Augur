@@ -5,6 +5,7 @@ import HtmlComponent from 'yii-steroids/components/HtmlComponent';
 import LocaleComponent from 'yii-steroids/components/LocaleComponent';
 import StoreComponent from 'yii-steroids/components/StoreComponent';
 import UiComponent from 'yii-steroids/components/UiComponent';
+import DalComponent from './DalComponent';
 
 // Create instances
 const clientStorage = new ClientStorageComponent();
@@ -13,6 +14,7 @@ const html = new HtmlComponent();
 const locale = new LocaleComponent();
 const store = new StoreComponent();
 const ui = new UiComponent();
+const dal = new DalComponent();
 
 // Apply configuration
 const customConfig = store.getState().config || {};
@@ -22,6 +24,7 @@ _merge(html, customConfig.html);
 _merge(locale, customConfig.locale);
 _merge(store, customConfig.store);
 _merge(ui, customConfig.ui);
+_merge(dal, customConfig.dal);
 
 export {
     clientStorage,
@@ -30,4 +33,5 @@ export {
     locale,
     store,
     ui,
+    dal,
 };
