@@ -8,6 +8,21 @@
 @import './base/icons';
 @import './base/overall';
 
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
 .MaterialIcon, .material-icons {
     position: relative;
     top: 4px;
@@ -33,4 +48,22 @@
 
     /* Support for IE. */
     font-feature-settings: 'liga';
+}
+
+
+// TODO move to view
+.ButtonView {
+    &.base-green {
+        width: 230px;
+        height: 50px;
+        font-size: 18px;
+        background-color: #0BC91F;
+        color: #fff;
+        border:none;
+        border-radius: 3px;
+    }
+    &.base-green.outline {
+        background-color: #fff;
+        color: #0BC91F;
+    }
 }

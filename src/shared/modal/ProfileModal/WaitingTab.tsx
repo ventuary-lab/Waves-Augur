@@ -7,7 +7,7 @@ import SvgIcon from 'components/global/common/SvgIcon';
 import {
     profileSvg,
     arrowDown
-} from 'ui/icon/index';
+} from 'static/icons/index';
 
 
 const WaitingTab: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => (

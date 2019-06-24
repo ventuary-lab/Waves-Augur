@@ -1,10 +1,10 @@
 import React from 'react';
-import InputField from 'ui/form/InputField';
-import Button from 'ui/form/Button/Button';
+import InputField from 'yii-steroids/ui/form/InputField';
+import Button from 'yii-steroids/ui/form/Button/Button';
 // import SvgIcon from 'components/global/common/SvgIcon';
 import { Field } from 'react-final-form'
 
-import InputTag from 'ui/form/InputTag';
+import InputTag from 'shared/InputTag';
 import { html } from 'components';
 const bem: any = html.bem('AboutTab');
 
@@ -26,7 +26,7 @@ class AboutTab extends React.Component<React.HTMLAttributes<HTMLDivElement>> {
     }
 
     connectUserImage () {
-        
+
     }
 
     render () {

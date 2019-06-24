@@ -6,7 +6,7 @@ const bem: any = html.bem('InputTag');
 
 import {
     cross
-} from 'ui/icon/index';
+} from 'static/icons/index';
 
 import "./InputTag.scss";
 

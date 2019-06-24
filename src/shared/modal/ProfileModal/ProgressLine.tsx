@@ -3,7 +3,7 @@ import SvgIcon from 'components/global/common/SvgIcon';
 
 import {
     tinyRect
-} from 'ui/icon/index';
+} from 'static/icons/index';
 
 import { html } from 'components';
 const bem: any = html.bem('ProgressLine');

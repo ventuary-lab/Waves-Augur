@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {html} from 'components';
-import {getNavItems} from 'reducers/navigation';
+import {getNavItems} from 'yii-steroids/reducers/navigation';
 import sidebarData from 'static/data/profile-sidebar';
 import RoutesEnum from 'enums/RoutesEnum';
 import ProfileSidebar from './views/ProfileSidebar';

@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import Button from 'ui/form/Button/Button';
+import Button from 'yii-steroids/ui/form/Button/Button';
 import { Form, Field } from 'react-final-form';
 import DAL from 'dal/DataAccessLayer';
 
@@ -127,8 +127,8 @@ class ProfilePopup extends React.Component {
                                         {visibleTab}
                                         <div className={bem.element('buttons-cont')}>
                                             {currentTab > 0 ? (
-                                                <Button 
-                                                    className="base-green outline" 
+                                                <Button
+                                                    className="base-green outline"
                                                     onClick={() => onBack(currentTab - 1)}>
                                                     Back
                                                 </Button>

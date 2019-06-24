@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
-import Link from 'ui/nav/Link';
+import Link from 'yii-steroids/ui/nav/Link';
 import RoutesEnum from 'enums/RoutesEnum';
-import { getNavUrl } from 'reducers/navigation';
+import { getNavUrl } from 'yii-steroids/reducers/navigation';
 
 import './Footer.scss';
 

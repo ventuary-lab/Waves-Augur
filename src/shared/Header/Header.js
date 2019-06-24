@@ -2,10 +2,10 @@ import React from 'react';
 import {push} from 'react-router-redux';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getNavItems, getNavItem, getNavUrl} from 'reducers/navigation';
-import Link from 'ui/nav/Link';
-import Form from 'ui/form/Form';
-import InputField from 'ui/form/InputField';
+import {getNavItems, getNavItem, getNavUrl} from 'yii-steroids/reducers/navigation';
+import Link from 'yii-steroids/ui/nav/Link';
+import Form from 'yii-steroids/ui/form/Form';
+import InputField from 'yii-steroids/ui/form/InputField';
 import {html} from 'components';
 import ProfileBlock from 'shared/ProfileBlock';
 import HeaderNav from './views/HeaderNav';
@@ -60,7 +60,7 @@ export default class Header extends React.PureComponent {
                     >
                         <img
                             className={bem.element('logo-image')}
-                            src='static/icons/logo.svg'
+                            src='/icons/logo.svg'
                             alt='ventuary dao'
                         />
                     </Link>

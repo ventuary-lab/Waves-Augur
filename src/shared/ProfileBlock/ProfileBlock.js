@@ -2,16 +2,16 @@ import React from 'react';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Link from 'ui/nav/Link';
-import Button from 'ui/form/Button';
+import Link from 'yii-steroids/ui/nav/Link';
+import Button from 'yii-steroids/ui/form/Button';
 
 import {html} from 'components';
 import NavItemSchema from 'types/NavItemSchema';
+import avatarStub from 'static/images/avatar-stub.png';
 
 import './ProfileBlock.scss';
 
 const bem = html.bem('ProfileBlock');
-const DEFAULT_AVATAR_PATH = './static/images/avatar-stub.png';
 
 @connect()
 export default class ProfileBlock extends React.PureComponent {
@@ -42,7 +42,7 @@ export default class ProfileBlock extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.avatar || DEFAULT_AVATAR_PATH}
+                    src={this.props.user.avatar || avatarStub}
                     alt={this.props.user.name}
                 />
                 <div className={bem.element('inner')}>

@@ -5,6 +5,7 @@ import moment from 'moment';
 import {html} from 'components';
 import SocialLinksSchema from 'types/SocialLinksSchema';
 import SocialLinks from 'shared/SocialLinks';
+import avatarStub from 'static/images/avatar-stub.png';
 
 import './ProfileSidebar.scss';
 
@@ -39,7 +40,7 @@ export default class ProfileSidebar extends React.PureComponent {
             })}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.avatarUrl || '/images/avatar-stub.png'}
+                    src={this.props.avatarUrl || avatarStub}
                     alt={this.props.name}
                 />
                 <div className={bem.element('inner')}>

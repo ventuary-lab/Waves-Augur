@@ -1,5 +1,5 @@
 {
-  "name": "waves-augur-ts",
+  "name": "waves-augur",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -103,6 +103,7 @@
     "ckeditor": "^4.8.0",
     "content-disposition": "^0.5.3",
     "cross-env": "^5.2.0",
+    "css-hot-loader": "^1.4.4",
     "domready": "^1.0.8",
     "express": "^4.16.4",
     "file-saver": "^2.0.0",
@@ -159,9 +160,8 @@
     "yup": "^0.26.6"
   },
   "scripts": {
-    "dev": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack-dev-server --colors --config ./webpack/webpack.config.dev.ts",
-    "heroku-postbuild": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --colors --config ./webpack/webpack.config.prod.ts",
-    "ts:check": "tsc -p tsconfig-lint.json --noEmit",
+    "dev": "node webpack",
+    "heroku-postbuild": "node webpack production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
