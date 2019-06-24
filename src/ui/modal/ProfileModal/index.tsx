@@ -1,7 +1,8 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import Button from 'ui/form/Button/Button';
-import { Form, Field } from 'react-final-form'
+import { Form, Field } from 'react-final-form';
+import DAL from 'dal/DataAccessLayer';
 
 import AboutTab from './AboutTab';
 import LinksTab from './LinksTab';
@@ -19,6 +20,7 @@ type InitialState = {
     isOpened: boolean;
     currentTab: number;
     formState: any;
+    initialForm: any;
     isSendingAllowed: boolean;
 }
 
@@ -33,6 +35,7 @@ class ProfilePopup extends React.Component {
         this.initialState = {
             isOpened: false,
             formState: {},
+            initialForm: {},
             currentTab: 0,
             isSendingAllowed: false
         };
@@ -44,6 +47,24 @@ class ProfilePopup extends React.Component {
             <LinksTab className={bem.element('body-inner')} />,
             <AboutTab className={bem.element('body-inner')} />
         ];
+    }
+
+    async componentDidMount () {
+        try {
+            const onUnregistered = () => {
+                console.log("OPENED");
+                this.onOpen();
+                this.setState({ initialForm: {} });
+            };
+
+            // @ts-ignore
+            const userData = await DAL.getCheckStatusRegisteredUser(onUnregistered);
+
+            // @ts-ignore
+            this.setState({ initialForm: userData.bio });
+        } catch (e) {
+            // this.formState
+        }
     }
 
     onClose = () => {
@@ -86,7 +107,7 @@ class ProfilePopup extends React.Component {
 
     render () {
         const { onBack, onNext, onClose, onOpen, onFormSubmit } = this;
-        const { isOpened, currentTab } = this.state;
+        const { isOpened, currentTab, initialForm } = this.state;
 
         const visibleTab: React.ReactNode = this.tabs
             .filter((tab: React.ReactNode, tabIndex: number) => tabIndex === currentTab)[0];
@@ -97,6 +118,7 @@ class ProfilePopup extends React.Component {
                 <Modal open={isOpened} onClose={onClose}>
                     <Form
                         onSubmit={onFormSubmit}
+                        initialValues={initialForm}
                         render={({ handleSubmit, values }) => (
                             <FormContext.Provider value={values}>
                                 <form onSubmit={handleSubmit}>

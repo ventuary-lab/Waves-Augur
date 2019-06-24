@@ -8,7 +8,6 @@ import './IndexPage.scss';
 
 const bem = html.bem('IndexPage');
 
-import ProfilePopup from 'ui/modal/ProfileModal';
 
 export default class IndexPage extends React.PureComponent {
 
@@ -17,7 +16,6 @@ export default class IndexPage extends React.PureComponent {
     render() {
         return (
             <>
-                <ProfilePopup />
                 <div className={bem.block()}>
                     <section className={bem.element('hero')}>
                         <div className={bem.element('hero-inner')}>

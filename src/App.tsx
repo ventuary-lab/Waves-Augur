@@ -7,6 +7,8 @@ import Application from './Application';
 import './style/index.scss';
 import './App.css';
 
+
+
 const App: React.FC = () => {
   return (
     <Provider store={store.store}>

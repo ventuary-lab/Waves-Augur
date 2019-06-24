@@ -25,16 +25,6 @@ class AboutTab extends React.Component<React.HTMLAttributes<HTMLDivElement>> {
         }
     }
 
-    // onTagAdd = (event: React.KeyboardEvent) => {
-    //     const { value } = event.target;
-
-    //     console.log({ event })
-
-    //     if (event.keyCode === 13) {
-    //         this.setState((prevState: State) => ({ tags: [...prevState.tags, value] }));
-    //     }
-    // }
-
     connectUserImage () {
         
     }

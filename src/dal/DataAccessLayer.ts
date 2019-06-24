@@ -1,3 +1,5 @@
+import { invokeScript, nodeInteraction } from '@waves/waves-transactions';
+// import { stringToUint8Array, sha256, base58Encode } from '@waves/waves-crypto';
 
 let dummyTestUsers = [
     {address: '3N16c6myJsnmdHVXWS9NmXYBDUdVgb2Dgvv', seed: 'invited1 broom nut fun weekend task library twice faint wish state camp', 
@@ -48,44 +50,38 @@ let dummyUser = {
     dummyUser, dummyUser, dummyUser, dummyInvitedUser, dummyInvitedUser, dummyInvitedUser
   ]
   
-  let getCheckStatusInvitedUser = function(state) {
+  let getCheckStatusInvitedUser = function(state: any) {
     return new Promise((resolve) => {
       resolve(dummyTestUsers[0].address == state.account.address)
     });
   }
-  let getCheckStatusRegisteredUser = function(state) {
-    return new Promise((resolve) => {
-      resolve(dummyTestUsers[1].address == state.account.address)
-    });
-  }
-  let getCheckStatusWhaleUser = function(state) {
+  let getCheckStatusWhaleUser = function(state: any) {
     return new Promise((resolve) => {
       resolve(dummyTestUsers[2].address == state.account.address)
     });
   }
   
-  let getCollectionInvitedUsers = function(address) {
-    let dal = this
+  let getCollectionInvitedUsers = function(address: any) {
     return new Promise((resolve) => {
-      resolve(dal._collectionUsers.filter((x) => x.ref == address))
+      resolve(DAL._collectionUsers.filter((x: any) => x.ref == address))
     });
   }
   
   let getCollectionAllUsers = function() {
     return new Promise((resolve) => {
-      resolve(dal._collectionUsers.filter((x) => x.status == "registered"))
+      resolve(DAL._collectionUsers.filter((x: any) => x.status == "registered"))
     });
   }
   
-  let setInviteUser = function(userdata) {
-    let dal = this
-    dal._collectionUsers.push(userdata)
+  let setInviteUser = function(userdata: any) {
+    DAL._collectionUsers.push(userdata)
     return new Promise((resolve) => {
       resolve({type: 16}) // invoke tx for WavesKeeper
     });
   }
+
   
-  let setUserRegisterOrUpdate = function(userdata) {
+  let setUserRegisterOrUpdate = function(userdata: any) {
     let transaction = {
       type: 16,
       data: {
@@ -108,6 +104,35 @@ let dummyUser = {
       resolve(transaction) // invoke tx for WavesKeeper
     });
   }
+
+export const NODE_URL = 'https://testnodes.wavesnodes.com';
+
+export const getCurrentUserData = async function(address: string) {
+    let dapp = "3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF";
+    let bio = await nodeInteraction.accountDataByKey("wl_bio_" + address, dapp, NODE_URL);
+    let status = await nodeInteraction.accountDataByKey("wl_sts_" + address, dapp, NODE_URL);
+
+    return new Promise((resolve) => {
+        resolve(
+            { address: address, bio: JSON.parse(bio.value as any), status: status.value }
+        )
+    });
+}
+
+export const getCheckStatusRegisteredUser = async function (onUnregistered: () => void) {
+    // @ts-ignore
+    const WavesKeeper = window.WavesKeeper || {};
+
+    try {
+        const userData = await WavesKeeper.publicState();
+        const { address } = userData.account;
+        const data = await DAL.getCurrentUserData(address);
+        return data;
+    } catch (e) {
+        // User is not invited!
+        onUnregistered();
+    }
+}
   
 const DAL = {
     _collectionEvents: [],
@@ -125,7 +150,8 @@ const DAL = {
     getCollectionVotes: "",
     setInviteUser: setInviteUser,
     setUserRegisterOrUpdate: setUserRegisterOrUpdate,
-    setProfileRegisterOrUpdate: ""
+    setProfileRegisterOrUpdate: "",
+    getCurrentUserData: getCurrentUserData
 }
 
 export default DAL;

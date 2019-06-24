@@ -15,6 +15,8 @@ ui.addFormatters(require.context('./ui', true, /Formatter.js$/));
 
 import DAL from './dal/DataAccessLayer';
 
+import ProfilePopup from 'ui/modal/ProfileModal';
+
 class Application extends React.PureComponent {
 
     static treeToList(item: any) {
@@ -29,16 +31,19 @@ class Application extends React.PureComponent {
 
     componentDidMount () {
         // @ts-ignore
-        window.DAL = DAL;
+        window.DAL = DAL;        
     }
 
     render() {
 
         return (
-            <Router
-                wrapperView={Layout}
-                routes={Application.treeToList(routesTree)}
-            />
+            <>
+                <ProfilePopup />
+                <Router
+                    wrapperView={Layout}
+                    routes={Application.treeToList(routesTree)}
+                />
+            </>
         )
     }
 }
