@@ -149,7 +149,7 @@ export default class DalComponent {
             address: address,
             name: userData.account.name,
             bio: bio ? JSON.parse(bio.value) : null,
-            status: status ? status.value : null,
+            role: status ? status.value : null,
         };
     }
 

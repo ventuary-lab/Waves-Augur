@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {push} from 'react-router-redux';
 import {connect} from 'react-redux';
-import Link from 'yii-steroids/ui/nav/Link';
 
 import {html} from 'components';
 
@@ -31,7 +31,6 @@ export default class ProfileContentFilter extends React.PureComponent {
         }
 
         return (
-
             <div className={bem.element('nav-container')}>
                 <div className={bem.element('nav')}>
                     {this.props.navItems.map(item => (
@@ -40,15 +39,12 @@ export default class ProfileContentFilter extends React.PureComponent {
                             className={bem.element('nav-item', {
                                 'is-active': item.isActive,
                             })}
+                            onClick={() => this.props.dispatch(push(item.url))}
                         >
-                            <Link
-                                to={item.url}
-                            >
-                                <div className={bem.element('nav-icon')}>
-                                    <span className={`Icon ${item.isActive ? item.icon + '_green' : item.icon}`}/>
-                                </div>
-                                {item.label}
-                            </Link>
+                            <div className={bem.element('nav-icon')}>
+                                <span className={`Icon ${item.isActive ? item.icon + '_green' : item.icon}`}/>
+                            </div>
+                            {item.label}
                         </span>
                     ))}
                 </div>
