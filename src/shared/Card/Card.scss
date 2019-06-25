@@ -1,0 +1,26 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.Card {
+  display: flex;
+  background: #fff;
+  border: 1px solid $color-gg-10;
+  box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+  border-radius: 3px;
+
+  &__column {
+    width: 100%;
+
+    &_left {
+      max-width: 190px;
+    }
+
+    &_center {
+      max-width: 190px;
+    }
+
+    &_right {
+      flex-grow: 1;
+    }
+  }
+}

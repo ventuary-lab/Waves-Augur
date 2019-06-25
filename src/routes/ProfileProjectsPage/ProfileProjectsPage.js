@@ -5,6 +5,8 @@ import {openModal} from 'yii-steroids/actions/modal';
 
 import ProfileLayout from 'shared/ProfileLayout';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
+import ProjectCard from './views/ProjectCard';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import {html} from 'components';
 
@@ -35,12 +37,31 @@ export default class ProfileProjectsPage extends React.PureComponent {
                         iconClass={'Icon__new-project'}
                         handleClick={this.onProjectAdd}
                     />
+
+                    <div className={bem.element('card-list')}>
+
+                        <ProjectCard
+                            title={'SmartChain Media'}
+                            description={'Build Blockchain-related applications and uild applications ser'}
+                            logoUrl={''}
+                            coverUrl={''}
+                            expireVoting={'2019-07-01'}
+                            expireCrowd={'2019-08-01'}
+                            expireWhale={'2019-08-05'}
+                            targetWaves={1000}
+                            currentWaves={43}
+                            againstWaves={5}
+                            status={ProjectStatusEnum.VOTING}
+                            country={'Russia'} //TODO: need enum
+                            activity={1422}
+                        />
+                    </div>
                 </ProfileLayout>
             </div>
         );
     }
 
     onProjectAdd() {
-        this.props.dispatch(openModal(AddNewProjectModal))
+        this.props.dispatch(openModal(AddNewProjectModal));
     }
 }
