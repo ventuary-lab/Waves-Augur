@@ -1,0 +1,42 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.ConnectImageField {
+  &__field {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  @include desktop {
+    display: flex;
+  }
+
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+
+    @include desktop {
+      justify-content: flex-start;
+    }
+  }
+
+  &__action {
+    padding-left: 46px;
+    padding-right: 46px;
+
+    @include desktop {
+      margin-right: 20px;
+      padding-left: 31px;
+      padding-right: 31px;
+    }
+  }
+
+  &__avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: $color-gg-4;
+  }
+
+}

@@ -8,6 +8,52 @@ $icons-dir: '../static/icons';
   min-width: 16px;
   min-height: 16px;
 
+  &__trash {
+    background-image: url('#{$icons-dir}/trash.svg');
+  }
+
+  &__close-small {
+    background-image: url('#{$icons-dir}/delete-tag.svg');
+  }
+
+  &__calendar {
+    min-width: 20px;
+    min-height: 25px;
+    background-image: url('#{$icons-dir}/calendar.svg');
+    opacity: 0.5;
+
+    &_dark-grey {
+      background-image: url('#{$icons-dir}/calendar-dark-grey.svg');
+      opacity: 1;
+    }
+
+    &_green {
+      background-image: url('#{$icons-dir}/calendar-green.svg');
+      opacity: 1;
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/calendar-dark-grey.svg');
+      opacity: 1;
+    }
+  }
+
+  &__checkbox-true {
+    background-image: url('#{$icons-dir}/checkbox-true.svg');
+  }
+
+  &__invite-user {
+    min-width: 120px;
+    min-height: 120px;
+    background-image: url('#{$icons-dir}/invite-user.svg');
+  }
+
+  &__invite-whale {
+    min-width: 120px;
+    min-height: 120px;
+    background-image: url('#{$icons-dir}/invite-whale.svg');
+  }
+
   &__logo {
     background-image: url('#{$icons-dir}/logo.svg');
   }
@@ -22,6 +68,10 @@ $icons-dir: '../static/icons';
 
   &__instagram {
     background-image: url('#{$icons-dir}/instagram.svg');
+  }
+
+  &__linkedin {
+    background-image: url('#{$icons-dir}/linkedin.svg');
   }
 
   &__telegram {
@@ -96,6 +146,13 @@ $icons-dir: '../static/icons';
   }
 
   &__new-project {
+
+    &_lg {
+      min-width: 120px;
+      min-height: 120px;
+      background-image: url('#{$icons-dir}/new-project_lg.svg');
+    }
+
     min-width: 69px;
     min-height: 69px;
     background-image: url('#{$icons-dir}/new-project.svg');
@@ -113,31 +170,31 @@ $icons-dir: '../static/icons';
     background-image: url('#{$icons-dir}/landing-rewards.svg');
   }
 
-  &__rocket-main {
+  &__rocket-graph-main {
     min-width: 60px;
     min-height: 60px;
     background-image: url('#{$icons-dir}/landing-rocket-main.svg');
   }
 
-  &__rocket {
+  &__rocket-graph {
     min-width: 115px;
     min-height: 120px;
     background-image: url('#{$icons-dir}/landing-rocket.svg');
   }
 
-  &__rocket-big {
+  &__rocket-graph-big {
     min-width: 115px;
     min-height: 120px;
     background-image: url('#{$icons-dir}/landing-rocket-big.svg');
   }
 
-  &__voting {
+  &__voting-graph {
     min-width: 60px;
     min-height: 60px;
     background-image: url('#{$icons-dir}/landing-voting.svg');
   }
 
-  &__voting-big {
+  &__voting-graph-big {
     min-width: 115px;
     min-height: 120px;
     background-image: url('#{$icons-dir}/landing-voting-big.svg');

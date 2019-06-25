@@ -1,14 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { html } from 'components';
 import Button from 'yii-steroids/ui/form/Button';
 import Link from 'yii-steroids/ui/nav/Link';
+import { openModal } from 'yii-steroids/actions/modal';
 
 import './IndexPage.scss';
+import AddNewProjectModal from 'modals/AddNewProjectModal';
 
 const bem = html.bem('IndexPage');
 
-
+@connect()
 export default class IndexPage extends React.PureComponent {
 
     static propTypes = {};
@@ -30,15 +33,17 @@ export default class IndexPage extends React.PureComponent {
                                     </p>
                                 </div>
                                 <div className={bem.element('hero-actions')}>
-                                    <Button
+                                    <button
                                         className={bem.element('hero-action', 'primary')}
-                                        label={__('Add project')}
-                                        onClick={() => console.log('add project')}
-                                    />
-                                    <Link
+                                        onClick={() => this.props.dispatch(openModal(AddNewProjectModal))}
+                                    >
+                                        {__('Add project')}
+                                    </button>
+                                    <a
                                         className={bem.element('hero-action', 'secondary')}
-                                        label={__('Find project')}
-                                    />
+                                    >
+                                        {__('Find project')}
+                                    </a>
                                 </div>
                             </div>
                             <div
@@ -75,14 +80,14 @@ export default class IndexPage extends React.PureComponent {
                                 <li className={bem.element('features-item')}>
                                     <span className={bem.element('features-label')}>{__('Crowdfunding')}</span>
                                     <span
-                                        className={bem(bem.element('features-icon'), 'Icon Icon__rocket-main')}
+                                        className={bem(bem.element('features-icon'), 'Icon Icon__rocket-graph-main')}
                                         aria-hidden
                                     />
                                 </li>
                                 <li className={bem.element('features-item')}>
                                     <span className={bem.element('features-label')}>{__('Votings')}</span>
                                     <span
-                                        className={bem(bem.element('features-icon'), 'Icon Icon__voting')}
+                                        className={bem(bem.element('features-icon'), 'Icon Icon__voting-graph')}
                                         aria-hidden
                                     />
                                 </li>
@@ -112,7 +117,7 @@ export default class IndexPage extends React.PureComponent {
                                 <li className={bem.element('process-item')}>
                                     <span className={bem.element('process-label')}>{__('Proposal')}</span>
                                     <span
-                                        className={bem(bem.element('process-icon'), 'Icon Icon__rocket-big')}
+                                        className={bem(bem.element('process-icon'), 'Icon Icon__rocket-graph-big')}
                                         aria-hidden
                                     />
                                     <span className={bem(bem.element('process-icon'), 'Icon Icon__arrow')} style={{position: 'absolute'}}></span>
@@ -120,7 +125,7 @@ export default class IndexPage extends React.PureComponent {
                                 <li className={bem.element('process-item')}>
                                     <span className={bem.element('process-label')}>{__('Voting')}</span>
                                     <span
-                                        className={bem(bem.element('process-icon'), 'Icon Icon__voting-big')}
+                                        className={bem(bem.element('process-icon'), 'Icon Icon__voting-graph-big')}
                                         aria-hidden
                                     />
                                 </li>
@@ -148,7 +153,7 @@ export default class IndexPage extends React.PureComponent {
                                 <li className={bem.element('process-item')}>
                                     <span className={bem.element('process-label')}>{__('Launch')}</span>
                                     <span
-                                        className={bem(bem.element('process-icon'), 'Icon Icon__rocket')}
+                                        className={bem(bem.element('process-icon'), 'Icon Icon__rocket-graph')}
                                         aria-hidden
                                     />
                                 </li>

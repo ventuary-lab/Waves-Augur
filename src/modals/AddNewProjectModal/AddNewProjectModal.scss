@@ -1,0 +1,128 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.AddNewProjectModal {
+
+  $root: &;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  //&_step_3,
+  //&_step_4,
+  //&_step_5,
+  //&_step_6 {
+  //  .FieldLayoutView {
+  //    margin-bottom: 38px;
+  //  }
+  //}
+
+
+  &__form-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+
+    &_margin-bottom {
+      margin-bottom: 38px;
+    }
+  }
+
+  &__form-col-label {
+    width: 35%;
+    margin-right: 20px;
+    margin-top: 15px;
+    font-weight: 300;
+    color: $color-gg-4;
+
+    display: none;
+
+    & > label {
+      display: flex;
+      align-items: center;
+    }
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__form-col-label-icon {
+    margin-right: 10px;
+  }
+
+  &__form-col-field {
+    flex-grow: 1;
+    width: 100%;
+  }
+
+  &__inner {
+    padding-top: 60px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__container {
+    width: 100%;
+  }
+
+  &__form-progress {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 17px;
+    width: 100%;
+  }
+
+  &__new-project-icon {
+    margin: 30px 0;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  &__sub-title {
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__button {
+    &_back {
+      margin-right: 40px;
+    }
+
+    &_main-action {
+
+    }
+  }
+
+  &__deadlines,
+  &__targets {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      width: 48%;
+    }
+
+  }
+}

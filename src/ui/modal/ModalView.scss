@@ -1,0 +1,90 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ModalView {
+  &__modal {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    outline: none;
+    max-width: 760px;
+    padding: 0 20px;
+    border: none;
+    width: 100%;
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+    overflow: auto;
+  }
+
+  &__inner {
+    width: 100%;
+    max-width: 760px;
+    min-height: 350px;
+    background: #fff;
+  }
+
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: block;
+    width: 30px;
+    height: 30px;
+
+    &:hover::before,
+    &:hover::after {
+      background-color: #333;
+    }
+
+    &::before,
+    &::after
+    {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      margin-top: -8px;
+      left: 50%;
+      width: 2px;
+      height: 16px;
+      background-color: $color-gg-4;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &__content {
+    padding: 15px;
+
+    @include tablet {
+      padding-left: 126px;
+      padding-right: 126px;
+      padding-bottom: 37px;
+    }
+  }
+}
+
+//fade
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}

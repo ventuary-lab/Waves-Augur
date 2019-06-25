@@ -72,24 +72,19 @@ export default class ProfileBlock extends React.PureComponent {
                                             active: menuItem.isActive,
                                         })}
                                         to={menuItem.url}
-                                        label={menuItem.title}
+                                        label={menuItem.label}
                                         onClick={() => this.onMenuClick(menuItem.url)}
+                                        noStyles
                                     />
                                 </li>
                             ))}
-                            <li className={bem.element('menu-item')}>
-                                <Button
-                                    className={bem.element('menu-link', 'logout')}
-                                    onClick={() => console.log('logout')}
-                                    label={__('Log Out')}
-                                />
-                            </li>
                         </ul>
                     </div>
                 </div>
                 <Link
                     className={bem.element('notification')}
                     to={'/'}
+                    noStyles
                 >
                     <span className={bem(bem.element('notification-icon'), 'MaterialIcon')}>notifications</span>
                 </Link>

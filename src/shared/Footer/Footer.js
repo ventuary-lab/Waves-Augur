@@ -36,6 +36,7 @@ export default class Footer extends React.PureComponent {
                         <Link
                             className={bem.element('logo')}
                             to={this.props.indexPageUrl}
+                            noStyles
                         >
                             <img
                                 className={bem.element('logo-image')}
@@ -77,6 +78,7 @@ export default class Footer extends React.PureComponent {
                                         <Link
                                             className={bem.element('helper-link')}
                                             to={this.props.createProjectPageUrl}
+                                            noStyles
                                         >
                                             {__('Add project')}
                                         </Link>
@@ -85,6 +87,7 @@ export default class Footer extends React.PureComponent {
                                         <Link
                                             className={bem.element('helper-link')}
                                             to={this.props.findProjectPageUrl}
+                                            noStyles
                                         >
                                             {__('Find project')}
                                         </Link>

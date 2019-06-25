@@ -10,7 +10,7 @@ const bem = html.bem('AboutTab');
 
 import FormContext from './context';
 import InputField from 'yii-steroids/ui/form/InputField';
-import AvatarField from 'ui/form/AvatarField/AvatarField';
+import AvatarField from 'yii-steroids/ui/form/AvatarField/AvatarField';
 
 @connect(
     (state, props) => ({

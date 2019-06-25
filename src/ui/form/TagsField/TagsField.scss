@@ -1,43 +1,119 @@
 @import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
 
 .TagsField {
-  padding: 13px 20px;
-  background-color: $color-base;
-  color: $color-base-revert;
-  box-sizing: border-box;
-  border: 1px solid $color-brand-light-green;
-  border-radius: 3px;
-  font-family: $ff-roboto;
-  font-weight: 300;
-  font-size: 18px;
-  line-height: 24px;
-  outline: none;
 
-  &::placeholder {
-    color: $color-gg-4;
+  &__field {
+    position: relative;
+    display: flex;
   }
 
-  &:hover {
-    border-color: $color-brand-green;
+  &__input {
+    flex-grow: 1;
   }
 
-  &:focus {
-    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
-    border-color: $color-brand-green;
+  &__add-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 46px;
+    border: 1px solid $color-gg-5;
+    background-color: $color-base;
+    cursor: pointer;
+
+    &_disabled {
+      pointer-events: none;
+      opacity: $disabled-opacity;
+    }
   }
 
-  &_isInvalid {
-    border-color: $color-brand-red;
-    color: $color-brand-red;
+  &__add-button-icon {
+    transform: rotate(45deg);
   }
 
-  &:disabled {
-    background-color: $color-gg-10;
-    color: $color-gg-4;
+  &__skills {
+    margin-top: 16px;
+  }
+
+  &__skill-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    @include tablet {
+      flex-direction: row;
+    }
+  }
+
+  &__skill-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 5px 27px 5px 10px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    color: $color-base-revert;
+    background-color: rgba($color-brand-green, 0.1);
+    cursor: pointer;
+    border-radius: 3px;
 
     &:hover {
-      border-color: $color-brand-light-green;
-      cursor: not-allowed;
+      background-color: $color-base;
+      color: $color-gg-4;
+    }
+
+    @include tablet {
+      margin-bottom: 8px;
+      margin-right: 8px;
+    }
+  }
+
+  &__skill-remove {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__drop-down {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    z-index: $zi-sticky;
+    background-color: $color-base;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1);
+  }
+
+  &__drop-down-list {
+    min-height: 20px;
+    max-height: 185px;
+    overflow: auto;
+  }
+
+  &__drop-down-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 24px;
+    cursor: pointer;
+    color: $color-gg-3;
+
+    &_hover {
+      background-color: $color-brand-green;
+      color: $color-base;
     }
   }
 }

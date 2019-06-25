@@ -185,3 +185,18 @@ $col-width: percentage(100/$col-length)/100;
     flex: 1;
   }
 }
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-label-col {
+  width: 25%;
+}
+
+.form-field-col {
+  width: 65%;
+}
+
+

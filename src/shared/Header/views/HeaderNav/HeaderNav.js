@@ -29,7 +29,8 @@ export default class HeaderNav extends React.PureComponent {
                                     'active': navItem.isActive,
                                 })}
                                 to={navItem.url}
-                                label={navItem.title}
+                                label={navItem.label}
+                                noStyles
                             />
                         </li>
                     ))}

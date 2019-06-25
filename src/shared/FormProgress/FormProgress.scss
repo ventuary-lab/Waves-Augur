@@ -1,0 +1,48 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.FormProgress {
+  $root: &;
+  $item-width: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  &__item-container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &_first {
+      width: $item-width;
+    }
+  }
+
+  &__point {
+    width: $item-width;
+    height: $item-width;
+    background-color: $color-gg-4;
+
+    transform: rotate(45deg);
+
+    &_filled {
+      background-color: $color-brand-green;
+    }
+  }
+
+  &__line {
+    display: block;
+    width: 99%;
+    height: 1px;
+    background-color: $color-gg-4;
+    opacity: 0.5;
+
+    &_filled {
+      background-color: $color-brand-green;
+      opacity: 1;
+    }
+  }
+}
