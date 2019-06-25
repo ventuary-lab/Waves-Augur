@@ -116,7 +116,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                                             <Button
                                                 label={__('Back')}
                                                 onClick={this.onBackStep}
-                                                likeString
+                                                link
                                             />
                                         </div>
                                     )}

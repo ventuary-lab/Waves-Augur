@@ -24,22 +24,6 @@
     box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
   }
 
-  &_like-string {
-    padding: 0;
-    background-color: transparent !important;
-    color: $color-brand-green !important;
-    font-weight: 300;
-
-    &:hover, &:focus {
-      box-shadow: none;
-      font-weight: 500;
-    }
-
-    &:active {
-      color: $color-brand-light-green;
-    }
-  }
-
   &:active {
     box-shadow: none;
 
@@ -62,6 +46,23 @@
 
     &:active {
       opacity: 0.4;
+    }
+  }
+
+  &_link {
+    text-decoration: none;
+    padding: 0;
+    background-color: transparent;
+    color: $color-brand-green;
+    font-weight: 300;
+
+    &:hover, &:focus {
+      box-shadow: none;
+      font-weight: 500;
+    }
+
+    &:active {
+      color: $color-brand-light-green;
     }
   }
 

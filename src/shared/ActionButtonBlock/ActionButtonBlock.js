@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'yii-steroids/ui/nav/Link';
+import _isFunction from 'lodash-es/isFunction';
 
 import {html} from 'components';
 
@@ -12,27 +12,26 @@ export default class ActionButtonBlock extends React.PureComponent {
 
     static propTypes = {
         title: PropTypes.string,
-        iconClass: PropTypes.string
+        iconClass: PropTypes.string,
+        handleClick: PropTypes.func,
     };
 
     render() {
         return (
-            <div className={bem.block()}>
-                <Link
-                    //TODO: link path
-                    to={'/'}
-                >
-                    <div className={bem.element('container')}>
-                        <div className={bem.element('inner')}>
-                            <div className={bem.element('icon')}>
-                                <span className={`Icon ${this.props.iconClass}`}/>
-                            </div>
-                            <span className={bem.element('title')}>
-                                {this.props.title}
-                            </span>
+            <div
+                className={bem.block()}
+                onClick={_isFunction(this.props.handleClick) ? this.props.handleClick : null}
+            >
+                <div className={bem.element('container')}>
+                    <div className={bem.element('inner')}>
+                        <div className={bem.element('icon')}>
+                            <span className={`Icon ${this.props.iconClass}`}/>
                         </div>
+                        <span className={bem.element('title')}>
+                            {this.props.title}
+                        </span>
                     </div>
-                </Link>
+                </div>
             </div>
         );
     }

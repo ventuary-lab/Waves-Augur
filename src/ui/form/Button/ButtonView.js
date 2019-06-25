@@ -113,7 +113,7 @@ export default class ButtonView extends React.PureComponent {
                 submitting: this.props.submitting,
                 'is-loading': this.props.isLoading,
                 ...modifiers,
-                'like-string': this.props.likeString,
+                link: this.props.link,
             }),
             this.props.className,
         );
