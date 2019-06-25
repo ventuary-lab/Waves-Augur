@@ -10,7 +10,7 @@ import {html} from 'components';
 import ProfileBlock from 'shared/ProfileBlock';
 import HeaderNav from './views/HeaderNav';
 import NavItemSchema from './../../types/NavItemSchema';
-import RoutesEnum from '../../enums/RoutesEnum';
+import {ROUTE_ROOT, ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import user from '../../static/data/user';
 import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView';
 import InputFieldHamburgerSearchView from 'ui/form/InputField/InputFieldHamburgerSearchView';
@@ -22,10 +22,10 @@ const FORM_ID = 'search';
 
 @connect(
     state => ({
-        navItems: getNavItems(state, RoutesEnum.MAIN),
-        inboxPageNavItem: getNavItem(state, RoutesEnum.PROFILE_INBOX),
-        profilePageNavItem: getNavItem(state, RoutesEnum.PROFILE),
-        indexPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+        navItems: getNavItems(state, ROUTE_ROOT),
+        inboxPageNavItem: getNavItem(state, ROUTE_PROFILE_INBOX),
+        profilePageNavItem: getNavItem(state, ROUTE_PROFILE),
+        indexPageUrl: getNavUrl(state, ROUTE_ROOT),
     })
 )
 export default class Header extends React.PureComponent {
@@ -49,7 +49,7 @@ export default class Header extends React.PureComponent {
     }
 
     render() {
-        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX, RoutesEnum.TEST].includes(item.id));
+        const navItems = this.props.navItems.filter(item => item.isNavVisible !== false);
 
         return (
             <header className={bem.block()}>
@@ -109,7 +109,7 @@ export default class Header extends React.PureComponent {
     }
 
     renderMenu() {
-        const navItems = this.props.navItems.filter(item => ![RoutesEnum.PROFILE, RoutesEnum.PROFILE_INBOX].includes(item.id));
+        const navItems = this.props.navItems.filter(item => item.isNavVisible !== false);
 
         return (
             <div className={bem.element('menu', {

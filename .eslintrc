@@ -6,9 +6,7 @@
     "es6": true
   },
   "globals": {
-    "__appWidget": true,
-    "__": true,
-    "jQuery": true
+    "__": true
   },
   "rules": {
     "semi": [ "warn", "always" ],

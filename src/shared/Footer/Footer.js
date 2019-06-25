@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import Link from 'yii-steroids/ui/nav/Link';
-import RoutesEnum from 'enums/RoutesEnum';
+import {ROUTE_ROOT} from 'routes';
 import { getNavUrl } from 'yii-steroids/reducers/navigation';
 
 import './Footer.scss';
@@ -15,9 +15,9 @@ const bem = html.bem('Footer');
 // TODO replace page id when create project page will be reade
 @connect(
     state => ({
-        createProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
-        findProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
-        indexPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+        createProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
+        findProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
+        indexPageUrl: getNavUrl(state, ROUTE_ROOT),
     })
 )
 export default class Footer extends React.PureComponent {

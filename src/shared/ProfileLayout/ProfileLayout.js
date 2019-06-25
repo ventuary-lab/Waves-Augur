@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {html} from 'components';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import sidebarData from 'static/data/profile-sidebar';
-import RoutesEnum from 'enums/RoutesEnum';
+import {ROUTE_PROFILE} from 'routes';
 import ProfileSidebar from './views/ProfileSidebar';
 import ProfileContentFilter from './views/ProfileContentFilter';
 
@@ -15,7 +15,7 @@ const bem = html.bem('ProfileLayout');
 
 @connect(
     (state) => ({
-        profileFilterNavItems: getNavItems(state, RoutesEnum.PROFILE),
+        profileFilterNavItems: getNavItems(state, ROUTE_PROFILE),
     })
 )
 export default class ProfileLayout extends React.PureComponent {

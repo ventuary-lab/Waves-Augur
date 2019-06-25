@@ -4,7 +4,7 @@ import navigationHoc from 'yii-steroids/ui/nav/navigationHoc';
 
 import {ui} from 'components';
 import Layout from 'shared/Layout';
-import routesTree from './routes';
+import routes from './routes';
 
 // Automatically import all views from yii-steroids
 ui.addViews(require.context('yii-steroids/ui', true, /View.js?$/));
@@ -13,24 +13,13 @@ ui.addViews(require.context('yii-steroids/ui', true, /View.js?$/));
 ui.addFields(require.context('yii-steroids/ui', true, /Field.js$/));
 ui.addFormatters(require.context('yii-steroids/ui', true, /Formatter.js$/));
 
-@navigationHoc(routesTree)
 export default class Application extends React.PureComponent {
-
-    static treeToList(item) {
-        let items = [item];
-        if (item.items) {
-            item.items.forEach(sub => {
-                items = items.concat(Application.treeToList(sub));
-            });
-        }
-        return items;
-    }
 
     render() {
         return (
             <Router
                 wrapperView={Layout}
-                routes={Application.treeToList(routesTree)}
+                routes={routes}
             />
         );
     }

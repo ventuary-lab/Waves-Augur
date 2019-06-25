@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
-import Button from 'yii-steroids/ui/form/Button';
+import _uniq from 'lodash/uniq';
+import _remove from 'lodash/remove';
+import dataProviderHoc from 'yii-steroids/ui/form/dataProviderHoc';
+import propsHoc from 'yii-steroids/ui/propsHoc';
 
 import {html} from 'components';
 
 const bem = html.bem('TagsField');
 
 import './TagsField.scss';
-import InputTag from 'shared/InputTag';
 
-export default
-@fieldHoc({
+export default @fieldHoc({
     componentId: 'form.TagsField',
 })
+@propsHoc({
+    multiple: true,
+})
+@dataProviderHoc()
 class TagsField extends React.PureComponent {
 
     static propTypes = {
@@ -51,32 +56,38 @@ class TagsField extends React.PureComponent {
                     placeholder={this.props.placeholder || __('Enter')}
                     disabled={this.props.disabled}
                     required={this.props.required}
-                    {...this.props.input}
                     {...this.props.inputProps}
                     onKeyDown={this._onKeyDown}
                 />
                 <div>
-                    {tags.map((tag) => <InputTag>{tag}</InputTag>)}
+                    {[].concat(this.props.input.value || []).map((tag, index) => (
+                        <div
+                            key={index}
+                            onClick={e => this._onRemoveItem(e, tag)}
+                        >
+                            {tag}
+                        </div>
+                    ))}
                 </div>
-
-
-                <Button color='primary'>
-                    {__('Connect')}
-                </Button>
-                {this.props.input.value && (
-                    <img
-                        src={this.props.input.value}
-                        alt={__('Avatar')}
-                    />
-                )}
             </div>
         );
+    }
+
+    _onRemoveItem(e, tag) {
+        e.preventDefault();
+
+        const tags = [].concat(this.props.input.value) || [];
+        this.props.input.onChange(_remove(tags, t => t !== tag));
     }
 
     _onKeyDown(e) {
         if (e.which === 13) { // enter
             e.preventDefault();
 
+            const tags = [].concat(this.props.input.value) || [];
+            tags.push(e.target.value);
+            e.target.value = '';
+            this.props.input.onChange(_uniq(tags));
 
         }
     }

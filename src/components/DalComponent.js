@@ -57,6 +57,7 @@ export default class DalComponent {
 
     constructor() {
         this.nodeUrl = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
+        this.keeper = window.WavesKeeper || {};
 
         this._collectionEvents = [];
         this._collectionVotes = [];
@@ -107,31 +108,19 @@ export default class DalComponent {
         });
     }
 
-    async getCurrentUserData(address) {
+    async auth() {
+        const userData = await this.keeper.publicState();
+        const address = userData.account.address;
+
         let dapp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF';
         let bio = await nodeInteraction.accountDataByKey('wl_bio_' + address, dapp, this.nodeUrl);
         let status = await nodeInteraction.accountDataByKey('wl_sts_' + address, dapp, this.nodeUrl);
 
-        return new Promise((resolve) => {
-            resolve(
-                {address: address, bio: JSON.parse(bio.value), status: status.value}
-            )
-        });
-    }
-
-    async getCheckStatusRegisteredUser(onUnregistered) {
-        // @ts-ignore
-        const WavesKeeper = window.WavesKeeper || {};
-
-        try {
-            const userData = await WavesKeeper.publicState();
-            const {address} = userData.account;
-            return await this.getCurrentUserData(address);
-        } catch (e) {
-            // User is not invited!
-            onUnregistered();
-        }
-        return null;
+        return {
+            address: address,
+            bio: JSON.parse(bio.value),
+            status: status.value,
+        };
     }
 
 }

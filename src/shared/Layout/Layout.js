@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
+import layoutHoc from 'yii-steroids/ui/layoutHoc';
 
-import {html} from 'components';
+import {html, dal} from 'components';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 
@@ -10,6 +11,15 @@ import './Layout.scss';
 
 const bem = html.bem('Layout');
 
+@layoutHoc(
+    () => dal.auth()
+        .then(user => ({
+            user,
+        }))
+        .catch(() => ({
+            user: null,
+        }))
+)
 export default class Layout extends React.PureComponent {
 
     static propTypes = {
