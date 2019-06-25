@@ -1,18 +1,17 @@
 import React from 'react';
 import {InputField} from 'yii-steroids/ui/form';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
-import dataProviderHoc from 'yii-steroids/ui/form/dataProviderHoc';
 import Button from 'yii-steroids/ui/form/Button';
 
-import {html, http} from 'components';
+import {html} from 'components';
 
 const bem = html.bem('ConnectImageField');
 import './ConnectImageField.scss';
 
-export default @fieldHoc({
+export default
+@fieldHoc({
     componentId: 'form.ConnectImageField',
 })
-@dataProviderHoc()
 class ConnectImageField extends React.PureComponent {
 
     static propTypes = {};

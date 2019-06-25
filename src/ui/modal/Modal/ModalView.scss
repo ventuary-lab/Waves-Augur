@@ -1,5 +1,5 @@
-@import '../../style/helpers/vars';
-@import '../../style/helpers/mixins';
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
 
 .ModalView {
   &__modal {
@@ -73,9 +73,7 @@
     padding: 15px;
 
     @include tablet {
-      padding-left: 126px;
-      padding-right: 126px;
-      padding-bottom: 37px;
+      padding: 35px 125px;
     }
   }
 }

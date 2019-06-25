@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
-import layoutHoc from 'yii-steroids/ui/layoutHoc';
+import layoutHoc, {STATUS_LOADING} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 
@@ -12,6 +12,9 @@ import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 
 import './Layout.scss';
+import {openModal} from 'yii-steroids/actions/modal';
+import ProfileModal from 'modals/ProfileModal/ProfileModal';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 const bem = html.bem('Layout');
 
@@ -20,13 +23,14 @@ const bem = html.bem('Layout');
         .then(user => ({
             user,
         }))
-        .catch(() => ({
+        .catch(e => console.error(e) || ({
             user: null,
         }))
 )
 @connect(
     state => ({
         routeId: getCurrentRoute(state).id,
+        user: getUser(state),
     })
 )
 @screenWatcherHoc()
@@ -34,7 +38,16 @@ export default class Layout extends React.PureComponent {
 
     static propTypes = {
         status: PropTypes.string,
+        user: PropTypes.object,
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
+            && (!nextProps.user || !nextProps.user.bio)
+        ) {
+            this.props.dispatch(openModal(ProfileModal));
+        }
+    }
 
     render() {
         return (

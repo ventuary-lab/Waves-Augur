@@ -1,41 +1,34 @@
 import React from 'react';
-import Button from 'yii-steroids/ui/form/Button/Button';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import Modal from 'yii-steroids/ui/modal/Modal';
-import Form from 'yii-steroids/ui/form/Form';
-import Nav from 'yii-steroids/ui/nav/Nav';
 
 import {html, dal} from 'components';
 import AboutTab from './views/AboutTab';
 import LinksTab from './views/LinksTab';
 import WaitingTab from './views/WaitingTab';
+import FormWizard from 'ui/form/FormWizard';
 
 const bem = html.bem('ProfileModal');
 
 import './ProfileModal.scss';
+import {getUser} from 'yii-steroids/reducers/auth';
 
-export default class ProfilePopup extends React.Component {
+@connect(
+    state => ({
+        user: getUser(state),
+    })
+)
+export default class ProfileModal extends React.Component {
+
+    static propTypes = {
+        user: PropTypes.object,
+    };
 
     constructor() {
         super(...arguments);
 
-        this.state = {
-            activeTabIndex: 0,
-        };
-
-        this._tabs = [
-            {
-                id: 'waiting',
-                component: WaitingTab,
-            },
-            {
-                id: 'links',
-                component: LinksTab,
-            },
-            {
-                id: 'about',
-                component: AboutTab,
-            },
-        ];
+        this._onSubmit = this._onSubmit.bind(this);
     }
 
     render() {
@@ -44,68 +37,42 @@ export default class ProfilePopup extends React.Component {
                 {...this.props}
                 className={bem.block()}
             >
-                <Form
+                <FormWizard
                     formId='ProfileModal'
                     onSubmit={this._onSubmit}
-                >
-                    <Nav
-                        items={this._tabs.map(tab => ({
-                            id: tab.id,
-                        }))}
-                        activeTab={this._tabs[this.state.activeTabIndex].id}
-                    />
-                    {this.renderContent()}
-                    <div className={bem.element('buttons-cont')}>
-                        {this.state.activeTabIndex > 0 && (
-                            <Button
-                                color='primary'
-                                onClick={() => this.switchTab(-1)}
-                                outline
-                            >
-                                {__('Back')}
-                            </Button>
-                        )}
-                        <Button
-                            type='submit'
-                            color='primary'
-                            onClick={() => this.switchTab(1)}
-                            outline
-                        >
-                            {__('Next')}
-                        </Button>
-                    </div>
-                </Form>
+                    initialValues={{
+                        name: this.props.user ? this.props.user.name : null,
+                    }}
+                    items={[
+                        {
+                            id: 'waiting',
+                            component: WaitingTab,
+                        },
+                        {
+                            id: 'links',
+                            component: LinksTab,
+                        },
+                        {
+                            id: 'about',
+                            component: AboutTab,
+                        },
+                    ]}
+                />
             </Modal>
         );
     }
 
-    renderContent() {
-        const TabComponent = this._tabs[this.state.activeTabIndex].component;
-        return (
-            <TabComponent/>
-        );
-    }
-
-    switchTab(direction) {
-        const newIndex = Math.max(0, Math.min(this._tabs.length - 1, this.state.activeTabIndex + direction));
-        this.setState({
-            activeTab: this._tabs[newIndex].id,
-        });
-    }
-
     _onSubmit(values) {
-        const isEndTab = this.state.activeTabIndex === this._tabs.length - 1;
-        if (isEndTab) {
-            (async () => {
-                try {
-                    const tx = await dal.setUserRegisterOrUpdate(values);
-                    const signResponse = await window.WavesKeeper.signAndPublishTransaction(tx);
-                    console.log({signResponse});
-                    window.alert(JSON.stringify({signResponse}));
-                    this.onClose();
-                } catch (e) {
-                }
-            })();
-        }
+        (async () => {
+            try {
+                const res = await dal.saveUser(values);
+                console.log(res);
+                //window.alert(JSON.stringify({signResponse}));
+            } catch (e) {
+                console.error(e);
+            }
+
+            this.props.onClose();
+        })();
     }
 }

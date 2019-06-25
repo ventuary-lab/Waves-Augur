@@ -11,7 +11,7 @@ import ProfileBlock from 'shared/ProfileBlock';
 import HeaderNav from './views/HeaderNav';
 import NavItemSchema from './../../types/NavItemSchema';
 import {ROUTE_ROOT, ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
-import user from '../../static/data/user';
+import user from 'static/data/user';
 import InputFieldSearchView from 'ui/form/InputField/InputFieldSearchView';
 import InputFieldHamburgerSearchView from 'ui/form/InputField/InputFieldHamburgerSearchView';
 

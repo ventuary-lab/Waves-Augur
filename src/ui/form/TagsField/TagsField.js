@@ -53,6 +53,7 @@ class TagsField extends React.PureComponent {
         onSearch: PropTypes.func,
         onItemClick: PropTypes.func,
         onItemMouseOver: PropTypes.func,
+        max: PropTypes.number,
     };
 
     constructor() {
@@ -131,7 +132,11 @@ class TagsField extends React.PureComponent {
     _onAdd(value) {
         if (value) {
             this.setState({value: ''});
-            this.props.input.onChange(_uniq(this.getValues().concat(value)));
+            let values = _uniq(this.getValues().concat(value));
+            if (this.props.max > 0) {
+                values.splice(this.props.max);
+            }
+            this.props.input.onChange(values);
         }
     }
 

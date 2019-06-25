@@ -3,9 +3,10 @@ import React from 'react';
 export default class SvgIcon extends React.PureComponent {
     render() {
         return (
-            <span
-                dangerouslySetInnerHTML={{__html: this.props.icon}}
+            <img
                 {...this.props}
+                src={this.props.icon}
+                alt=''
             />
         );
     }

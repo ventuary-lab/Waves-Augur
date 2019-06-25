@@ -9,7 +9,7 @@ import ActionButtonBlock from 'shared/ActionButtonBlock';
 import {html} from 'components';
 
 import './ProfileProjectsPage.scss';
-import AddNewProjectModal from 'modals/AddNewProjectModal';
+import ProjectWizardModal from 'modals/ProjectWizardModal';
 
 const bem = html.bem('ProfileProjectsPage');
 
@@ -41,6 +41,6 @@ export default class ProfileProjectsPage extends React.PureComponent {
     }
 
     onProjectAdd() {
-        this.props.dispatch(openModal(AddNewProjectModal))
+        this.props.dispatch(openModal(ProjectWizardModal))
     }
 }

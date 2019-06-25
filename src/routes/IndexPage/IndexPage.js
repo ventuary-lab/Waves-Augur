@@ -7,7 +7,7 @@ import Link from 'yii-steroids/ui/nav/Link';
 import { openModal } from 'yii-steroids/actions/modal';
 
 import './IndexPage.scss';
-import AddNewProjectModal from 'modals/AddNewProjectModal';
+import ProjectWizardModal from 'modals/ProjectWizardModal';
 
 const bem = html.bem('IndexPage');
 
@@ -35,7 +35,7 @@ export default class IndexPage extends React.PureComponent {
                                 <div className={bem.element('hero-actions')}>
                                     <button
                                         className={bem.element('hero-action', 'primary')}
-                                        onClick={() => this.props.dispatch(openModal(AddNewProjectModal))}
+                                        onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
                                     >
                                         {__('Add project')}
                                     </button>

@@ -7,8 +7,8 @@ require('yii-steroids/webpack')
         sourcePath: __dirname + '/src',
         useHash: true,
         devServer: {
-            historyApiFallback: {
-                index: '/index.html',
+            proxy: {
+                '**': null,
             },
         },
     })

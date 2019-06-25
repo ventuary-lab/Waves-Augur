@@ -1,3 +1,4 @@
+import _get from 'lodash/get';
 import {nodeInteraction} from '@waves/waves-transactions';
 
 const dummyTestUsers = [
@@ -57,13 +58,18 @@ export default class DalComponent {
 
     constructor() {
         this.nodeUrl = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
-        this.keeper = window.WavesKeeper || {};
+        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
 
         this._collectionEvents = [];
         this._collectionVotes = [];
         this._collectionDonations = [];
         this._collectionUsers = dummyUserCollection;
         this._collectionProjects = [];
+    }
+
+    getMyAddress() {
+        const store = require('components').store;
+        return _get(store.getState(), 'auth.user.address');
     }
 
     async getCheckStatusInvitedUser(state) {
@@ -87,18 +93,18 @@ export default class DalComponent {
         return Promise.resolve({type: 16}); // invoke tx for WavesKeeper
     }
 
-    async setUserRegisterOrUpdate(user) {
-        return Promise.resolve({ // invoke tx for WavesKeeper
+    async saveUser(params) {
+        return window.WavesKeeper.signAndPublishTransaction({ // invoke tx for WavesKeeper
             type: 16,
             data: {
                 fee: {
                     assetId: 'WAVES',
                     tokens: '0.009'
                 },
-                dApp: '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF',
+                dApp: this.dApp,
                 call: {
                     args: [
-                        {type: 'string', value: JSON.stringify(user)},
+                        {type: 'string', value: JSON.stringify(params)},
                         {type: 'string', value: ''}
                     ],
                     function: 'signup'
@@ -108,18 +114,42 @@ export default class DalComponent {
         });
     }
 
+    getKeeper() {
+        const start = Date.now();
+        const checker = resolve => {
+            if (window.WavesKeeper && window.WavesKeeper.publicState) {
+                resolve(window.WavesKeeper);
+            } else if (Date.now() - start > 2000) {
+                resolve(null);
+                alert(__('WalletKeeper not found, please install it in you browser - https://wavesplatform.com/products-keeper'));
+            } else {
+                setTimeout(() => checker(resolve), 50);
+            }
+        };
+        return new Promise(checker);
+    }
+
     async auth() {
-        const userData = await this.keeper.publicState();
+        const keeper = await this.getKeeper();
+        const userData = await keeper.publicState();
         const address = userData.account.address;
 
-        let dapp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF';
-        let bio = await nodeInteraction.accountDataByKey('wl_bio_' + address, dapp, this.nodeUrl);
-        let status = await nodeInteraction.accountDataByKey('wl_sts_' + address, dapp, this.nodeUrl);
+        let bio = null;
+        let status = null;
+        let invited = null;
+        try {
+            bio = await nodeInteraction.accountDataByKey('wl_bio_' + address, this.dApp, this.nodeUrl);
+            status = await nodeInteraction.accountDataByKey('wl_sts_' + address, this.dApp, this.nodeUrl);
+            invited = await nodeInteraction.accountDataByKey('wl_ref_' + address, this.dApp, this.nodeUrl);
+        } catch (e) {
+            console.error(e);
+        }
 
         return {
             address: address,
-            bio: JSON.parse(bio.value),
-            status: status.value,
+            name: userData.account.name,
+            bio: bio ? JSON.parse(bio.value) : null,
+            status: status ? status.value : null,
         };
     }
 

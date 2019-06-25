@@ -1,12 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import Modal from 'yii-steroids/ui/modal/Modal';
-import Form from 'yii-steroids/ui/form/Form';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
-import Button from 'yii-steroids/ui/form/Button';
-import FormProgress from 'shared/FormProgress';
 import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
 import ConnectImageField from 'ui/form/ConnectImageField';
@@ -14,152 +10,73 @@ import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {html} from 'components';
 
-import './AddNewProjectModal.scss';
+import './ProjectWizardModal.scss';
+import FormWizard from 'ui/form/FormWizard';
 
-const bem = html.bem('AddNewProjectModal');
-const FORM_ID = 'AddNewProject';
-const STEPS_COUNT = 7;
-
+const bem = html.bem('ProjectWizardModal');
 
 @connect(
     state => ({
         isPhone: isPhone(state),
     })
 )
-export default class AddNewProjectModal extends React.PureComponent {
-
-    static propTypes = {
-
-    };
+export default class ProjectWizardModal extends React.PureComponent {
 
     constructor() {
         super(...arguments);
 
-        this.state = {
-          step: 1,
-        };
-
-        this.onBackStep = this.onBackStep.bind(this);
-        this.onNextStep = this.onNextStep.bind(this);
+        this._onSubmit = this._onSubmit.bind(this);
     }
 
     render() {
         return (
             <Modal
-                {...this.props.modalProps}
-                className={bem.block({
-                    step: this.state.step,
-                })}
+                {...this.props}
+                className={bem.block()}
             >
-                <div className={bem.element('inner')}>
-                    <div className={bem.element('container')}>
-                        <div className={bem.element('form-progress')}>
-                            <FormProgress
-                                stepCount={STEPS_COUNT}
-                                step={this.state.step}
-                            />
-                        </div>
-                        <div className={bem.element('form')}>
-                            <Form
-                                action={''}
-                                formId={FORM_ID}
-                            >
-                                <div className={bem.element('title')}>
-                                    {__('You Are Creating New Project')}
-                                </div>
-                                <div className={bem.element('form-inner')}>
-                                    {this.state.step === 1 && (
-                                        <>
-                                            {this.renderStepOne()}
-                                        </>
-                                    )}
-                                    {this.state.step === 2 && (
-                                        <>
-                                            {this.renderStepTwo()}
-                                        </>
-                                    )}
-                                    {this.state.step === 3 && (
-                                        <>
-                                            {this.renderStepThree()}
-                                        </>
-                                    )}
-                                    {this.state.step === 4 && (
-                                        <>
-                                            {this.renderStepFour()}
-                                        </>
-                                    )}
-
-                                    {this.state.step === 5 && (
-                                        <>
-                                            {this.renderStepFive()}
-                                        </>
-                                    )}
-
-                                    {this.state.step === 6 && (
-                                        <>
-                                            {this.renderStepSix()}
-                                        </>
-                                    )}
-
-                                    {this.state.step === 7 && (
-                                        <>
-                                            {this.renderStepSeven()}
-                                        </>
-                                    )}
-                                </div>
-                                <div className={bem.element('buttons')}>
-                                    {this.state.step !== 1 && (
-                                        <div className={bem.element('button', {
-                                            back: true,
-                                            'step-seven': this.state.step === 7
-                                        })}>
-                                            <Button
-                                                label={__('Back')}
-                                                onClick={this.onBackStep}
-                                                likeString
-                                            />
-                                        </div>
-                                    )}
-                                    {this.state.step !== STEPS_COUNT && (
-                                        <div className={bem.element('button', 'next')}>
-                                            <Button
-                                                label={__('Next')}
-                                                onClick={this.onNextStep}
-                                            />
-                                        </div>
-                                    )}
-                                    {this.state.step === STEPS_COUNT && (
-                                        <div className={bem.element('button','main-action')}>
-                                            <Button
-                                                type={'submit'}
-                                                label={__('Create Project')}
-                                                onClick={() => console.log('created')}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </Form>
-                        </div>
-                    </div>
-                </div>
+                <FormWizard
+                    formId='ProjectWizardModal'
+                    onSubmit={this._onSubmit}
+                    items={[
+                        {
+                            id: 'name',
+                            component: this._stepName,
+                        },
+                        {
+                            id: 'campaign',
+                            component: this._stepCampaign,
+                        },
+                        {
+                            id: 'idea-problem',
+                            component: this._stepIdeaProblem,
+                        },
+                        {
+                            id: 'idea-mvp',
+                            component: this._stepIdeaMvp,
+                        },
+                        {
+                            id: 'idea-impact',
+                            component: this._stepIdeaImpact,
+                        },
+                        {
+                            id: 'idea-code',
+                            component: this._stepIdeaCode,
+                        },
+                        {
+                            id: 'contacts',
+                            component: this._stepContacts,
+                        },
+                    ]}
+                />
             </Modal>
         );
     }
 
-    onNextStep() {
-        this.setState({
-            step: this.state.step + 1
-        })
+    _onSubmit(values) {
+
     }
 
-    onBackStep() {
-        this.setState({
-            step: this.state.step - 1
-        })
-    }
-
-
-    renderStepOne() {
+    _stepName(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -177,7 +94,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <InputField
-                            label={this.props.isPhone ? __('Project Name') : false}
+                            label={props.isPhone ? __('Project Name') : false}
                             attribute={'name'}
                             placeholder={__('Enter Your Project Name')}
                         />
@@ -191,7 +108,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <TextField
-                            label={this.props.isPhone ? __('Srort Description') : false}
+                            label={props.isPhone ? __('Sort Description') : false}
                             attribute={'shortDescription'}
                             placeholder={__('Description')}
                         />
@@ -201,11 +118,11 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepTwo() {
+    _stepCampaign(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Campign Details')}
+                    {__('Campaign Details')}
                 </div>
 
                 <div className={bem.element('form-row')}>
@@ -216,7 +133,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <ConnectImageField
-                            label={this.props.isPhone ? __('Logo URL') : false}
+                            label={props.isPhone ? __('Logo URL') : false}
                             attribute='logoUrl'
                             placeholder={__('Enter URL')}
                         />
@@ -230,7 +147,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <ConnectImageField
-                            label={this.props.isPhone ? __('Cover URL') : false}
+                            label={props.isPhone ? __('Cover URL') : false}
                             attribute='coverUrl'
                             placeholder={__('Enter URL')}
                         />
@@ -265,7 +182,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <div className={bem.element('targets')}>
                             <InputField
-                                label={this.props.isPhone ? __('Waves') : false}
+                                label={props.isPhone ? __('Waves') : false}
                                 attribute={'target'}
                                 placeholder={__('Enter Your Project Name')}
                             />
@@ -298,7 +215,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <InputField
-                            label={this.props.isPhone ? __('Your Country') : false}
+                            label={props.isPhone ? __('Your Country') : false}
                             attribute={'country'}
                             placeholder={__('Enter')}
                         />
@@ -308,7 +225,7 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepThree() {
+    _stepIdeaProblem(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -348,7 +265,7 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepFour() {
+    _stepIdeaMvp() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -377,7 +294,7 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepFive() {
+    _stepIdeaImpact(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -415,7 +332,7 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepSix() {
+    _stepIdeaCode(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -462,7 +379,7 @@ export default class AddNewProjectModal extends React.PureComponent {
         );
     }
 
-    renderStepSeven() {
+    _stepContacts(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -478,7 +395,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <InputField
                             attribute={'website'}
-                            label={this.props.isPhone ? __('Project Website') : false}
+                            label={props.isPhone ? __('Project Website') : false}
                             placeholder={__('Enter URL')}
                         />
                     </div>
@@ -495,7 +412,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <InputField
                             attribute={'twitter'}
-                            label={this.props.isPhone ? __('Twitter') : false}
+                            label={props.isPhone ? __('Twitter') : false}
                             placeholder={__('Enter URL')}
                         />
                     </div>
@@ -511,7 +428,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <InputField
-                            label={this.props.isPhone ? __('Facebook') : false}
+                            label={props.isPhone ? __('Facebook') : false}
                             attribute={'facebook'}
                             placeholder={__('Enter URL')}
                         />
@@ -528,7 +445,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <InputField
-                            label={this.props.isPhone ? __('Linkedin') : false}
+                            label={props.isPhone ? __('Linkedin') : false}
                             attribute={'linkedin'}
                             placeholder={__('Enter URL')}
                         />
@@ -543,7 +460,7 @@ export default class AddNewProjectModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <InputField
                             attribute={'email'}
-                            label={this.props.isPhone ? __('E-mail') : false}
+                            label={props.isPhone ? __('E-mail') : false}
                             placeholder={__('Enter URL')}
                         />
                     </div>

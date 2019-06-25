@@ -1,7 +1,7 @@
 @import '../../style/helpers/vars';
 @import '../../style/helpers/mixins';
 
-.AddNewProjectModal {
+.ProjectWizardModal {
 
   $root: &;
 
@@ -96,22 +96,6 @@
     font-weight: 300;
     text-align: center;
     margin-bottom: 30px;
-  }
-
-  &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__button {
-    &_back {
-      margin-right: 40px;
-    }
-
-    &_main-action {
-
-    }
   }
 
   &__deadlines,
