@@ -12708,10 +12708,10 @@ yargs@~3.27.0:
     window-size "^0.1.2"
     y18n "^3.2.0"
 
-yii-steroids@^1.11.10:
-  version "1.11.10"
-  resolved "https://registry.yarnpkg.com/yii-steroids/-/yii-steroids-1.11.10.tgz#cd3c6e6a05fb0ed52ca6e949ff6f0f1f55243900"
-  integrity sha512-NhAYpShNrSe1Ts/6xqbWP246+LkSj49ItK1aJgnkka0vYIgk5ysXRkYNOlmtcDC0cDjZX7hCPHlEDSFAG3wmng==
+yii-steroids@^1.11.12:
+  version "1.11.12"
+  resolved "https://registry.yarnpkg.com/yii-steroids/-/yii-steroids-1.11.12.tgz#6dd3ee40ceb7148547d7e6c45d975391b3ebcbac"
+  integrity sha512-OxXBuACumx1t+wd8YVfFm+Xmy3MLTepNIYYFprU1/M6FEubCwM1TRQFlbo95PXx89xZX5tRkfEMxXsQaEOimSg==
   dependencies:
     "@babel/core" "^7.0.0-0"
     "@babel/plugin-proposal-class-properties" "^7.0.0"

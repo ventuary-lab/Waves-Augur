@@ -1,0 +1,53 @@
+$main-green: #0BC91F;
+
+.AboutTab {
+    margin-bottom: auto;
+
+    label {
+        font-weight: 300;
+        font-size: 13px;
+        line-height: 14px;
+    }
+
+    &__grid {
+        padding: 20px;
+
+        & > * {
+            display: grid;
+            justify-items: center;
+            padding-top: 15px;
+            align-items: center;
+
+            & > :nth-child(2) {
+                justify-self: left;
+                text-align: left;
+            }
+        }
+
+        & > :not(:nth-child(1)) {
+            & > :nth-child(2) input {
+                width: 389px;
+            }
+
+            grid-template-columns: 30% auto 106px;
+        }
+
+        & > :nth-child(1) {
+            grid-template-columns: 30% auto auto 106px;
+
+            & button {
+                width: 130px;
+            }
+        }
+
+        // & > :nth-child(2) {
+        //     grid-template-columns: 30% auto 106px
+        // }
+        // & > :nth-child(3) {
+        //     grid-template-columns: 30% auto 106px
+        // }
+        // & > :nth-child(4) {
+        //     grid-template-columns: 30% auto 106px
+        // }
+    }
+}

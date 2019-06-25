@@ -156,7 +156,7 @@
     "stylelint-webpack-plugin": "^0.10.5",
     "uuid": "^3.3.2",
     "webpack-bundle-analyzer": "^3.0.2",
-    "yii-steroids": "^1.11.10",
+    "yii-steroids": "^1.11.12",
     "yup": "^0.26.6"
   },
   "scripts": {

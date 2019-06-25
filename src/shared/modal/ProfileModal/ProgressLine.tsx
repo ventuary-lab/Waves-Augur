@@ -1,5 +1,5 @@
 import React from 'react';
-import SvgIcon from 'components/global/common/SvgIcon';
+import SvgIcon from 'shared/SvgIcon';
 
 import {
     tinyRect

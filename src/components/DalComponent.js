@@ -1,4 +1,3 @@
-import React from 'react';
 import {nodeInteraction} from '@waves/waves-transactions';
 
 const dummyTestUsers = [
