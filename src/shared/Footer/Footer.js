@@ -7,6 +7,7 @@ import SocialLinks from 'shared/SocialLinks';
 import Link from 'yii-steroids/ui/nav/Link';
 import {ROUTE_ROOT} from 'routes';
 import { getNavUrl } from 'yii-steroids/reducers/navigation';
+import ventuaryLogo from 'static/icons/ventuary-logo-white.svg';
 
 import './Footer.scss';
 
@@ -40,7 +41,7 @@ export default class Footer extends React.PureComponent {
                         >
                             <img
                                 className={bem.element('logo-image')}
-                                src='static/icons/ventuary-logo-white.svg'
+                                src={ventuaryLogo}
                                 alt='ventuary dao'
                             />
                         </Link>

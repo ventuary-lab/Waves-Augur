@@ -5,6 +5,11 @@ import { html } from 'components';
 import Button from 'yii-steroids/ui/form/Button';
 import Link from 'yii-steroids/ui/nav/Link';
 import { openModal } from 'yii-steroids/actions/modal';
+import landingHero from 'static/images/landing-hero.svg';
+import wavesLogo from 'static/icons/landing-waves-logo.svg';
+import tradisysLogo from 'static/icons/landing-tradisys-logo.svg';
+import blockdataLogo from 'static/icons/landing-blockdata-logo.png';
+import wavesLabsLogo from 'static/icons/landing-waves-labs-logo.svg';
 
 import './IndexPage.scss';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
@@ -51,7 +56,7 @@ export default class IndexPage extends React.PureComponent {
                                 aria-hidden
                             >
                                 <img
-                                    src='static/images/landing-hero.svg'
+                                    src={landingHero}
                                     alt='Ventuary-DAO'
                                 />
                             </div>
@@ -174,7 +179,7 @@ export default class IndexPage extends React.PureComponent {
                                     >
                                         <img
                                             className={bem.element('partners-logo', 'waves')}
-                                            src='static/icons/landing-waves-logo.svg'
+                                            src={wavesLogo}
                                             alt='waves'
                                         />
                                     </a>
@@ -187,7 +192,7 @@ export default class IndexPage extends React.PureComponent {
                                     >
                                         <img
                                             className={bem.element('partners-logo', 'tradisvs')}
-                                            src='static/icons/landing-tradisys-logo.svg'
+                                            src={tradisysLogo}
                                             alt='tradisys'
                                         />
                                     </a>
@@ -200,7 +205,7 @@ export default class IndexPage extends React.PureComponent {
                                     >
                                         <img
                                             className={bem.element('partners-logo', 'blockdata')}
-                                            src='static/icons/landing-blockdata-logo.png'
+                                            src={blockdataLogo}
                                             alt='blockdata'
                                         />
                                     </a>
@@ -213,7 +218,7 @@ export default class IndexPage extends React.PureComponent {
                                     >
                                         <img
                                             className={bem.element('partners-logo', 'waves-labs')}
-                                            src='static/icons/landing-waves-labs-logo.svg'
+                                            src={wavesLabsLogo}
                                             alt='waves-labs'
                                         />
                                     </a>
