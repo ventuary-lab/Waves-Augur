@@ -16,10 +16,6 @@ export default class Card extends React.PureComponent {
             component: PropTypes.func,
             componentProps: PropTypes.object,
         }),
-        center: PropTypes.shape({
-            component: PropTypes.func,
-            componentProps: PropTypes.object,
-        }),
         right: PropTypes.shape({
             component: PropTypes.func,
             componentProps: PropTypes.object,
@@ -29,22 +25,17 @@ export default class Card extends React.PureComponent {
 
     render() {
         const LeftComponent = _get(this.props, 'left.component');
-        const CenterComponent = _get(this.props, 'center.component');
+        // const CenterComponent = _get(this.props, 'center.component');
         const RightComponent = _get(this.props, 'right.component');
 
         return (
             <div className={bem.block()}>
-                <div className={bem.element('column', 'left')}>
+                <div className={bem.element('column-left')}>
                     {LeftComponent && (
                         <LeftComponent {...this.props.left.componentProps}/>
                     )}
                 </div>
-                <div className={bem.element('column', 'center')}>
-                    {CenterComponent && (
-                        <CenterComponent {...this.props.center.componentProps}/>
-                    )}
-                </div>
-                <div className={bem.element('column', 'right')}>
+                <div className={bem.element('column-right')}>
                     {RightComponent && (
                         <RightComponent {...this.props.right.componentProps}/>
                     )}
