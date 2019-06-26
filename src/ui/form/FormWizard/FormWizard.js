@@ -5,6 +5,7 @@ import _times from 'lodash-es/times';
 import {html} from 'components';
 import Form from 'yii-steroids/ui/form/Form';
 import Button from 'yii-steroids/ui/form/Button';
+import validate from 'shared/validate';
 
 import './FormWizard.scss';
 
@@ -109,6 +110,11 @@ export default class FormWizard extends React.PureComponent {
     }
 
     _onSubmit(values) {
+        const item = this.props.items[this.getActiveIndex()];
+        if (item.validators) {
+            validate(values, item.validators);
+        }
+
         const isFinish = this.getActiveIndex() === this.props.items.length - 1;
         if (isFinish) {
             if (this.props.onSubmit) {

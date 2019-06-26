@@ -1,5 +1,7 @@
-const express = require('express');
+// This is server used for Heroku app deployment
+// See https://alpha-ventuary-dao.herokuapp.com
 
+const express = require('express');
 const app = express();
 
 app.use(express.static(__dirname + '/dist'));

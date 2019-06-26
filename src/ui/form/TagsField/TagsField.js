@@ -159,6 +159,7 @@ class TagsField extends React.PureComponent {
         // On enter
         if (e.which === 13 && !this.props.hoveredItem) {
             e.preventDefault();
+            e.stopPropagation();
             this._onAdd(this.state.value);
         }
     }

@@ -13,6 +13,7 @@ const bem = html.bem('ProfileWizardModal');
 
 import './ProfileWizardModal.scss';
 import {getUser} from 'yii-steroids/reducers/auth';
+import SocialEnum from 'enums/SocialEnum';
 
 @connect(
     state => ({
@@ -45,14 +46,24 @@ export default class ProfileWizardModal extends React.Component {
                             componentProps: {
                                 invitedBy: this.props.user.invitedBy,
                             },
+                            validators: [
+                                ['name', 'required'],
+                                ['name', 'string'],
+                            ],
                         },
                         {
                             id: 'links',
                             component: LinksTab,
+                            validators: [
+                                [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
+                            ],
                         },
                         {
                             id: 'about',
                             component: AboutTab,
+                            validators: [
+                                [['avatar', 'title', 'location'], 'string'],
+                            ],
                         },
                     ]}
                 />
