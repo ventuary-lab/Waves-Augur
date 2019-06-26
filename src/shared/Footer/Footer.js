@@ -45,26 +45,7 @@ export default class Footer extends React.PureComponent {
                             />
                         </Link>
                         <div className={bem.element('socials')}>
-                            <SocialLinks
-                                items={[
-                                    {
-                                        id: 'twitter',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'facebook',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'instagram',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'telegram',
-                                        link: ''
-                                    },
-                                ]}
-                            />
+                            <SocialLinks/>
                         </div>
                     </div>
                     <div className={bem.element('right')}>

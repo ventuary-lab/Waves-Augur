@@ -19,12 +19,10 @@ export default class ProfileVotingPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <ProfileLayout>
-                    <ActionButtonBlock
-                        title={__('Explore New Ideas')}
-                        iconClass={'Icon__explore-ideas'}
-                    />
-                </ProfileLayout>
+                <ActionButtonBlock
+                    title={__('Explore New Ideas')}
+                    iconClass={'Icon__explore-ideas'}
+                />
             </div>
         );
     }

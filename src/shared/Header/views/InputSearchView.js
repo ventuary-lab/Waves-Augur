@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 
-import './InputFieldSearchView.scss';
+import './InputSearchView.scss';
 
-const bem = html.bem('InputFieldSearchView');
+const bem = html.bem('InputSearchView');
 
-export default class InputFieldSearchView extends React.PureComponent {
+export default class InputSearchView extends React.PureComponent {
 
     static propTypes = {
         label: PropTypes.oneOfType([

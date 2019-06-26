@@ -31,7 +31,7 @@ export default class ProjectWizardModal extends React.PureComponent {
     render() {
         return (
             <Modal
-                {...this.props}
+                {...this.props.modalProps}
                 className={bem.block()}
             >
                 <FormWizard

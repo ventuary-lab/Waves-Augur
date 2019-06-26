@@ -78,6 +78,10 @@ $icons-dir: '../static/icons';
     background-image: url('#{$icons-dir}/telegram.svg');
   }
 
+  &__website {
+    background-image: url('#{$icons-dir}/website.svg');
+  }
+
   &__notification {
     background-image: url('#{$icons-dir}/notification.svg');
 

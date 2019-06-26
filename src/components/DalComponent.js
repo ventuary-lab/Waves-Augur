@@ -1,117 +1,25 @@
-import _get from 'lodash/get';
+import moment from 'moment';
+import uuid from 'uuid/v4';
+import _isInteger from 'lodash/isInteger';
+import _isObject from 'lodash/isObject';
+import _round from 'lodash/round';
+import _toInteger from 'lodash/toInteger';
 import {nodeInteraction} from '@waves/waves-transactions';
 
-const dummyTestUsers = [
-    {
-        address: '3N16c6myJsnmdHVXWS9NmXYBDUdVgb2Dgvv',
-        seed: 'invited1 broom nut fun weekend task library twice faint wish state camp',
-        data: {role: 'invited', name: 'Loly Best', ref: 'Genesis Jedi'}
-    },
-    {
-        address: '3N9FwayDdXjyV6EcRo3Tnj7cxbNihXcqBv2',
-        seed: 'invited2 broom nut fun weekend task library twice faint wish state camp',
-        data: {role: 'registered', name: 'Tomy Wane', ref: 'Genesis Jedi'}
-    },
-    {
-        address: '3N6jbdiSihz6dHXsV5jDCCSTkRNXuAQDiHn',
-        seed: 'invited3 broom nut fun weekend task library twice faint wish state camp',
-        data: {role: 'whale', name: 'Waves Labs', ref: 'Genesis Jedi'}
-    }
-];
-const dummyKeeperState = {
-    account: {
-        address: '3N16c6myJsnmdHVXWS9NmXYBDUdVgb2Dgvv'
-    }
-};
-const _social = {
-    url_twitter: 'https://twitter.com/AlekseiPupyshev',
-    url_telegram: 'https://t.me/adventuary'
-};
-const dummyUser = {
-    address: '3N16c6myJsnmdHVXWS9NmXYBDUdVgb2Dgvv',
-    ref: '3Mtzmtfh13ihJ3nJyyxT9zUvZRUKmNVDMa5',
-    name: 'Aleksei Pupyshev',
-    title: 'DLT Evangelist',
-    activity: '150',
-    avatar: 'https://pp.userapi.com/c848520/v848520954/bd19d/eQJ5RP-ilpg.jpg',
-    social: _social,
-    status: 'registered',
-    location: ''
-};
-const dummyInvitedUser = {
-    address: '3N16c6myJsnmdHVXWS9NmXYBDUdVgb2Dgvv',
-    ref: '3Mtzmtfh13ihJ3nJyyxT9zUvZRUKmNVDMa5',
-    name: 'Aleksei Pupyshev',
-    title: '',
-    activity: '0',
-    avatar: '',
-    social: '',
-    status: 'invited',
-    location: ''
-};
-const dummyUserCollection = [
-    dummyUser, dummyUser, dummyUser, dummyInvitedUser, dummyInvitedUser, dummyInvitedUser
-];
-
+import UserRole from 'enums/UserRole';
+import validate from './validate';
+import {setUser} from 'yii-steroids/actions/auth';
 
 export default class DalComponent {
 
     constructor() {
         this.nodeUrl = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
         this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
-
-        this._collectionEvents = [];
-        this._collectionVotes = [];
-        this._collectionDonations = [];
-        this._collectionUsers = dummyUserCollection;
-        this._collectionProjects = [];
     }
 
-    getMyAddress() {
-        const store = require('components').store;
-        return _get(store.getState(), 'auth.user.address');
-    }
-
-    async getCheckStatusInvitedUser(state) {
-        return Promise.resolve(dummyTestUsers[0].address === state.account.address);
-    }
-
-    async getCheckStatusWhaleUser(state) {
-        return Promise.resolve(dummyTestUsers[2].address === state.account.address);
-    }
-
-    async getCollectionInvitedUsers(address) {
-        return Promise.resolve(this._collectionUsers.filter((x) => x.ref === address));
-    }
-
-    async getCollectionAllUsers() {
-        return Promise.resolve(this._collectionUsers.filter((x) => x.status === 'registered'));
-    }
-
-    async setInviteUser(user) {
-        this._collectionUsers.push(user);
-        return Promise.resolve({type: 16}); // invoke tx for WavesKeeper
-    }
-
-    async saveUser(params) {
-        return window.WavesKeeper.signAndPublishTransaction({ // invoke tx for WavesKeeper
-            type: 16,
-            data: {
-                fee: {
-                    assetId: 'WAVES',
-                    tokens: '0.009'
-                },
-                dApp: this.dApp,
-                call: {
-                    args: [
-                        {type: 'string', value: JSON.stringify(params)},
-                        {type: 'string', value: ''}
-                    ],
-                    function: 'signup'
-                },
-                payment: []
-            }
-        });
+    static dateToHeight(date) {
+        const mins = -1 * moment().diff(date) / 60000;
+        return Math.round(mins / 2); // One block = 2 minutes
     }
 
     getKeeper() {
@@ -119,14 +27,119 @@ export default class DalComponent {
         const checker = resolve => {
             if (window.WavesKeeper && window.WavesKeeper.publicState) {
                 resolve(window.WavesKeeper);
-            } else if (Date.now() - start > 2000) {
+            } else if (Date.now() - start > 1000) {
                 resolve(null);
-                alert(__('WalletKeeper not found, please install it in you browser - https://wavesplatform.com/products-keeper'));
             } else {
-                setTimeout(() => checker(resolve), 50);
+                setTimeout(() => checker(resolve), 100);
             }
         };
         return new Promise(checker);
+    }
+
+    async getActiveAddress() {
+        const keeper = await this.getKeeper();
+        const userData = await keeper.publicState();
+        return userData.account.address;
+    }
+
+    async invite(data) {
+        data = {
+            address: '',
+            name: '',
+            message: null,
+            isWhale: false,
+            ...data,
+        };
+
+        validate(data, 'address', 'required');
+        validate(data, ['name', 'message'], 'string');
+
+        try {
+            await this._nodePublish('inviteuser', [
+                data.address,
+                data,
+            ]);
+        } catch (e) {
+            if (e.message && e.data) {
+                validate.error('address', e.data);
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    async signup(data) {
+        data = {
+            name: '',
+            avatar: null,
+            title: null,
+            tags: [],
+            location: '',
+            socials: {
+                url_twitter: null,
+                url_facebook: null,
+                url_linkedin: null,
+                url_instagram: null,
+                url_telegram: null,
+                url_website: null,
+                ...data.socials,
+            },
+            ...data,
+        };
+
+        await this._nodePublish('signup', [data, '']);
+
+        const store = require('components').store;
+        store.dispatch(setUser(data));
+    }
+
+    async addItem(item, expVoting, expCrowd, expWhale, data) {
+        data = {
+            title: '',
+            description: null,
+            logoUrl: null,
+            coverUrl: null,
+            expireVoting: '', // YYYY-MM-DD
+            expireCrowd: '', // YYYY-MM-DD
+            expireWhale: '', // YYYY-MM-DD
+            targetWaves: 0,
+            tags: [],
+            location: '',
+            contents: {
+                problem: '',
+                solution: '',
+                xFactor: '',
+                mvp: '',
+                largeScaleAdoption: '',
+                impactOnUser: '',
+                impactOnUserContext: '',
+                impactOnUserSociety: '',
+                codeValidation: '',
+                legalArrangements: '',
+                openSourceStrategy: '',
+                interconnectedness: '',
+                ...data.contents,
+            },
+            socials: {
+                url_twitter: null,
+                url_facebook: null,
+                url_linkedin: null,
+                url_instagram: null,
+                url_telegram: null,
+                url_website: null,
+                ...data.socials,
+            },
+            ...data,
+            uid: uuid(),
+        };
+
+        return this._nodePublish('additem', [
+            data.uid,
+            DalComponent.dateToHeight(data.expireVoting),
+            DalComponent.dateToHeight(data.expireCrowd),
+            DalComponent.dateToHeight(data.expireWhale),
+            data,
+        ]);
     }
 
     async auth() {
@@ -135,12 +148,27 @@ export default class DalComponent {
         const address = userData.account.address;
 
         let bio = null;
-        let status = null;
-        let invited = null;
+        let role = null;
         try {
-            bio = await nodeInteraction.accountDataByKey('wl_bio_' + address, this.dApp, this.nodeUrl);
-            status = await nodeInteraction.accountDataByKey('wl_sts_' + address, this.dApp, this.nodeUrl);
-            invited = await nodeInteraction.accountDataByKey('wl_ref_' + address, this.dApp, this.nodeUrl);
+            bio = await this._nodeFetch('wl_bio_' + address);
+            role = await this._nodeFetch('wl_sts_' + address);
+        } catch (e) {
+            console.error(e);
+        }
+
+        // Genesis role by address
+        if (address === this.dApp) {
+            role = UserRole.GENESIS;
+        }
+
+        // Get invited info
+        let invitedBy = null;
+        try {
+            const invitedByAddress = await this._nodeFetch('wl_ref_' + address);
+            invitedBy = {
+                address: invitedByAddress,
+                ...(await this._nodeFetch('wl_bio_' + invitedByAddress))
+            };
         } catch (e) {
             console.error(e);
         }
@@ -148,9 +176,55 @@ export default class DalComponent {
         return {
             address: address,
             name: userData.account.name,
-            bio: bio ? JSON.parse(bio.value) : null,
-            role: status ? status.value : null,
+            balance: _round(_toInteger(userData.account.balance.available) / Math.pow(10, 8), 2),
+            role,
+            invitedBy,
+            ...bio,
         };
     }
+
+    /**
+     * @param key
+     * @returns {Promise<null|string | number | boolean>}
+     * @private
+     */
+    async _nodeFetch(key) {
+        const result = await nodeInteraction.accountDataByKey(key, this.dApp, this.nodeUrl);
+        if (result && result.value) {
+            return ['{', '['].includes(result.value.substr(0, 1))
+                ? JSON.parse(result.value)
+                : result.value;
+        }
+        return null;
+    }
+
+    /**
+     * @param method
+     * @param args
+     * @returns {Promise<*>}
+     * @private
+     */
+    async _nodePublish(method, args) {
+        const keeper = await this.getKeeper();
+        return keeper.signAndPublishTransaction({
+            type: 16,
+            data: {
+                fee: {
+                    assetId: 'WAVES',
+                    tokens: '0.009'
+                },
+                dApp: this.dApp,
+                call: {
+                    args: args.map(item => ({
+                        type: _isInteger(item) ? 'integer' : 'string',
+                        value: _isObject(item) ? JSON.stringify(item) : item,
+                    })),
+                    function: method
+                },
+                payment: []
+            }
+        });
+    }
+
 
 }

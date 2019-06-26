@@ -8,13 +8,19 @@ import {profileSvg, arrowDown} from 'static/icons';
 const bem = html.bem('LinksTab');
 
 import './WaitingTab.scss';
+import UserSchema from 'types/UserSchema';
 
 export default class WaitingTab extends React.PureComponent {
+
+    static propTypes = {
+        invitedBy: UserSchema,
+    };
+
     render () {
         return (
             <div className={bem.block()}>
                 <h3>We were waiting for you!</h3>
-                <span>You was invited by Tinh Tran</span>
+                <span>You was invited by <b>{this.props.invitedBy.name}</b></span>
                 <SvgIcon icon={profileSvg}/>
                 <h3>Please Register to Continue</h3>
                 <SvgIcon icon={arrowDown}/>

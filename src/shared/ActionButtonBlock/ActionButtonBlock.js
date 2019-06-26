@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _isFunction from 'lodash-es/isFunction';
 
 import {html} from 'components';
 
@@ -13,14 +12,14 @@ export default class ActionButtonBlock extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string,
         iconClass: PropTypes.string,
-        handleClick: PropTypes.func,
+        onClick: PropTypes.func,
     };
 
     render() {
         return (
             <div
                 className={bem.block()}
-                onClick={_isFunction(this.props.handleClick) ? this.props.handleClick : null}
+                onClick={this.props.onClick}
             >
                 <div className={bem.element('container')}>
                     <div className={bem.element('inner')}>

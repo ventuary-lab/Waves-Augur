@@ -1,7 +1,7 @@
-@import '../../style/helpers/vars';
-@import '../../style/helpers/mixins';
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
 
-.ProfileBlock {
+.HeaderProfile {
   $root: &;
 
   display: flex;
@@ -106,22 +106,6 @@
 
     &_hidden {
       display: none;
-    }
-  }
-
-  &__menu-item {
-
-    &:nth-last-child(2) #{$root}__menu-link {
-      padding-bottom: 15px;
-    }
-
-    &:last-child::before {
-      content: '';
-      position: absolute;
-      height: 1px;
-      width: 100%;
-      left: 0;
-      background-color: $color-gg-10;
     }
   }
 

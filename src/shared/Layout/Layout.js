@@ -13,8 +13,10 @@ import Footer from 'shared/Footer';
 
 import './Layout.scss';
 import {openModal} from 'yii-steroids/actions/modal';
-import ProfileModal from 'modals/ProfileModal/ProfileModal';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
 import {getUser} from 'yii-steroids/reducers/auth';
+import MessageModal from 'modals/MessageModal';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('Layout');
 
@@ -41,11 +43,23 @@ export default class Layout extends React.PureComponent {
         user: PropTypes.object,
     };
 
+    async componentDidMount() {
+        const keeper = await dal.getKeeper();
+        if (!keeper) {
+            this.props.dispatch(openModal(MessageModal, {
+                title: __('Install Waves Keeper'),
+                description: __('You Need a WAVES Wallet to Join Us'),
+                submitLabel: __('Install'),
+                onSubmit: () => location.href = 'https://wavesplatform.com/products-keeper',
+            }));
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
-            && (!nextProps.user || !nextProps.user.bio)
+            && nextProps.user && nextProps.user.role === UserRole.INVITED && nextProps.user.invitedBy
         ) {
-            this.props.dispatch(openModal(ProfileModal));
+            this.props.dispatch(openModal(ProfileWizardModal));
         }
     }
 
@@ -57,7 +71,7 @@ export default class Layout extends React.PureComponent {
                     {this.props.routeId !== ROUTE_ROOT && (
                         <div className={bem.element('image-line')}/>
                     )}
-                    {this.props.children}
+                    {this.props.status !== STATUS_LOADING && this.props.children}
                 </main>
                 <Footer/>
                 <ModalWrapper/>

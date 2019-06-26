@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {html} from 'components';
+import {html, dal} from 'components';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import Form from 'yii-steroids/ui/form/Form';
 import InputField from 'yii-steroids/ui/form/InputField';
@@ -37,13 +37,15 @@ export default class InviteUserModal extends React.PureComponent {
                     <Form
                         className={bem.element('form')}
                         formId={FORM_ID}
-                        layout={'default'}
+                        layout='default'
+                        onSubmit={values => dal.invite(values)}
+                        onComplete={this.props.onClose}
                     >
                         <div className={bem.element('form-inner')}>
                             <div className={bem.element('group')}>
                                 <InputField
                                     className={bem.element('nickname')}
-                                    attribute='nickname'
+                                    attribute='name'
                                     topHint={__('User’s Nickname (Optional)')}
                                     placeholder={__('Nickname')}
                                 />
@@ -59,7 +61,7 @@ export default class InviteUserModal extends React.PureComponent {
                         </div>
                         <InputField
                             className={bem.element('address')}
-                            attribute='wavesAddress'
+                            attribute='address'
                             label={__('Waves Address')}
                             placeholder={__('Enter New User’s Waves Adress')}
                         />

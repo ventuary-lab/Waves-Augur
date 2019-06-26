@@ -9,9 +9,9 @@ import LinksTab from './views/LinksTab';
 import WaitingTab from './views/WaitingTab';
 import FormWizard from 'ui/form/FormWizard';
 
-const bem = html.bem('ProfileModal');
+const bem = html.bem('ProfileWizardModal');
 
-import './ProfileModal.scss';
+import './ProfileWizardModal.scss';
 import {getUser} from 'yii-steroids/reducers/auth';
 
 @connect(
@@ -19,27 +19,22 @@ import {getUser} from 'yii-steroids/reducers/auth';
         user: getUser(state),
     })
 )
-export default class ProfileModal extends React.Component {
+export default class ProfileWizardModal extends React.Component {
 
     static propTypes = {
         user: PropTypes.object,
     };
 
-    constructor() {
-        super(...arguments);
-
-        this._onSubmit = this._onSubmit.bind(this);
-    }
-
     render() {
         return (
             <Modal
-                {...this.props}
+                {...this.props.modalProps}
                 className={bem.block()}
             >
                 <FormWizard
-                    formId='ProfileModal'
-                    onSubmit={this._onSubmit}
+                    formId='ProfileWizardModal'
+                    onSubmit={values => dal.signup(values)}
+                    onComplete={this.props.onClose}
                     initialValues={{
                         name: this.props.user ? this.props.user.name : null,
                     }}
@@ -47,6 +42,9 @@ export default class ProfileModal extends React.Component {
                         {
                             id: 'waiting',
                             component: WaitingTab,
+                            componentProps: {
+                                invitedBy: this.props.user.invitedBy,
+                            },
                         },
                         {
                             id: 'links',
@@ -62,17 +60,4 @@ export default class ProfileModal extends React.Component {
         );
     }
 
-    _onSubmit(values) {
-        (async () => {
-            try {
-                const res = await dal.saveUser(values);
-                console.log(res);
-                //window.alert(JSON.stringify({signResponse}));
-            } catch (e) {
-                console.error(e);
-            }
-
-            this.props.onClose();
-        })();
-    }
 }

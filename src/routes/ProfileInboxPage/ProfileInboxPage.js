@@ -18,9 +18,7 @@ export default class ProfileInboxPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <ProfileLayout>
-                    InboxPage
-                </ProfileLayout>
+                InboxPage
             </div>
         );
     }

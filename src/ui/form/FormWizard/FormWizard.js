@@ -15,9 +15,11 @@ export default class FormWizard extends React.PureComponent {
     static propTypes = {
         formId: PropTypes.string.isRequired,
         onSubmit: PropTypes.func,
+        onComplete: PropTypes.func,
         items: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string,
             component: PropTypes.func,
+            componentProps: PropTypes.object,
         })),
     };
 
@@ -92,9 +94,10 @@ export default class FormWizard extends React.PureComponent {
     }
 
     renderContent() {
-        const Component = this.props.items[this.getActiveIndex()].component;
+        const item = this.props.items[this.getActiveIndex()];
+        const Component = item.component;
         return (
-            <Component/>
+            <Component {...item.componentProps}/>
         );
     }
 
@@ -108,7 +111,12 @@ export default class FormWizard extends React.PureComponent {
     _onSubmit(values) {
         const isFinish = this.getActiveIndex() === this.props.items.length - 1;
         if (isFinish) {
-            this.props.onSubmit && this.props.onSubmit(values);
+            if (this.props.onSubmit) {
+                return Promise.resolve(this.props.onSubmit(values))
+                    .then(() => {
+                        this.props.onComplete && this.props.onComplete();
+                    });
+            }
         } else {
             this.switchTab(1);
         }

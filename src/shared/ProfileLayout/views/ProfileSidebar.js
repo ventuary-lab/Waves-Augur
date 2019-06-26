@@ -1,97 +1,75 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import {connect} from 'react-redux';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 import {html} from 'components';
-import SocialLinksSchema from 'types/SocialLinksSchema';
 import SocialLinks from 'shared/SocialLinks';
 import avatarStub from 'static/images/avatar-stub.png';
+import UserSchema from 'types/UserSchema';
 
 import './ProfileSidebar.scss';
 
 const bem = html.bem('ProfileSidebar');
 
+@connect(
+    state => ({
+        user: getUser(state),
+    })
+)
 export default class ProfileSidebar extends React.PureComponent {
 
     static propTypes = {
-        avatarUrl: PropTypes.string,
-        backgroundUlr: PropTypes.string,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        socialLinks: SocialLinksSchema,
-        activity: PropTypes.number,
-        status: PropTypes.string, //TODO make enum
-        country: PropTypes.string,
-        invitedBy: PropTypes.string,
-        tags: PropTypes.arrayOf(PropTypes.string),
-        balance: PropTypes.number,
-        crowdfunding: PropTypes.shape({
-            startDate: PropTypes.string,
-            finishDate: PropTypes.string,
-        }),
-        isProject: PropTypes.bool,
-
+        user: UserSchema,
     };
 
     render() {
+        // TODO activity
         return (
-            <div className={bem.block({
-                'is-project': this.props.isProject,
-            })}>
+            <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.avatarUrl || avatarStub}
-                    alt={this.props.name}
+                    src={this.props.user.avatar || avatarStub}
+                    alt={this.props.user.name}
                 />
                 <div className={bem.element('inner')}>
                     <span className={bem.element('name')}>
-                        {this.props.name}
+                        {this.props.user.name}
                     </span>
                     <span className={bem.element('description')}>
-                        {this.props.description}
+                        {this.props.user.title}
                     </span>
-                    {!this.props.isProject && this.props.socialLinks && (
+                    {this.props.user.socials && (
                         <div className={bem.element('social-links')}>
-                            <SocialLinks
-                                items={this.props.socialLinks}
-                            />
+                            <SocialLinks urls={this.props.user.socials}/>
                         </div>
                     )}
-                    {this.props.isProject && this.props.status && (
-                        <div className={bem.element('info-string', 'status')}>
-                            <span>{__('Status')}:</span>
-                            <span className={bem.element('info-value')}>
-                                {this.props.status}
-                            </span>
-                        </div>
-                    )}
-                    {!this.props.isProject && this.props.activity && (
+                    {this.props.user.activity && (
                         <div className={bem.element('info-string', 'activity')}>
                             <span>{__('Activity')}:</span>
                             <span className={bem.element('info-value')}>
-                                {this.props.activity}
+                                {this.props.user.activity}
                             </span>
                         </div>
                     )}
-                    {this.props.country && (
+                    {this.props.user.location && (
                         <div className={bem.element('country')}>
                             <span className={'MaterialIcon'}>location_on</span>
                             &nbsp;
-                            <span>{this.props.country}</span>
+                            <span>{this.props.user.location}</span>
                         </div>
                     )}
-                    {!this.props.isProject && this.props.invitedBy && (
+                    {this.props.user.invitedBy && (
                         <div className={bem.element('invited-by')}>
                             <span>{__('Invited by')}</span>
                             &nbsp;
                             <span>
-                                {this.props.invitedBy}
+                                {this.props.user.invitedBy.name}
                             </span>
                         </div>
                     )}
-                    {this.props.tags && (
+                    {this.props.user.tags && this.props.user.tags.length > 0 && (
                         <ul className={bem.element('tags-list')}>
-                            {this.props.tags.map((item, index) => (
+                            {this.props.user.tags.map((item, index) => (
                                 <li
                                     key={index}
                                     className={bem.element('tags-item')}
@@ -101,30 +79,12 @@ export default class ProfileSidebar extends React.PureComponent {
                             ))}
                         </ul>
                     )}
-                    {this.props.isProject && this.props.crowdfunding && (
-                        <table className={bem.element('crowdfunding')}>
-                            <tbody>
-                                <tr>
-                                    <td>{__('Crowdfunding')}</td>
-                                    <td>
-                                        {moment(this.props.crowdfunding.startDate).format('DD.MM.YYYY')}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{__('Finish')}</td>
-                                    <td>{moment(this.props.crowdfunding.finishDate).format('DD.MM.YYYY')}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
-                    {!this.props.isProject && this.props.balance && (
-                        <div className={bem.element('balance')}>
-                            <span>{__('Balance')}</span>
-                            <span>
-                                {this.props.balance} {__('WAVES')}
-                            </span>
-                        </div>
-                    )}
+                    <div className={bem.element('balance')}>
+                        <span>{__('Balance')}</span>
+                        <span>
+                            {this.props.user.balance} {__('WAVES')}
+                        </span>
+                    </div>
                 </div>
             </div>
         );

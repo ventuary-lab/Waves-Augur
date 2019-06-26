@@ -18,9 +18,7 @@ export default class ProfileDonationPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <ProfileLayout>
-                    DonationPage
-                </ProfileLayout>
+                DonationPage
             </div>
         );
     }

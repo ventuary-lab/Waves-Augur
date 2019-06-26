@@ -24,10 +24,10 @@ export default class SocialEnum extends Enum {
         return {
             [this.TWITTER]: 'Icon Icon__twitter',
             [this.FACEBOOK]: 'Icon Icon__facebook',
-            [this.LINKEDIN]: '',
+            [this.LINKEDIN]: 'Icon Icon__linkedin',
             [this.INSTAGRAM]: 'Icon Icon__instagram',
             [this.TELEGRAM]: 'Icon Icon__telegram',
-            [this.WEBSITE]: '',
+            [this.WEBSITE]: 'Icon Icon__website',
         };
     }
 }
