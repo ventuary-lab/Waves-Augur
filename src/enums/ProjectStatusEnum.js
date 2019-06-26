@@ -1,6 +1,6 @@
 import Enum from './Enum';
 
-export default class SocialEnum extends Enum {
+export default class ProfileStatusEnum extends Enum {
 
     static VOTING = 'voting';
     static CROWDFUND = 'crowdfund';

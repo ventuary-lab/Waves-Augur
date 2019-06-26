@@ -8,6 +8,7 @@ import InputField from 'yii-steroids/ui/form/InputField';
 import CheckboxField from 'yii-steroids/ui/form/CheckboxField';
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
+import validate from 'shared/validate';
 
 import './InviteUserModal.scss';
 
@@ -38,7 +39,14 @@ export default class InviteUserModal extends React.PureComponent {
                         className={bem.element('form')}
                         formId={FORM_ID}
                         layout='default'
-                        onSubmit={values => dal.invite(values)}
+                        onSubmit={values => {
+                            validate(values,[
+                                ['address', 'required'],
+                                [['name', 'message'], 'string'],
+                            ]);
+
+                            dal.invite(values);
+                        }}
                         onComplete={this.props.onClose}
                     >
                         <div className={bem.element('form-inner')}>

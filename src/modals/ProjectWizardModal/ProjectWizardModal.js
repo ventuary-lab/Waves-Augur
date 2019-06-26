@@ -7,13 +7,16 @@ import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
 import ConnectImageField from 'ui/form/ConnectImageField';
 import {isPhone} from 'yii-steroids/reducers/screen';
+import AutoSaveHelper from 'yii-steroids/ui/form/Form/AutoSaveHelper';
 
-import {html} from 'components';
+import {dal, html} from 'components';
 
 import './ProjectWizardModal.scss';
 import FormWizard from 'ui/form/FormWizard';
+import SocialEnum from 'enums/SocialEnum';
 
 const bem = html.bem('ProjectWizardModal');
+const FORM_ID = 'ProjectWizardModal';
 
 @connect(
     state => ({
@@ -22,12 +25,6 @@ const bem = html.bem('ProjectWizardModal');
 )
 export default class ProjectWizardModal extends React.PureComponent {
 
-    constructor() {
-        super(...arguments);
-
-        this._onSubmit = this._onSubmit.bind(this);
-    }
-
     render() {
         return (
             <Modal
@@ -35,16 +32,40 @@ export default class ProjectWizardModal extends React.PureComponent {
                 className={bem.block()}
             >
                 <FormWizard
-                    formId='ProjectWizardModal'
-                    onSubmit={this._onSubmit}
+                    formId={FORM_ID}
+                    onSubmit={values => dal.addItem(values)}
+                    onComplete={() => {
+                        this.props.onClose();
+                        AutoSaveHelper.remove(FORM_ID);
+                    }}
+                    autoSave
                     items={[
                         {
                             id: 'name',
                             component: this._stepName,
+                            validators: [
+                                ['name', 'required'],
+                                [['name', 'description'], 'string'],
+                            ],
                         },
                         {
                             id: 'campaign',
                             component: this._stepCampaign,
+                            validators: [
+                                [['expireVoting', 'expireCrowd', 'expireWhale', 'targetWaves'], 'required'],
+                                [['expireVoting', 'expireCrowd', 'expireWhale'], 'date'],
+                                ['targetWaves', 'integer', {min: 1}],
+                                ['expireCrowd', function(values, attribute) {
+                                    if (values[attribute] && values.expireVoting && values[attribute] <= values.expireVoting) {
+                                        return __('Crowdfunding date must be more than Voting');
+                                    }
+                                }],
+                                ['expireWhale', function(values, attribute) {
+                                    if (values[attribute] && values.expireCrowd && values[attribute] <= values.expireCrowd) {
+                                        return __('Whale date must be more than Crowdfunding');
+                                    }
+                                }],
+                            ],
                         },
                         {
                             id: 'idea-problem',
@@ -65,15 +86,14 @@ export default class ProjectWizardModal extends React.PureComponent {
                         {
                             id: 'contacts',
                             component: this._stepContacts,
+                            validators: [
+                                [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
+                            ],
                         },
                     ]}
                 />
             </Modal>
         );
-    }
-
-    _onSubmit(values) {
-
     }
 
     _stepName(props) {
@@ -103,13 +123,13 @@ export default class ProjectWizardModal extends React.PureComponent {
                 <div className={bem.element('form-row')}>
                     <div className={bem.element('form-col-label')}>
                         <label>
-                            {__('Srort Description')}
+                            {__('Short Description')}
                         </label>
                     </div>
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={props.isPhone ? __('Sort Description') : false}
-                            attribute={'shortDescription'}
+                            attribute={'description'}
                             placeholder={__('Description')}
                         />
                     </div>
@@ -162,12 +182,12 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <div className={bem.element('deadlines')}>
                             <DateField
-                                attribute='crowdfunding'
-                                label={__('Crowdfunding')}
+                                attribute='expireVoting'
+                                label={__('Voting')}
                             />
                             <DateField
-                                attribute='grantDecision'
-                                label={__('Grant decision')}
+                                attribute='expireCrowd'
+                                label={__('Crowdfunding')}
                             />
                         </div>
                     </div>
@@ -183,12 +203,12 @@ export default class ProjectWizardModal extends React.PureComponent {
                         <div className={bem.element('targets')}>
                             <InputField
                                 label={props.isPhone ? __('Waves') : false}
-                                attribute={'target'}
+                                attribute='targetWaves'
                                 placeholder={__('Enter Your Project Name')}
                             />
                             <DateField
-                                attribute='demo-day'
-                                label={__('Demo day')}
+                                attribute='expireWhale'
+                                label={__('Whale date')}
                             />
                         </div>
                     </div>
@@ -216,7 +236,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <InputField
                             label={props.isPhone ? __('Your Country') : false}
-                            attribute={'country'}
+                            attribute={'location'}
                             placeholder={__('Enter')}
                         />
                     </div>
@@ -235,7 +255,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Problem'}
-                            attribute={'problem'}
+                            attribute={'contents.problem'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -245,7 +265,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Solution'}
-                            attribute={'solution'}
+                            attribute={'contents.solution'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -255,7 +275,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'X-Factor'}
-                            attribute={'x-factor'}
+                            attribute={'contents.xFactor'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -276,7 +296,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'MVP'}
-                            attribute={'mvp'}
+                            attribute={'contents.mvp'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -285,7 +305,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Large Scale Adoption'}
-                            attribute={'large-scale-adoption'}
+                            attribute={'contents.largeScaleAdoption'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -305,7 +325,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Impact on User'}
-                            attribute={'impact-on-user'}
+                            attribute={'contents.impactOnUser'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -314,7 +334,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Impact on User Context'}
-                            attribute={'impact-on-user-context'}
+                            attribute={'contents.impactOnUserContext'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -323,7 +343,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Impact on User Society'}
-                            attribute={'impact-on-user-society'}
+                            attribute={'contents.impactOnUserSociety'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -343,7 +363,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Code Validation'}
-                            attribute={'code-validation'}
+                            attribute={'contents.codeValidation'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -352,7 +372,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Legal Arrangements'}
-                            attribute={'legal-arrangements'}
+                            attribute={'contents.legalArrangements'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -361,7 +381,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Open-source strategy'}
-                            attribute={'open-source-strategy'}
+                            attribute={'contents.openSourceStrategy'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -370,7 +390,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     <div className={bem.element('form-col-field')}>
                         <TextField
                             label={'Interconnectedness'}
-                            attribute={'interconnectedness'}
+                            attribute={'contents.interconnectedness'}
                             placeholder={__('Text')}
                         />
                     </div>
@@ -385,87 +405,26 @@ export default class ProjectWizardModal extends React.PureComponent {
                 <div className={bem.element('sub-title')}>
                     {__('Contacts')}
                 </div>
-
-                <div className={bem.element('form-row')}>
-                    <div className={bem.element('form-col-label')}>
-                        <label>
-                            {__('Project Website')}
-                        </label>
+                {SocialEnum.getKeys().map(id => (
+                    <div className={bem.element('form-row')}>
+                        <div className={bem.element('form-col-label')}>
+                            <label>
+                                <span className={bem.element('form-col-label-icon')}>
+                                    <span className={SocialEnum.getCssClass(id)}/>
+                                </span>
+                                <span>{SocialEnum.getLabel(id)}</span>
+                            </label>
+                        </div>
+                        <div className={bem.element('form-col-field')}>
+                            <InputField
+                                attribute={`socials.url_${id}`}
+                                label={props.isPhone ? SocialEnum.getLabel(id) : false}
+                                placeholder={__('Enter URL')}
+                            />
+                        </div>
                     </div>
-                    <div className={bem.element('form-col-field')}>
-                        <InputField
-                            attribute={'website'}
-                            label={props.isPhone ? __('Project Website') : false}
-                            placeholder={__('Enter URL')}
-                        />
-                    </div>
-                </div>
-                <div className={bem.element('form-row')}>
-                    <div className={bem.element('form-col-label')}>
-                        <label>
-                            <span className={bem.element('form-col-label-icon')}>
-                                <span className={'Icon Icon__twitter'}/>
-                            </span>
-                            <span>{__('Twitter')}</span>
-                        </label>
-                    </div>
-                    <div className={bem.element('form-col-field')}>
-                        <InputField
-                            attribute={'twitter'}
-                            label={props.isPhone ? __('Twitter') : false}
-                            placeholder={__('Enter URL')}
-                        />
-                    </div>
-                </div>
-                <div className={bem.element('form-row')}>
-                    <div className={bem.element('form-col-label')}>
-                        <label>
-                            <span className={bem.element('form-col-label-icon')}>
-                                <span className={'Icon Icon__facebook'}/>
-                            </span>
-                            <span>{__('Facebook')}</span>
-                        </label>
-                    </div>
-                    <div className={bem.element('form-col-field')}>
-                        <InputField
-                            label={props.isPhone ? __('Facebook') : false}
-                            attribute={'facebook'}
-                            placeholder={__('Enter URL')}
-                        />
-                    </div>
-                </div>
-                <div className={bem.element('form-row')}>
-                    <div className={bem.element('form-col-label')}>
-                        <label>
-                            <span className={bem.element('form-col-label-icon')}>
-                                <span className={'Icon Icon__linkedin'}/>
-                            </span>
-                            <span>{__('Linkedin')}</span>
-                        </label>
-                    </div>
-                    <div className={bem.element('form-col-field')}>
-                        <InputField
-                            label={props.isPhone ? __('Linkedin') : false}
-                            attribute={'linkedin'}
-                            placeholder={__('Enter URL')}
-                        />
-                    </div>
-                </div>
-                <div className={bem.element('form-row')}>
-                    <div className={bem.element('form-col-label')}>
-                        <label>
-                            {__('E-mail')}
-                        </label>
-                    </div>
-                    <div className={bem.element('form-col-field')}>
-                        <InputField
-                            attribute={'email'}
-                            label={props.isPhone ? __('E-mail') : false}
-                            placeholder={__('Enter URL')}
-                        />
-                    </div>
-                </div>
+                ))}
             </>
-        )
+        );
     }
 }

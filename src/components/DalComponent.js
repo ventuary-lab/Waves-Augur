@@ -7,7 +7,7 @@ import _toInteger from 'lodash/toInteger';
 import {nodeInteraction} from '@waves/waves-transactions';
 
 import UserRole from 'enums/UserRole';
-import validate from './validate';
+import validate from 'shared/validate';
 import {setUser} from 'yii-steroids/actions/auth';
 
 export default class DalComponent {
@@ -51,9 +51,6 @@ export default class DalComponent {
             ...data,
         };
 
-        validate(data, 'address', 'required');
-        validate(data, ['name', 'message'], 'string');
-
         try {
             await this._nodePublish('inviteuser', [
                 data.address,
@@ -93,7 +90,7 @@ export default class DalComponent {
         store.dispatch(setUser(data));
     }
 
-    async addItem(item, expVoting, expCrowd, expWhale, data) {
+    async addItem(data) {
         data = {
             title: '',
             description: null,
@@ -133,13 +130,22 @@ export default class DalComponent {
             uid: uuid(),
         };
 
-        return this._nodePublish('additem', [
-            data.uid,
-            DalComponent.dateToHeight(data.expireVoting),
-            DalComponent.dateToHeight(data.expireCrowd),
-            DalComponent.dateToHeight(data.expireWhale),
-            data,
-        ]);
+        return this._nodePublish(
+            'additem',
+            [
+                data.uid,
+                DalComponent.dateToHeight(data.expireVoting),
+                DalComponent.dateToHeight(data.expireCrowd),
+                DalComponent.dateToHeight(data.expireWhale),
+                data,
+            ],
+            [
+                {
+                    amount: 500000000 / 1000,
+                    asset: null
+                }
+            ]
+        );
     }
 
     async auth() {
@@ -199,19 +205,21 @@ export default class DalComponent {
     }
 
     /**
-     * @param method
-     * @param args
+     *
+     * @param string method
+     * @param array args
+     * @param array payment
      * @returns {Promise<*>}
      * @private
      */
-    async _nodePublish(method, args) {
+    async _nodePublish(method, args, payment = []) {
         const keeper = await this.getKeeper();
-        return keeper.signAndPublishTransaction({
+        const transaction = {
             type: 16,
             data: {
                 fee: {
                     assetId: 'WAVES',
-                    tokens: '0.009'
+                    tokens: '0.009',
                 },
                 dApp: this.dApp,
                 call: {
@@ -221,9 +229,15 @@ export default class DalComponent {
                     })),
                     function: method
                 },
-                payment: []
+                payment,
             }
-        });
+        };
+
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Sent transaction:', transaction);
+        }
+
+        return keeper.signAndPublishTransaction(transaction);
     }
 
 
