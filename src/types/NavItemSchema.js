@@ -8,7 +8,7 @@ const NavItemSchema = PropTypes.shape({
     icon: PropTypes.string,
     isActive: PropTypes.bool,
     isVisible: PropTypes.bool,
-    items: PropTypes.arrayOf(NavItemSchema),
+    items: PropTypes.arrayOf(PropTypes.object),
 });
 
 export default NavItemSchema;

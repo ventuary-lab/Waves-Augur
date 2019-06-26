@@ -1,5 +1,5 @@
 export default {
     name: 'Aleksei',
-    avatar: '/static/images/avatar-stub.png',
+    avatar: null,
     balance: 25.7,
 }

@@ -1,0 +1,92 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "__": true
+  },
+  "rules": {
+    "semi": [ "warn", "always" ],
+    "quotes": [ "warn", "single" ],
+    "jsx-quotes": ["warn", "prefer-single"],
+    "strict": 0,
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-undef": "warn",
+    "no-empty": "warn",
+    "no-tabs": "warn",
+    "valid-jsdoc": [
+      "warn",
+      {
+        "requireReturn": false,
+        "requireParamDescription": false,
+        "requireReturnDescription": false
+      }
+    ],
+    "no-lonely-if": "warn",
+    "no-multiple-empty-lines": "warn",
+    "curly": [ "error", "all" ],
+    "no-duplicate-case": "error",
+    "no-extra-boolean-cast": "error",
+    "no-dupe-keys": "error",
+    "no-dupe-args": "error",
+    "no-unsafe-negation": "error",
+    "indent": [
+      "warn",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "comma-style": "warn",
+    "block-spacing": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignore": ["React"]
+      }
+    ],
+    "linebreak-style": 0,
+    "object-curly-spacing": 0,
+    "quote-props": 0,
+    "comma-dangle": 0,
+    "padded-blocks": 0,
+    "react/prefer-stateless-function": 0,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1,
+    "react/jsx-no-undef": 1,
+    "react/react-in-jsx-scope": 1,
+    "import/no-extraneous-dependencies": 0,
+    "arrow-parens": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "no-underscore-dangle": 0,
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".js"]
+      }
+    ],
+    "react/jsx-indent": [
+      "error",
+      4
+    ],
+    "react/jsx-indent-props": [
+      "error",
+      4
+    ]
+  },
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  }
+}

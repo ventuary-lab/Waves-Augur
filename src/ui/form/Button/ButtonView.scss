@@ -1,5 +1,70 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
 .ButtonView {
   position: relative;
+  padding: 13px 87px;
+  font-family: $ff-roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: $color-base;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  box-sizing: border-box;
+  min-height: 50px;
+  outline: none;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+  }
+
+  &:active {
+    box-shadow: none;
+
+    .ButtonView__label {
+      opacity: 0.8;
+    }
+  }
+
+  &_color {
+    &_primary {
+      background-color: $color-brand-green;
+      color: $color-base;
+    }
+  }
+
+  &_outline {
+    background-color: $color-base;
+    color: $color-brand-green;
+    border-color: $color-brand-green;
+
+    &:active {
+      opacity: 0.4;
+    }
+  }
+
+  &_link {
+    text-decoration: none;
+    padding: 0;
+    background-color: transparent;
+    color: $color-brand-green;
+    font-weight: 300;
+
+    &:hover, &:focus {
+      box-shadow: none;
+      font-weight: 500;
+    }
+
+    &:active {
+      color: $color-brand-light-green;
+    }
+  }
 
   &__icon {
     margin-right: 3px;
@@ -18,19 +83,5 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-
-  &.base-green {
-    width: 230px;
-    height: 50px;
-    font-size: 18px;
-    background-color: #0BC91F;
-    color: #fff;
-    border:none;
-    border-radius: 3px;
-  }
-  &.base-green.outline {
-    background-color: #fff;
-    color: #0BC91F;
   }
 }

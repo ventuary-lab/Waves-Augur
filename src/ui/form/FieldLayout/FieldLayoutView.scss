@@ -1,17 +1,40 @@
-@import '~bootstrap/scss/_functions.scss';
-@import '~bootstrap/scss/_variables.scss';
+@import '../../../style/helpers/vars';
 
 .FieldLayoutView {
-  &__label {
-    &_required:after {
-      display: inline-block;
-      content: '*';
-      color: $danger;
-      margin: 0 0 0 3px;
-    }
+  &__field {
+    position: relative;
   }
+
+  //&__label {
+  //  font-weight: 300;
+  //  color: $color-gg-4;
+  //
+  //  //&_required:after {
+  //  //  display: inline-block;
+  //  //  content: '*';
+  //  //  color: red;
+  //  //  margin: 0 0 0 3px;
+  //  //}
+  //}
+
+  &__label {
+    position: absolute;
+    top: -17px;
+
+    font-weight: 300;
+    color: $color-gg-4;
+    font-size: 13px;
+    line-height: 14px;
+
+    //&_layout_horizontal {
+    //  left: calc(#{$grid-offset-tablet} / 2);
+    //}
+
+  }
+
   &__invalid-feedback {
     display: block !important;
+    color: $color-brand-red;
   }
   &__hint {
     width: 100%;

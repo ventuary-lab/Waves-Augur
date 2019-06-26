@@ -33,6 +33,7 @@ export default class ButtonView extends React.PureComponent {
         block: PropTypes.bool,
         className: PropTypes.string,
         view: PropTypes.func,
+        noStyles: PropTypes.bool,
     };
 
     render() {
@@ -95,8 +96,14 @@ export default class ButtonView extends React.PureComponent {
             </>
         );
     }
-    
+
     _getClassName(modifiers) {
+        if (this.props.noStyles) {
+            return bem(
+                this.props.className,
+            );
+        }
+
         return bem(
             bem.block({
                 color: this.props.color,
@@ -106,13 +113,9 @@ export default class ButtonView extends React.PureComponent {
                 submitting: this.props.submitting,
                 'is-loading': this.props.isLoading,
                 ...modifiers,
+                link: this.props.link,
             }),
             this.props.className,
-            !this.props.link && 'btn',
-            this.props.size && 'btn-' + this.props.size,
-            !this.props.link && 'btn-' + (this.props.outline ? 'outline-' : '') + this.props.color,
-            this.props.block && 'btn-block',
-            this.props.link && 'btn-link',
         );
     }
 }

@@ -1,0 +1,11 @@
+$main-green: #0BC91F;
+
+.LinksTab {
+    &__grid {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        padding: 40px 60px;
+        grid-row-gap: 20px;
+        align-items: center;
+    }
+}

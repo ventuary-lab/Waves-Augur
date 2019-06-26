@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
-import Link from 'ui/nav/Link';
-import RoutesEnum from 'enums/RoutesEnum';
-import { getNavUrl } from 'reducers/navigation';
+import Link from 'yii-steroids/ui/nav/Link';
+import {ROUTE_ROOT} from 'routes';
+import { getNavUrl } from 'yii-steroids/reducers/navigation';
 
 import './Footer.scss';
 
@@ -15,9 +15,9 @@ const bem = html.bem('Footer');
 // TODO replace page id when create project page will be reade
 @connect(
     state => ({
-        createProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
-        findProjectPageUrl: getNavUrl(state, RoutesEnum.MAIN),
-        indexPageUrl: getNavUrl(state, RoutesEnum.MAIN),
+        createProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
+        findProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
+        indexPageUrl: getNavUrl(state, ROUTE_ROOT),
     })
 )
 export default class Footer extends React.PureComponent {
@@ -36,6 +36,7 @@ export default class Footer extends React.PureComponent {
                         <Link
                             className={bem.element('logo')}
                             to={this.props.indexPageUrl}
+                            noStyles
                         >
                             <img
                                 className={bem.element('logo-image')}
@@ -44,26 +45,7 @@ export default class Footer extends React.PureComponent {
                             />
                         </Link>
                         <div className={bem.element('socials')}>
-                            <SocialLinks
-                                items={[
-                                    {
-                                        id: 'twitter',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'facebook',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'instagram',
-                                        link: ''
-                                    },
-                                    {
-                                        id: 'telegram',
-                                        link: ''
-                                    },
-                                ]}
-                            />
+                            <SocialLinks/>
                         </div>
                     </div>
                     <div className={bem.element('right')}>
@@ -77,6 +59,7 @@ export default class Footer extends React.PureComponent {
                                         <Link
                                             className={bem.element('helper-link')}
                                             to={this.props.createProjectPageUrl}
+                                            noStyles
                                         >
                                             {__('Add project')}
                                         </Link>
@@ -85,6 +68,7 @@ export default class Footer extends React.PureComponent {
                                         <Link
                                             className={bem.element('helper-link')}
                                             to={this.props.findProjectPageUrl}
+                                            noStyles
                                         >
                                             {__('Find project')}
                                         </Link>

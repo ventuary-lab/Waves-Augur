@@ -22,33 +22,38 @@ export default class CheckboxFieldView extends React.PureComponent {
 
     render() {
         return (
-            <div className={bem(
-                bem.block(),
-                'custom-control',
-                'custom-checkbox'
-            )}>
-                <input
-                    className={bem(
-                        bem.element('input'),
-                        'custom-control-input',
-                        this.props.isInvalid && 'is-invalid',
-                        this.props.className
-                    )}
-                    id={this.props.fieldId + '_' + 'checkbox'}
-                    {...this.props.inputProps}
-                    disabled={this.props.disabled}
-                    required={this.props.required}
-                />
+            <div
+                className={bem(
+                    bem.block({
+                        disabled: this.props.disabled
+                    }),
+                    this.props.className
+                )}
+            >
                 <label
-                    className={bem(
-                        bem.element('label'),
-                        'custom-control-label'
-                    )}
+                    className={bem.element('label')}
                     htmlFor={this.props.fieldId + '_' + 'checkbox'}
                 >
-                    <span className={bem.element('label-text', {required: this.props.required})}>
-                        {this.props.label}
-                    </span>
+                    <input
+                        className={bem(
+                            bem.element('input', {
+                                'is-invalid': this.props.isInvalid
+                            }),
+                            this.props.className
+                        )}
+                        id={this.props.fieldId + '_' + 'checkbox'}
+                        {...this.props.inputProps}
+                        disabled={this.props.disabled}
+                        required={this.props.required}
+                    />
+                    <div className={bem.element('container')}>
+                        <div className={bem.element('inner')}>
+                            <span className={bem(bem.element('icon'), 'Icon Icon__checkbox-true')}/>
+                        </div>
+                        <div className={bem.element('text', {required: this.props.required})}>
+                            {this.props.label}
+                        </div>
+                    </div>
                 </label>
             </div>
         );

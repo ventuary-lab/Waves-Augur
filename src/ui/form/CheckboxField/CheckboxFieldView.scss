@@ -1,15 +1,84 @@
 @import '~bootstrap/scss/_functions.scss';
 @import '~bootstrap/scss/_variables.scss';
+@import '../../../style/helpers/vars';
 
 .CheckboxFieldView {
+  $root: &;
+  $item-checkbox: #{&}__input;
+
   display: inline-block;
 
-  &__label-text {
-    &_required:after {
-      display: inline-block;
-      content: '*';
-      color: $danger;
-      margin: 0 0 0 3px;
+
+
+  &__input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &__label {
+    display: block;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: $color-base;
+    color: $color-base-revert;
+    box-sizing: border-box;
+    border: 1px solid $color-brand-light-green;
+    border-radius: 3px;
+    margin-right: 20px;
+
+    &:hover {
+      border-color: $color-brand-green;
     }
+
+    &:focus {
+      box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+      border-color: $color-brand-green;
+    }
+
+    &_isInvalid {
+      border-color: $color-brand-red;
+      color: $color-brand-red;
+    }
+
+    &:disabled {
+      background-color: $color-gg-10;
+      color: $color-gg-4;
+
+      &:hover {
+        border-color: $color-brand-light-green;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__icon {
+    display: none !important;
+  }
+
+  #{$item-checkbox}:checked ~ &__container &__inner &__icon {
+    display: block !important;
+  }
+
+  &__text {
+    font-family: $ff-roboto;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 16px;
+    line-height: 24px;
   }
 }

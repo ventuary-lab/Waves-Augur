@@ -27,6 +27,7 @@ export default class DateFieldView extends React.PureComponent {
             <div>
                 <DayPickerInput
                     {...this.props.pickerProps}
+                    component={props => this.renderInput(props)}
                     inputProps={{
                         className: bem(
                             bem.block({
@@ -43,6 +44,15 @@ export default class DateFieldView extends React.PureComponent {
                 />
             </div>
         );
+    }
+
+    renderInput(props) {
+        return (
+            <div className={bem.element('container')}>
+                <div className={bem(bem.element('icon'), 'Icon Icon__calendar')}/>
+                <input {...props}/>
+            </div>
+        )
     }
 
 }

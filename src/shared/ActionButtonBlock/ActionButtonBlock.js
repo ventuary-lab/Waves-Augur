@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'ui/nav/Link';
 
 import {html} from 'components';
 
@@ -12,27 +11,26 @@ export default class ActionButtonBlock extends React.PureComponent {
 
     static propTypes = {
         title: PropTypes.string,
-        iconClass: PropTypes.string
+        iconClass: PropTypes.string,
+        onClick: PropTypes.func,
     };
 
     render() {
         return (
-            <div className={bem.block()}>
-                <Link
-                    //TODO: link path
-                    to={'/'}
-                >
-                    <div className={bem.element('container')}>
-                        <div className={bem.element('inner')}>
-                            <div className={bem.element('icon')}>
-                                <span className={`Icon ${this.props.iconClass}`}/>
-                            </div>
-                            <span className={bem.element('title')}>
-                                {this.props.title}
-                            </span>
+            <div
+                className={bem.block()}
+                onClick={this.props.onClick}
+            >
+                <div className={bem.element('container')}>
+                    <div className={bem.element('inner')}>
+                        <div className={bem.element('icon')}>
+                            <span className={`Icon ${this.props.iconClass}`}/>
                         </div>
+                        <span className={bem.element('title')}>
+                            {this.props.title}
+                        </span>
                     </div>
-                </Link>
+                </div>
             </div>
         );
     }

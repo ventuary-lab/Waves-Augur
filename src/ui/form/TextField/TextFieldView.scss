@@ -1,3 +1,60 @@
-.TextFieldView {
+@import '../../../style/helpers/vars';
 
+.TextFieldView {
+  display: flex;
+  padding: 13px 20px;
+  background-color: $color-base;
+  color: $color-base-revert;
+  box-sizing: border-box;
+  border: 1px solid $color-brand-light-green;
+  border-radius: 3px;
+  font-family: $ff-roboto;
+  font-weight: 100;
+  font-size: 18px;
+  line-height: 24px;
+  outline: none;
+  width: 100%;
+
+  &::placeholder {
+    color: $color-gg-4;
+    font-weight: 100;
+  }
+
+  &:hover {
+    border-color: $color-brand-green;
+  }
+
+  &:focus {
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+    border-color: $color-brand-green;
+  }
+
+  &_isInvalid {
+    border-color: $color-brand-red;
+    color: $color-brand-red;
+  }
+
+  &:disabled {
+    background-color: $color-gg-10;
+    color: $color-gg-4;
+
+    &:hover {
+      border-color: $color-brand-light-green;
+      cursor: not-allowed;
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  //&__label {
+  //  font-style: normal;
+  //  font-weight: 100;
+  //  font-size: 13px;
+  //  line-height: 14px;
+  //  color: $color-gg-4;
+  //  margin-bottom: 4px;
+  //}
 }

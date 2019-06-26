@@ -1,0 +1,92 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.CardProgress {
+  padding: 20px 20px 20px 65px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+
+  &__status-icon {
+    position: absolute;
+    top: 20px;
+    left: 18px;
+  }
+
+  &__info {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  &__progress {
+    flex-grow: 1;
+  }
+
+  &__progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__progress-line-container {
+    background: $color-brand-light-green;
+    border-radius: 2px;
+    height: 4px;
+    width: 100%;
+
+    position: relative;
+  }
+
+  &__progress-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: $color-brand-green;
+  }
+
+  &__current-waves {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    color: $color-brand-green;
+  }
+
+  &__target-waves {
+    margin-left: 15px;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    & > span {
+      font-weight: 300;
+      font-size: 11px;
+      line-height: 9px;
+      color: $color-gg-4;
+    }
+  }
+
+  &__against-waves {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    opacity: 0.3;
+  }
+
+  &__percent {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    color: $color-gg-4;
+  }
+
+  &__actions {
+    color: $color-brand-green;
+    cursor: pointer;
+  }
+}

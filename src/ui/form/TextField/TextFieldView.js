@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {html} from 'components';
+import './TextFieldView.scss';
 const bem = html.bem('TextFieldView');
 
 export default class TextFieldView extends React.PureComponent {
@@ -23,18 +24,20 @@ export default class TextFieldView extends React.PureComponent {
 
     render() {
         return (
-            <textarea
-                className={bem(
-                    bem.block({
-                        size: this.props.size,
-                    }),
-                    'form-control',
-                    'form-control-' + this.props.size,
-                    this.props.isInvalid && 'is-invalid',
-                    this.props.className
-                )}
-                {...this.props.inputProps}
-            />
+            <div className={bem.element('container')}>
+                <textarea
+                    className={bem(
+                        bem.block({
+                            size: this.props.size,
+                        }),
+                        'form-control',
+                        'form-control-' + this.props.size,
+                        this.props.isInvalid && 'is-invalid',
+                        this.props.className
+                    )}
+                    {...this.props.inputProps}
+                />
+            </div>
         );
     }
 

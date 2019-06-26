@@ -1,0 +1,92 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.InviteUserModal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__title {
+    font-family: $ff-roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 0;
+  }
+
+  &__invited-by {
+    font-family: $ff-roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    max-width: 258px;
+    margin: 0 auto 40px;
+  }
+
+  &__nickname {
+    margin-bottom: 20px;
+  }
+
+  &__is-wale {
+    margin-bottom: 20px;
+
+    @include phone-horizontal {
+      margin-bottom: 0;
+    }
+  }
+
+  &__address {
+    margin-bottom: 20px;
+
+    @include phone-horizontal {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__message {
+    margin-bottom: 20px;
+
+    @include phone-horizontal {
+      margin-bottom: 30px;
+    }
+  }
+
+  &__form-inner {
+    display: flex;
+    flex-direction: column;
+
+    @include phone-horizontal {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  &__group {
+    @include phone-horizontal {
+      margin-right: 48px;
+      margin-bottom: 32px;
+      width: 320px;
+    }
+  }
+
+  &__icon {
+    order: -1;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    margin-bottom: 50px;
+
+    @include phone-horizontal {
+      margin-bottom: 0;
+      order: 0;
+    }
+  }
+
+  &__action {
+    text-align: center;
+  }
+}
