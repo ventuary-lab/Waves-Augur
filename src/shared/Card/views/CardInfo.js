@@ -31,8 +31,8 @@ export default class CardInfo extends React.PureComponent {
     render() {
 
         const isProject = this.props.isProject;
-        const status = isProject ? this.getProjectStatus() : null;
-        const daysLeft = isProject ? this.getDaysLeft(status) : null;
+        const status = isProject ? ProjectStatusEnum.getStatus(this.props) : null;
+        const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
 
         return (
             <div className={bem.block()}>
@@ -50,21 +50,25 @@ export default class CardInfo extends React.PureComponent {
                         />
                     </div>
                     <div className={bem.element('info')}>
-                        {daysLeft && (
-                            <span className={bem.element('days-left')}>
-                                {daysLeft} {__('days left')}
-                            </span>
-                        )}
-                        {!isProject && this.props.activity && (
-                            <span className={bem.element('activity')}>
-                                {this.props.activity}
-                            </span>
-                        )}
-                        {status && (
-                            <span className={bem.element('status')}>
-                                {ProjectStatusEnum.getLabel(status)}
-                            </span>
-                        )}
+                        <div className={bem.element('left-info')}>
+                            {daysLeft && (
+                                <span className={bem.element('days-left')}>
+                                    {daysLeft} {__('days left')}
+                                </span>
+                            )}
+                        </div>
+                        <div className={bem.element('right-info')}>
+                            {!isProject && this.props.activity && (
+                                <span className={bem.element('activity')}>
+                                    {this.props.activity}
+                                </span>
+                            )}
+                            {status && (
+                                <span className={bem.element('status')}>
+                                    {ProjectStatusEnum.getLabel(status)}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className={bem.element('column-right')}>
@@ -92,43 +96,5 @@ export default class CardInfo extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    getDaysLeft(status) {
-        const now = moment();
-
-        if (status === ProjectStatusEnum.VOTING) {
-            return moment(this.props.expireVoting).diff(now, 'days');
-        }
-
-        if (status === ProjectStatusEnum.CROWDFUND) {
-            return moment(this.props.expireCrowd).diff(now, 'days');
-        }
-
-        if (status === ProjectStatusEnum.WAITING_GRANT) {
-            return moment(this.props.expireWhale).diff(now, 'days');
-        }
-
-        if (status === ProjectStatusEnum.GRANT) {
-            return null;
-        }
-    }
-
-    getProjectStatus() {
-        if (moment() < moment(this.props.expireVoting)) {
-            return ProjectStatusEnum.VOTING;
-        }
-
-        if (moment(this.props.expireVoting) < moment() < moment(this.props.expireCrowd)) {
-            return ProjectStatusEnum.CROWDFUND;
-        }
-
-        if (moment(this.props.expireCrowd) < moment() < moment(this.props.expireWhale)) {
-            return ProjectStatusEnum.WAITING_GRANT;
-        }
-
-        if (moment(this.props.expireWhale) < moment()) {
-            return ProjectStatusEnum.GRANT;
-        }
     }
 }

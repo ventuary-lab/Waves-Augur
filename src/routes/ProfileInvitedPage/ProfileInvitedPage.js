@@ -23,23 +23,26 @@ export default class ProfileInvitedPage extends React.PureComponent {
                     iconClass={'Icon__new-project'}
                     onClick={() => this.props.dispatch(openModal(InviteUserModal))}
                 />
-                <InvitedUserCard
-                    title={'Aleksei Pupyshev'}
-                    description={'Founder & CEO @Ventuary'}
-                    logoUrl={''}
-                    coverUrl={''}
-                    country={'Russia'} //TODO: need enum
-                    activity={1422}
-                    tags={['Consulting', 'RND', 'Analytics', 'Research and Development']}
-                    socials={{
-                        url_twitter: 'test',
-                        url_facebook: 'test',
-                        url_linkedin: 'test',
-                        url_instagram: 'test',
-                        url_telegram: 'test',
-                        url_website: 'test',
-                    }}
-                />
+
+                <div className={bem.element('card-list')}>
+                    <InvitedUserCard
+                        title={'Aleksei Pupyshev'}
+                        description={'Founder & CEO @Ventuary'}
+                        logoUrl={''}
+                        coverUrl={''}
+                        country={'Russia'} //TODO: need enum
+                        activity={1422}
+                        tags={['Consulting', 'RND', 'Analytics', 'Research and Development']}
+                        socials={{
+                            url_twitter: 'test',
+                            url_facebook: 'test',
+                            url_linkedin: 'test',
+                            url_instagram: 'test',
+                            url_telegram: 'test',
+                            url_website: 'test',
+                        }}
+                    />
+                </div>
             </div>
         );
     }

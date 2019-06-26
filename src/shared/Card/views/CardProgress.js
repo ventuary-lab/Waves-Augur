@@ -24,7 +24,7 @@ export default class CardProgress extends React.PureComponent {
     render() {
         const isNew = this.props.currentWaves === 0;
         const percent = this.props.currentWaves * 100 / this.props.targetWaves;
-        const status = this.getProjectStatus();
+        const status = ProjectStatusEnum.getStatus(this.props);
 
         return (
             <div className={bem.block()}>
@@ -83,23 +83,5 @@ export default class CardProgress extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    getProjectStatus() {
-        if (moment() < moment(this.props.expireVoting)) {
-            return ProjectStatusEnum.VOTING;
-        }
-
-        if (moment(this.props.expireVoting) < moment() < moment(this.props.expireCrowd)) {
-            return ProjectStatusEnum.CROWDFUND;
-        }
-
-        if (moment(this.props.expireCrowd) < moment() < moment(this.props.expireWhale)) {
-            return ProjectStatusEnum.WAITING_GRANT;
-        }
-
-        if (moment(this.props.expireWhale) < moment()) {
-            return ProjectStatusEnum.GRANT;
-        }
     }
 }
