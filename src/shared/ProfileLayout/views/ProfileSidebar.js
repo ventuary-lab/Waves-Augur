@@ -4,6 +4,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
+import Tags from 'shared/Tags';
 import avatarStub from 'static/images/avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 
@@ -68,16 +69,9 @@ export default class ProfileSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.user.tags && this.props.user.tags.length > 0 && (
-                        <ul className={bem.element('tags-list')}>
-                            {this.props.user.tags.map((item, index) => (
-                                <li
-                                    key={index}
-                                    className={bem.element('tags-item')}
-                                >
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
+                        <Tags
+                            items={this.props.user.tags}
+                        />
                     )}
                     <div className={bem.element('balance')}>
                         <span>{__('Balance')}</span>

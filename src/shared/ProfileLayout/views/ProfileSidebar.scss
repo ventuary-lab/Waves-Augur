@@ -82,27 +82,6 @@
     }
   }
 
-  &__tags-list {
-    padding: 0 20px;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 35px 0;
-    list-style: none;
-  }
-
-  &__tags-item {
-    padding: 5px 10px;
-    margin-bottom: 5px;
-    background-color: fade-out($color-brand-green, 0.9);
-    border-radius: 3px;
-    font-size: 13px;
-    line-height: 14px;
-
-    &:not(:last-child) {
-      margin-right: 5px;
-    }
-  }
-
   &__balance {
     margin-bottom: 16px;
 

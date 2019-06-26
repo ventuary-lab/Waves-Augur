@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import {html} from 'components';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
@@ -15,24 +16,27 @@ export default class CardProgress extends React.PureComponent {
         currentWaves: PropTypes.number,
         againstWaves: PropTypes.number,
         targetWaves: PropTypes.number,
-        status: PropTypes.oneOf(ProjectStatusEnum),
+        expireVoting: PropTypes.string,
+        expireCrowd: PropTypes.string,
+        expireWhale: PropTypes.string,
     };
 
     render() {
         const isNew = this.props.currentWaves === 0;
         const percent = this.props.currentWaves * 100 / this.props.targetWaves;
+        const status = this.getProjectStatus();
 
         return (
             <div className={bem.block()}>
                 <div className={bem.element('status-icon')}>
-                    {this.props.status === ProjectStatusEnum.GRANT && (
+                    {status === ProjectStatusEnum.GRANT && (
                         <span className={'Icon Icon__grant'}/>
                     )}
-                    {this.props.status === ProjectStatusEnum.CROWDFUND && (
+                    {status === ProjectStatusEnum.CROWDFUND && (
                         <span className={'Icon Icon__crowdfunded'}/>
                     )}
 
-                    {this.props.status === ProjectStatusEnum.VOTING && (
+                    {status === ProjectStatusEnum.VOTING && (
                         <>
                             {isNew
                                 ? <span className={'Icon Icon__new'}/>
@@ -79,5 +83,23 @@ export default class CardProgress extends React.PureComponent {
                 </div>
             </div>
         );
+    }
+
+    getProjectStatus() {
+        if (moment() < moment(this.props.expireVoting)) {
+            return ProjectStatusEnum.VOTING;
+        }
+
+        if (moment(this.props.expireVoting) < moment() < moment(this.props.expireCrowd)) {
+            return ProjectStatusEnum.CROWDFUND;
+        }
+
+        if (moment(this.props.expireCrowd) < moment() < moment(this.props.expireWhale)) {
+            return ProjectStatusEnum.WAITING_GRANT;
+        }
+
+        if (moment(this.props.expireWhale) < moment()) {
+            return ProjectStatusEnum.GRANT;
+        }
     }
 }

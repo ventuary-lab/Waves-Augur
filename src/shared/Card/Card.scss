@@ -8,6 +8,7 @@
   box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
   border-radius: 3px;
   flex-direction: column;
+  min-height: 150px;
 
   @include desktop {
     flex-direction: row;
