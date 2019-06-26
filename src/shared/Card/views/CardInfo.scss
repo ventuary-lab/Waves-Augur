@@ -2,16 +2,61 @@
 @import '../../../style/helpers/mixins';
 
 .CardInfo {
-  padding: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: $color-gg-4;
-  height: 100%;
+
+  &__column-left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+
+  &__column-right {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $color-gg-4;
+    width: 50%;
+  }
+
+  &__cover {
+    background-color: $color-brand-light-green;
+    min-height: 67px;
+    background-size: cover;
+  }
+
+  &__info {
+    align-items: flex-end;
+    padding: 20px;
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+  }
+
+  &__status {
+    color: $color-brand-green;
+  }
+
+  &__avatar {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    width: 74px;
+    height: 74px;
+    object-fit: cover;
+  }
 
   &__title {
     font-weight: 500;
     margin-bottom: 6px;
+    text-align: center;
   }
 
   &__description {

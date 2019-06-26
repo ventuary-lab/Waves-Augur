@@ -37,7 +37,6 @@ export default class ProfileProjectsPage extends React.PureComponent {
                         targetWaves={1000}
                         currentWaves={43}
                         againstWaves={5}
-                        status={ProjectStatusEnum.VOTING}
                         country={'Russia'} //TODO: need enum
                         activity={1422}
                     />

@@ -7,20 +7,23 @@
   border: 1px solid $color-gg-10;
   box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
   border-radius: 3px;
+  flex-direction: column;
 
-  &__column {
+  @include desktop {
+    flex-direction: row;
+  }
+
+  &__column-left {
     width: 100%;
 
-    &_left {
-      max-width: 190px;
+    @include desktop {
+      max-width: 380px;
     }
 
-    &_center {
-      max-width: 190px;
-    }
+  }
 
-    &_right {
-      flex-grow: 1;
-    }
+  &__column-right {
+    width: 100%;
+    flex-grow: 1;
   }
 }

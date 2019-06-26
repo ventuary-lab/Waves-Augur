@@ -23,7 +23,7 @@ export default class ProfileSidebar extends React.PureComponent {
     };
 
     render() {
-        // TODO activity
+
         return (
             <div className={bem.block()}>
                 <img
