@@ -240,5 +240,32 @@ $icons-dir: '../static/icons';
     background-image: url('#{$icons-dir}/landing-arrow.svg');
   }
 
+  &__new {
+    min-width: 32px;
+    min-height: 24px;
+    background-image: url('#{$icons-dir}/new.svg');
+  }
+
+  &__crowdfunded {
+    min-width: 38px;
+    min-height: 38px;
+    background-image: url('#{$icons-dir}/crowdfunded.svg');
+  }
+
+  &__grant {
+    min-width: 38px;
+    min-height: 38px;
+    background-image: url('#{$icons-dir}/grant.svg');
+  }
+
+  &__process {
+    min-width: 38px;
+    min-height: 38px;
+
+    &_green {
+      background-image: url('#{$icons-dir}/process_green.svg');
+    }
+  }
+
 
 }
