@@ -37,6 +37,11 @@
       background-color: $color-brand-green;
       color: $color-base;
     }
+
+    &_danger {
+      background-color: $color-brand-red;
+      color: $color-base;
+    }
   }
 
   &_outline {

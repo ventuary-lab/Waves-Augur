@@ -87,3 +87,10 @@
     }
   }
 }
+
+@mixin card-styles {
+  background: #fff;
+  border: 1px solid $color-gg-10;
+  box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+  border-radius: 3px;
+}

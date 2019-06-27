@@ -27,9 +27,7 @@
 
     @include tablet {
       height: 150px;
-      background-color: #fff;
-      box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
-      border-radius: 2px;
+      @include card-styles;
       font-weight: 300;
       font-size: 16px;
       color: #000;
