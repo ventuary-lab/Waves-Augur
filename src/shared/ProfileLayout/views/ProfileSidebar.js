@@ -27,7 +27,6 @@ export default class ProfileSidebar extends React.PureComponent {
     };
 
     render() {
-
         return (
             <div className={bem.block()}>
                 <img

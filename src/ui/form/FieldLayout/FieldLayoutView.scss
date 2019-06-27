@@ -41,6 +41,8 @@
   &__invalid-feedback {
     display: block !important;
     color: $color-brand-red;
+    position: relative;
+    top: -10px;
   }
   &__hint {
     width: 100%;

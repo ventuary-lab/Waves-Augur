@@ -1,19 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {openModal} from 'yii-steroids/actions/modal';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectCard from 'shared/ProjectCard';
 
-import {html} from 'components';
+import {dal, html} from 'components';
 
 import './ProfileProjectsPage.scss';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
+import ProjectSchema from 'types/ProjectSchema';
+import List from 'yii-steroids/ui/list/List';
 
 const bem = html.bem('ProfileProjectsPage');
 
+@dal.hoc(
+    () => dal.getMyProjects()
+        .then(items => ({items}))
+)
 @connect()
 export default class ProfileProjectsPage extends React.PureComponent {
+
+    static propTypes = {
+        items: PropTypes.arrayOf(ProjectSchema),
+    };
 
     render() {
         return (
@@ -24,20 +35,11 @@ export default class ProfileProjectsPage extends React.PureComponent {
                     onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
                 />
                 <div className={bem.element('card-list')}>
-
-                    <ProjectCard
-                        address={'s234sd67868adsfa9879'}
-                        title={'SmartChain Media'}
-                        description={'Build Blockchain-related applications and uild applications ser'}
-                        logoUrl={''}
-                        coverUrl={''}
-                        expireVoting={'2019-07-01'}
-                        expireCrowd={'2019-08-01'}
-                        expireWhale={'2019-08-05'}
-                        targetWaves={1000}
-                        currentWaves={43}
-                        againstWaves={5}
-                        country={'Russia'} //TODO: need enum
+                    <List
+                        listId='ProfileProjectsPage'
+                        itemView={ProjectCard}
+                        emptyText={__('No projects')}
+                        items={this.props.items}
                     />
                 </div>
             </div>

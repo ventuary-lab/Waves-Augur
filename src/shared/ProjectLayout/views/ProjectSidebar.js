@@ -127,6 +127,12 @@ export default class ProjectSidebar extends React.PureComponent {
                     <div className={bem.element('action')}>
                         <Button
                             label={(__('Vote'))}
+                            onClick={() => {
+                                // TODO
+                                window.scrollTo(0, 200);
+                                const el = document.querySelector('textarea[name=review]');
+                                el && el.focus();
+                            }}
                         />
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import moment from 'components/DalComponent';
+import moment from 'moment';
 
 export default class DalHelper {
 
@@ -9,17 +9,6 @@ export default class DalHelper {
 
     static dateNow() {
         return moment.utc().format('YYYY-MM-DD HH:mm:ss');
-    }
-
-    static dateToHeight(date) {
-        let days = -1 * Math.floor(moment().diff(date, 'days', true));
-        if (this.isTestMode) {
-            // In test mode one block = 1 day
-            return days;
-        } else {
-            // One block = 2 minutes
-            return Math.round((days * 1440) / 2);
-        }
     }
 
 }

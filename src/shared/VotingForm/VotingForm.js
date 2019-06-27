@@ -1,21 +1,33 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {getFormValues} from 'redux-form';
 
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 
-import {html} from 'components';
+import {dal, html} from 'components';
 
 import './VotingForm.scss';
+import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import ProjectVoteEnum from 'enums/ProjectVoteEnum';
+
 const FORM_ID = 'VotingForm';
 
 const bem = html.bem('VotingForm');
 
+@connect(
+    state => ({
+        route: getCurrentRoute(state),
+        formValues: getFormValues(FORM_ID)(state),
+    })
+)
 export default class VotingForm extends React.PureComponent {
 
     static propTypes = {
-
+        route: PropTypes.object,
+        formValues: PropTypes.object,
     };
 
     render() {
@@ -31,17 +43,23 @@ export default class VotingForm extends React.PureComponent {
                     </div>
                     <div className={bem.element('actions')}>
                         <Button
-                            type={'submit'}
                             label={__('Accept')}
+                            onClick={() => this._onSubmit(ProjectVoteEnum.FEATURED)}
                         />
                         <Button
-                            color={'danger'}
-                            type={'submit'}
                             label={__('Reject')}
+                            onClick={() => this._onSubmit(ProjectVoteEnum.FEATURED)}
+                            color={'danger'}
                         />
                     </div>
                 </Form>
             </div>
         );
+    }
+
+    _onSubmit(vote) {
+        dal.voteProject(this.props.route.params.uid, vote, {
+            comment: this.props.formValues.review,
+        });
     }
 }

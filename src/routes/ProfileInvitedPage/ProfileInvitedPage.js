@@ -1,19 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {openModal} from 'yii-steroids/actions/modal';
 
-import {html} from 'components';
+import {dal, html} from 'components';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import InviteUserModal from 'modals/InviteUserModal';
 import UserCard from 'shared/UserCard';
 
 import './ProfileInvitedPage.scss';
+import List from 'yii-steroids/ui/list/List';
+import UserSchema from 'types/UserSchema';
 
 const bem = html.bem('ProfileInvitedPage');
 
+@dal.hoc(
+    () => dal.getInvitedUsers()
+        .then(items => ({items}))
+)
 @connect()
 export default class ProfileInvitedPage extends React.PureComponent {
 
+    static propTypes = {
+        items: PropTypes.arrayOf(UserSchema),
+    };
 
     render() {
         return (
@@ -23,24 +33,12 @@ export default class ProfileInvitedPage extends React.PureComponent {
                     iconClass={'Icon__new-project'}
                     onClick={() => this.props.dispatch(openModal(InviteUserModal))}
                 />
-
                 <div className={bem.element('card-list')}>
-                    <UserCard
-                        title={'Aleksei Pupyshev'}
-                        description={'Founder & CEO @Ventuary'}
-                        logoUrl={''}
-                        coverUrl={''}
-                        country={'Russia'} //TODO: need enum
-                        activity={1422}
-                        tags={['Consulting', 'RND', 'Analytics', 'Research and Development']}
-                        socials={{
-                            url_twitter: 'test',
-                            url_facebook: 'test',
-                            url_linkedin: 'test',
-                            url_instagram: 'test',
-                            url_telegram: 'test',
-                            url_website: 'test',
-                        }}
+                    <List
+                        listId='ProfileInvitedPage'
+                        itemView={UserCard}
+                        emptyText={__('No invited users')}
+                        items={this.props.items}
                     />
                 </div>
             </div>

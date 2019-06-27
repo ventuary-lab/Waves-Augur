@@ -358,6 +358,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 {SocialEnum.getKeys().map(id => (
                     <InputField
+                        key={id}
                         attribute={`socials.url_${id}`}
                         label={SocialEnum.getLabel(id)}
                         labelIconClass={SocialEnum.getCssClass(id)}

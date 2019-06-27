@@ -16,7 +16,7 @@ export default class ProjectProgress extends React.PureComponent {
     };
 
     render() {
-        const percent = this.props.currentWaves * 100 / this.props.targetWaves;
+        const percent = Math.max(0, Math.min(100, 100 * this.props.currentWaves / this.props.targetWaves));
 
         return (
             <div className={bem.block()}>
