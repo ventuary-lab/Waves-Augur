@@ -76,7 +76,6 @@ export default class FormWizard extends React.PureComponent {
                         <Button
                             color='primary'
                             onClick={() => this.switchTab(-1)}
-                            outline
                             link
                         >
                             {__('Back')}
@@ -85,7 +84,6 @@ export default class FormWizard extends React.PureComponent {
                     <Button
                         type='submit'
                         color='primary'
-                        outline
                     >
                         {__('Next')}
                     </Button>

@@ -1,11 +1,15 @@
-$main-green: #0BC91F;
-
 .LinksTab {
-    &__grid {
-        display: grid;
-        grid-template-columns: 30% 70%;
-        padding: 40px 60px;
-        grid-row-gap: 20px;
-        align-items: center;
+    &__title {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    &__sub-title {
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 30px;
     }
 }

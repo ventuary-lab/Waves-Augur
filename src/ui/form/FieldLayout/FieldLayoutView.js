@@ -12,12 +12,12 @@ export default class FieldLayoutView extends React.PureComponent {
             PropTypes.string,
             PropTypes.bool,
         ]),
-        labeIconClass: PropTypes.string,
+        topLabel: PropTypes.string,
+        labelIconClass: PropTypes.string,
         hint: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.bool,
         ]),
-        topHint: PropTypes.string,
         errors: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.arrayOf(PropTypes.string),
@@ -38,39 +38,31 @@ export default class FieldLayoutView extends React.PureComponent {
                 bem.block({
                     layout: this.props.layout
                 }),
-                'form-group',
                 this.props.layoutClassName,
-                // this.props.layout === 'horizontal' && 'row',
-                // this.props.layout === 'horizontal' && 'form-row',
-                // this.props.layout === 'inline' && 'form-inline mb-0'
+                this.props.layout === 'horizontal' && 'form-row',
             )}>
-                {/*{this.props.label && (
+                {this.props.label && (
                     <label className={bem(
                         bem.element('label', {
                             required: this.props.required
                         }),
                         this.props.layout === 'horizontal' && 'form-label-col',
-                        // this.props.layout === 'horizontal' && 'col col_count-' + this.props.layoutProps.cols[0],
-                        // this.props.layout === 'inline' && 'sr-only',
                     )}>
-                        {this.props.labeIconClass && (
-                            <span className={this.props.labeIconClass}/>
+                        {this.props.labelIconClass && (
+                            <span className={bem(bem.element('label-icon'), this.props.labelIconClass)}/>
                         )}
                         {this.props.label}
                     </label>
-                )}*/}
+                )}
                 <div
                     className={bem(
                         bem.element('field'),
-                        // this.props.layout === 'horizontal' && 'form-field-col',
-                        // this.props.layout === 'horizontal' && 'col col_count-' + this.props.layoutProps.cols[1],
-                        // this.props.layout === 'horizontal' && !this.props.label && 'col col_offset-' + this.props.layoutProps.cols[0],
-                        // this.props.layout === 'inline' && 'w-100'
+                        this.props.layout === 'horizontal' && 'form-field-col',
                     )}
                 >
-                    {this.props.label && (
-                        <span className={bem.element('label')}>
-                            {this.props.label}
+                    {this.props.topLabel && (
+                        <span className={bem.element('top-label')}>
+                            {this.props.topLabel}
                         </span>
                     )}
                     {this.props.children}
@@ -83,11 +75,11 @@ export default class FieldLayoutView extends React.PureComponent {
                             ))}
                         </div>
                     )}
-                    {/*{!this.props.errors && this.props.layout !== 'inline'  && this.props.hint && (
-                        <div className={bem(bem.element('hint'), 'text-muted')}>
+                    {!this.props.errors && this.props.hint && (
+                        <div className={bem(bem.element('hint'))}>
                             {this.props.hint}
                         </div>
-                    )}*/}
+                    )}
                 </div>
             </div>
         );

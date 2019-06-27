@@ -26,11 +26,6 @@ export default class InputFieldView extends React.PureComponent {
     render() {
         return (
             <>
-                {this.props.label && (
-                    <label className={bem.element('label')}>
-                        {this.props.label}
-                    </label>
-                )}
                 <input
                     className={bem(
                         bem.block({
