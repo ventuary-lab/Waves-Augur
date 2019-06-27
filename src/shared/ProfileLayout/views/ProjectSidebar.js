@@ -53,19 +53,19 @@ export default class ProfileSidebar extends React.PureComponent {
             })}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.avatar || avatarStub}
-                    alt={this.props.user.name}
+                    src={this.props.user.profile.avatar || avatarStub}
+                    alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>
                     <span className={bem.element('name')}>
-                        {this.props.user.name}
+                        {this.props.user.profile.name}
                     </span>
                     <span className={bem.element('description')}>
-                        {this.props.user.title}
+                        {this.props.user.profile.title}
                     </span>
                     {!this.props.isProject && this.props.social && (
                         <div className={bem.element('social-links')}>
-                            <SocialLinks urls={this.props.user.social}/>
+                            <SocialLinks urls={this.props.social}/>
                         </div>
                     )}
 

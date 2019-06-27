@@ -72,8 +72,8 @@ export default class ButtonView extends React.PureComponent {
                     <div className={bem.element('preloader')}>
                         <span
                             className='spinner-border spinner-border-sm'
-                            role="status"
-                            aria-hidden="true"
+                            role='status'
+                            aria-hidden='true'
                         />
                     </div>
                 )}

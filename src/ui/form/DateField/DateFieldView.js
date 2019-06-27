@@ -52,7 +52,7 @@ export default class DateFieldView extends React.PureComponent {
                 <div className={bem(bem.element('icon'), 'Icon Icon__calendar')}/>
                 <input {...props}/>
             </div>
-        )
+        );
     }
 
 }

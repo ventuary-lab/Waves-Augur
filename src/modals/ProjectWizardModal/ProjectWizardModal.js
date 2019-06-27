@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {connect} from 'react-redux';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
@@ -33,10 +34,17 @@ export default class ProjectWizardModal extends React.PureComponent {
             >
                 <FormWizard
                     formId={FORM_ID}
-                    onSubmit={values => dal.addItem(values)}
+                    onSubmit={values => dal.saveProject(values)}
                     onComplete={() => {
                         this.props.onClose();
                         AutoSaveHelper.remove(FORM_ID);
+                    }}
+                    initialValues={!dal.isTestMode ? undefined : {
+                        name: 'proj' + (new Date()).getTime(),
+                        expireVoting: moment().add(1, 'day').format('YYYY-MM-DD'),
+                        expireCrowd: moment().add(2, 'day').format('YYYY-MM-DD'),
+                        expireWhale: moment().add(3, 'day').format('YYYY-MM-DD'),
+                        targetWaves: 50,
                     }}
                     autoSave
                     items={[
@@ -49,8 +57,8 @@ export default class ProjectWizardModal extends React.PureComponent {
                             ],
                         },
                         {
-                            id: 'campaign',
-                            component: this._stepCampaign,
+                            id: 'project',
+                            component: this._stepProject,
                             validators: [
                                 [['expireVoting', 'expireCrowd', 'expireWhale', 'targetWaves'], 'required'],
                                 [['expireVoting', 'expireCrowd', 'expireWhale'], 'date'],
@@ -138,11 +146,11 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepCampaign(props) {
+    _stepProject(props) {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Campaign Details')}
+                    {__('Project Details')}
                 </div>
 
                 <div className={bem.element('form-row')}>
@@ -406,7 +414,10 @@ export default class ProjectWizardModal extends React.PureComponent {
                     {__('Contacts')}
                 </div>
                 {SocialEnum.getKeys().map(id => (
-                    <div className={bem.element('form-row')}>
+                    <div
+                        key={id}
+                        className={bem.element('form-row')}
+                    >
                         <div className={bem.element('form-col-label')}>
                             <label>
                                 <span className={bem.element('form-col-label-icon')}>

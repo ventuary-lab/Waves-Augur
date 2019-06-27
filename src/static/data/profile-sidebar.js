@@ -74,4 +74,4 @@ export default {
             finishDate: '01.04.2020',
         },
     }
-}
+};

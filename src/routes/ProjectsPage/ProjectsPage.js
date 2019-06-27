@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 
-import './AboutPage.scss';
+import './ProjectsPage.scss';
 
-const bem = html.bem('AboutPage');
+const bem = html.bem('ProjectsPage');
 
-export default class AboutPage extends React.PureComponent {
+export default class ProjectsPage extends React.PureComponent {
 
     static propTypes = {
 
@@ -19,7 +19,7 @@ export default class AboutPage extends React.PureComponent {
                 <div className={'wrapper'}>
                     <div className={'row'}>
                         <div className={'col'}>
-                            AboutPage page
+                            ProjectsPage
                         </div>
                     </div>
                 </div>

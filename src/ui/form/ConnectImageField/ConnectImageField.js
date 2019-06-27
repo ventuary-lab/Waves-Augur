@@ -50,9 +50,7 @@ class ConnectImageField extends React.PureComponent {
                         label={__('Connect')}
                         color='primary'
                         layout='default'
-                        onClick={() => {
-                            this.setState({imageUrl: this.state.value})
-                        }}
+                        onClick={() => this.setState({imageUrl: this.state.value})}
                     />
                     {this.state.imageUrl && (
                         <img

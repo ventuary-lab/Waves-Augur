@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import _get from 'lodash/get';
 import Modal from 'yii-steroids/ui/modal/Modal';
 
 import {html, dal} from 'components';
@@ -14,6 +15,7 @@ const bem = html.bem('ProfileWizardModal');
 import './ProfileWizardModal.scss';
 import {getUser} from 'yii-steroids/reducers/auth';
 import SocialEnum from 'enums/SocialEnum';
+import UserSchema from 'types/UserSchema';
 
 @connect(
     state => ({
@@ -23,7 +25,8 @@ import SocialEnum from 'enums/SocialEnum';
 export default class ProfileWizardModal extends React.Component {
 
     static propTypes = {
-        user: PropTypes.object,
+        user: UserSchema,
+        isCreate: PropTypes.bool,
     };
 
     render() {
@@ -34,16 +37,15 @@ export default class ProfileWizardModal extends React.Component {
             >
                 <FormWizard
                     formId='ProfileWizardModal'
-                    onSubmit={values => dal.signup(values)}
+                    onSubmit={values => dal.saveUser(values)}
                     onComplete={this.props.onClose}
-                    initialValues={{
-                        name: this.props.user ? this.props.user.name : null,
-                    }}
+                    initialValues={_get(this.props, 'user.profile')}
                     items={[
                         {
                             id: 'waiting',
                             component: WaitingTab,
                             componentProps: {
+                                isCreate: this.props.isCreate,
                                 invitedBy: this.props.user.invitedBy,
                             },
                             validators: [

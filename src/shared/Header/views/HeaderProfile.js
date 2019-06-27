@@ -45,7 +45,7 @@ export default class HeaderProfile extends React.PureComponent {
             return null;
         }
 
-        const items = this.props.profileNavItems.filter(item => item.roles.includes(this.props.user.role));
+        const items = this.props.user && this.props.profileNavItems.filter(item => item.roles.includes(this.props.user.role)) || [];
         if (!this.props.isAuthorized || items.length === 0) {
             return (
                 <Link
@@ -61,8 +61,8 @@ export default class HeaderProfile extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.avatar || avatarStub}
-                    alt={this.props.user.name}
+                    src={this.props.user.profile.avatar || avatarStub}
+                    alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('balance')}>
@@ -70,7 +70,7 @@ export default class HeaderProfile extends React.PureComponent {
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('name')}>
-                            {this.props.user.name}
+                            {this.props.user.profile.name}
                         </div>
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}

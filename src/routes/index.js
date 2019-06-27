@@ -2,11 +2,10 @@ import {Redirect} from 'react-router';
 
 import UserRole from 'enums/UserRole';
 import IndexPage from './IndexPage';
-import AboutPage from './AboutPage';
 import NewsPage from './NewsPage';
 import TestPage from './TestPage';
 import CommunityPage from './CommunityPage';
-import CampaignsPage from './CampaignsPage';
+import ProjectsPage from './ProjectsPage';
 import ProfileInboxPage from './ProfileInboxPage';
 import ProfileDonationPage from './ProfileDonationPage';
 import ProfileProjectsPage from './ProfileProjectsPage';
@@ -15,11 +14,10 @@ import ProfileInvitedPage from './ProfileInvitedPage';
 import ProfileLayout from 'shared/ProfileLayout';
 
 export const ROUTE_ROOT = 'root';
-export const ROUTE_ABOUT = 'about';
 export const ROUTE_FEED = 'feed';
 export const ROUTE_COMMUNITY = 'community';
 export const ROUTE_TEST = 'test';
-export const ROUTE_CAMPAIGNS = 'campaigns';
+export const ROUTE_PROJECTS = 'projects';
 export const ROUTE_PROFILE = 'profile';
 export const ROUTE_PROFILE_INBOX = 'profile_inbox';
 export const ROUTE_PROFILE_DONATION = 'profile_donation';
@@ -35,18 +33,11 @@ export default {
     roles: UserRole.getKeys(),
     label: __('Main'),
     items: {
-        [ROUTE_ABOUT]: {
+        [ROUTE_PROJECTS]: {
             exact: true,
-            path: '/about',
-            component: AboutPage,
-            label: __('About'),
-            roles: UserRole.getKeys(),
-        },
-        [ROUTE_CAMPAIGNS]: {
-            exact: true,
-            path: '/campaigns',
-            component: CampaignsPage,
-            label: __('Campaigns'),
+            path: '/projects',
+            component: ProjectsPage,
+            label: __('Projects'),
             roles: UserRole.getKeys(),
         },
         [ROUTE_COMMUNITY]: {

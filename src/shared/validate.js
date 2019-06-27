@@ -53,10 +53,8 @@ const validate = function (data, rules) {
                 case 'social':
                     if (value) {
                         const match = (new RegExp('(' + SocialEnum.getKeys().join('|') + ')')).exec(attribute);
-                        console.log(2, match);
                         if (match) {
                             value = SocialEnum.formatLink(value, match[0]);
-                            console.log(3, value);
                         }
                     }
                     break;

@@ -45,9 +45,9 @@ export default class InviteUserModal extends React.PureComponent {
                                 [['name', 'message'], 'string'],
                             ]);
 
-                            dal.invite(values);
+                            dal.invite(values)
+                                .then(() => this.props.onClose());
                         }}
-                        onComplete={this.props.onClose}
                     >
                         <div className={bem.element('form-inner')}>
                             <div className={bem.element('group')}>

@@ -44,8 +44,7 @@ export default class Layout extends React.PureComponent {
     };
 
     async componentDidMount() {
-        const keeper = await dal.getKeeper();
-        if (!keeper) {
+        if (!await dal.isKeeperInstalled()) {
             this.props.dispatch(openModal(MessageModal, {
                 title: __('Install Waves Keeper'),
                 description: __('You Need a WAVES Wallet to Join Us'),

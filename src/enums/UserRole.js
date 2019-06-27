@@ -3,8 +3,8 @@ import Enum from './Enum';
 export default class UserRole extends Enum {
 
     static GUEST = null;
-    static REGISTERED = 'registered';
     static INVITED = 'invited';
+    static REGISTERED = 'registered';
     static WHALE = 'whale';
     static GENESIS = 'genesis';
 
