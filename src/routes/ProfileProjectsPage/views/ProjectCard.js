@@ -14,6 +14,7 @@ const bem = html.bem('ProjectCard');
 export default class ProjectCard extends React.PureComponent {
 
     static propTypes = {
+        address: PropTypes.string,
         logoUrl: PropTypes.string,
         coverUrl: PropTypes.string,
         title: PropTypes.string,

@@ -1,0 +1,113 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.ProjectSidebar {
+
+  position: relative;
+  margin-left: -$grid-offset-mobile;
+  margin-right: -$grid-offset-mobile;
+
+  padding-top: 91px;
+  padding-bottom: 15px;
+
+  @include desktop {
+    padding-top: 113px;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__background {
+    min-height: 91px;
+    background-size: cover;
+  }
+
+  &__avatar {
+    box-sizing: content-box;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    transform: translateX(-50%);
+    border: 10px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+
+    @include desktop {
+      width: 160px;
+      height: 160px;
+      top: -90px;
+      border: none;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  &__description {
+    margin-bottom: 23px;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+  }
+
+  &__info-string {
+    &_activity,
+    &_status {
+      margin-bottom: 8px;
+    }
+  }
+
+  &__info-value {
+    font-weight: 500;
+    margin-left: 10px;
+  }
+
+  &__country {
+    color: $color-gg-4;
+    margin-bottom: 8px;
+  }
+
+  &__invited-by {
+    & > span:last-child {
+      color: $color-brand-green;
+    }
+  }
+
+  &__balance {
+    margin-bottom: 16px;
+
+    & > span:first-child {
+      font-weight: 500;
+    }
+
+    & > span:last-child {
+      margin-left: 10px;
+    }
+  }
+
+  &__social-links {
+    margin-bottom: 25px;
+  }
+
+  &__crowdfunding {
+    & > tbody > tr > td {
+      &:first-child {
+        text-align: right;
+      }
+
+      &:last-child {
+        font-weight: 500;
+        padding-left: 10px;
+      }
+    }
+  }
+}

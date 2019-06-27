@@ -7,25 +7,25 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
 import {html} from 'components';
-import {ROUTE_PROFILE} from 'routes';
-import ProfileSidebar from './views/ProfileSidebar';
+import {ROUTE_PROJECT} from 'routes';
+import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
 import routes from 'routes';
 
-import './ProfileLayout.scss';
+import './ProjectLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 
-const bem = html.bem('ProfileLayout');
+const bem = html.bem('ProjectLayout');
 
 @connect(
     (state) => ({
         user: getUser(state),
         routeId: _get(getCurrentRoute(state), 'id'),
-        profileNavItems: getNavItems(state, ROUTE_PROFILE),
+        profileNavItems: getNavItems(state, ROUTE_PROJECT),
     })
 )
-export default class ProfileLayout extends React.PureComponent {
+export default class ProjectLayout extends React.PureComponent {
 
     static propTypes = {
         user: UserSchema,
@@ -34,14 +34,14 @@ export default class ProfileLayout extends React.PureComponent {
     };
 
     render() {
-        const ContentComponent = _get(routes, ['items', ROUTE_PROFILE, 'items', this.props.routeId, 'component']);
+        const ContentComponent = _get(routes, ['items', ROUTE_PROJECT, 'items', this.props.routeId, 'component']);
         return (
             <section className={bem.block()}>
                 <div className={'wrapper'}>
                     <div className={'row'}>
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
-                                <ProfileSidebar/>
+                                <ProjectSidebar/>
                             </div>
                         </div>
                         <div className='col col_tablet-count-8'>
@@ -56,6 +56,9 @@ export default class ProfileLayout extends React.PureComponent {
                                                     'is-active': item.isActive,
                                                 })}
                                                 toRoute={item.id}
+                                                toRouteParams={{
+                                                    address: this.props.match.params.address,
+                                                }}
                                                 noStyles
                                             >
                                                 <span className={bem.element('nav-icon')}>

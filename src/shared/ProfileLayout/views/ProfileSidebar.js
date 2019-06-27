@@ -5,7 +5,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import Tags from 'shared/Tags';
-import avatarStub from 'static/images/avatar-stub.png';
+import userAvatarStub from 'static/images/user-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 
 import './ProfileSidebar.scss';
@@ -29,7 +29,7 @@ export default class ProfileSidebar extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.avatar || avatarStub}
+                    src={this.props.user.avatar || userAvatarStub}
                     alt={this.props.user.name}
                 />
                 <div className={bem.element('inner')}>
@@ -59,7 +59,7 @@ export default class ProfileSidebar extends React.PureComponent {
                             <span>{this.props.user.location}</span>
                         </div>
                     )}
-                    {this.props.user.invitedBy && (
+                    {this.props.user.invitedBy && this.props.user.invitedBy.name && (
                         <div className={bem.element('invited-by')}>
                             <span>{__('Invited by')}</span>
                             &nbsp;

@@ -4,7 +4,6 @@ import {openModal} from 'yii-steroids/actions/modal';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectCard from './views/ProjectCard';
-import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import {html} from 'components';
 
@@ -27,6 +26,7 @@ export default class ProfileProjectsPage extends React.PureComponent {
                 <div className={bem.element('card-list')}>
 
                     <ProjectCard
+                        address={'s234sd67868adsfa9879'}
                         title={'SmartChain Media'}
                         description={'Build Blockchain-related applications and uild applications ser'}
                         logoUrl={''}
