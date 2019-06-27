@@ -1,0 +1,23 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.VotingForm {
+  @include card-styles;
+  padding: 20px;
+
+  &__text {
+    margin-bottom: 10px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ButtonView {
+      min-height: 38px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+}
