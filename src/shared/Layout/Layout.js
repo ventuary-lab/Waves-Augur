@@ -17,6 +17,7 @@ import ProfileWizardModal from 'modals/ProfileWizardModal';
 import {getUser} from 'yii-steroids/reducers/auth';
 import MessageModal from 'modals/MessageModal';
 import UserRole from 'enums/UserRole';
+import {getCurrentItem, getCurrentItemParam} from 'yii-steroids/reducers/navigation';
 
 const bem = html.bem('Layout');
 
@@ -31,7 +32,7 @@ const bem = html.bem('Layout');
 )
 @connect(
     state => ({
-        routeId: getCurrentRoute(state).id,
+        isShowImageLine: getCurrentItemParam(state, 'isShowImageLine'),
         user: getUser(state),
     })
 )
@@ -41,6 +42,7 @@ export default class Layout extends React.PureComponent {
     static propTypes = {
         status: PropTypes.string,
         user: PropTypes.object,
+        isShowImageLine: PropTypes.bool,
     };
 
     async componentDidMount() {
@@ -67,7 +69,7 @@ export default class Layout extends React.PureComponent {
             <div className={bem.block()}>
                 <Header/>
                 <main className={bem.element('content')}>
-                    {this.props.routeId !== ROUTE_ROOT && (
+                    {this.props.isShowImageLine && (
                         <div className={bem.element('image-line')}/>
                     )}
                     {this.props.status !== STATUS_LOADING && this.props.children}

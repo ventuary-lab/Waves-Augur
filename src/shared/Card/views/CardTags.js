@@ -36,7 +36,7 @@ export default class CardTags extends React.PureComponent {
                 </div>
                 <div className={bem.element('actions')}>
                     <span className={bem.element('link')}>
-                        {__('ReadMore')}
+                        {__('Read More')}
                     </span>
                     <div className={bem.element('socials')}>
                         <SocialLinks

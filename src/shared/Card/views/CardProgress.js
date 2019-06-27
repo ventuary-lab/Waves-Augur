@@ -17,7 +17,6 @@ export default class CardProgress extends React.PureComponent {
     static propTypes = {
         address: PropTypes.string,
         currentWaves: PropTypes.number,
-        againstWaves: PropTypes.number,
         targetWaves: PropTypes.number,
         expireVoting: PropTypes.string,
         expireCrowd: PropTypes.string,
@@ -27,6 +26,7 @@ export default class CardProgress extends React.PureComponent {
     render() {
         const isNew = this.props.currentWaves === 0;
         const status = ProjectStatusEnum.getStatus(this.props);
+        const againstWaves = Math.max(0, this.props.targetWaves - this.props.currentWaves);
 
         return (
             <div className={bem.block()}>
@@ -52,7 +52,7 @@ export default class CardProgress extends React.PureComponent {
                     <ProjectProgress
                         currentWaves={this.props.currentWaves}
                         targetWaves={this.props.targetWaves}
-                        againstWaves={this.props.againstWaves}
+                        againstWaves={againstWaves}
                     />
                 </div>
                 <div className={bem.element('actions')}>
@@ -61,7 +61,7 @@ export default class CardProgress extends React.PureComponent {
                             className={bem.element('link')}
                             toRoute={ROUTE_PROJECT_FEED}
                             toRouteParams={{
-                                address: this.props.address
+                                uid: this.props.uid
                             }}
                             label={'Voting'}
                             noStyles
@@ -71,7 +71,7 @@ export default class CardProgress extends React.PureComponent {
                             className={bem.element('link')}
                             toRoute={ROUTE_PROJECT_DETAILS}
                             toRouteParams={{
-                                address: this.props.address
+                                uid: this.props.uid
                             }}
                             label={'Read More'}
                             noStyles

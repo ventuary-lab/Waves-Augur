@@ -7,6 +7,10 @@ export default class DalHelper {
         return uuid();
     }
 
+    static dateNow() {
+        return moment.utc().format('YYYY-MM-DD HH:mm:ss');
+    }
+
     static dateToHeight(date) {
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
         if (this.isTestMode) {

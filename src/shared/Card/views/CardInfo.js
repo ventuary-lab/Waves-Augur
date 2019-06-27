@@ -31,7 +31,7 @@ export default class CardInfo extends React.PureComponent {
     render() {
 
         const isProject = this.props.isProject;
-        const status = isProject ? ProjectStatusEnum.getStatus(this.props) : null;
+        const status = isProject ? this.props.status : null;
         const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
 
         return (

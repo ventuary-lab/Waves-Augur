@@ -1,19 +1,23 @@
 import _get from 'lodash/get';
 import _round from 'lodash/round';
 import _toInteger from 'lodash/toInteger';
+import _orderBy from 'lodash/orderBy';
+import {setUser} from 'yii-steroids/actions/auth';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
-import {setUser} from 'yii-steroids/actions/auth';
-import WavesTransport from 'components/dal/WavesTransport';
-import DalHelper from 'components/dal/DalHelper';
-import {getUser} from 'yii-steroids/reducers/auth';
+import WavesTransport from './dal/WavesTransport';
+import DalHelper from './dal/DalHelper';
+import fetchHoc from './dal/fetchHoc';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 export default class DalComponent {
 
     constructor() {
         this.isTestMode = (process.env.APP_MODE || 'test') === 'test';
         this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
+        this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
 
         this._authInterval = null;
@@ -105,6 +109,24 @@ export default class DalComponent {
     }
 
     /**
+     * Get all users (without guests/invited)
+     * @returns {Promise}
+     */
+    async getUsers() {
+        const data = await this.transport.nodeAllData();
+        let users = await Promise.all(
+            Object.keys(data)
+                .filter(key => /^wl_sts_/.test(key) && data[key].value !== UserRole.INVITED)
+                .map(key => this.getUser(key.replace(/^wl_sts_/, '')))
+        );
+
+        users = users.filter(user => !!user.profile.name);
+        _orderBy(users, 'createTime', 'desc');
+
+        return users;
+    }
+
+    /**
      * Create or update context user
      * @param {object} data
      * @returns {Promise}
@@ -116,6 +138,7 @@ export default class DalComponent {
             title: null,
             tags: [],
             location: '',
+            createTime: DalHelper.dateNow(),
             socials: {
                 url_twitter: null,
                 url_facebook: null,
@@ -128,12 +151,61 @@ export default class DalComponent {
             ...data,
         };
 
-        const result = await this.transport.nodePublish('signup', [data, '']);
+        // Detect user exists
+        const keeper = await this.transport.getKeeper();
+        const userData = await keeper.publicState();
+        const status = await this.transport.nodeFetchKey('wl_sts_' + userData.account.address);
+        const method = !status ? 'signup' : 'userupdate';
+
+        // Save
+        const result = await this.transport.nodePublish(method, [data, '']);
 
         const store = require('components').store;
         store.dispatch(setUser(data));
 
         return result;
+    }
+
+    async getVotedProjects() {
+        const projects = await this.getProjects();
+        return projects;//.filter(item => item.status !== ProjectStatusEnum.VOTING);
+    }
+
+    async getProjects() {
+        const data = await this.transport.nodeAllData();
+        let projects = await Promise.all(
+            Object.keys(data)
+                .filter(key => /^author_/.test(key))
+                .map(key => this.getProject(key.replace(/^author_/, '')))
+        );
+
+        _orderBy(projects, 'createTime', 'desc');
+
+        return projects;
+    }
+
+    async getProject(uid) {
+        const project = await this.transport.nodeFetchKey('datajson_' + uid);
+        if (!project) {
+            return null;
+        }
+
+        const status = await this.transport.nodeFetchKey('status_' + uid);
+        const statusMap = {
+            'new': ProjectStatusEnum.VOTING,
+            'reveal': ProjectStatusEnum.VOTING,
+            'commit': ProjectStatusEnum.VOTING,
+            'delisted': ProjectStatusEnum.REJECTED,
+            'buyout': ProjectStatusEnum.GRANT,
+        };
+
+        return {
+            ...project,
+            status: statusMap[status] || ProjectStatusEnum.getStatus(project),
+            balance: (await this.transport.nodeFetchKey('bank_' + uid)) || 0,
+            author: await this.getUser(await this.transport.nodeFetchKey('author_' + uid)),
+            uid,
+        };
     }
 
     /**
@@ -178,6 +250,7 @@ export default class DalComponent {
                 ...data.socials,
             },
             ...data,
+            createTime: DalHelper.dateNow(),
             uid: DalHelper.generateUid(),
         };
 
@@ -241,6 +314,7 @@ export default class DalComponent {
     donateProject(uid, amount, comment) {
 
     }
+
 
     log() {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {

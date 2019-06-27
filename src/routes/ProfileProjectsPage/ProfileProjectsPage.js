@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {openModal} from 'yii-steroids/actions/modal';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';
-import ProjectCard from './views/ProjectCard';
+import ProjectCard from 'shared/ProjectCard';
 
 import {html} from 'components';
 

@@ -1,13 +1,20 @@
 import Enum from './Enum';
 import moment from 'moment';
 
-export default class ProfileStatusEnum extends Enum {
+export default class ProjectStatusEnum extends Enum {
+
+    //static NEW = 'new';
+    //static REVEAL = 'reveal';
+    //static COMMIT = 'commit';
+    //static FEATURED = '';
+    //static DELISTED = '';
+    //static BUYOUT = '';
 
     static VOTING = 'voting';
     static CROWDFUND = 'crowdfund';
     static WAITING_GRANT = 'waiting_grant';
     static GRANT = 'grant';
-    static CANCELLED = 'cancelled';
+    static REJECTED = 'rejected';
 
     static getLabels() {
         return {
@@ -15,7 +22,7 @@ export default class ProfileStatusEnum extends Enum {
             [this.CROWDFUND]: __('Crowdfund'),
             [this.WAITING_GRANT]: __('Waiting grant'),
             [this.GRANT]: __('Grant'),
-            [this.CANCELLED]: __('Cancelled'),
+            [this.REJECTED]: __('Rejected'),
         };
     }
 

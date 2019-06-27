@@ -6,7 +6,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
-import {html} from 'components';
+import {dal, html} from 'components';
 import {ROUTE_PROJECT} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
@@ -15,9 +15,14 @@ import routes from 'routes';
 
 import './ProjectLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
+import ProjectSchema from 'types/ProjectSchema';
 
 const bem = html.bem('ProjectLayout');
 
+@dal.hoc(
+    props => dal.getProject(_get(props, 'match.params.uid'))
+        .then(project => ({project}))
+)
 @connect(
     (state) => ({
         user: getUser(state),
@@ -31,9 +36,14 @@ export default class ProjectLayout extends React.PureComponent {
         user: UserSchema,
         routeId: PropTypes.string,
         profileNavItems: PropTypes.arrayOf(NavItemSchema),
+        project: ProjectSchema,
     };
 
     render() {
+        if (!this.props.project) {
+            return null;
+        }
+
         const ContentComponent = _get(routes, ['items', ROUTE_PROJECT, 'items', this.props.routeId, 'component']);
         return (
             <section className={bem.block()}>
@@ -57,7 +67,7 @@ export default class ProjectLayout extends React.PureComponent {
                                                 })}
                                                 toRoute={item.id}
                                                 toRouteParams={{
-                                                    address: this.props.match.params.address,
+                                                    uid: this.props.match.params.uid,
                                                 }}
                                                 noStyles
                                             >

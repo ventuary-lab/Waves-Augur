@@ -4,6 +4,8 @@ import _isInteger from 'lodash/isInteger';
 import _isObject from 'lodash/isObject';
 import _trim from 'lodash/trim';
 import axios from 'axios';
+import _isArray from 'lodash-es/isArray';
+import queryString from 'query-string';
 
 const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
@@ -15,6 +17,10 @@ export default class WavesTransport {
     constructor(dal) {
         this.dal = dal;
         this.nodeUrl = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
+
+        this._cacheData = null;
+        this._cacheTimeout = null;
+        this._cacheCallbacks = null;
     }
 
     /**
@@ -35,6 +41,36 @@ export default class WavesTransport {
         return new Promise(checker);
     }
 
+    async nodeAllData() {
+        if (this._cacheData) {
+            return this._cacheData;
+        }
+
+        // Multi request detector
+        if (_isArray(this._cacheCallbacks)) {
+            return new Promise(resolve => {
+                this._cacheCallbacks.push(resolve);
+            });
+        }
+        this._cacheCallbacks = [];
+
+        // Fetch data
+        this._cacheData = await nodeInteraction.accountData(this.dal.dApp, this.nodeUrl);
+
+        // Invalidate cache after 30 sec
+        if (this._cacheTimeout) {
+            clearTimeout(this._cacheTimeout);
+        }
+        this._cacheTimeout = setTimeout(() => {
+            this._cacheData = null;
+        }, 30000);
+
+        // Call callbacks
+        this._cacheCallbacks.forEach(resolve => resolve(this._cacheData));
+
+        return this._cacheData;
+    }
+
     /**
      * Get node data by key
      * @param {string} key
@@ -42,12 +78,17 @@ export default class WavesTransport {
      */
     async nodeFetchKey(key) {
         let result = null;
-        try {
-            result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.nodeUrl);
-        } catch (e) {
-            console.error(e); // eslint-disable-line no-console
-            return null;
+        if (this._cacheData) {
+            result = this._cacheData[key];
+        } else {
+            try {
+                result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.nodeUrl);
+            } catch (e) {
+                console.error(e); // eslint-disable-line no-console
+                return null;
+            }
         }
+
 
         if (result && result.value) {
             return _isString(result.value) && ['{', '['].includes(result.value.substr(0, 1))
@@ -58,13 +99,20 @@ export default class WavesTransport {
     }
 
     async nodeFetchPattern(regexp) {
-        const matches = encodeURIComponent(_trim(String(regexp), '/'));
-        const data = await this._accountDataPattern(matches);
-        const result = {};
-        data.forEach(item => {
-            result[item.key] = item.value;
+        let result = null;
+        if (this._cacheData) {
+            const key = Object.keys(this._cacheData).find(key => regexp.test(key));
+            result = key && this._cacheData[key];
+        } else {
+            const matches = encodeURIComponent(_trim(String(regexp), '/'));
+            result = await this._accountDataPattern(matches);
+        }
+
+        const data = {};
+        result.forEach(item => {
+            data[item.key] = item.value;
         });
-        return result;
+        return data;
     }
 
     /**

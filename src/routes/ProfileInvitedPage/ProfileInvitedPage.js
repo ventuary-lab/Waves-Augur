@@ -5,7 +5,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import {html} from 'components';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import InviteUserModal from 'modals/InviteUserModal';
-import InvitedUserCard from './views/InvitedUserCard';
+import UserCard from 'shared/UserCard';
 
 import './ProfileInvitedPage.scss';
 
@@ -25,7 +25,7 @@ export default class ProfileInvitedPage extends React.PureComponent {
                 />
 
                 <div className={bem.element('card-list')}>
-                    <InvitedUserCard
+                    <UserCard
                         title={'Aleksei Pupyshev'}
                         description={'Founder & CEO @Ventuary'}
                         logoUrl={''}

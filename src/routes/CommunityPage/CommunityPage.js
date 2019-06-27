@@ -1,25 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {html} from 'components';
+import {html, dal} from 'components';
 
 import './CommunityPage.scss';
+import ProjectSchema from 'types/ProjectSchema';
+import List from 'yii-steroids/ui/list/List';
+import UserCard from 'shared/UserCard';
 
 const bem = html.bem('CommunityPage');
 
+@dal.hoc(
+    () => dal.getUsers()
+        .then(items => ({items}))
+)
 export default class CommunityPage extends React.PureComponent {
 
     static propTypes = {
-
+        items: PropTypes.arrayOf(ProjectSchema),
     };
 
     render() {
+        if (!this.props.items) {
+            return null;
+        }
+
         return (
             <section className={bem.block()}>
                 <div className={'wrapper'}>
                     <div className={'row'}>
                         <div className={'col'}>
-                            CommunityPage page
+                            <List
+                                listId='CommunityPage'
+                                itemView={UserCard}
+                                emptyText={__('No users')}
+                                items={this.props.items}
+                            />
                         </div>
                     </div>
                 </div>

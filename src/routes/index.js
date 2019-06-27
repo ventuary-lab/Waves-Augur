@@ -99,6 +99,7 @@ export default {
                     icon: 'Icon__notification',
                     isNavVisible: false,
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_DONATION]: {
                     exact: true,
@@ -107,6 +108,7 @@ export default {
                     label: __('Donation'),
                     icon: 'Icon__rhombus',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_PROJECTS]: {
                     exact: true,
@@ -115,6 +117,7 @@ export default {
                     label: __('Projects'),
                     icon: 'Icon__rocket',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_VOTING]: {
                     exact: true,
@@ -123,6 +126,7 @@ export default {
                     label: __('Voting'),
                     icon: 'Icon__voting',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_INVITED]: {
                     exact: true,
@@ -131,16 +135,17 @@ export default {
                     label: __('Invited Users'),
                     icon: 'Icon__invite',
                     roles: [UserRole.REGISTERED, UserRole.WHALE, UserRole.GENESIS],
+                    isShowImageLine: true,
                 },
             },
         },
         [ROUTE_PROJECT_REDIRECT]: {
             exact: true,
-            path: '/project/:address',
+            path: '/projects/:uid',
             component: Route,
             componentProps: {
                 render: ({match}) => (
-                    <Redirect to={`/project/${match.params.address}/feed`} />
+                    <Redirect to={`/project/${match.params.uid}/feed`}/>
                 )
             },
             label: __('Project'),
@@ -148,36 +153,40 @@ export default {
             roles: UserRole.getKeys(),
         },
         [ROUTE_PROJECT]: {
-            path: '/project/:address',
+            path: '/projects/:uid',
             component: ProjectLayout,
             label: __('Project'),
             isNavVisible: false,
             roles: UserRole.getAuth(),
+            isShowImageLine: true,
             items: {
                 [ROUTE_PROJECT_FEED]: {
                     exact: true,
-                    path: '/project/:address/feed',
+                    path: '/projects/:uid/feed',
                     component: ProjectFeedPage,
                     label: __('Feed'),
                     icon: 'Icon__feed',
                     isNavVisible: false,
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_DETAILS]: {
                     exact: true,
-                    path: '/project/:address/details',
+                    path: '/projects/:uid/details',
                     component: ProjectDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_NEWS]: {
                     exact: true,
-                    path: '/project/:address/news',
+                    path: '/projects/:uid/news',
                     component: ProjectNewsPage,
                     label: __('News'),
                     icon: 'Icon__news',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
                 },
             },
         },
