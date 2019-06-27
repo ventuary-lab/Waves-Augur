@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import moment from 'moment';
 
 // import {getUser} from 'yii-steroids/reducers/auth';
 import {html} from 'components';
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
@@ -62,6 +64,8 @@ export default class ProjectSidebar extends React.PureComponent {
     };
 
     render() {
+        const status = ProjectStatusEnum.getStatus(this.props.project);
+
         return (
             <div className={bem.block()}>
                 <img
@@ -82,6 +86,12 @@ export default class ProjectSidebar extends React.PureComponent {
                         currentWaves={this.props.project.currentWaves}
                         againstWaves={this.props.project.againstWaves}
                     />
+                    <div className={bem.element('info-string', 'activity')}>
+                        <span>{__('Status')}:</span>
+                        <span className={bem.element('info-value')}>
+                            {ProjectStatusEnum.getLabel(status)}
+                        </span>
+                    </div>
 
                     {this.props.project.country && (
                         <div className={bem.element('country')}>
@@ -95,6 +105,18 @@ export default class ProjectSidebar extends React.PureComponent {
                             items={this.props.project.tags}
                         />
                     )}
+                    <table className={bem.element('crowdfunding')}>
+                        <tr>
+                            <td>{__('Crowdfunding')}</td>
+                            <td>
+                                {moment(this.props.project.expireVoting).format('DD.MM.YYYY')}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{__('Finish')}</td>
+                            <td>{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         );

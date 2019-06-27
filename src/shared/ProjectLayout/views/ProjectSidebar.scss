@@ -60,7 +60,6 @@
   }
 
   &__info-string {
-    &_activity,
     &_status {
       margin-bottom: 8px;
     }
@@ -74,28 +73,6 @@
   &__country {
     color: $color-gg-4;
     margin-bottom: 8px;
-  }
-
-  &__invited-by {
-    & > span:last-child {
-      color: $color-brand-green;
-    }
-  }
-
-  &__balance {
-    margin-bottom: 16px;
-
-    & > span:first-child {
-      font-weight: 500;
-    }
-
-    & > span:last-child {
-      margin-left: 10px;
-    }
-  }
-
-  &__social-links {
-    margin-bottom: 25px;
   }
 
   &__crowdfunding {
