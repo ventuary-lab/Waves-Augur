@@ -267,5 +267,41 @@ $icons-dir: '../static/icons';
     }
   }
 
+  &__feed {
+    background-image: url('#{$icons-dir}/feed.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/feed_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/feed_green.svg');
+    }
+  }
+
+  &__details {
+    background-image: url('#{$icons-dir}/details.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/details_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/details_green.svg');
+    }
+  }
+
+  &__news {
+    background-image: url('#{$icons-dir}/news.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/news_green.svg');
+    }
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/news_green.svg');
+    }
+  }
+
 
 }

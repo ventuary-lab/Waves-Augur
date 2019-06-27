@@ -45,9 +45,9 @@ export default class ProfileSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.user.activity && (
-                        <div className={bem.element('info-string', 'activity')}>
+                        <div className={bem.element('activity')}>
                             <span>{__('Activity')}:</span>
-                            <span className={bem.element('info-value')}>
+                            <span>
                                 {this.props.user.activity}
                             </span>
                         </div>

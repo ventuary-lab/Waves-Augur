@@ -85,8 +85,8 @@
     color: $color-gg-4;
   }
 
-  &__actions {
+  &__link {
+    text-decoration: none;
     color: $color-brand-green;
-    cursor: pointer;
   }
 }

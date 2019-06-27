@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import moment from 'moment';
+import Button from 'yii-steroids/ui/form/Button';
 
 // import {getUser} from 'yii-steroids/reducers/auth';
 import {html} from 'components';
@@ -81,14 +82,16 @@ export default class ProjectSidebar extends React.PureComponent {
                         {this.props.project.description}
                     </span>
 
-                    <ProjectProgress
-                        targetWaves={this.props.project.targetWaves}
-                        currentWaves={this.props.project.currentWaves}
-                        againstWaves={this.props.project.againstWaves}
-                    />
-                    <div className={bem.element('info-string', 'activity')}>
+                    <div className={bem.element('progress')}>
+                        <ProjectProgress
+                            targetWaves={this.props.project.targetWaves}
+                            currentWaves={this.props.project.currentWaves}
+                            againstWaves={this.props.project.againstWaves}
+                        />
+                    </div>
+                    <div className={bem.element('status')}>
                         <span>{__('Status')}:</span>
-                        <span className={bem.element('info-value')}>
+                        <span>
                             {ProjectStatusEnum.getLabel(status)}
                         </span>
                     </div>
@@ -101,22 +104,31 @@ export default class ProjectSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.project.tags && this.props.project.tags.length > 0 && (
-                        <Tags
-                            items={this.props.project.tags}
-                        />
+                        <div className={bem.element('tags')}>
+                            <Tags
+                                items={this.props.project.tags}
+                            />
+                        </div>
                     )}
                     <table className={bem.element('crowdfunding')}>
-                        <tr>
-                            <td>{__('Crowdfunding')}</td>
-                            <td>
-                                {moment(this.props.project.expireVoting).format('DD.MM.YYYY')}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{__('Finish')}</td>
-                            <td>{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>{__('Crowdfunding')}</td>
+                                <td>
+                                    {moment(this.props.project.expireVoting).format('DD.MM.YYYY')}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{__('Finish')}</td>
+                                <td>{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}</td>
+                            </tr>
+                        </tbody>
                     </table>
+                    <div className={bem.element('action')}>
+                        <Button
+                            label={(__('Vote'))}
+                        />
+                    </div>
                 </div>
             </div>
         );

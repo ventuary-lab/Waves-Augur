@@ -58,9 +58,9 @@ export default class ProfileLayout extends React.PureComponent {
                                                 toRoute={item.id}
                                                 noStyles
                                             >
-                                                <span className={bem.element('nav-icon')}>
+                                                <div className={bem.element('nav-icon')}>
                                                     <span className={`Icon ${item.isActive ? item.icon + '_green' : item.icon}`}/>
-                                                </span>
+                                                </div>
                                                 {item.label}
                                             </Link>
                                         ))

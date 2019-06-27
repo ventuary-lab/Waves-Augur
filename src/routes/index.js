@@ -143,19 +143,6 @@ export default {
                 },
             },
         },
-        // [ROUTE_PROJECT_REDIRECT]: {
-        //     exact: true,
-        //     path: '/project/:address',
-        //     component: Redirect,
-        //     componentProps: {
-        //         from: '/project/:address',
-        //         to: '/project/:address/feed',
-        //     },
-        //     label: __('Project'),
-        //     isNavVisible: false,
-        //     roles: UserRole.getKeys(),
-        // },
-
         [ROUTE_PROJECT_REDIRECT]: {
             exact: true,
             path: '/project/:address',
@@ -181,7 +168,7 @@ export default {
                     path: '/project/:address/feed',
                     component: ProjectFeedPage,
                     label: __('Feed'),
-                    icon: 'Icon__notification',
+                    icon: 'Icon__feed',
                     isNavVisible: false,
                     roles: [UserRole.REGISTERED],
                 },
@@ -190,7 +177,7 @@ export default {
                     path: '/project/:address/details',
                     component: ProjectDetailsPage,
                     label: __('Details'),
-                    icon: 'Icon__rhombus',
+                    icon: 'Icon__details',
                     roles: [UserRole.REGISTERED],
                 },
                 [ROUTE_PROJECT_NEWS]: {
@@ -198,7 +185,7 @@ export default {
                     path: '/project/:address/news',
                     component: ProjectNewsPage,
                     label: __('News'),
-                    icon: 'Icon__rocket',
+                    icon: 'Icon__news',
                     roles: [UserRole.REGISTERED],
                 },
             },

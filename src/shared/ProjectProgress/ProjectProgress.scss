@@ -16,7 +16,7 @@
   }
 
   &__progress-line-container {
-    background: $color-brand-light-green;
+    background-color: fade-out($color-brand-green, 0.9);
     border-radius: 2px;
     height: 4px;
     width: 100%;
@@ -30,6 +30,7 @@
     left: 0;
     height: 100%;
     background: $color-brand-green;
+    border-radius: 2px;
   }
 
   &__current-waves {
@@ -53,6 +54,8 @@
       font-size: 11px;
       line-height: 9px;
       color: $color-gg-4;
+      max-width: 35px;
+      text-align: right;
     }
   }
 

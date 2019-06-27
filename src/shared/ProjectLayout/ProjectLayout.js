@@ -61,9 +61,9 @@ export default class ProjectLayout extends React.PureComponent {
                                                 }}
                                                 noStyles
                                             >
-                                                <span className={bem.element('nav-icon')}>
+                                                <div className={bem.element('nav-icon')}>
                                                     <span className={`Icon ${item.isActive ? item.icon + '_green' : item.icon}`}/>
-                                                </span>
+                                                </div>
                                                 {item.label}
                                             </Link>
                                         ))

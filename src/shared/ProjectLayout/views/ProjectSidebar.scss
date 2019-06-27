@@ -7,11 +7,10 @@
   margin-left: -$grid-offset-mobile;
   margin-right: -$grid-offset-mobile;
 
-  padding-top: 91px;
-  padding-bottom: 15px;
+  padding: 90px 20px 15px;
 
   @include desktop {
-    padding-top: 113px;
+    padding: 113px 30px 100px;
   }
 
   &__inner {
@@ -54,20 +53,26 @@
 
   &__description {
     margin-bottom: 23px;
-    margin-left: 20px;
-    margin-right: 20px;
     text-align: center;
   }
 
-  &__info-string {
-    &_status {
-      margin-bottom: 8px;
+  &__status {
+    margin-bottom: 16px;
+
+    & > span:last-child {
+      font-weight: 500;
+      margin-left: 10px;
     }
   }
 
-  &__info-value {
-    font-weight: 500;
-    margin-left: 10px;
+  &__progress {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  &__tags {
+    padding-top: 50px;
+    margin-bottom: 22px;
   }
 
   &__country {
@@ -76,6 +81,8 @@
   }
 
   &__crowdfunding {
+    margin-bottom: 22px;
+
     & > tbody > tr > td {
       &:first-child {
         text-align: right;

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 
-import {ROUTE_PROJECT_FEED} from 'routes';
 import {html} from 'components';
+import {ROUTE_PROJECT_FEED, ROUTE_PROJECT_DETAILS} from 'routes';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import ProjectProgress from 'shared/ProjectProgress';
 
@@ -26,7 +26,6 @@ export default class CardProgress extends React.PureComponent {
 
     render() {
         const isNew = this.props.currentWaves === 0;
-        // const percent = this.props.currentWaves * 100 / this.props.targetWaves;
         const status = ProjectStatusEnum.getStatus(this.props);
 
         return (
@@ -55,38 +54,22 @@ export default class CardProgress extends React.PureComponent {
                         targetWaves={this.props.targetWaves}
                         againstWaves={this.props.againstWaves}
                     />
-
-                    {/*<div className={bem.element('progress')}>
-                        <div className={bem.element('progress-info')}>
-                            <span className={bem.element('current-waves')}>
-                                {this.props.currentWaves || 0} W
-                            </span>
-                            <span className={bem.element('against-waves')}>
-                                {this.props.againstWaves || 0} W {__('against')}
-                            </span>
-                            <span className={bem.element('percent')}>
-                                {percent}%
-                            </span>
-                        </div>
-                        <div className={bem.element('progress-line-container')}>
-                            <div
-                                className={bem.element('progress-line')}
-                                style={{width: `${percent}%`}}
-                            />
-                        </div>
-                    </div>
-                    <div className={bem.element('target-waves')}>
-                        {this.props.targetWaves} W <span>{__('target sum')}</span>
-                    </div>*/}
                 </div>
                 <div className={bem.element('actions')}>
                     {isNew && (
-                        <span>
-                            {__('Voting')}
-                        </span>
+                        <Link
+                            className={bem.element('link')}
+                            toRoute={ROUTE_PROJECT_FEED}
+                            toRouteParams={{
+                                address: this.props.address
+                            }}
+                            label={'Voting'}
+                            noStyles
+                        />
                     ) || (
                         <Link
-                            toRoute={ROUTE_PROJECT_FEED}
+                            className={bem.element('link')}
+                            toRoute={ROUTE_PROJECT_DETAILS}
                             toRouteParams={{
                                 address: this.props.address
                             }}
