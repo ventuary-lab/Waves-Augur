@@ -187,16 +187,23 @@ $col-width: percentage(100/$col-length)/100;
 }
 
 .form-row {
+  margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
 }
 
 .form-label-col {
+  padding-top: 15px;
+  padding-right: 10px;
   width: 25%;
+
+  & > label {
+    color: $color-gg-4;
+  }
 }
 
 .form-field-col {
-  width: 65%;
+  width: 80%;
 }
 
 

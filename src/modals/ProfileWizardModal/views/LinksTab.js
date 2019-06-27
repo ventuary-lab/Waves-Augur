@@ -12,19 +12,21 @@ export default class LinksTab extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <h3>Links</h3>
-                <span>Connect With Your Social Media To Get More Coverage</span>
-                <div className={bem.element('grid')}>
-                    {SocialEnum.getKeys().map(socialId => (
-                        <div key={socialId}>
-                            <span>{SocialEnum.getLabel(socialId)}</span>
-                            <InputField
-                                attribute={`socials.url_${socialId}`}
-                                placeholder={__('Enter URL')}
-                            />
-                        </div>
-                    ))}
+                <h3 className={bem.element('title')}>{__('Links')}</h3>
+                <div className={bem.element('sub-title')}>
+                    {__('Connect With Your Social Media To Get More Coverage')}
                 </div>
+                {SocialEnum.getKeys().map(socialId => (
+                    <div key={socialId}>
+                        <InputField
+                            attribute={`socials.url_${socialId}`}
+                            label={SocialEnum.getLabel(socialId)}
+                            labelIconClass={SocialEnum.getCssClass(socialId)}
+                            placeholder={__('Enter URL')}
+                            layout={'horizontal'}
+                        />
+                    </div>
+                ))}
             </div>
         );
     }
