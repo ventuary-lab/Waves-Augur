@@ -1,7 +1,7 @@
 @import '../../../style/helpers/vars';
 @import '../../../style/helpers/mixins';
 
-.ProfileSidebar {
+.ProjectSidebar {
 
   position: relative;
   margin-left: -$grid-offset-mobile;
@@ -56,39 +56,42 @@
     text-align: center;
   }
 
-  &__activity {
+  &__status {
+    margin-bottom: 16px;
+
     & > span:last-child {
       font-weight: 500;
       margin-left: 10px;
     }
+  }
+
+  &__progress {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  &__tags {
+    padding-top: 50px;
+    margin-bottom: 22px;
   }
 
   &__country {
     color: $color-gg-4;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }
 
-  &__invited-by {
-    margin-bottom: 15px;
+  &__crowdfunding {
+    margin-bottom: 22px;
 
-    & > span:last-child {
-      color: $color-brand-green;
+    & > tbody > tr > td {
+      &:first-child {
+        text-align: right;
+      }
+
+      &:last-child {
+        font-weight: 500;
+        padding-left: 10px;
+      }
     }
-  }
-
-  &__balance {
-    margin-bottom: 16px;
-
-    & > span:first-child {
-      font-weight: 500;
-    }
-
-    & > span:last-child {
-      margin-left: 10px;
-    }
-  }
-
-  &__social-links {
-    margin-bottom: 25px;
   }
 }

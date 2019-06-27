@@ -7,7 +7,7 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 
 import {html} from 'components';
 import NavItemSchema from 'types/NavItemSchema';
-import avatarStub from 'static/images/avatar-stub.png';
+import userAvatarStub from 'static/images/user-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 import {ROUTE_PROFILE, ROUTE_ROOT} from 'routes';
 
@@ -61,7 +61,7 @@ export default class HeaderProfile extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || avatarStub}
+                    src={this.props.user.profile.avatar || userAvatarStub}
                     alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>

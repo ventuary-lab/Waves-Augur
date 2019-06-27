@@ -1,0 +1,23 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.Tags {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &__item {
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    background-color: fade-out($color-brand-green, 0.9);
+    border-radius: 3px;
+    font-size: 13px;
+    line-height: 14px;
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}

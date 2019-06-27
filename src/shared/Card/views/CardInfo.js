@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import coverStub from '../../../static/images/cover-stub.png';
-import avatarStub from '../../../static/images/avatar-stub.png';
+import userAvatarStub from '../../../static/images/user-avatar-stub.png';
+import projectAvatarStub from '../../../static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import './CardInfo.scss';
@@ -16,16 +17,23 @@ export default class CardInfo extends React.PureComponent {
         daysLeft: PropTypes.number,
         logoUrl: PropTypes.string,
         coverUrl: PropTypes.string,
-        activity: PropTypes.number,
+        expireVoting: PropTypes.string,
+        expireCrowd: PropTypes.string,
+        expireWhale: PropTypes.string,
         status: PropTypes.string,
-
-
         title: PropTypes.string,
         description: PropTypes.string,
         country: PropTypes.string,
+        activity: PropTypes.number,
+        isProject: PropTypes.bool,
     };
 
     render() {
+
+        const isProject = this.props.isProject;
+        const status = isProject ? ProjectStatusEnum.getStatus(this.props) : null;
+        const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('column-left')}>
@@ -37,46 +45,54 @@ export default class CardInfo extends React.PureComponent {
                     >
                         <img
                             className={bem.element('avatar')}
-                            src={this.props.imageUrl || avatarStub}
+                            src={this.props.logoUrl || isProject ? projectAvatarStub : userAvatarStub}
                             alt='avatar'
                         />
                     </div>
                     <div className={bem.element('info')}>
-                        {this.props.daysLeft && (
-                            <span className={bem.element('days-left')}>
-                                {this.props.daysLeft} {__('days left')}
-                            </span>
-                        )}
-                        {this.props.activity && (
-                            <span className={bem.element('activity')}>
-                                {this.props.activity}
-                            </span>
-                        )}
-                        {this.props.status && (
-                            <span className={bem.element('status')}>
-                                {ProjectStatusEnum.getLabel(this.props.status)}
-                            </span>
-                        )}
+                        <div className={bem.element('left-info')}>
+                            {daysLeft && (
+                                <span className={bem.element('days-left')}>
+                                    {daysLeft} {__('days left')}
+                                </span>
+                            )}
+                        </div>
+                        <div className={bem.element('right-info')}>
+                            {!isProject && this.props.activity && (
+                                <span className={bem.element('activity')}>
+                                    {this.props.activity}
+                                </span>
+                            )}
+                            {status && (
+                                <span className={bem.element('status')}>
+                                    {ProjectStatusEnum.getLabel(status)}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className={bem.element('column-right')}>
-                    {this.props.title && (
-                        <span className={bem.element('title')}>
-                            {this.props.title}
-                        </span>
-                    )}
-                    {this.props.description && (
-                        <p className={bem.element('description')}>
-                            {this.props.description}
-                        </p>
-                    )}
-                    {this.props.country && (
-                        <div className={bem.element('country')}>
-                            <span className={'MaterialIcon'}>location_on</span>
-                            &nbsp;
-                            <span>{this.props.country}</span>
-                        </div>
-                    )}
+                    <div className={bem.element('top-info')}>
+                        {this.props.title && (
+                            <div className={bem.element('title')}>
+                                {this.props.title}
+                            </div>
+                        )}
+                        {this.props.description && (
+                            <p className={bem.element('description')}>
+                                {this.props.description}
+                            </p>
+                        )}
+                    </div>
+                    <div className={bem.element('bottom-info')}>
+                        {this.props.country && (
+                            <div className={bem.element('country')}>
+                                <span className={'MaterialIcon'}>location_on</span>
+                                &nbsp;
+                                <span>{this.props.country}</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );

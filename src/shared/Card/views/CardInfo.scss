@@ -3,6 +3,7 @@
 
 .CardInfo {
   display: flex;
+  height: 100%;
 
   &__column-left {
     position: relative;
@@ -15,7 +16,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
     color: $color-gg-4;
     width: 50%;
   }
@@ -53,9 +54,13 @@
     object-fit: cover;
   }
 
+  &__top-info {
+    margin-bottom: 10px;
+  }
+
   &__title {
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     text-align: center;
   }
 
@@ -65,12 +70,12 @@
     line-height: 14px;
     text-align: center;
     margin-top: 0;
-    margin-bottom: 16px;
   }
 
   &__country {
     font-weight: 300;
     font-size: 13px;
-    line-height: 14px;
+    line-height: 20px;
+    text-align: center;
   }
 }

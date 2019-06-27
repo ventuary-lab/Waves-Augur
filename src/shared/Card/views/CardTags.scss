@@ -1,0 +1,24 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.CardTags {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__tags {
+    margin-bottom: 10px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__link {
+    margin-right: 7px;
+    color: $color-brand-green;
+  }
+}

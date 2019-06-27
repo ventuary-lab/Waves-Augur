@@ -4,7 +4,8 @@ import {getUser} from 'yii-steroids/reducers/auth';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
-import avatarStub from 'static/images/avatar-stub.png';
+import Tags from 'shared/Tags';
+import userAvatarStub from 'static/images/user-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 
 import './ProfileSidebar.scss';
@@ -31,7 +32,7 @@ export default class ProfileSidebar extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || avatarStub}
+                    src={this.props.user.profile.avatar || userAvatarStub}
                     alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>
@@ -47,9 +48,9 @@ export default class ProfileSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.user.profile.activity && (
-                        <div className={bem.element('info-string', 'activity')}>
+                        <div className={bem.element('activity')}>
                             <span>{__('Activity')}:</span>
-                            <span className={bem.element('info-value')}>
+                            <span>
                                 {this.props.user.profile.activity}
                             </span>
                         </div>
@@ -61,7 +62,7 @@ export default class ProfileSidebar extends React.PureComponent {
                             <span>{this.props.user.profile.location}</span>
                         </div>
                     )}
-                    {this.props.user.profile.invitedBy && (
+                    {this.props.user.profile.invitedBy && this.props.user.profile.invitedBy.name && (
                         <div className={bem.element('invited-by')}>
                             <span>{__('Invited by')}</span>
                             &nbsp;
@@ -81,6 +82,11 @@ export default class ProfileSidebar extends React.PureComponent {
                                 </li>
                             ))}
                         </ul>
+                    )}
+                    {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (
+                        <Tags
+                            items={this.props.user.profile.tags}
+                        />
                     )}
                     <div className={bem.element('balance')}>
                         <span>{__('Balance')}</span>

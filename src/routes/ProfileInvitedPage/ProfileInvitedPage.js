@@ -5,6 +5,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import {html} from 'components';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import InviteUserModal from 'modals/InviteUserModal';
+import InvitedUserCard from './views/InvitedUserCard';
 
 import './ProfileInvitedPage.scss';
 
@@ -22,7 +23,26 @@ export default class ProfileInvitedPage extends React.PureComponent {
                     iconClass={'Icon__new-project'}
                     onClick={() => this.props.dispatch(openModal(InviteUserModal))}
                 />
-                InvitedPage
+
+                <div className={bem.element('card-list')}>
+                    <InvitedUserCard
+                        title={'Aleksei Pupyshev'}
+                        description={'Founder & CEO @Ventuary'}
+                        logoUrl={''}
+                        coverUrl={''}
+                        country={'Russia'} //TODO: need enum
+                        activity={1422}
+                        tags={['Consulting', 'RND', 'Analytics', 'Research and Development']}
+                        socials={{
+                            url_twitter: 'test',
+                            url_facebook: 'test',
+                            url_linkedin: 'test',
+                            url_instagram: 'test',
+                            url_telegram: 'test',
+                            url_website: 'test',
+                        }}
+                    />
+                </div>
             </div>
         );
     }
