@@ -1,7 +1,7 @@
 @import '../../style/helpers/vars';
 @import '../../style/helpers/mixins';
 
-.VotingForm {
+.DonateForm {
   @include card-styles;
   padding: 20px;
 
@@ -45,12 +45,8 @@
     justify-content: space-between;
     align-items: center;
 
-    //todo fix
-    .FieldLayoutView_layout_default {
-      width: auto;
-    }
-
     .ButtonView {
+      width: 100%;
       min-height: 38px;
       padding-top: 5px;
       padding-bottom: 5px;
