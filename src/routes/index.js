@@ -4,7 +4,6 @@ import React from 'react';
 import UserRole from 'enums/UserRole';
 import IndexPage from './IndexPage';
 import NewsPage from './NewsPage';
-import TestPage from './TestPage';
 import CommunityPage from './CommunityPage';
 import ProjectsPage from './ProjectsPage';
 import ProfileInboxPage from './ProfileInboxPage';
@@ -56,14 +55,6 @@ export default {
             path: '/community',
             component: CommunityPage,
             label: __('Community'),
-            roles: UserRole.getKeys(),
-        },
-        [ROUTE_TEST]: {
-            exact: true,
-            path: '/test',
-            component: TestPage,
-            label: __('Test'),
-            isNavVisible: false,
             roles: UserRole.getKeys(),
         },
         [ROUTE_FEED]: {

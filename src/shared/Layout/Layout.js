@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_LOADING} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 
 import {html, dal} from 'components';
-import {ROUTE_ROOT} from 'routes';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 
@@ -17,7 +15,7 @@ import ProfileWizardModal from 'modals/ProfileWizardModal';
 import {getUser} from 'yii-steroids/reducers/auth';
 import MessageModal from 'modals/MessageModal';
 import UserRole from 'enums/UserRole';
-import {getCurrentItem, getCurrentItemParam} from 'yii-steroids/reducers/navigation';
+import {getCurrentItemParam} from 'yii-steroids/reducers/navigation';
 
 const bem = html.bem('Layout');
 
@@ -26,7 +24,7 @@ const bem = html.bem('Layout');
         .then(user => ({
             user,
         }))
-        .catch(e => console.error(e) || ({
+        .catch(() => ({
             user: null,
         }))
 )

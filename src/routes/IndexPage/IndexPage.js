@@ -1,10 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
-import { html } from 'components';
+import {html} from 'components';
 import Button from 'yii-steroids/ui/form/Button';
 import Link from 'yii-steroids/ui/nav/Link';
-import { openModal } from 'yii-steroids/actions/modal';
+import {openModal} from 'yii-steroids/actions/modal';
 import landingHero from 'static/images/landing-hero.svg';
 import wavesLogo from 'static/icons/landing-waves-logo.svg';
 import tradisysLogo from 'static/icons/landing-tradisys-logo.svg';
@@ -13,13 +14,27 @@ import wavesLabsLogo from 'static/icons/landing-waves-labs-logo.svg';
 
 import './IndexPage.scss';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
+import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS} from 'routes/index';
+import {getUser} from 'yii-steroids/reducers/auth';
+import {getNavItem} from 'yii-steroids/reducers/navigation';
 
 const bem = html.bem('IndexPage');
 
-@connect()
+@connect(
+    state => {
+        const user = getUser(state);
+        const item = getNavItem(state, ROUTE_PROFILE_PROJECTS);
+
+        return {
+            canAddProject: user && (item.roles || []).includes(user.role),
+        };
+    }
+)
 export default class IndexPage extends React.PureComponent {
 
-    static propTypes = {};
+    static propTypes = {
+        canAddProject: PropTypes.bool,
+    };
 
     render() {
         return (
@@ -38,17 +53,22 @@ export default class IndexPage extends React.PureComponent {
                                     </p>
                                 </div>
                                 <div className={bem.element('hero-actions')}>
-                                    <button
-                                        className={bem.element('hero-action', 'primary')}
-                                        onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
-                                    >
-                                        {__('Add project')}
-                                    </button>
-                                    <a
+                                    {this.props.canAddProject && (
+                                        <Button
+                                            className={bem.element('hero-action', 'primary')}
+                                            onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
+                                            noStyles
+                                        >
+                                            {__('Add project')}
+                                        </Button>
+                                    )}
+                                    <Link
                                         className={bem.element('hero-action', 'secondary')}
+                                        to={ROUTE_PROJECTS}
+                                        noStyles
                                     >
                                         {__('Find project')}
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div
@@ -120,12 +140,17 @@ export default class IndexPage extends React.PureComponent {
                             </h2>
                             <ul className={bem.element('process-list')}>
                                 <li className={bem.element('process-item')}>
-                                    <span className={bem.element('process-label')}>{__('Proposal')}</span>
+                                    <span className={bem.element('process-label')}>
+                                        {__('Proposal')}
+                                    </span>
                                     <span
                                         className={bem(bem.element('process-icon'), 'Icon Icon__rocket-graph-big')}
                                         aria-hidden
                                     />
-                                    <span className={bem(bem.element('process-icon'), 'Icon Icon__arrow')} style={{position: 'absolute'}}></span>
+                                    <span
+                                        className={bem(bem.element('process-icon'), 'Icon Icon__arrow')}
+                                        style={{position: 'absolute'}}
+                                    />
                                 </li>
                                 <li className={bem.element('process-item')}>
                                     <span className={bem.element('process-label')}>{__('Voting')}</span>

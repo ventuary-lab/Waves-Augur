@@ -5,6 +5,10 @@
   @include card-styles;
   padding: 20px;
 
+  &__sub-title {
+    margin-bottom: 10px;
+  }
+
   &__text {
     margin-bottom: 10px;
   }

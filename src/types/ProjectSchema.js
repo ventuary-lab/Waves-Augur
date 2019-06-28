@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 
 const ProjectSchema = PropTypes.shape({
     address: PropTypes.string,
-    title: PropTypes.string,
+    name: PropTypes.string,
+    positiveBalance: PropTypes.number,
+    negativeBalance: PropTypes.number,
     logoUrl: PropTypes.string,
     coverUrl: PropTypes.string,
     expireVoting: PropTypes.string,

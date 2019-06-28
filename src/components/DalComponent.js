@@ -12,6 +12,8 @@ import DalHelper from './dal/DalHelper';
 import fetchHoc from './dal/fetchHoc';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
+import FeedTypeEnum from 'enums/FeedTypeEnum';
+import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 
 export default class DalComponent {
 
@@ -45,21 +47,26 @@ export default class DalComponent {
         return !!keeper;
     }
 
+    async getAccount() {
+        const keeper = await this.transport.getKeeper();
+        const userData = await keeper.publicState();
+        return userData.account;
+    }
+
     /**
      * Auth current user and return it data
      * @returns {Promise}
      */
     async auth() {
-        const keeper = await this.transport.getKeeper();
-        const userData = await keeper.publicState();
-        let user = await this.getUser(userData.account.address);
+        const account = await this.getAccount();
+        let user = await this.getUser(account.address);
         user = {
             ...user,
             profile: {
-                name: userData.account.name,
+                name: account.name,
                 ...user.profile,
             },
-            balance: _round(_toInteger(userData.account.balance.available) / Math.pow(10, 8), 2),
+            balance: _round(_toInteger(account.balance.available) / Math.pow(10, 8), 2),
         };
 
         if (this._authInterval) {
@@ -139,14 +146,11 @@ export default class DalComponent {
     }
 
     async getInvitedUsers() {
-        const keeper = await this.transport.getKeeper();
-        const userData = await keeper.publicState();
-        const address = userData.account.address;
-
+        const account = await this.getAccount();
         const data = await this.transport.nodeAllData();
         return Promise.all(
             Object.keys(data)
-                .filter(key => /^wl_ref_/.test(key) && data[key].value === address)
+                .filter(key => /^wl_ref_/.test(key) && data[key].value === account.address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
         );
     }
@@ -176,13 +180,11 @@ export default class DalComponent {
         };
 
         // Get address
-        const keeper = await this.transport.getKeeper();
-        const userData = await keeper.publicState();
-        const address = userData.account.address;
-        const user = await this.getUser(profile.address);
+        const account = await this.getAccount();
+        const user = await this.getUser(account.address);
 
         // Detect user exists
-        const isNew = !(await this.transport.nodeFetchKey('wl_sts_' + address));
+        const isNew = !(await this.transport.nodeFetchKey('wl_sts_' + account.address));
         const method = isNew ? 'signup' : 'userupdate';
         if (isNew) {
             profile.createTime = DalHelper.dateNow();
@@ -204,6 +206,11 @@ export default class DalComponent {
         return result;
     }
 
+    /**
+     * Return project by uid
+     * @param {string} uid
+     * @returns {Promise}
+     */
     async getProject(uid) {
         const project = await this.transport.nodeFetchKey('datajson_' + uid);
         if (!project) {
@@ -222,12 +229,21 @@ export default class DalComponent {
         return {
             ...project,
             status: statusMap[status] || ProjectStatusEnum.getStatus(project),
-            balance: (await this.transport.nodeFetchKey('bank_' + uid)) || 0,
+            positiveBalance: (await this.transport.nodeFetchKey('positive_fund_' + uid)) || 0,
+            negativeBalance: (await this.transport.nodeFetchKey('negative_fund_' + uid)) || 0,
+            votesCount: {
+                [ProjectVoteEnum.FEATURED]: (await this.transport.nodeFetchKey('cnt_yes_' + uid)) || 0,
+                [ProjectVoteEnum.DELISTED]: (await this.transport.nodeFetchKey('cnt_no_' + uid)) || 0,
+            },
             author: await this.getUser(await this.transport.nodeFetchKey('author_' + uid)),
             uid,
         };
     }
 
+    /**
+     * Return all projects
+     * @returns {Promise}
+     */
     async getProjects() {
         const data = await this.transport.nodeAllData();
         let projects = await Promise.all(
@@ -241,20 +257,71 @@ export default class DalComponent {
         return projects;
     }
 
+    /**
+     * Return projects with status CROWDFUND and next
+     * @returns {Promise}
+     */
     async getVotedProjects() {
         const projects = await this.getProjects();
         return projects.filter(item => item.status !== ProjectStatusEnum.VOTING);
     }
 
+    /**
+     * Return user projects (where user is owner)
+     * @returns {Promise}
+     */
     async getMyProjects() {
-        const keeper = await this.transport.getKeeper();
-        const userData = await keeper.publicState();
-        const address = userData.account.address;
-
+        const account = await this.getAccount();
         const data = await this.transport.nodeAllData();
         return Promise.all(
             Object.keys(data)
-                .filter(key => /^author_/.test(key) && data[key].value === address)
+                .filter(key => /^author_/.test(key) && data[key].value === account.address)
+                .map(key => this.getProject(key.replace(/^author_/, '')))
+        );
+    }
+
+    /**
+     * Return project feed: votes and donations, sorted by time desc
+     * @param {string} uid
+     * @returns {Promise}
+     */
+    async getProjectFeed(uid) {
+        const account = await this.getAccount();
+        const data = await this.transport.nodeAllData();
+
+        return Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_([0-9a-z_]+)(:([0-9]+))?/i.exec(key);
+                    if (match && match[1] === uid) {
+                        const item = {
+                            user: await this.getUser(match[2]),
+                            review: data[key],
+                            reviewNumber: 1,
+                        };
+                        switch (match[3]) {
+                            case 'votereview':
+                                item.type = FeedTypeEnum.VOTE;
+                                item.vote = await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`);
+                                break;
+
+                            case 'text_id':
+                                const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[5]}`);
+                                const tier = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[5]}`);
+                                item.type = FeedTypeEnum.DONATE;
+                                item.amount = (mode === 'negative' ? -1 : 1) * tier;
+                                item.reviewNumber = parseInt(match[5]);
+                                break;
+
+                            case 'whalereview':
+                                item.type = FeedTypeEnum.WHALE;
+                                break;
+                        }
+                        return item;
+                    }
+                    return null;
+                })
+                .filter(key => /^author_/.test(key) && data[key].value === account.address)
                 .map(key => this.getProject(key.replace(/^author_/, '')))
         );
     }
@@ -266,7 +333,7 @@ export default class DalComponent {
      */
     async saveProject(data) {
         data = {
-            title: '',
+            name: '',
             description: null,
             logoUrl: null,
             coverUrl: null,
@@ -375,9 +442,9 @@ export default class DalComponent {
         return new Promise(checker);
     }
 
-    donateProject(uid, amount, comment) {
+    /*donateProject(uid, amount, comment) {
 
-    }
+    }*/
 
 
     log() {
@@ -392,9 +459,8 @@ export default class DalComponent {
         const prevAddress = _get(getUser(store.getState()), 'address');
 
         // Get next address
-        const keeper = await this.transport.getKeeper();
-        const userData = await keeper.publicState();
-        const nextAddress = userData.account.address;
+        const account = await this.getAccount();
+        const nextAddress = account.address;
 
         if (prevAddress !== nextAddress) {
             const user = await this.auth();

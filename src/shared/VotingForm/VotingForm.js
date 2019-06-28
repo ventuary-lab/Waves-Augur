@@ -36,6 +36,9 @@ export default class VotingForm extends React.PureComponent {
                 <Form
                     formId={FORM_ID}
                 >
+                    <div className={bem.element('sub-title')}>
+                        {__('Vote for project')}
+                    </div>
                     <div className={bem.element('text')}>
                         <TextField
                             attribute={'review'}

@@ -16,17 +16,17 @@ export default class CardProgress extends React.PureComponent {
 
     static propTypes = {
         address: PropTypes.string,
-        currentWaves: PropTypes.number,
         targetWaves: PropTypes.number,
+        positiveBalance: PropTypes.number,
+        negativeBalance: PropTypes.number,
         expireVoting: PropTypes.string,
         expireCrowd: PropTypes.string,
         expireWhale: PropTypes.string,
     };
 
     render() {
-        const isNew = this.props.currentWaves === 0;
+        const isNew = this.props.positiveBalance === 0;
         const status = ProjectStatusEnum.getStatus(this.props);
-        const againstWaves = Math.max(0, this.props.targetWaves - this.props.currentWaves);
 
         return (
             <div className={bem.block()}>
@@ -50,9 +50,9 @@ export default class CardProgress extends React.PureComponent {
                 </div>
                 <div className={bem.element('info')}>
                     <ProjectProgress
-                        currentWaves={this.props.currentWaves}
                         targetWaves={this.props.targetWaves}
-                        againstWaves={againstWaves}
+                        positiveBalance={this.props.positiveBalance}
+                        negativeBalance={this.props.negativeBalance}
                     />
                 </div>
                 <div className={bem.element('actions')}>

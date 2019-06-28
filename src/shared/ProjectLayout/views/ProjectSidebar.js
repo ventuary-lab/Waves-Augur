@@ -1,10 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 
-// import {getUser} from 'yii-steroids/reducers/auth';
 import {html} from 'components';
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
@@ -16,48 +13,6 @@ import './ProjectSidebar.scss';
 
 const bem = html.bem('ProjectSidebar');
 
-@connect(
-    state => ({
-        project: {
-            title: 'SmartChain Media',
-            description: 'Build Blockchain-related applications and uild applications ser',
-            logoUrl: null,
-            coverUrl: null,
-            expireVoting: '2019-07-01',
-            expireCrowd: '2019-08-01',
-            expireWhale: '2019-08-05',
-            targetWaves: 1000,
-            tags: ['RDN', 'Analytics'],
-            country: 'RU',
-            contents: {
-                problem: '',
-                solution: '',
-                xFactor: '',
-                mvp: '',
-                largeScaleAdoption: '',
-                impactOnUser: '',
-                impactOnUserContext: '',
-                impactOnUserSociety: '',
-                codeValidation: '',
-                legalArrangements: '',
-                openSourceStrategy: '',
-                interconnectedness: '',
-            },
-            socials: {
-                url_twitter: null,
-                url_facebook: null,
-                url_linkedin: null,
-                url_instagram: null,
-                url_telegram: null,
-                url_website: null,
-            },
-
-            currentWaves: 43,
-            againstWaves: 5,
-
-        },
-    })
-)
 export default class ProjectSidebar extends React.PureComponent {
 
     static propTypes = {
@@ -72,11 +27,11 @@ export default class ProjectSidebar extends React.PureComponent {
                 <img
                     className={bem.element('avatar')}
                     src={this.props.project.logoUrl || projectAvatarStub}
-                    alt={this.props.project.title}
+                    alt={this.props.project.name}
                 />
                 <div className={bem.element('inner')}>
                     <span className={bem.element('name')}>
-                        {this.props.project.title}
+                        {this.props.project.name}
                     </span>
                     <span className={bem.element('description')}>
                         {this.props.project.description}
@@ -85,8 +40,8 @@ export default class ProjectSidebar extends React.PureComponent {
                     <div className={bem.element('progress')}>
                         <ProjectProgress
                             targetWaves={this.props.project.targetWaves}
-                            currentWaves={this.props.project.currentWaves}
-                            againstWaves={this.props.project.againstWaves}
+                            positiveBalance={this.props.project.positiveBalance}
+                            negativeBalance={this.props.project.negativeBalance}
                         />
                     </div>
                     <div className={bem.element('status')}>

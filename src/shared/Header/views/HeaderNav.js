@@ -44,6 +44,6 @@ export default class HeaderNav extends React.PureComponent {
                     ))}
                 </ul>
             </nav>
-        )
+        );
     }
 }

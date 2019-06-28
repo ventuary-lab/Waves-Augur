@@ -57,6 +57,7 @@ export default class ProfileWizardModal extends React.Component {
                             id: 'links',
                             component: LinksTab,
                             validators: [
+                                ['socials.url_' + SocialEnum.TELEGRAM, 'required'],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
                             ],
                         },

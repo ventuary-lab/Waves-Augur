@@ -11,22 +11,22 @@ export default class ProjectProgress extends React.PureComponent {
 
     static propTypes = {
         targetWaves: PropTypes.number,
-        currentWaves: PropTypes.number,
-        againstWaves: PropTypes.number,
+        positiveBalance: PropTypes.number,
+        negativeBalance: PropTypes.number,
     };
 
     render() {
-        const percent = Math.max(0, Math.min(100, 100 * this.props.currentWaves / this.props.targetWaves));
+        const percent = Math.max(0, Math.min(100, 100 * this.props.positiveBalance / this.props.targetWaves));
 
         return (
             <div className={bem.block()}>
                 <div className={bem.element('progress')}>
                     <div className={bem.element('progress-info')}>
                         <span className={bem.element('current-waves')}>
-                            {this.props.currentWaves || 0} W
+                            {this.props.positiveBalance || 0} W
                         </span>
                         <span className={bem.element('against-waves')}>
-                            {this.props.againstWaves || 0} W {__('against')}
+                            {this.props.negativeBalance || 0} W {__('against')}
                         </span>
                         <span className={bem.element('percent')}>
                             {percent}%

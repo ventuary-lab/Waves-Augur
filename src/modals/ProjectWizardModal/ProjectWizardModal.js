@@ -1,14 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import {connect} from 'react-redux';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
-import FieldSet from 'yii-steroids/ui/form/FieldSet';
 import TagsField from 'ui/form/TagsField';
 import ConnectImageField from 'ui/form/ConnectImageField';
-import {isPhone} from 'yii-steroids/reducers/screen';
 import AutoSaveHelper from 'yii-steroids/ui/form/Form/AutoSaveHelper';
 
 import {dal, html} from 'components';
@@ -20,11 +17,6 @@ import SocialEnum from 'enums/SocialEnum';
 const bem = html.bem('ProjectWizardModal');
 const FORM_ID = 'ProjectWizardModal';
 
-@connect(
-    state => ({
-        isPhone: isPhone(state),
-    })
-)
 export default class ProjectWizardModal extends React.PureComponent {
 
     render() {
@@ -42,10 +34,13 @@ export default class ProjectWizardModal extends React.PureComponent {
                     }}
                     initialValues={!dal.isTestMode ? undefined : {
                         name: 'proj' + (new Date()).getTime(),
+                        description: 'Build Blockchain-related applications and uild applications ser',
                         expireVoting: moment().add(1, 'day').format('YYYY-MM-DD'),
                         expireCrowd: moment().add(2, 'day').format('YYYY-MM-DD'),
                         expireWhale: moment().add(3, 'day').format('YYYY-MM-DD'),
                         targetWaves: 50,
+                        tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
+                        location: 'Russia',
                     }}
                     autoSave
                     layout={'horizontal'}
@@ -97,6 +92,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                             id: 'contacts',
                             component: this._stepContacts,
                             validators: [
+                                ['socials.url_' + SocialEnum.TWITTER, 'required'],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
                             ],
                         },
@@ -106,7 +102,7 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepName(props) {
+    _stepName() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -116,7 +112,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                     bem.element('new-project-icon'),
                     'Icon Icon__new-project_lg')}
                 />
-
                 <InputField
                     label={__('Project Name')}
                     attribute={'name'}
@@ -131,13 +126,12 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepProject(props) {
+    _stepProject() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
                     {__('Project Details')}
                 </div>
-
                 <ConnectImageField
                     label={__('Logo URL')}
                     attribute='logoUrl'
@@ -148,7 +142,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                     attribute='coverUrl'
                     placeholder={__('Enter URL')}
                 />
-
                 <div className={'form-row'}>
                     <div className={'form-label-col'}>
                         <label>
@@ -170,7 +163,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-
                 <div className={'form-row'}>
                     <div className={'form-label-col'}>
                         <label>
@@ -208,7 +200,7 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepIdeaProblem(props) {
+    _stepIdeaProblem() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -248,7 +240,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                 <div className={bem.element('sub-title')}>
                     {__('Idea Canvas')}
                 </div>
-
                 <div className={'form-row'}>
                     <TextField
                         topLabel={'MVP'}
@@ -257,7 +248,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                         layout={'default'}
                     />
                 </div>
-
                 <div className={'form-row'}>
                     <TextField
                         topLabel={'Large Scale Adoption'}
@@ -270,13 +260,12 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepIdeaImpact(props) {
+    _stepIdeaImpact() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
                     {__('Idea Canvas')}
                 </div>
-
                 <div className={'form-row'}>
                     <TextField
                         topLabel={'Impact on User'}
@@ -305,14 +294,12 @@ export default class ProjectWizardModal extends React.PureComponent {
         );
     }
 
-    _stepIdeaCode(props) {
+    _stepIdeaCode() {
         return (
             <>
                 <div className={bem.element('sub-title')}>
                     {__('Idea Canvas')}
                 </div>
-
-
                 <div className={'form-row'}>
                     <TextField
                         topLabel={'Code Validation'}
@@ -345,12 +332,11 @@ export default class ProjectWizardModal extends React.PureComponent {
                         layout={'default'}
                     />
                 </div>
-
             </>
         );
     }
 
-    _stepContacts(props) {
+    _stepContacts() {
         return (
             <>
                 <div className={bem.element('sub-title')}>

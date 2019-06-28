@@ -64,7 +64,7 @@ export default class InputSearchView extends React.PureComponent {
             return null;
         }
 
-        this.setState({isFocused: false})
+        this.setState({isFocused: false});
     }
 
     _onFocus() {
@@ -72,6 +72,6 @@ export default class InputSearchView extends React.PureComponent {
             return null;
         }
 
-        this.setState({isFocused: true})
+        this.setState({isFocused: true});
     }
 }

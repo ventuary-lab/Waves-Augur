@@ -5,7 +5,6 @@ import _isObject from 'lodash/isObject';
 import _trim from 'lodash/trim';
 import axios from 'axios';
 import _isArray from 'lodash-es/isArray';
-import queryString from 'query-string';
 
 const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
@@ -84,7 +83,7 @@ export default class WavesTransport {
             try {
                 result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.nodeUrl);
             } catch (e) {
-                console.error(e); // eslint-disable-line no-console
+                console.warn(e); // eslint-disable-line no-console
                 return null;
             }
         }

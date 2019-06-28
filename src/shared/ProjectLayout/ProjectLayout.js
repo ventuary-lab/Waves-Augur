@@ -51,7 +51,7 @@ export default class ProjectLayout extends React.PureComponent {
                     <div className={'row'}>
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
-                                <ProjectSidebar/>
+                                <ProjectSidebar project={this.props.project}/>
                             </div>
                         </div>
                         <div className='col col_tablet-count-8'>
@@ -82,7 +82,9 @@ export default class ProjectLayout extends React.PureComponent {
                             </div>
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
-                                    <ContentComponent />
+                                    <ContentComponent
+                                        project={this.props.project}
+                                    />
                                 )}
                             </div>
                         </div>

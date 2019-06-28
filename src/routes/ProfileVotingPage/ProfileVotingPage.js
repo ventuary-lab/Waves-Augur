@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ProfileLayout from 'shared/ProfileLayout';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 
 import {html} from 'components';
@@ -13,7 +12,7 @@ const bem = html.bem('ProfileVotingPage');
 export default class ProfileVotingPage extends React.PureComponent {
 
     static propTypes = {
-
+        items: PropTypes.array,
     };
 
     render() {
