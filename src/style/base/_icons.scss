@@ -303,5 +303,54 @@ $icons-dir: '../static/icons';
     }
   }
 
+  &__like {
+    min-width: 24px;
+    min-height: 20px;
+    background-image: url('#{$icons-dir}/like.svg');
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/like_green.svg');
+    }
+
+    &_green {
+      background-image: url('#{$icons-dir}/like_green.svg');
+    }
+
+    &_filled {
+      background-image: url('#{$icons-dir}/like_filled.svg');
+    }
+
+    &_filled_green {
+      min-width: 24px;
+      min-height: 20px;
+      background-image: url('#{$icons-dir}/like_filled_green.svg');
+    }
+  }
+
+
+  &__unlike {
+    min-width: 24px;
+    min-height: 20px;
+    background-image: url('#{$icons-dir}/unlike.svg');
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/unlike_red.svg');
+    }
+
+    &_red {
+      background-image: url('#{$icons-dir}/unlike_red.svg');
+    }
+
+    &_filled {
+      background-image: url('#{$icons-dir}/unlike_filled.svg');
+    }
+
+    &_filled_red {
+      min-width: 24px;
+      min-height: 20px;
+      background-image: url('#{$icons-dir}/unlike_filled_red.svg');
+    }
+  }
+
 
 }

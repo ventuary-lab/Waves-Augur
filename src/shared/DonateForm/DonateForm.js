@@ -17,6 +17,8 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 const FORM_ID = 'DonateForm';
 
 const bem = html.bem('DonateForm');
+const POSITIVE_DIRECTION = 'positive';
+const NEGATIVE_DIRECTION = 'negative';
 
 @connect(
     state => ({
@@ -35,10 +37,10 @@ export default class DonateForm extends React.PureComponent {
         super(...arguments);
 
         this.state = {
-            donate: {
-                count: 0,
-                isPositive: true,
-            }
+            wavesValue: 0,
+            wavesHovered: 0,
+            directionValue: POSITIVE_DIRECTION,
+            directionHovered: null,
         };
     }
 
@@ -57,23 +59,78 @@ export default class DonateForm extends React.PureComponent {
                     </span>
                     <div className={bem.element('donate-control')}>
                         <div className={bem.element('donate-direction')}>
-                            {_times(5).map(item => (
-                                <div className={bem.element('donate-count-item', {
-                                    positive: this.state.donate.isPositive,
-                                    negative: !this.state.donate.isPositive,
-                                })}/>
+                            {_times(5).map((item, index) => (
+                                <div
+                                    className={bem.element('donate-count-container', {
+                                        active: this.state.wavesValue >= (index + 1),
+                                        hovered: this.state.wavesHovered >= (index + 1),
+                                        direction: this.state.directionValue,
+                                    })}
+                                    key={index}
+                                    onClick={() => {
+                                        this.setState({
+                                            wavesValue: this.state.wavesValue === (index + 1) ? 0 : (index + 1),
+                                        });
+                                    }}
+                                    onMouseOver={() => {
+                                        this.setState({
+                                            wavesHovered: index + 1,
+                                        });
+                                    }}
+                                    onMouseLeave={() => {
+                                        this.setState({
+                                            wavesHovered: 0,
+                                        });
+                                    }}
+                                >
+                                    <div className={bem.element('donate-count-item')}/>
+                                </div>
                             ))}
                         </div>
                         <div className={bem.element('donate-direction-switcher')}>
-                            <div className={bem.element('donate-switch-positive', {
-                                active: this.state.donate.isPositive,
-                            })}>
-
+                            <div
+                                className={bem.element('donate-unlike')}
+                                onClick={() => this.setState({
+                                    directionValue: NEGATIVE_DIRECTION,
+                                })}
+                                onMouseOver={() => {
+                                    this.setState({
+                                        directionHovered: POSITIVE_DIRECTION,
+                                    });
+                                }}
+                                onMouseLeave={() => {
+                                    this.setState({
+                                        directionHovered: null,
+                                    });
+                                }}
+                            >
+                                {this.state.directionValue === POSITIVE_DIRECTION && (
+                                    <span className={'Icon Icon__unlike'}/>
+                                ) || (
+                                    <span className={'Icon Icon__unlike_filled_red'}/>
+                                )}
                             </div>
-                            <div className={bem.element('donate-switch-negative', {
-                                active: !this.state.donate.isPositive,
-                            })}>
-
+                            <div
+                                className={bem.element('donate-like')}
+                                onClick={() => this.setState({
+                                    directionValue: POSITIVE_DIRECTION,
+                                })}
+                                onMouseOver={() => {
+                                    this.setState({
+                                        directionHovered: NEGATIVE_DIRECTION,
+                                    });
+                                }}
+                                onMouseLeave={() => {
+                                    this.setState({
+                                        directionHovered: null,
+                                    });
+                                }}
+                            >
+                                {this.state.directionValue === POSITIVE_DIRECTION && (
+                                    <span className={'Icon Icon__like_filled_green'}/>
+                                ) || (
+                                    <span className={'Icon Icon__like'}/>
+                                )}
                             </div>
                         </div>
                     </div>

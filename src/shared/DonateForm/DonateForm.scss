@@ -2,6 +2,8 @@
 @import '../../style/helpers/mixins';
 
 .DonateForm {
+  $root: &;
+
   @include card-styles;
   padding: 20px;
 
@@ -52,4 +54,61 @@
       padding-bottom: 5px;
     }
   }
+
+  &__donate-direction {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  &__donate-count-container {
+    padding: 5px;
+
+
+    &_hovered#{$root}__donate-count-container_direction_positive {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-light-green;
+        border-color: $color-brand-light-green;
+      }
+    }
+
+    &_hovered#{$root}__donate-count-container_direction_negative {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-light-red;
+        border-color: $color-brand-light-red;
+      }
+    }
+
+    &_active#{$root}__donate-count-container_direction_negative {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-red;
+        border-color: $color-brand-red;
+      }
+    }
+
+    &_active#{$root}__donate-count-container_direction_positive {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-green;
+        border-color: $color-brand-green;
+      }
+    }
+  }
+
+  &__donate-count-item {
+    width: 9px;
+    height: 9px;
+    border: 1px solid $color-gg-4;
+    transform: rotate(45deg);
+  }
+
+  &__donate-direction-switcher {
+    display: flex;
+    justify-content: center;
+  }
+
+
+
+  &__donate-unlike {
+    margin-right: 14px;
+  }
+
 }
