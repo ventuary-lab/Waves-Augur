@@ -44,6 +44,8 @@ export default class Layout extends React.PureComponent {
     };
 
     async componentDidMount() {
+        dal.voteReveralMonitor.start();
+
         if (!await dal.isKeeperInstalled()) {
             this.props.dispatch(openModal(MessageModal, {
                 title: __('Install Waves Keeper'),

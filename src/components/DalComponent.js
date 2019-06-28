@@ -14,6 +14,7 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
+import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 
 export default class DalComponent {
 
@@ -22,6 +23,15 @@ export default class DalComponent {
         this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
+        this.voteReveralMonitor = new VoteReveralMonitor(this);
+        this.contract = {
+            VOTERS: 3,
+            QUORUM: 2,
+            LISTINGFEE: 0.005, // LISTINGFEE = 500000000/1000
+            VOTEBET: 0.0015, // VOTEBET = 150000000/1000
+            TIERS: [10, 50, 250, 1250, 6250],
+            MULTIPLIER: 150,
+        };
 
         this._authInterval = null;
         this._authChecker = this._authChecker.bind(this);
@@ -140,7 +150,7 @@ export default class DalComponent {
         );
 
         users = users.filter(user => !!user.profile.name);
-        _orderBy(users, 'createTime', 'desc');
+        users = _orderBy(users, 'createTime', 'desc');
 
         return users;
     }
@@ -190,8 +200,14 @@ export default class DalComponent {
             profile.createTime = DalHelper.dateNow();
         }
 
+        this.transport.resetCache();
+
         // Save
         const result = await this.transport.nodePublish(method, [profile, '']);
+
+        if (user.role === UserRole.INVITED) {
+            user.role = UserRole.REGISTERED;
+        }
 
         // Update in redux store
         const store = require('components').store;
@@ -252,7 +268,7 @@ export default class DalComponent {
                 .map(key => this.getProject(key.replace(/^author_/, '')))
         );
 
-        _orderBy(projects, 'createTime', 'desc');
+        projects = _orderBy(projects, 'createTime', 'desc');
 
         return projects;
     }
@@ -371,6 +387,8 @@ export default class DalComponent {
             ...data,
         };
 
+        this.transport.resetCache();
+
         const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
         if (isNew) {
             data.createTime = DalHelper.dateNow();
@@ -383,7 +401,7 @@ export default class DalComponent {
                     this.dateToHeight(data.expireWhale),
                     data,
                 ],
-                0.005
+                this.contract.LISTINGFEE
             );
         } else {
             return this.transport.nodePublish(
@@ -405,8 +423,8 @@ export default class DalComponent {
      */
     async voteProject(uid, vote, data) {
         const hashes = {
-            featured: '3GAzarVTT2Vt8WdCnJDZKny1grGwwuh76SeWpd4SKJxN', // это хэш от строки randomstring1delisted
-            delisted: 'HXatbtd3THY6FURCGb7PPmogYbQM5ibifg9gtcnDmfAo',
+            featured: '3GAzarVTT2Vt8WdCnJDZKny1grGwwuh76SeWpd4SKJxN',
+            delisted: 'HXatbtd3THY6FURCGb7PPmogYbQM5ibifg9gtcnDmfAo', // это хэш от строки randomstring1delisted
         };
         const salts = {
             featured: 'randomstring2',
@@ -420,32 +438,31 @@ export default class DalComponent {
         data.createTime = DalHelper.dateNow();
 
         // Sign transactions
-        const txCommit= await this.transport.nodeSign('votecommit', [uid, hash], 0.003); // 2 x (VOTEBET = 150000000/1000)
+        const txCommit= await this.transport.nodeSign('votecommit', [uid, hash], 2 * this.contract.VOTEBET);
         const txReveal = await this.transport.nodeSign('votereveal', [uid, vote, salt, data]);
         this.log('Signed vote tx:', {txCommit, txReveal});
 
         // Broadcast first
-        await this.transport.broadcast(txCommit);
-
-        // Wait and brodcast second
-        // TODO Save in localstorage
-        const checker = resolve => {
-            const nCommits = this.transport.nodeFetchKey('ncommits_' + uid);
-            this.log(`Wait broadcast vote tx, ncommits_${uid}:`, nCommits);
-
-            if (nCommits >= 3) {
-                resolve(this.transport.broadcast(txReveal));
+        let result = null;
+        try {
+            result = await this.transport.broadcast(txCommit);
+        } catch (e) {
+            if (e.message && e.data) {
+                alert(e.data);
             } else {
-                setTimeout(() => checker(resolve), 1000);
+                throw e;
             }
-        };
-        return new Promise(checker);
+        }
+
+        // Wait and broadcast second
+        this.voteReveralMonitor.add(uid, txReveal);
+
+        return result;
     }
 
     /*donateProject(uid, amount, comment) {
 
     }*/
-
 
     log() {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {

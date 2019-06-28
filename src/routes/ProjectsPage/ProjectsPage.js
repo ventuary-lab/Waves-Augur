@@ -11,7 +11,7 @@ import ProjectCard from 'shared/ProjectCard';
 const bem = html.bem('ProjectsPage');
 
 @dal.hoc(
-    () => dal.getVotedProjects()
+    () => dal.getProjects()
         .then(items => ({items}))
 )
 export default class ProjectsPage extends React.PureComponent {
