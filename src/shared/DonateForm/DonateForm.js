@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getFormValues} from 'redux-form';
 import _times from 'lodash-es/times';
+import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
@@ -12,7 +14,6 @@ import {dal, html} from 'components';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './DonateForm.scss';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 
 const FORM_ID = 'DonateForm';
 
@@ -24,6 +25,7 @@ const NEGATIVE_DIRECTION = 'negative';
     state => ({
         route: getCurrentRoute(state),
         formValues: getFormValues(FORM_ID)(state),
+        user: getUser(state),
     })
 )
 export default class DonateForm extends React.PureComponent {
@@ -51,11 +53,11 @@ export default class DonateForm extends React.PureComponent {
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
-                        src={userAvatarStub}
-                        alt='user-name'
+                        src={this.props.user.profile.avatar || userAvatarStub}
+                        alt={this.props.user.profile.name}
                     />
                     <span className={bem.element('user-name')}>
-                        Aleksey Pupyshev
+                        {this.props.user.profile.name}
                     </span>
                     <div className={bem.element('donate-control')}>
                         <div className={bem.element('donate-direction')}>
