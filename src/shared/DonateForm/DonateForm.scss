@@ -5,7 +5,7 @@
   $root: &;
   $count-container: #{$root}__count-container;
 
-  @include card-styles;
+  @include card;
   padding: 20px;
 
   display: flex;

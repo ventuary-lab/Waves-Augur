@@ -2,7 +2,7 @@
 @import '../../style/helpers/mixins';
 
 .VotingForm {
-  @include card-styles;
+  @include card;
   padding: 20px;
 
   display: flex;

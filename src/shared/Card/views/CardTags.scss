@@ -19,6 +19,6 @@
 
   &__link {
     margin-right: 7px;
-    color: $color-brand-green;
+    @include link;
   }
 }
