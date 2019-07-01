@@ -3,6 +3,7 @@
 
 .DonateForm {
   $root: &;
+  $count-container: #{$root}__count-container;
 
   @include card-styles;
   padding: 20px;
@@ -55,60 +56,86 @@
     }
   }
 
-  &__donate-direction {
+  &__direction {
     display: flex;
     margin-bottom: 10px;
   }
 
-  &__donate-count-container {
+  &__count-container {
     padding: 5px;
+    cursor: pointer;
 
 
-    &_hovered#{$root}__donate-count-container_direction_positive {
-      #{$root}__donate-count-item {
-        background-color: $color-brand-light-green;
-        border-color: $color-brand-light-green;
+    &_hovered {
+      &#{$count-container}_direction_positive {
+        #{$root}__count-item {
+          background-color: $color-brand-light-green;
+          border-color: $color-brand-light-green;
+        }
+      }
+
+      &#{$count-container}_direction_negative {
+        #{$root}__count-item {
+          background-color: $color-brand-light-red;
+          border-color: $color-brand-light-red;
+        }
       }
     }
 
-    &_hovered#{$root}__donate-count-container_direction_negative {
-      #{$root}__donate-count-item {
-        background-color: $color-brand-light-red;
-        border-color: $color-brand-light-red;
+    &_active {
+      &#{$count-container}_direction_negative {
+        #{$root}__count-item {
+          background-color: $color-brand-red;
+          border-color: $color-brand-red;
+        }
+      }
+
+      &#{$count-container}_direction_positive {
+        #{$root}__count-item {
+          background-color: $color-brand-green;
+          border-color: $color-brand-green;
+        }
       }
     }
 
-    &_active#{$root}__donate-count-container_direction_negative {
-      #{$root}__donate-count-item {
-        background-color: $color-brand-red;
-        border-color: $color-brand-red;
+    &_active {
+      &#{$count-container}_direction_positive#{$count-container}_direction-hovered_negative {
+        #{$root}__count-item {
+          background-color: $color-brand-light-red;
+          border-color: $color-brand-light-red;
+        }
       }
     }
 
-    &_active#{$root}__donate-count-container_direction_positive {
-      #{$root}__donate-count-item {
-        background-color: $color-brand-green;
-        border-color: $color-brand-green;
+    &_active {
+      &#{$count-container}_direction_negative#{$count-container}_direction-hovered_positive {
+        #{$root}__count-item {
+          background-color: $color-brand-light-green;
+          border-color: $color-brand-light-green;
+        }
       }
     }
   }
 
-  &__donate-count-item {
+  &__count-item {
     width: 9px;
     height: 9px;
     border: 1px solid $color-gg-4;
     transform: rotate(45deg);
   }
 
-  &__donate-direction-switcher {
+  &__direction-switcher {
     display: flex;
     justify-content: center;
   }
 
 
-
-  &__donate-unlike {
-    margin-right: 14px;
+  &__like,
+  &__unlike {
+    cursor: pointer;
   }
 
+  &__unlike {
+    margin-right: 14px;
+  }
 }

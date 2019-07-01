@@ -317,6 +317,8 @@ $icons-dir: '../static/icons';
     }
 
     &_filled {
+      min-width: 24px;
+      min-height: 20px;
       background-image: url('#{$icons-dir}/like_filled.svg');
     }
 
@@ -342,6 +344,8 @@ $icons-dir: '../static/icons';
     }
 
     &_filled {
+      min-width: 24px;
+      min-height: 20px;
       background-image: url('#{$icons-dir}/unlike_filled.svg');
     }
 
