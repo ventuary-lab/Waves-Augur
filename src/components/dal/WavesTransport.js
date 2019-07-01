@@ -16,6 +16,7 @@ export default class WavesTransport {
     constructor(dal) {
         this.dal = dal;
         this.nodeUrl = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
+        this.fee = 0.009;
 
         this._cacheData = null;
         this._cacheTimeout = null;
@@ -60,9 +61,7 @@ export default class WavesTransport {
         if (this._cacheTimeout) {
             clearTimeout(this._cacheTimeout);
         }
-        this._cacheTimeout = setTimeout(() => {
-            this._cacheData = null;
-        }, 30000);
+        this._cacheTimeout = setTimeout(() => this.resetCache(), 30000);
 
         // Call callbacks
         this._cacheCallbacks.forEach(resolve => resolve(this._cacheData));
@@ -149,13 +148,17 @@ export default class WavesTransport {
         return broadcast(tx, this.nodeUrl);
     }
 
+    resetCache() {
+        this._cacheData = null;
+    }
+
     _buildTransaction(method, args, payment) {
         const transaction = {
             type: 16,
             data: {
                 fee: {
                     assetId: 'WAVES',
-                    tokens: '0.009',
+                    tokens: String(this.fee),
                 },
                 dApp: this.dal.dApp,
                 call: {

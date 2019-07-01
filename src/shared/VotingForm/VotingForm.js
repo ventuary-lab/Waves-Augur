@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getFormValues} from 'redux-form';
+import _get from 'lodash/get';
 
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
@@ -56,7 +57,7 @@ export default class VotingForm extends React.PureComponent {
                 >
                     <div className={bem.element('text-field')}>
                         <TextField
-                            attribute={'review'}
+                            attribute='review'
                         />
                     </div>
                     <div className={bem.element('actions')}>
@@ -77,7 +78,7 @@ export default class VotingForm extends React.PureComponent {
 
     _onSubmit(vote) {
         dal.voteProject(this.props.route.params.uid, vote, {
-            comment: this.props.formValues.review,
+            comment: _get(this.props, 'formValues.review') || null,
         });
     }
 }

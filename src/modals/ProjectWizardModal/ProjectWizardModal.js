@@ -41,6 +41,9 @@ export default class ProjectWizardModal extends React.PureComponent {
                         targetWaves: 50,
                         tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
                         location: 'Russia',
+                        socials: {
+                            url_twitter: 'https://twitter.com/MarsCuriosity',
+                        }
                     }}
                     autoSave
                     layout={'horizontal'}
@@ -60,6 +63,11 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 [['expireVoting', 'expireCrowd', 'expireWhale', 'targetWaves'], 'required'],
                                 [['expireVoting', 'expireCrowd', 'expireWhale'], 'date'],
                                 ['targetWaves', 'integer', {min: 1}],
+                                ['expireVoting', function(values, attribute) {
+                                    if (values[attribute] && values[attribute] <= moment().format('YYYY-MM-DD')) {
+                                        return __('Voting date must be in future');
+                                    }
+                                }],
                                 ['expireCrowd', function(values, attribute) {
                                     if (values[attribute] && values.expireVoting && values[attribute] <= values.expireVoting) {
                                         return __('Crowdfunding date must be more than Voting');
