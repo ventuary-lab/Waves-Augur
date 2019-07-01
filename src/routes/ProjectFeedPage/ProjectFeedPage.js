@@ -43,6 +43,30 @@ export default class ProjectFeedPage extends React.PureComponent {
                         items={this.props.items}
                     />
                 </div>
+
+                {/*<FeedCard
+                    item={{
+                        user: {
+                            profile: {
+                                avatar: '',
+                                socials: {
+                                    url_twitter: '1',
+                                    url_facebook: '1',
+                                    url_linkedin: '1',
+                                    url_instagram: '1',
+                                    url_telegram: '1',
+                                    url_website: '1',
+                                }
+                            }
+                        },
+                        type: 'donate',
+                        // vote: 'delisted',
+                        amount: -5,
+                        review: {
+                            comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consectetur est illum labore mollitia numquam optio quaerat sapiente temporibus! Ad aliquid eaque mollitia neque pariatur quis sunt, unde voluptates voluptatibus?',
+                        },
+                    }}
+                />*/}
             </div>
         );
     }

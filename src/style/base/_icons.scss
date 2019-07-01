@@ -329,7 +329,6 @@ $icons-dir: '../static/icons';
     }
   }
 
-
   &__unlike {
     min-width: 24px;
     min-height: 20px;
@@ -356,5 +355,19 @@ $icons-dir: '../static/icons';
     }
   }
 
+  &__wave {
+    min-width: 9px;
+    min-height: 9px;
+    &_green {
+      min-width: 9px;
+      min-height: 9px;
+      background-image: url('#{$icons-dir}/wave_green.svg');
+    }
 
+    &_red {
+      min-width: 9px;
+      min-height: 9px;
+      background-image: url('#{$icons-dir}/wave_red.svg');
+    }
+  }
 }

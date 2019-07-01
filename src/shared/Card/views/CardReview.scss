@@ -1,0 +1,71 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.CardReview {
+  position: relative;
+  height: 100%;
+  padding: 20px 20px 20px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__avatar {
+    position: absolute;
+    object-fit: cover;
+    width: 38px;
+    height: 38px;
+    top: 20px;
+    left: 18px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__link {
+    margin-right: 7px;
+    color: $color-brand-green;
+  }
+
+  &__featured-vote-icon {
+    font-size: 25px;
+    color: $color-brand-green;
+  }
+
+  &__delisted-vote-icon {
+    font-size: 22px;
+    color: $color-brand-red;
+  }
+
+  &__amount {
+    font-weight: 500;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__info-container {
+    margin-bottom: 25px;
+  }
+
+  &__text {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+  }
+
+  &__donate-amount {
+    display: flex;
+    align-items: center;
+  }
+
+  &__wave-icon {
+    &:not(:last-child) {
+      margin-right: 1px;
+    }
+  }
+}

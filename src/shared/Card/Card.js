@@ -25,16 +25,17 @@ export default class Card extends React.PureComponent {
 
     render() {
         const LeftComponent = _get(this.props, 'left.component');
-        // const CenterComponent = _get(this.props, 'center.component');
         const RightComponent = _get(this.props, 'right.component');
 
         return (
             <div className={bem.block()}>
-                <div className={bem.element('column-left')}>
-                    {LeftComponent && (
-                        <LeftComponent {...this.props.left.componentProps}/>
-                    )}
-                </div>
+                {_get(this.props, 'left.component') && (
+                    <div className={bem.element('column-left')}>
+                        {LeftComponent && (
+                            <LeftComponent {...this.props.left.componentProps}/>
+                        )}
+                    </div>
+                )}
                 <div className={bem.element('column-right')}>
                     {RightComponent && (
                         <RightComponent {...this.props.right.componentProps}/>

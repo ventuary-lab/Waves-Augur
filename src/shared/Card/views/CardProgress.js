@@ -46,7 +46,6 @@ export default class CardProgress extends React.PureComponent {
                             }
                         </>
                     )}
-
                 </div>
                 <div className={bem.element('info')}>
                     <ProjectProgress
