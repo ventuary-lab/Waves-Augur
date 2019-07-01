@@ -4,6 +4,7 @@ import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
+import * as wavesCrypto from '@waves/waves-crypto';
 
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
@@ -417,23 +418,13 @@ export default class DalComponent {
     /**
      * Vote to project
      * @param {string} uid
-     * @param {string} vote
+     * @param {string} vote Featured (yes) OR delisted (no)
      * @param {object} data
      * @returns {Promise<any>}
      */
     async voteProject(uid, vote, data) {
-        const hashes = {
-            featured: '3GAzarVTT2Vt8WdCnJDZKny1grGwwuh76SeWpd4SKJxN',
-            delisted: 'HXatbtd3THY6FURCGb7PPmogYbQM5ibifg9gtcnDmfAo', // это хэш от строки randomstring1delisted
-        };
-        const salts = {
-            featured: 'randomstring2',
-            delisted: 'randomstring1',
-        };
-
-        vote = 'featured'; // featured (yes) OR delisted (no)
-        const hash = hashes[vote];
-        const salt = salts[vote];
+        const salt = DalHelper.generateUid();
+        const hash = wavesCrypto.base58encode(wavesCrypto.sha256(wavesCrypto.stringToUint8Array(vote + salt)));
 
         data.createTime = DalHelper.dateNow();
 
@@ -460,9 +451,11 @@ export default class DalComponent {
         return result;
     }
 
-    /*donateProject(uid, amount, comment) {
+    donateProject(uid, amount, data) {
+        const tier = Math.abs(amount);
+        const mode = amount > 0 ? 'positive' : 'negative';
 
-    }*/
+    }
 
     log() {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {

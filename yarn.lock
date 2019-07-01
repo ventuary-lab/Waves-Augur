@@ -1360,13 +1360,6 @@
     "@types/crypto-js" "^3.1.43"
     crypto-js "^3.1.9-1"
 
-"@waves/waves-crypto@^3.0.11":
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/@waves/waves-crypto/-/waves-crypto-3.0.11.tgz#0ce219d99cfd1c8efbdcddbb53118a05386bacd3"
-  integrity sha512-ozy4gYjJwLXBTAFPksoGPtZT/f8B3oMoBem3B4u+3doDBpfUmaVH/F6UcPRSr/mM4VkJ+RLfzG6oPf5Ui7sVvw==
-  dependencies:
-    crypto-js "^3.1.9-1"
-
 "@waves/waves-transactions@^3.11.0":
   version "3.11.0"
   resolved "https://registry.yarnpkg.com/@waves/waves-transactions/-/waves-transactions-3.11.0.tgz#58fe2a08292d3ae404ad3b28ff3433f32332cedb"
