@@ -1,0 +1,114 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.DonateForm {
+  $root: &;
+
+  @include card-styles;
+  padding: 20px;
+
+  display: flex;
+
+
+  &__user-info {
+    min-width: 150px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__user-avatar {
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 4px;
+    width: 38px;
+    height: 38px;
+  }
+
+  &__user-name {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    margin-bottom: 4px;
+    color: $color-gg-4;
+  }
+
+  &__form {
+    flex-grow: 1;
+  }
+
+  &__text-field {
+    margin-bottom: 10px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ButtonView {
+      width: 100%;
+      min-height: 38px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+
+  &__donate-direction {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  &__donate-count-container {
+    padding: 5px;
+
+
+    &_hovered#{$root}__donate-count-container_direction_positive {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-light-green;
+        border-color: $color-brand-light-green;
+      }
+    }
+
+    &_hovered#{$root}__donate-count-container_direction_negative {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-light-red;
+        border-color: $color-brand-light-red;
+      }
+    }
+
+    &_active#{$root}__donate-count-container_direction_negative {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-red;
+        border-color: $color-brand-red;
+      }
+    }
+
+    &_active#{$root}__donate-count-container_direction_positive {
+      #{$root}__donate-count-item {
+        background-color: $color-brand-green;
+        border-color: $color-brand-green;
+      }
+    }
+  }
+
+  &__donate-count-item {
+    width: 9px;
+    height: 9px;
+    border: 1px solid $color-gg-4;
+    transform: rotate(45deg);
+  }
+
+  &__donate-direction-switcher {
+    display: flex;
+    justify-content: center;
+  }
+
+
+
+  &__donate-unlike {
+    margin-right: 14px;
+  }
+
+}

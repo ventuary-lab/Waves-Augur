@@ -7,12 +7,14 @@ import _get from 'lodash/get';
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
+import {getUser} from 'yii-steroids/reducers/auth';
+import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 
+import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import {dal, html} from 'components';
+import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
-import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 
 const FORM_ID = 'VotingForm';
 
@@ -22,6 +24,7 @@ const bem = html.bem('VotingForm');
     state => ({
         route: getCurrentRoute(state),
         formValues: getFormValues(FORM_ID)(state),
+        user: getUser(state),
     })
 )
 export default class VotingForm extends React.PureComponent {
@@ -34,13 +37,25 @@ export default class VotingForm extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
+
+                <div className={bem.element('user-info')}>
+                    <img
+                        className={bem.element('user-avatar')}
+                        src={this.props.user.profile.avatar || userAvatarStub}
+                        alt={this.props.user.profile.name}
+                    />
+                    <span className={bem.element('user-name')}>
+                        {this.props.user.profile.name}
+                    </span>
+                    <span className={bem.element('vote-price')}>
+                        1 W
+                    </span>
+                </div>
                 <Form
+                    className={bem.element('form')}
                     formId={FORM_ID}
                 >
-                    <div className={bem.element('sub-title')}>
-                        {__('Vote for project')}
-                    </div>
-                    <div className={bem.element('text')}>
+                    <div className={bem.element('text-field')}>
                         <TextField
                             attribute='review'
                         />

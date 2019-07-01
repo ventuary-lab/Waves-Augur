@@ -5,11 +5,38 @@
   @include card-styles;
   padding: 20px;
 
-  &__sub-title {
-    margin-bottom: 10px;
+  display: flex;
+
+
+  &__user-info {
+    min-width: 150px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  &__text {
+  &__user-avatar {
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 4px;
+    width: 38px;
+    height: 38px;
+  }
+
+  &__user-name {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    margin-bottom: 4px;
+    color: $color-gg-4;
+  }
+
+  &__form {
+    flex-grow: 1;
+  }
+
+  &__text-field {
     margin-bottom: 10px;
   }
 
@@ -17,6 +44,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    //todo fix
+    .FieldLayoutView_layout_default {
+      width: auto;
+    }
 
     .ButtonView {
       min-height: 38px;
