@@ -44,7 +44,7 @@ export default class ProjectFeedPage extends React.PureComponent {
                     />
                 </div>
 
-                <FeedCard
+                {/*<FeedCard
                     item={{
                         user: {
                             profile: {
@@ -66,7 +66,7 @@ export default class ProjectFeedPage extends React.PureComponent {
                             comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consectetur est illum labore mollitia numquam optio quaerat sapiente temporibus! Ad aliquid eaque mollitia neque pariatur quis sunt, unde voluptates voluptatibus?',
                         },
                     }}
-                />
+                />*/}
             </div>
         );
     }

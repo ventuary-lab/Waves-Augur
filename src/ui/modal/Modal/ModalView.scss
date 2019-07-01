@@ -8,10 +8,14 @@
     left: 50%;
     transform: translateX(-50%);
     outline: none;
-    max-width: 760px;
     padding: 0 20px;
     border: none;
     width: 100%;
+
+    @include tablet {
+      padding: 0;
+      width: 760px;
+    }
   }
 
   &__overlay {
