@@ -86,7 +86,6 @@
   }
 
   &__link {
-    text-decoration: none;
-    color: $color-brand-green;
+    @include link;
   }
 }

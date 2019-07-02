@@ -7,18 +7,21 @@
 
   &__field {
     position: relative;
-    width: 100%;
+    //width: 100%;
   }
 
   &__label-icon {
     margin-right: 5px;
   }
 
+  &__label-inner {
+    display: flex;
+    align-items: center;
+  }
+
   &__label {
     font-weight: 300;
     color: $color-gg-4;
-    display: flex;
-    align-items: center;
 
     &_required:after {
       display: inline-block;
@@ -42,7 +45,7 @@
     display: block !important;
     color: $color-brand-red;
     position: relative;
-    top: -10px;
+    top: 4px;
   }
   &__hint {
     width: 100%;

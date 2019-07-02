@@ -34,14 +34,14 @@ $col-width: percentage(100/$col-length)/100;
   padding-right: $grid-offset-mobile / 2;
   box-sizing: border-box;
 
-  @include desktop {
-    padding-left: $grid-offset-desktop / 2;
-    padding-right: $grid-offset-desktop / 2;
-  }
-
   @include tablet {
     padding-left: $grid-offset-tablet / 2;
     padding-right: $grid-offset-tablet / 2;
+  }
+
+  @include desktop {
+    padding-left: $grid-offset-desktop / 2;
+    padding-right: $grid-offset-desktop / 2;
   }
 
   &_zero {
@@ -203,7 +203,7 @@ $col-width: percentage(100/$col-length)/100;
 }
 
 .form-field-col {
-  width: 80%;
+  width: 70%;
 }
 
 

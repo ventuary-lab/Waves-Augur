@@ -14,7 +14,7 @@ const process400 = resp => resp.status === 400
     : resp;
 const validateStatus = status => status === 400 || status >= 200 && status < 300;
 
-export default class WavesTransport {
+class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
@@ -94,10 +94,7 @@ export default class WavesTransport {
     async nodeFetchKey(key) {
         let result = null;
         if (this._cacheData) {
-            result = {
-                key,
-                value: this._cacheData[key],
-            };
+            result = this._cacheData[key];
         } else {
             try {
                 result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.nodeUrl);
@@ -190,14 +187,7 @@ export default class WavesTransport {
         if (_isString(tx)) {
             tx = JSON.parse(tx);
         }
-
-        let result = null;
-        try {
-            result = await broadcast(tx, this.nodeUrl);
-        } catch (e) {
-            this.dal.error(e);
-        }
-        return result;
+        return broadcast(tx, this.nodeUrl);
     }
 
     resetCache() {
@@ -258,3 +248,5 @@ export default class WavesTransport {
     }
 
 }
+
+module.exports = WavesTransport;

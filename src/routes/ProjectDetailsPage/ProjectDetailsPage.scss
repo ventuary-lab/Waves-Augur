@@ -1,6 +1,14 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
 .ProjectDetailsPage {
   &__form-block {
     margin-bottom: 20px;
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
   }
 
   &__leader-block {
@@ -16,5 +24,29 @@
 
   &__description {
     margin-bottom: 40px;
+  }
+
+  &__links {
+    padding: 35px 20px 43px;
+
+    @include tablet {
+
+    }
+  }
+
+  &__info {
+    padding: 0 15px;
+  }
+
+  &__social-links {
+    margin-bottom: 23px;
+  }
+
+  &__share-link {
+    @include link;
+  }
+
+  &__inner {
+
   }
 }

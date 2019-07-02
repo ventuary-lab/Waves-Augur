@@ -15,7 +15,7 @@ const bem = html.bem('ProjectFeedPage');
 
 @connect(
     state => ({
-        projectUid: _get(getCurrentRoute(state), 'match.params.uid'),
+        projectUid: _get(getCurrentRoute(state), 'params.uid'),
     })
 )
 @dal.hoc(

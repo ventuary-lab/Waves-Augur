@@ -16,6 +16,7 @@ import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
+import {openModal} from 'yii-steroids/actions/modal';
 
 export default class DalComponent {
 
@@ -338,10 +339,9 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProjectFeed(uid) {
-        const account = await this.getAccount();
         const data = await this.transport.nodeAllData();
 
-        return Promise.all(
+        const result = await Promise.all(
             Object.keys(data)
                 .map(async key => {
                     const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_([0-9a-z_]+)(:([0-9]+))?/i.exec(key);
@@ -355,6 +355,7 @@ export default class DalComponent {
                             case 'votereview':
                                 item.type = FeedTypeEnum.VOTE;
                                 item.vote = await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`);
+                                item.amount = this.getVotePayment();
                                 break;
 
                             case 'text_id':
@@ -368,14 +369,16 @@ export default class DalComponent {
                             case 'whalereview':
                                 item.type = FeedTypeEnum.WHALE;
                                 break;
+
+                            default:
+                                return null;
                         }
                         return item;
                     }
                     return null;
                 })
-                .filter(key => /^author_/.test(key) && data[key].value === account.address)
-                .map(key => this.getProject(key.replace(/^author_/, '')))
         );
+        return result.filter(Boolean);
     }
 
     /**
@@ -472,20 +475,23 @@ export default class DalComponent {
         let result = null;
         try {
             result = await this.transport.broadcast(txCommit);
-        } catch (e) {
-            if (e.message && e.data) {
-                alert(e.data);
-            } else {
-                throw e;
-            }
-        }
 
-        // Wait and broadcast second
-        this.voteReveralMonitor.add(uid, txReveal);
+            // Wait and broadcast second
+            this.voteReveralMonitor.add(uid, txReveal);
+        } catch (e) {
+            this.error(e);
+        }
 
         return result;
     }
 
+    /**
+     *
+     * @param {string} uid
+     * @param {number} amount
+     * @param {object} data
+     * @returns {Promise<null>}
+     */
     async donateProject(uid, amount, data) {
         const tier = Math.abs(amount);
         const mode = amount > 0 ? 'positive' : 'negative';
@@ -494,24 +500,37 @@ export default class DalComponent {
         try {
             result = await this.transport.nodePublish('donate', [uid, tier, mode, data], tier / Math.pow(10, 8));
         } catch (e) {
-            if (e.message && e.data) {
-                alert(e.data);
-            } else {
-                throw e;
-            }
+            this.error(e);
         }
 
         return result;
     }
 
-    async finalizeVoting(uid) {
-        const address = (await this.getAccount()).address;
-        await this.transport.nodePublish('finalizevoting', [uid, address]);
-    }
-
     log() {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {
             console.log.apply(console, arguments); // eslint-disable-line no-console
+        }
+    }
+
+    error(e) {
+        console.error(e); // eslint-disable-line no-console
+
+        let message = null;
+        if (e.message.indexOf('Error while executing account-script:') === 0) {
+            message = e.message.replace('Error while executing account-script:', '');
+        }
+        if (e.message && e.data) {
+            message = e.data;
+        }
+        if (message) {
+            const store = require('components').store;
+            const MessageModal = require('modals/MessageModal').default;
+            store.dispatch(openModal(MessageModal, {
+                type: 'alert',
+                color: 'danger',
+                title: __('Error'),
+                description: message,
+            }));
         }
     }
 

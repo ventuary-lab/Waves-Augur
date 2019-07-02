@@ -317,6 +317,8 @@ $icons-dir: '../static/icons';
     }
 
     &_filled {
+      min-width: 24px;
+      min-height: 20px;
       background-image: url('#{$icons-dir}/like_filled.svg');
     }
 
@@ -326,7 +328,6 @@ $icons-dir: '../static/icons';
       background-image: url('#{$icons-dir}/like_filled_green.svg');
     }
   }
-
 
   &__unlike {
     min-width: 24px;
@@ -342,6 +343,8 @@ $icons-dir: '../static/icons';
     }
 
     &_filled {
+      min-width: 24px;
+      min-height: 20px;
       background-image: url('#{$icons-dir}/unlike_filled.svg');
     }
 
@@ -352,5 +355,19 @@ $icons-dir: '../static/icons';
     }
   }
 
+  &__wave {
+    min-width: 9px;
+    min-height: 9px;
+    &_green {
+      min-width: 9px;
+      min-height: 9px;
+      background-image: url('#{$icons-dir}/wave_green.svg');
+    }
 
+    &_red {
+      min-width: 9px;
+      min-height: 9px;
+      background-image: url('#{$icons-dir}/wave_red.svg');
+    }
+  }
 }

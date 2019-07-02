@@ -2,7 +2,7 @@
 @import '../../style/helpers/mixins';
 
 .Card {
-  @include card-styles;
+  @include card;
   display: flex;
   flex-direction: column;
   min-height: 150px;

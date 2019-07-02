@@ -48,10 +48,12 @@ export default class FieldLayoutView extends React.PureComponent {
                         }),
                         this.props.layout === 'horizontal' && 'form-label-col',
                     )}>
-                        {this.props.labelIconClass && (
-                            <span className={bem(bem.element('label-icon'), this.props.labelIconClass)}/>
-                        )}
-                        {this.props.label}
+                        <span className={bem.element('label-inner')}>
+                            {this.props.labelIconClass && (
+                                <span className={bem(bem.element('label-icon'), this.props.labelIconClass)}/>
+                            )}
+                            {this.props.label}
+                        </span>
                     </label>
                 )}
                 <div

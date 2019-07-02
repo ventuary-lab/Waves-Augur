@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
-import layoutHoc, {STATUS_LOADING} from 'yii-steroids/ui/layoutHoc';
+import layoutHoc, {STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
 import {html, dal} from 'components';
@@ -65,6 +65,10 @@ export default class Layout extends React.PureComponent {
     }
 
     render() {
+        if (this.props.status === STATUS_RENDER_ERROR) {
+            return null;
+        }
+
         return (
             <div className={bem.block()}>
                 <Header/>

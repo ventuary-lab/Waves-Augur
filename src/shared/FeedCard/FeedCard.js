@@ -1,9 +1,11 @@
 import React from 'react';
 
+import Card from 'shared/Card';
+import CardReview from 'shared/Card/views/CardReview'
 import {html} from 'components';
+import FeedSchema from 'types/FeedSchema';
 
 import './FeedCard.scss';
-import FeedSchema from 'types/FeedSchema';
 
 const bem = html.bem('FeedCard');
 
@@ -16,7 +18,12 @@ export default class FeedCard extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                {this.props.item.type}
+                <Card
+                    right={{
+                        component: CardReview,
+                        componentProps: this.props.item,
+                    }}
+                />
             </div>
         );
     }

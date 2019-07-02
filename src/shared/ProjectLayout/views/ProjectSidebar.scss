@@ -6,8 +6,14 @@
   position: relative;
   margin-left: -$grid-offset-mobile;
   margin-right: -$grid-offset-mobile;
-
+  background-color: #fff;
   padding: 90px 20px 15px;
+
+  @include tablet {
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   @include desktop {
     padding: 113px 30px 100px;

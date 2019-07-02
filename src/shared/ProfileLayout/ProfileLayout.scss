@@ -6,9 +6,16 @@
   &__nav-container {
     display: flex;
     justify-content: center;
+    background-color: #fff;
+
+    margin-left: -$grid-offset-mobile;
+    margin-right: -$grid-offset-mobile;
 
     @include tablet {
       justify-content: flex-start;
+
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 

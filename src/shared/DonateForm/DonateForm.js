@@ -62,81 +62,7 @@ export default class DonateForm extends React.PureComponent {
                         {this.props.user.profile.name}
                     </span>
                     <div className={bem.element('donate-control')}>
-                        <div className={bem.element('donate-direction')}>
-                            {this._tiers.map((tier, index) => (
-                                <div
-                                    className={bem.element('donate-count-container', {
-                                        active: this.state.wavesValue && this.state.wavesValue >= tier,
-                                        hovered: this.state.wavesHovered && this.state.wavesHovered >= tier,
-                                        direction: this.state.directionValue,
-                                    })}
-                                    key={index}
-                                    onClick={() => {
-                                        this.setState({
-                                            wavesValue: this.state.wavesValue === tier ? this._tiers[0] : tier,
-                                        });
-                                    }}
-                                    onMouseOver={() => {
-                                        this.setState({
-                                            wavesHovered: tier,
-                                        });
-                                    }}
-                                    onMouseLeave={() => {
-                                        this.setState({
-                                            wavesHovered: null,
-                                        });
-                                    }}
-                                >
-                                    <div className={bem.element('donate-count-item')}/>
-                                </div>
-                            ))}
-                        </div>
-                        <div className={bem.element('donate-direction-switcher')}>
-                            <div
-                                className={bem.element('donate-unlike')}
-                                onClick={() => this.setState({
-                                    directionValue: NEGATIVE_DIRECTION,
-                                })}
-                                onMouseOver={() => {
-                                    this.setState({
-                                        directionHovered: POSITIVE_DIRECTION,
-                                    });
-                                }}
-                                onMouseLeave={() => {
-                                    this.setState({
-                                        directionHovered: null,
-                                    });
-                                }}
-                            >
-                                {this.state.directionValue === POSITIVE_DIRECTION && (
-                                    <span className={'Icon Icon__unlike'}/>
-                                ) || (
-                                    <span className={'Icon Icon__unlike_filled_red'}/>
-                                )}
-                            </div>
-                            <div
-                                className={bem.element('donate-like')}
-                                onClick={() => this.setState({
-                                    directionValue: POSITIVE_DIRECTION,
-                                })}
-                                onMouseOver={() => {
-                                    this.setState({
-                                        directionHovered: NEGATIVE_DIRECTION,
-                                    });
-                                }}
-                                onMouseLeave={() => {
-                                    this.setState({
-                                        directionHovered: null,
-                                    });
-                                }}
-                            >
-                                {this.state.directionValue === POSITIVE_DIRECTION && (
-                                    <span className={'Icon Icon__like_filled_green'}/>
-                                ) || (
-                                    <span className={'Icon Icon__like'}/>
-                                )}
-                            </div>
-                        </div>
+                        {this.renderDonateControl()}
                     </div>
 
                 </div>
@@ -168,5 +94,102 @@ export default class DonateForm extends React.PureComponent {
         return dal.donateProject(this.props.project.uid, amount, {
             comment: _get(this.props, 'formValues.review') || null,
         });
+    }
+
+    renderDonateControl() {
+        return (
+            <>
+                <div className={bem.element('direction')}>
+                    {this._tiers.map((tier, index) => (
+                        <div
+                            className={bem.element('count-container', {
+                                active: this.state.wavesValue && this.state.wavesValue >= tier,
+                                hovered: this.state.wavesHovered && this.state.wavesHovered >= tier,
+                                direction: this.state.directionValue,
+                                'direction-hovered': this.state.directionHovered,
+                            })}
+                            key={index}
+                            onClick={() => {
+                                this.setState({
+                                    wavesValue: this.state.wavesValue === tier ? this._tiers[0] : tier,
+                                });
+                            }}
+                            onMouseOver={() => {
+                                this.setState({
+                                    wavesHovered: tier,
+                                });
+                            }}
+                            onMouseLeave={() => {
+                                this.setState({
+                                    wavesHovered: null,
+                                });
+                            }}
+                        >
+                            <div className={bem.element('count-item')}/>
+                        </div>
+                    ))}
+                </div>
+                <div className={bem.element('direction-switcher')}>
+                    <div
+                        className={bem.element('unlike', {
+                            hovered: this.state.directionHovered,
+                        })}
+                        onClick={() => this.setState({
+                            directionValue: NEGATIVE_DIRECTION,
+                        })}
+                        onMouseOver={() => {
+                            this.setState({
+                                directionHovered: NEGATIVE_DIRECTION,
+                            });
+                        }}
+                        onMouseLeave={() => {
+                            this.setState({
+                                directionHovered: null,
+                            });
+                        }}
+                    >
+                        {this.state.directionValue === POSITIVE_DIRECTION && (
+                            <span className={'Icon Icon__unlike'}/>
+                        ) || (
+                            <>
+                                {this.state.directionHovered === POSITIVE_DIRECTION
+                                    ? <span className={'Icon Icon__unlike_filled'}/>
+                                    : <span className={'Icon Icon__unlike_filled_red'}/>
+                                }
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={bem.element('like', {
+                            hovered: this.state.directionHovered,
+                        })}
+                        onClick={() => this.setState({
+                            directionValue: POSITIVE_DIRECTION,
+                        })}
+                        onMouseOver={() => {
+                            this.setState({
+                                directionHovered: POSITIVE_DIRECTION,
+                            });
+                        }}
+                        onMouseLeave={() => {
+                            this.setState({
+                                directionHovered: null,
+                            });
+                        }}
+                    >
+                        {this.state.directionValue === POSITIVE_DIRECTION && (
+                            <>
+                                {this.state.directionHovered === NEGATIVE_DIRECTION
+                                    ? <span className={'Icon Icon__like_filled'}/>
+                                    : <span className={'Icon Icon__like_filled_green'}/>
+                                }
+                            </>
+                        ) || (
+                            <span className={'Icon Icon__like'}/>
+                        )}
+                    </div>
+                </div>
+            </>
+        );
     }
 }
