@@ -370,4 +370,28 @@ $icons-dir: '../static/icons';
       background-image: url('#{$icons-dir}/wave_red.svg');
     }
   }
+
+  &__rocket-success {
+    background-image: url('#{$icons-dir}/rocket-success.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/rocket-success_green.svg');
+    }
+  }
+
+  &__star {
+    background-image: url('#{$icons-dir}/star.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/star_green.svg');
+    }
+  }
+
+  &__donation {
+    background-image: url('#{$icons-dir}/donation.svg');
+
+    &_green {
+      background-image: url('#{$icons-dir}/donation_green.svg');
+    }
+  }
 }

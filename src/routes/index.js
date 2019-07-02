@@ -5,8 +5,7 @@ import UserRole from 'enums/UserRole';
 import IndexPage from './IndexPage';
 import NewsPage from './NewsPage';
 import CommunityPage from './CommunityPage';
-// import ProjectsPage from './ProjectsPage';
-import ProjectsFeaturedPage from './ProjectsFeaturedPage';
+import ProjectsPage from './ProjectsPage';
 import ProfileInboxPage from './ProfileInboxPage';
 import ProfileDonationPage from './ProfileDonationPage';
 import ProfileProjectsPage from './ProfileProjectsPage';
@@ -14,7 +13,6 @@ import ProfileVotingPage from './ProfileVotingPage';
 import ProfileInvitedPage from './ProfileInvitedPage';
 import ProfileLayout from 'shared/ProfileLayout';
 import ProjectLayout from 'shared/ProjectLayout';
-import ProjectsLayout from 'shared/ProjectsLayout';
 import ProjectFeedPage from './ProjectFeedPage';
 import ProjectDetailsPage from './ProjectDetailsPage';
 import ProjectNewsPage from './ProjectNewsPage';
@@ -24,9 +22,6 @@ export const ROUTE_FEED = 'feed';
 export const ROUTE_COMMUNITY = 'community';
 export const ROUTE_PROJECTS = 'projects';
 export const ROUTE_PROJECTS_REDIRECT = 'projects_redirect';
-export const ROUTE_PROJECTS_FEATURED = 'projects_featured';
-export const ROUTE_PROJECTS_DONATION = 'projects_donation';
-export const ROUTE_PROJECTS_SUCCESS = 'projects_success';
 export const ROUTE_PROFILE = 'profile';
 export const ROUTE_PROFILE_REDIRECT = 'profile_redirect';
 export const ROUTE_PROFILE_INBOX = 'profile_inbox';
@@ -56,41 +51,15 @@ export default {
                 to: '/projects/featured',
             },
             label: __('Projects'),
-            isNavVisible: false,
             roles: UserRole.getKeys(),
         },
         [ROUTE_PROJECTS]: {
-            path: '/projects(\w+)',
-            component: ProjectsLayout,
+            exact: true,
+            path: '/projects/:state',
+            component: ProjectsPage,
             label: __('Projects'),
+            isNavVisible: false,
             roles: UserRole.getKeys(),
-            items: {
-                [ROUTE_PROJECTS_FEATURED]: {
-                    exact: true,
-                    path: '/projects/featured',
-                    component: ProjectsFeaturedPage,
-                    label: __('Featured'),
-                    icon: 'Icon__notification',
-                    isNavVisible: false,
-                    roles: [UserRole.REGISTERED],
-                },
-                [ROUTE_PROJECTS_DONATION]: {
-                    exact: true,
-                    path: '/projects/donation',
-                    component: ProfileDonationPage,
-                    label: __('Donation'),
-                    icon: 'Icon__rhombus',
-                    roles: [UserRole.REGISTERED],
-                },
-                [ROUTE_PROJECTS_SUCCESS]: {
-                    exact: true,
-                    path: '/projects/success',
-                    component: ProfileProjectsPage,
-                    label: __('Success'),
-                    icon: 'Icon__rocket',
-                    roles: [UserRole.REGISTERED],
-                },
-            },
         },
         [ROUTE_COMMUNITY]: {
             exact: true,
@@ -174,7 +143,7 @@ export default {
         },
         [ROUTE_PROJECT_REDIRECT]: {
             exact: true,
-            path: '/projects/:uid(\w+-\w+)',
+            path: '/projects/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
             component: Route,
             componentProps: {
                 render: ({match}) => (
@@ -186,7 +155,7 @@ export default {
             roles: UserRole.getKeys(),
         },
         [ROUTE_PROJECT]: {
-            path: '/projects/:uid(\w+-\w+)',
+            path: '/projects/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
             component: ProjectLayout,
             label: __('Project'),
             isNavVisible: false,
@@ -195,7 +164,7 @@ export default {
             items: {
                 [ROUTE_PROJECT_FEED]: {
                     exact: true,
-                    path: '/projects/:uid(\w+-\w+)/feed',
+                    path: '/projects/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/feed',
                     component: ProjectFeedPage,
                     label: __('Feed'),
                     icon: 'Icon__feed',
@@ -205,7 +174,7 @@ export default {
                 },
                 [ROUTE_PROJECT_DETAILS]: {
                     exact: true,
-                    path: '/projects/:uid(\w+-\w+)/details',
+                    path: '/projects/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/details',
                     component: ProjectDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
@@ -214,7 +183,7 @@ export default {
                 },
                 [ROUTE_PROJECT_NEWS]: {
                     exact: true,
-                    path: '/projects/:uid(\w+-\w+)/news',
+                    path: '/projects/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/news',
                     component: ProjectNewsPage,
                     label: __('News'),
                     icon: 'Icon__news',
