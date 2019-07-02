@@ -2,8 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getFormValues} from 'redux-form';
-import _times from 'lodash-es/times';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import {getUser} from 'yii-steroids/reducers/auth';
 
 import TextField from 'yii-steroids/ui/form/TextField';
@@ -14,6 +12,8 @@ import {dal, html} from 'components';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './DonateForm.scss';
+import ProjectSchema from 'types/ProjectSchema';
+import _get from 'lodash/get';
 
 const FORM_ID = 'DonateForm';
 
@@ -23,7 +23,6 @@ const NEGATIVE_DIRECTION = 'negative';
 
 @connect(
     state => ({
-        route: getCurrentRoute(state),
         formValues: getFormValues(FORM_ID)(state),
         user: getUser(state),
     })
@@ -31,16 +30,20 @@ const NEGATIVE_DIRECTION = 'negative';
 export default class DonateForm extends React.PureComponent {
 
     static propTypes = {
-        route: PropTypes.object,
+        project: ProjectSchema,
         formValues: PropTypes.object,
     };
 
     constructor() {
         super(...arguments);
 
+        this._onSubmit = this._onSubmit.bind(this);
+
+        this._tiers = dal.contract.TIERS;
+
         this.state = {
-            wavesValue: 0,
-            wavesHovered: 0,
+            wavesValue: this._tiers[0],
+            wavesHovered: null,
             directionValue: POSITIVE_DIRECTION,
             directionHovered: null,
         };
@@ -49,7 +52,6 @@ export default class DonateForm extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
@@ -61,27 +63,27 @@ export default class DonateForm extends React.PureComponent {
                     </span>
                     <div className={bem.element('donate-control')}>
                         <div className={bem.element('donate-direction')}>
-                            {_times(5).map((item, index) => (
+                            {this._tiers.map((tier, index) => (
                                 <div
                                     className={bem.element('donate-count-container', {
-                                        active: this.state.wavesValue >= (index + 1),
-                                        hovered: this.state.wavesHovered >= (index + 1),
+                                        active: this.state.wavesValue && this.state.wavesValue >= tier,
+                                        hovered: this.state.wavesHovered && this.state.wavesHovered >= tier,
                                         direction: this.state.directionValue,
                                     })}
                                     key={index}
                                     onClick={() => {
                                         this.setState({
-                                            wavesValue: this.state.wavesValue === (index + 1) ? 0 : (index + 1),
+                                            wavesValue: this.state.wavesValue === tier ? this._tiers[0] : tier,
                                         });
                                     }}
                                     onMouseOver={() => {
                                         this.setState({
-                                            wavesHovered: index + 1,
+                                            wavesHovered: tier,
                                         });
                                     }}
                                     onMouseLeave={() => {
                                         this.setState({
-                                            wavesHovered: 0,
+                                            wavesHovered: null,
                                         });
                                     }}
                                 >
@@ -145,12 +147,13 @@ export default class DonateForm extends React.PureComponent {
                     <div className={bem.element('text-field')}>
                         <TextField
                             attribute={'review'}
+                            placeholder={__('Donate comment...')}
                         />
                     </div>
                     <div className={bem.element('actions')}>
                         <Button
                             label={__('Donate')}
-                            // onClick={() => this._onSubmit(ProjectVoteEnum.FEATURED)}
+                            onClick={this._onSubmit}
                         />
                     </div>
                 </Form>
@@ -158,9 +161,12 @@ export default class DonateForm extends React.PureComponent {
         );
     }
 
-    // _onSubmit(vote) {
-    //     dal.voteProject(this.props.route.params.uid, vote, {
-    //         comment: this.props.formValues.review,
-    //     });
-    // }
+    _onSubmit(e) {
+        e.preventDefault();
+
+        const amount = (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
+        return dal.donateProject(this.props.project.uid, amount, {
+            comment: _get(this.props, 'formValues.review') || null,
+        });
+    }
 }

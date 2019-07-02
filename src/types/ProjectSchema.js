@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 
 const ProjectSchema = PropTypes.shape({
-    address: PropTypes.string,
+    uid: PropTypes.string,
     name: PropTypes.string,
     positiveBalance: PropTypes.number,
     negativeBalance: PropTypes.number,
+    status: PropTypes.string,
     logoUrl: PropTypes.string,
     coverUrl: PropTypes.string,
     expireVoting: PropTypes.string,
@@ -34,6 +35,12 @@ const ProjectSchema = PropTypes.shape({
         url_instagram: PropTypes.string,
         url_telegram: PropTypes.string,
         url_website: PropTypes.string,
+    }),
+    blocks: PropTypes.shape({
+        create: PropTypes.number,
+        votingEnd: PropTypes.number,
+        crowdfundEnd: PropTypes.number,
+        whaleEnd: PropTypes.number,
     }),
 });
 

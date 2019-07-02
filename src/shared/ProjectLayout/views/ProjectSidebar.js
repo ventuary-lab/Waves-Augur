@@ -20,7 +20,7 @@ export default class ProjectSidebar extends React.PureComponent {
     };
 
     render() {
-        const status = ProjectStatusEnum.getStatus(this.props.project);
+        const status = this.props.project.status;
 
         return (
             <div className={bem.block()}>

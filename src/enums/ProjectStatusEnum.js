@@ -26,22 +26,17 @@ export default class ProjectStatusEnum extends Enum {
         };
     }
 
-    static getStatus(project) {
-        if (moment() < moment(project.expireVoting)) {
+    static getStatus(blocks, height) {
+        if (height < blocks.votingEnd) {
             return this.VOTING;
         }
-
-        if (moment(project.expireVoting) < moment() < moment(project.expireCrowd)) {
+        if (height < blocks.crowdfundEnd) {
             return this.CROWDFUND;
         }
-
-        if (moment(project.expireCrowd) < moment() < moment(project.expireWhale)) {
+        if (height < blocks.whaleEnd) {
             return this.WAITING_GRANT;
         }
-
-        if (moment(project.expireWhale) < moment()) {
-            return this.GRANT;
-        }
+        return this.GRANT;
     }
 
     static getDaysLeft(status, project) {

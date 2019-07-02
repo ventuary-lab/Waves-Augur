@@ -37,6 +37,7 @@ export default class ProjectCard extends React.PureComponent {
                         component: CardProgress,
                         componentProps: {
                             uid: this.props.item.uid,
+                            status: this.props.item.status,
                             positiveBalance: this.props.item.positiveBalance,
                             negativeBalance: this.props.item.negativeBalance,
                             targetWaves: this.props.item.targetWaves,

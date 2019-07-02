@@ -8,13 +8,13 @@ import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 import {getUser} from 'yii-steroids/reducers/auth';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import {dal, html} from 'components';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';
+import ProjectSchema from 'types/ProjectSchema';
 
 const FORM_ID = 'VotingForm';
 
@@ -22,7 +22,6 @@ const bem = html.bem('VotingForm');
 
 @connect(
     state => ({
-        route: getCurrentRoute(state),
         formValues: getFormValues(FORM_ID)(state),
         user: getUser(state),
     })
@@ -30,14 +29,13 @@ const bem = html.bem('VotingForm');
 export default class VotingForm extends React.PureComponent {
 
     static propTypes = {
-        route: PropTypes.object,
+        project: ProjectSchema,
         formValues: PropTypes.object,
     };
 
     render() {
         return (
             <div className={bem.block()}>
-
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
@@ -48,7 +46,7 @@ export default class VotingForm extends React.PureComponent {
                         {this.props.user.profile.name}
                     </span>
                     <span className={bem.element('vote-price')}>
-                        1 W
+                        {dal.getVotePayment()} W
                     </span>
                 </div>
                 <Form
@@ -58,6 +56,7 @@ export default class VotingForm extends React.PureComponent {
                     <div className={bem.element('text-field')}>
                         <TextField
                             attribute='review'
+                            placeholder={__('Vote comment...')}
                         />
                     </div>
                     <div className={bem.element('actions')}>
@@ -77,7 +76,7 @@ export default class VotingForm extends React.PureComponent {
     }
 
     _onSubmit(vote) {
-        dal.voteProject(this.props.route.params.uid, vote, {
+        return dal.voteProject(this.props.project.uid, vote, {
             comment: _get(this.props, 'formValues.review') || null,
         });
     }

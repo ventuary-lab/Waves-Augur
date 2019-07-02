@@ -1,17 +1,20 @@
-import {broadcast, nodeInteraction} from '@waves/waves-transactions';
-import _isString from 'lodash/isString';
-import _isInteger from 'lodash/isInteger';
-import _isObject from 'lodash/isObject';
-import _trim from 'lodash/trim';
-import axios from 'axios';
-import _isArray from 'lodash-es/isArray';
+// This is class also used in nodejs application!
+
+const {broadcast, nodeInteraction, invokeScript} = require('@waves/waves-transactions');
+const _isString = require('lodash/isString');
+const _isInteger = require('lodash/isInteger');
+const _isObject = require('lodash/isObject');
+const _trim = require('lodash/trim');
+const _escapeRegExp = require('lodash/escapeRegExp');
+const axios = require('axios');
+const _isArray = require('lodash/isArray');
 
 const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
     : resp;
 const validateStatus = status => status === 400 || status >= 200 && status < 300;
 
-export default class WavesTransport {
+class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
@@ -21,6 +24,12 @@ export default class WavesTransport {
         this._cacheData = null;
         this._cacheTimeout = null;
         this._cacheCallbacks = null;
+    }
+
+    static convertValueToJs(value) {
+        return _isString(value) && ['{', '['].includes(value.substr(0, 1))
+            ? JSON.parse(value)
+            : value;
     }
 
     /**
@@ -41,6 +50,10 @@ export default class WavesTransport {
         return new Promise(checker);
     }
 
+    async nodeHeight() {
+        return await nodeInteraction.currentHeight(this.nodeUrl);
+    }
+
     async nodeAllData() {
         if (this._cacheData) {
             return this._cacheData;
@@ -55,7 +68,11 @@ export default class WavesTransport {
         this._cacheCallbacks = [];
 
         // Fetch data
-        this._cacheData = await nodeInteraction.accountData(this.dal.dApp, this.nodeUrl);
+        this._cacheData = {};
+        const data = await nodeInteraction.accountData(this.dal.dApp, this.nodeUrl);
+        Object.keys(data).forEach(key => {
+            this._cacheData[key] = WavesTransport.convertValueToJs(data[key].value);
+        });
 
         // Invalidate cache after 30 sec
         if (this._cacheTimeout) {
@@ -87,28 +104,38 @@ export default class WavesTransport {
             }
         }
 
+        return result ? WavesTransport.convertValueToJs(result.value) : null;
+    }
 
-        if (result && result.value) {
-            return _isString(result.value) && ['{', '['].includes(result.value.substr(0, 1))
-                ? JSON.parse(result.value)
-                : result.value;
-        }
-        return null;
+    /**
+     * Get node data by multiple keys
+     * @param {string[]} keys
+     * @returns {Promise<null|string | number | boolean>}
+     */
+    async nodeFetchKeys(keys) {
+        const regexpKeys = keys.map(key => _escapeRegExp(key));
+        const regexp = new RegExp('^(' + regexpKeys.join('|') + ')$');
+        const data = await this.nodeFetchPattern(regexp);
+
+        return keys.map(key => data[key] || null);
     }
 
     async nodeFetchPattern(regexp) {
-        let result = null;
         if (this._cacheData) {
-            const key = Object.keys(this._cacheData).find(key => regexp.test(key));
-            result = key && this._cacheData[key];
-        } else {
-            const matches = encodeURIComponent(_trim(String(regexp), '/'));
-            result = await this._accountDataPattern(matches);
+            const data = {};
+            Object.keys(this._cacheData)
+                .filter(key => regexp.test(key))
+                .forEach(key => {
+                    data[key] = this._cacheData[key];
+                });
+            return data;
         }
 
+        const matches = encodeURIComponent(_trim(String(regexp), '/'));
+        const result = await this._accountDataPattern(matches);
         const data = {};
         result.forEach(item => {
-            data[item.key] = item.value;
+            data[item.key] = WavesTransport.convertValueToJs(item.value);
         });
         return data;
     }
@@ -117,7 +144,7 @@ export default class WavesTransport {
      *
      * @param {string} method
      * @param {array} args
-     * @param {array} payment
+     * @param {number} payment
      * @returns {Promise}
      */
     async nodePublish(method, args, payment) {
@@ -129,12 +156,27 @@ export default class WavesTransport {
      *
      * @param {string} method
      * @param {array} args
-     * @param {array} payment
+     * @param {number} payment
      * @returns {Promise}
      */
     async nodeSign(method, args, payment) {
         const keeper = await this.getKeeper();
         return keeper.signTransaction(this._buildTransaction(method, args, payment));
+    }
+
+    /**
+     *
+     * @param {string} method
+     * @param {array} args
+     * @param {number} payment
+     * @param {string} seed
+     * @returns {Promise}
+     */
+    async nodePublishBySeed(method, args, payment, seed) {
+        return invokeScript({
+            dApp: this.dal.dApp,
+            call: this._buildTransaction(method, args, payment).call,
+        }, seed);
     }
 
     /**
@@ -206,3 +248,5 @@ export default class WavesTransport {
     }
 
 }
+
+module.exports = WavesTransport;

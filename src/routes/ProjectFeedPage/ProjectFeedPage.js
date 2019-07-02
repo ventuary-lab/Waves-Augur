@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
-import VotingForm from 'shared/VotingForm';
 
 import './ProjectFeedPage.scss';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
@@ -32,9 +31,6 @@ export default class ProjectFeedPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <div className={bem.element('form-block')}>
-                    <VotingForm/>
-                </div>
                 <div className={bem.element('card-list')}>
                     <List
                         listId='ProjectFeedPage'

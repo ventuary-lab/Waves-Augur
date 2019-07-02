@@ -26,14 +26,10 @@ export default class ProjectDetailsPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <div className={bem.element('form-block')}>
-                    <DonateForm/>
-                </div>
                 <div className={bem.element('leader-block')}>
                     <div className={bem.element('title')}>
                         {__('Leader')}
                     </div>
-
                     {/*<UserCard
                         item={this.props.project.author}
                     />*/}

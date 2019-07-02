@@ -7,7 +7,7 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
-import {ROUTE_PROJECT} from 'routes';
+import {ROUTE_PROJECT, ROUTE_PROJECT_NEWS} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
@@ -16,6 +16,9 @@ import routes from 'routes';
 import './ProjectLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import ProjectSchema from 'types/ProjectSchema';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import VotingForm from 'shared/VotingForm';
+import DonateForm from 'shared/DonateForm';
 
 const bem = html.bem('ProjectLayout');
 
@@ -80,6 +83,16 @@ export default class ProjectLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
+                            {this.props.routeId !== ROUTE_PROJECT_NEWS && (
+                                <>
+                                    {this.props.project.status === ProjectStatusEnum.VOTING && (
+                                        <VotingForm project={this.props.project}/>
+                                    )}
+                                    {this.props.project.status === ProjectStatusEnum.CROWDFUND && (
+                                        <DonateForm project={this.props.project}/>
+                                    )}
+                                </>
+                            )}
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent

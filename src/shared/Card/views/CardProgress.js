@@ -16,6 +16,7 @@ export default class CardProgress extends React.PureComponent {
 
     static propTypes = {
         address: PropTypes.string,
+        status: PropTypes.string,
         targetWaves: PropTypes.number,
         positiveBalance: PropTypes.number,
         negativeBalance: PropTypes.number,
@@ -26,7 +27,7 @@ export default class CardProgress extends React.PureComponent {
 
     render() {
         const isNew = this.props.positiveBalance === 0;
-        const status = ProjectStatusEnum.getStatus(this.props);
+        const status = this.props.status;
 
         return (
             <div className={bem.block()}>

@@ -42,6 +42,10 @@ export default class DalComponent {
         }
     }
 
+    getVotePayment() {
+        return 2 * this.contract.VOTEBET;
+    }
+
     dateToHeight(date) {
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
         if (this.isTestMode) {
@@ -229,12 +233,36 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProject(uid) {
-        const project = await this.transport.nodeFetchKey('datajson_' + uid);
+        const [
+            project,
+            status,
+            positiveBalance,
+            negativeBalance,
+            votesFeaturedCount,
+            votesDelistedCount,
+            authorAddress,
+            blockCreate,
+            blockVotingEnd,
+            blockCrowdfundEnd,
+            blockWhaleEnd,
+        ] = await this.transport.nodeFetchKeys([
+            'datajson_' + uid,
+            'status_' + uid,
+            'positive_fund_' + uid,
+            'negative_fund_' + uid,
+            'cnt_yes_' + uid,
+            'cnt_no_' + uid,
+            'author_' + uid,
+            'block_' + uid,
+            'expiration_block_' + uid,
+            'expiration_one_' + uid,
+            'expiration_two_' + uid,
+        ]);
         if (!project) {
             return null;
         }
 
-        const status = await this.transport.nodeFetchKey('status_' + uid);
+        const height = await this.transport.nodeHeight();
         const statusMap = {
             'new': ProjectStatusEnum.VOTING,
             'reveal': ProjectStatusEnum.VOTING,
@@ -242,17 +270,24 @@ export default class DalComponent {
             'delisted': ProjectStatusEnum.REJECTED,
             'buyout': ProjectStatusEnum.GRANT,
         };
+        const blocks = {
+            create: blockCreate,
+            votingEnd: blockVotingEnd,
+            crowdfundEnd: blockCrowdfundEnd,
+            whaleEnd: blockWhaleEnd,
+        };
 
         return {
             ...project,
-            status: statusMap[status] || ProjectStatusEnum.getStatus(project),
-            positiveBalance: (await this.transport.nodeFetchKey('positive_fund_' + uid)) || 0,
-            negativeBalance: (await this.transport.nodeFetchKey('negative_fund_' + uid)) || 0,
+            blocks,
+            status: statusMap[status] || ProjectStatusEnum.getStatus(blocks, height),
+            positiveBalance: positiveBalance || 0,
+            negativeBalance: negativeBalance || 0,
             votesCount: {
-                [ProjectVoteEnum.FEATURED]: (await this.transport.nodeFetchKey('cnt_yes_' + uid)) || 0,
-                [ProjectVoteEnum.DELISTED]: (await this.transport.nodeFetchKey('cnt_no_' + uid)) || 0,
+                [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
+                [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
-            author: await this.getUser(await this.transport.nodeFetchKey('author_' + uid)),
+            author: await this.getUser(authorAddress),
             uid,
         };
     }
@@ -429,7 +464,7 @@ export default class DalComponent {
         data.createTime = DalHelper.dateNow();
 
         // Sign transactions
-        const txCommit= await this.transport.nodeSign('votecommit', [uid, hash], 2 * this.contract.VOTEBET);
+        const txCommit= await this.transport.nodeSign('votecommit', [uid, hash], this.getVotePayment());
         const txReveal = await this.transport.nodeSign('votereveal', [uid, vote, salt, data]);
         this.log('Signed vote tx:', {txCommit, txReveal});
 
@@ -451,10 +486,27 @@ export default class DalComponent {
         return result;
     }
 
-    donateProject(uid, amount, data) {
+    async donateProject(uid, amount, data) {
         const tier = Math.abs(amount);
         const mode = amount > 0 ? 'positive' : 'negative';
 
+        let result = null;
+        try {
+            result = await this.transport.nodePublish('donate', [uid, tier, mode, data], tier / Math.pow(10, 8));
+        } catch (e) {
+            if (e.message && e.data) {
+                alert(e.data);
+            } else {
+                throw e;
+            }
+        }
+
+        return result;
+    }
+
+    async finalizeVoting(uid) {
+        const address = (await this.getAccount()).address;
+        await this.transport.nodePublish('finalizevoting', [uid, address]);
     }
 
     log() {

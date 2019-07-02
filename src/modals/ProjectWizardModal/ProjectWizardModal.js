@@ -35,9 +35,9 @@ export default class ProjectWizardModal extends React.PureComponent {
                     initialValues={!dal.isTestMode ? undefined : {
                         name: 'proj' + (new Date()).getTime(),
                         description: 'Build Blockchain-related applications and uild applications ser',
-                        expireVoting: moment().add(1, 'day').format('YYYY-MM-DD'),
-                        expireCrowd: moment().add(2, 'day').format('YYYY-MM-DD'),
-                        expireWhale: moment().add(3, 'day').format('YYYY-MM-DD'),
+                        expireVoting: moment().add(4, 'day').format('YYYY-MM-DD'),
+                        expireCrowd: moment().add(8, 'day').format('YYYY-MM-DD'),
+                        expireWhale: moment().add(12, 'day').format('YYYY-MM-DD'),
                         targetWaves: 50,
                         tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
                         location: 'Russia',
