@@ -157,7 +157,7 @@ export default {
                     label: __('Feed'),
                     icon: 'Icon__feed',
                     isNavVisible: false,
-                    roles: [UserRole.REGISTERED],
+                    roles: [UserRole.REGISTERED, UserRole.WHALE],
                     isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_DETAILS]: {
@@ -166,7 +166,7 @@ export default {
                     component: ProjectDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
-                    roles: [UserRole.REGISTERED],
+                    roles: [UserRole.REGISTERED, UserRole.WHALE],
                     isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_NEWS]: {
@@ -175,7 +175,7 @@ export default {
                     component: ProjectNewsPage,
                     label: __('News'),
                     icon: 'Icon__news',
-                    roles: [UserRole.REGISTERED],
+                    roles: [UserRole.REGISTERED, UserRole.WHALE],
                     isShowImageLine: true,
                 },
             },
