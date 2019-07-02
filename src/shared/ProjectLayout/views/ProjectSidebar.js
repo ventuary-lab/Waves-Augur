@@ -10,6 +10,9 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
+import {ROUTE_PROJECT_NEWS} from 'routes';
+import VotingForm from 'shared/VotingForm';
+import DonateForm from 'shared/DonateForm';
 
 const bem = html.bem('ProjectSidebar');
 
@@ -79,17 +82,18 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
-                    <div className={bem.element('action')}>
-                        <Button
-                            label={(__('Vote'))}
-                            onClick={() => {
-                                // TODO
-                                window.scrollTo(0, 200);
-                                const el = document.querySelector('textarea[name=review]');
-                                el && el.focus();
-                            }}
-                        />
-                    </div>
+                    {this.props.routeId !== ROUTE_PROJECT_NEWS && [ProjectStatusEnum.VOTING, ProjectStatusEnum.CROWDFUND].indexOf(this.props.project.status) !== -1 && (
+                        <div className={bem.element('action')}>
+                            <Button
+                                label={this.props.project.status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
+                                onClick={() => {
+                                    window.scrollTo(0, 200);
+                                    const el = document.querySelector('textarea[name=review]');
+                                    el && el.focus();
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         );

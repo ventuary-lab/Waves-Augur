@@ -268,6 +268,7 @@ export default class DalComponent {
             'new': ProjectStatusEnum.VOTING,
             'reveal': ProjectStatusEnum.VOTING,
             'commit': ProjectStatusEnum.VOTING,
+            'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
             'delisted': ProjectStatusEnum.REJECTED,
             'buyout': ProjectStatusEnum.GRANT,
         };
@@ -515,13 +516,7 @@ export default class DalComponent {
     error(e) {
         console.error(e); // eslint-disable-line no-console
 
-        let message = null;
-        if (e.message.indexOf('Error while executing account-script:') === 0) {
-            message = e.message.replace('Error while executing account-script:', '');
-        }
-        if (e.message && e.data) {
-            message = e.data;
-        }
+        const message = (e.data || e.message).replace(/(Error: )?Error while executing account-script:/, '');
         if (message) {
             const store = require('components').store;
             const MessageModal = require('modals/MessageModal').default;

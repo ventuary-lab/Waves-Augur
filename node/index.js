@@ -31,9 +31,9 @@ const checker = async () => {
             }
 
             console.log(uid, projects[uid].status, address); // eslint-disable-line no-console
-            transport.nodePublishBySeed('finalizevoting', [uid, address], null, seed);
-            transport.nodePublishBySeed('closeexpiredvoting', [uid, address], null, seed);
-            transport.nodePublishBySeed('claimwinnings', [uid, address], null, seed);
+            transport.nodePublishBySeed('finalizevoting', [uid, address], null, seed).catch(console.error);
+            transport.nodePublishBySeed('closeexpiredvoting', [uid, address], null, seed).catch(console.error);
+            transport.nodePublishBySeed('claimwinnings', [uid, address], null, seed).catch(console.error);
         });
     });
 

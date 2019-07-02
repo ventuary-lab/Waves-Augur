@@ -173,10 +173,10 @@ class WavesTransport {
      * @returns {Promise}
      */
     async nodePublishBySeed(method, args, payment, seed) {
-        return invokeScript({
+        return this.broadcast(invokeScript({
             dApp: this.dal.dApp,
             call: this._buildTransaction(method, args, payment).call,
-        }, seed);
+        }, seed));
     }
 
     /**
