@@ -103,8 +103,8 @@ export default class DalComponent {
             address: '',
             name: '',
             message: null,
-            isWhale: false,
             ...data,
+            isWhale: !!data.isWhale,
         };
 
         try {
@@ -209,7 +209,8 @@ export default class DalComponent {
         this.transport.resetCache();
 
         // Save
-        const result = await this.transport.nodePublish(method, [profile, '']);
+        const type = profile.isWhale ? 'whale' : '';
+        const result = await this.transport.nodePublish(method, [profile, type]);
 
         if (user.role === UserRole.INVITED) {
             user.role = UserRole.REGISTERED;
@@ -268,7 +269,7 @@ export default class DalComponent {
             'new': ProjectStatusEnum.VOTING,
             'reveal': ProjectStatusEnum.VOTING,
             'commit': ProjectStatusEnum.VOTING,
-            'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
+            //'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
             'delisted': ProjectStatusEnum.REJECTED,
             'buyout': ProjectStatusEnum.GRANT,
         };
@@ -280,6 +281,7 @@ export default class DalComponent {
         };
 
         return {
+            createTime: '2000-01-01 00:00:00',
             ...project,
             blocks,
             status: statusMap[status] || ProjectStatusEnum.getStatus(blocks, height),
@@ -361,9 +363,9 @@ export default class DalComponent {
 
                             case 'text_id':
                                 const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[5]}`);
-                                const tier = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[5]}`);
+                                const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[5]}`);
                                 item.type = FeedTypeEnum.DONATE;
-                                item.amount = (mode === 'negative' ? -1 : 1) * tier;
+                                item.amount = (mode === 'negative' ? -1 : 1) * this.contract.TIERS[tierNumber - 1];
                                 item.reviewNumber = parseInt(match[5]);
                                 break;
 
@@ -432,7 +434,7 @@ export default class DalComponent {
         const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
         if (isNew) {
             data.createTime = DalHelper.dateNow();
-            return this.transport.nodePublish(
+            await this.transport.nodePublish(
                 'additem',
                 [
                     data.uid,
@@ -444,7 +446,7 @@ export default class DalComponent {
                 this.contract.LISTINGFEE
             );
         } else {
-            return this.transport.nodePublish(
+            await this.transport.nodePublish(
                 'projupdate',
                 [
                     data.uid,
@@ -452,6 +454,8 @@ export default class DalComponent {
                 ]
             );
         }
+
+        return data;
     }
 
     /**
@@ -461,14 +465,14 @@ export default class DalComponent {
      * @param {object} data
      * @returns {Promise<any>}
      */
-    async voteProject(uid, vote, data) {
+    async voteProject(uid, vote, data = {}) {
         const salt = DalHelper.generateUid();
         const hash = wavesCrypto.base58encode(wavesCrypto.sha256(wavesCrypto.stringToUint8Array(vote + salt)));
 
         data.createTime = DalHelper.dateNow();
 
         // Sign transactions
-        const txCommit= await this.transport.nodeSign('votecommit', [uid, hash], this.getVotePayment());
+        const txCommit = await this.transport.nodeSign('votecommit', [uid, hash], this.getVotePayment());
         const txReveal = await this.transport.nodeSign('votereveal', [uid, vote, salt, data]);
         this.log('Signed vote tx:', {txCommit, txReveal});
 
@@ -491,15 +495,41 @@ export default class DalComponent {
      * @param {string} uid
      * @param {number} amount
      * @param {object} data
-     * @returns {Promise<null>}
+     * @returns {Promise}
      */
-    async donateProject(uid, amount, data) {
+    async donateProject(uid, amount, data = {}) {
         const tier = Math.abs(amount);
         const mode = amount > 0 ? 'positive' : 'negative';
+        const tierNumber = this.contract.TIERS.indexOf(tier) + 1;
+
+        data.createTime = DalHelper.dateNow();
 
         let result = null;
         try {
-            result = await this.transport.nodePublish('donate', [uid, tier, mode, data], tier / Math.pow(10, 8));
+            result = await this.transport.nodePublish('donate', [uid, tierNumber, mode, data], tier / Math.pow(10, 8));
+        } catch (e) {
+            this.error(e);
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param {string} uid
+     * @param {number} tier
+     * @param {object} data
+     * @returns {Promise}
+     */
+    async whaleProject(uid, tier, data = {}) {
+        const fund = await this.transport.nodeFetchKey('positive_fund_' + uid);
+        const payment = fund * (this.contract.MULTIPLIER / 100);
+
+        data.createTime = DalHelper.dateNow();
+
+        let result = null;
+        try {
+            result = await this.transport.nodePublish('whale', [uid, data], payment);
         } catch (e) {
             this.error(e);
         }

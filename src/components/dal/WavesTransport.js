@@ -24,6 +24,10 @@ export default class WavesTransport {
         this._cacheData = null;
         this._cacheTimeout = null;
         this._cacheCallbacks = null;
+
+        this._height = null;
+        this._heightTimeout = null;
+        this._heightCallbacks = null;
     }
 
     static convertValueToJs(value) {
@@ -51,7 +55,32 @@ export default class WavesTransport {
     }
 
     async nodeHeight() {
-        return await nodeInteraction.currentHeight(this.nodeUrl);
+        if (this._height) {
+            return this._height;
+        }
+
+        // Multi request detector
+        if (_isArray(this._heightCallbacks)) {
+            return new Promise(resolve => {
+                this._heightCallbacks.push(resolve);
+            });
+        }
+        this._heightCallbacks = [];
+
+        // Fetch data
+        this._height = await nodeInteraction.currentHeight(this.nodeUrl);
+
+        // Invalidate cache after 30 sec
+        if (this._heightTimeout) {
+            clearTimeout(this._heightTimeout);
+        }
+        this._heightTimeout = setTimeout(() => this._height = null, 2000);
+
+        // Call callbacks
+        this._heightCallbacks.forEach(resolve => resolve(this._height));
+        this._heightCallbacks = null;
+
+        return this._height;
     }
 
     async nodeAllData() {
@@ -82,6 +111,7 @@ export default class WavesTransport {
 
         // Call callbacks
         this._cacheCallbacks.forEach(resolve => resolve(this._cacheData));
+        this._cacheCallbacks = null;
 
         return this._cacheData;
     }

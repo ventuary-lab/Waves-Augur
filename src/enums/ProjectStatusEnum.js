@@ -34,9 +34,9 @@ export default class ProjectStatusEnum extends Enum {
             return this.CROWDFUND;
         }
         if (height < blocks.whaleEnd) {
-            return this.WAITING_GRANT;
+            //return this.WAITING_GRANT;
         }
-        return this.GRANT;
+        return this.WAITING_GRANT;
     }
 
     static getDaysLeft(status, project) {

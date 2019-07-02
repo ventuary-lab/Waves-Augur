@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import moment from 'moment';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
@@ -13,10 +14,13 @@ import {dal, html} from 'components';
 import './ProjectWizardModal.scss';
 import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';
+import {goToPage} from 'yii-steroids/actions/navigation';
+import {ROUTE_PROJECT} from 'routes';
 
 const bem = html.bem('ProjectWizardModal');
 const FORM_ID = 'ProjectWizardModal';
 
+@connect()
 export default class ProjectWizardModal extends React.PureComponent {
 
     render() {
@@ -27,7 +31,12 @@ export default class ProjectWizardModal extends React.PureComponent {
             >
                 <FormWizard
                     formId={FORM_ID}
-                    onSubmit={values => dal.saveProject(values)}
+                    onSubmit={values => {
+                        return dal.saveProject(values)
+                            .then(project => {
+                                this.props.dispatch(goToPage(ROUTE_PROJECT, {uid: project.uid}));
+                            });
+                    }}
                     onComplete={() => {
                         this.props.onClose();
                         AutoSaveHelper.remove(FORM_ID);
@@ -38,7 +47,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                         expireVoting: moment().add(4, 'day').format('YYYY-MM-DD'),
                         expireCrowd: moment().add(8, 'day').format('YYYY-MM-DD'),
                         expireWhale: moment().add(12, 'day').format('YYYY-MM-DD'),
-                        targetWaves: 50,
+                        targetWaves: 10,
                         tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
                         location: 'Russia',
                         socials: {

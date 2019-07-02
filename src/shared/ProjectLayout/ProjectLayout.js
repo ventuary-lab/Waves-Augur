@@ -19,6 +19,8 @@ import ProjectSchema from 'types/ProjectSchema';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import VotingForm from 'shared/VotingForm';
 import DonateForm from 'shared/DonateForm';
+import GrantForm from 'shared/GrantForm';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectLayout');
 
@@ -90,6 +92,9 @@ export default class ProjectLayout extends React.PureComponent {
                                     )}
                                     {this.props.project.status === ProjectStatusEnum.CROWDFUND && (
                                         <DonateForm project={this.props.project}/>
+                                    )}
+                                    {this.props.project.status === ProjectStatusEnum.WAITING_GRANT && this.props.user.role === UserRole.WHALE && (
+                                        <GrantForm project={this.props.project}/>
                                     )}
                                 </>
                             )}

@@ -26,7 +26,7 @@ export default class VoteReveralMonitor {
 
     _updateStorage() {
         const clientStorage = require('components').clientStorage;
-        clientStorage.get(VoteReveralMonitor.STORAGE_VOTE_REVERAL_KEY, JSON.stringify(this._transactions));
+        clientStorage.set(VoteReveralMonitor.STORAGE_VOTE_REVERAL_KEY, JSON.stringify(this._transactions));
     }
 
     async _fetchNCommits(transactions) {

@@ -7,7 +7,7 @@ import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 import SocialLinks from 'shared/SocialLinks';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
-import {html} from 'components';
+import {dal, html} from 'components';
 
 import './CardReview.scss';
 
@@ -60,7 +60,7 @@ export default class CardReview extends React.PureComponent {
                         )}
                         {this.props.type === FeedTypeEnum.DONATE && (
                             <div className={bem.element('donate-amount')}>
-                                {_times(Math.abs(this.props.amount)).map((item, index) => (
+                                {_times(Math.abs(dal.contract.TIERS.indexOf(this.props.amount) + 1)).map((item, index) => (
                                     <div
                                         key={index}
                                         className={bem.element('wave-icon')}

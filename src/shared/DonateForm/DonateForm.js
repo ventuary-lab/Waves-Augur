@@ -14,6 +14,7 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 import './DonateForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
 import _get from 'lodash/get';
+import validate from 'shared/validate';
 
 const FORM_ID = 'DonateForm';
 
@@ -69,6 +70,7 @@ export default class DonateForm extends React.PureComponent {
                 <Form
                     className={bem.element('form')}
                     formId={FORM_ID}
+                    onSubmit={this._onSubmit}
                 >
                     <div className={bem.element('text-field')}>
                         <TextField
@@ -78,8 +80,8 @@ export default class DonateForm extends React.PureComponent {
                     </div>
                     <div className={bem.element('actions')}>
                         <Button
+                            type='submit'
                             label={__('Donate')}
-                            onClick={this._onSubmit}
                         />
                     </div>
                 </Form>
@@ -87,12 +89,14 @@ export default class DonateForm extends React.PureComponent {
         );
     }
 
-    _onSubmit(e) {
-        e.preventDefault();
+    _onSubmit(values) {
+        validate(values,[
+            ['review', 'required'],
+        ]);
 
         const amount = (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
         return dal.donateProject(this.props.project.uid, amount, {
-            comment: _get(this.props, 'formValues.review') || null,
+            comment: values.review,
         });
     }
 

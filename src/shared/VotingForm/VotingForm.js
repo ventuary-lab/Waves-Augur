@@ -15,6 +15,7 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
+import validate from 'shared/validate';
 
 const FORM_ID = 'VotingForm';
 
@@ -76,6 +77,11 @@ export default class VotingForm extends React.PureComponent {
     }
 
     _onSubmit(vote) {
+        // TODO validation
+        /*validate(_get(this.props, 'formValues', {}),[
+            ['review', 'required'],
+        ]);*/
+
         return dal.voteProject(this.props.project.uid, vote, {
             comment: _get(this.props, 'formValues.review') || null,
         });

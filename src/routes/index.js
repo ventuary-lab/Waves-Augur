@@ -20,7 +20,6 @@ import ProjectNewsPage from './ProjectNewsPage';
 export const ROUTE_ROOT = 'root';
 export const ROUTE_FEED = 'feed';
 export const ROUTE_COMMUNITY = 'community';
-export const ROUTE_TEST = 'test';
 export const ROUTE_PROJECTS = 'projects';
 export const ROUTE_PROFILE = 'profile';
 export const ROUTE_PROFILE_REDIRECT = 'profile_redirect';
@@ -136,7 +135,7 @@ export default {
             component: Route,
             componentProps: {
                 render: ({match}) => (
-                    <Redirect to={`/project/${match.params.uid}/feed`}/>
+                    <Redirect to={`/projects/${match.params.uid}/feed`}/>
                 )
             },
             label: __('Project'),
