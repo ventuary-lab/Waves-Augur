@@ -21,7 +21,7 @@ export default class ProjectNewsPage extends React.PureComponent {
 
     componentDidMount() {
 
-        const twitterName = this.props.project.socials.url_twitter.match(/\/[A-Za-z0-9]+$/)[0].substring(1);
+        // const twitterName = this.props.project.socials.url_twitter.match(/\/[A-Za-z0-9]+$/)[0].substring(1);
 
         resource.loadTwitterWidget().then(twttr => {
             twttr.widgets.createTimeline(
@@ -36,6 +36,7 @@ export default class ProjectNewsPage extends React.PureComponent {
     }
 
     render() {
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('twitter')}>

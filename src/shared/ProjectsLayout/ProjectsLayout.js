@@ -5,17 +5,18 @@ import _get from 'lodash-es/get';
 import Link from 'yii-steroids/ui/nav/Link';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 import {html, dal} from 'components';
 
 import ProjectSchema from 'types/ProjectSchema';
+import routes from 'routes';
 
 import {ROUTE_PROJECTS} from 'routes';
 
-import './ProjectsPage.scss';
-import routes from "../index";
+import './ProjectsLayout.scss';
 
-const bem = html.bem('ProjectsPage');
+const bem = html.bem('ProjectsLayout');
 
 @dal.hoc(
     () => dal.getProjects()
@@ -23,23 +24,27 @@ const bem = html.bem('ProjectsPage');
 )
 @connect(
     (state) => ({
+        user: getUser(state),
         routeId: _get(getCurrentRoute(state), 'id'),
         profileNavItems: getNavItems(state, ROUTE_PROJECTS),
     })
 )
-export default class ProjectsPage extends React.PureComponent {
+export default class ProjectsLayout extends React.PureComponent {
 
     static propTypes = {
         items: PropTypes.arrayOf(ProjectSchema),
     };
 
     render() {
+
         if (!this.props.items) {
             return null;
         }
+        console.log(this.props);
 
 
         const ContentComponent = _get(routes, ['items', ROUTE_PROJECTS, 'items', this.props.routeId, 'component']);
+
         return (
             <section className={bem.block()}>
                 <div className={'wrapper'}>

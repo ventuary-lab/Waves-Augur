@@ -48,6 +48,7 @@ export default class ProjectLayout extends React.PureComponent {
         }
 
         const ContentComponent = _get(routes, ['items', ROUTE_PROJECT, 'items', this.props.routeId, 'component']);
+
         return (
             <section className={bem.block()}>
                 <div className={'wrapper'}>
