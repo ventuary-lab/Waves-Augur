@@ -23,6 +23,7 @@ const checker = async () => {
             projects[matches[2]][matches[1]] = data[key];
         }
     });
+    console.log(projects);
 
     Object.keys(projects).map(uid => {
         projects[uid].reveal.forEach(address => {
@@ -37,6 +38,6 @@ const checker = async () => {
         });
     });
 
-    setTimeout(checker, 120 * 1000); // 2 mins
+    setTimeout(checker, 60 * 1000); // 1 m
 };
 checker();
