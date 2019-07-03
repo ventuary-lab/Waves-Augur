@@ -394,4 +394,40 @@ $icons-dir: '../static/icons';
       background-image: url('#{$icons-dir}/donation_green.svg');
     }
   }
+
+  &__invitation {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/invitation.svg');
+  }
+
+  &__invitation-voting {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/invitation-voting.svg');
+  }
+
+  &__proposal-accepted {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/proposal-accepted.svg');
+  }
+
+  &__proposal-rejected {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/proposal-rejected.svg');
+  }
+
+  &__proposal-supported {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/proposal-supported.svg');
+  }
+
+  &__proposal-won-grant {
+    min-width: 69px;
+    min-height: 69px;
+    background-image: url('#{$icons-dir}/proposal-won-grant.svg');
+  }
 }

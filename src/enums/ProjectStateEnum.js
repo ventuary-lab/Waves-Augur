@@ -31,9 +31,9 @@ export default class ProjectStateEnum extends Enum {
 
     static getCssClasses() {
         return {
-            [this.FEATURED]: __('Icon__star'),
-            [this.DONATION]: __('Icon__donation'),
-            [this.SUCCESS]: __('Icon__rocket-success'),
+            [this.FEATURED]: 'Icon__star',
+            [this.DONATION]: 'Icon__donation',
+            [this.SUCCESS]: 'Icon__rocket-success',
         };
     }
 

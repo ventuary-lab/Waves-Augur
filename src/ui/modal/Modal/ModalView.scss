@@ -39,11 +39,12 @@
 
   &__close {
     position: absolute;
-    top: 20px;
-    right: 30px;
+
     display: block;
     width: 30px;
     height: 30px;
+    top: 17px;
+    right: 40px;
 
     &:hover::before,
     &:hover::after {
@@ -71,10 +72,15 @@
     &::after {
       transform: rotate(-45deg);
     }
+
+    @include tablet {
+      top: 20px;
+      right: 30px;
+    }
   }
 
   &__content {
-    padding: 15px;
+    padding: 30px 15px 15px;
 
     @include tablet {
       padding: 35px 125px;

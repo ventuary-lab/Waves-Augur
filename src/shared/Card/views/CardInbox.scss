@@ -1,0 +1,39 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.CardInbox {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 13px;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: $color-brand-green;
+    max-width: 150px;
+    text-align: right;
+
+    &_gray {
+      color: $color-gg-4;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__link {
+    margin-right: 7px;
+    @include link;
+  }
+}
