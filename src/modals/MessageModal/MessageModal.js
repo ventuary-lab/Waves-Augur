@@ -21,6 +21,7 @@ export default class MessageModal extends React.PureComponent {
         submitLabel: PropTypes.string,
         onCancel: PropTypes.func,
         onSubmit: PropTypes.func,
+        url: PropTypes.string,
     };
 
     constructor() {
@@ -51,12 +52,23 @@ export default class MessageModal extends React.PureComponent {
                             outline
                         />
                     )}
-                    <Button
-                        type='submit'
-                        color='primary'
-                        onClick={this._onSubmit}
-                        label={this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
-                    />
+                    {this.props.url && (
+                        <a
+                            href={this.props.url}
+                            className='ButtonView ButtonView_color_primary'
+                            target='_blank'
+                        >
+                            {this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
+                        </a>
+                    ) || (
+                        <Button
+                            type='submit'
+                            color='primary'
+                            url={this.props.url}
+                            onClick={this._onSubmit}
+                            label={this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
+                        />
+                    )}
                 </div>
             </Modal>
         );
@@ -70,9 +82,11 @@ export default class MessageModal extends React.PureComponent {
     }
 
     _onSubmit(e) {
-        e.preventDefault();
+        if (this.props.onSubmit) {
+            e.preventDefault();
+            this.props.onSubmit();
+        }
 
         this.props.onClose();
-        this.props.onSubmit && this.props.onSubmit();
     }
 }

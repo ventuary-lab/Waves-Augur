@@ -21,6 +21,9 @@ import VotingForm from 'shared/VotingForm';
 import DonateForm from 'shared/DonateForm';
 import GrantForm from 'shared/GrantForm';
 import UserRole from 'enums/UserRole';
+import {openModal} from 'yii-steroids/actions/modal';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
+import ProjectWizardModal from 'modals/ProjectWizardModal';
 
 const bem = html.bem('ProjectLayout');
 
@@ -57,7 +60,10 @@ export default class ProjectLayout extends React.PureComponent {
                     <div className={'row'}>
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
-                                <ProjectSidebar project={this.props.project}/>
+                                <ProjectSidebar
+                                    project={this.props.project}
+                                    user={this.props.user}
+                                />
                             </div>
                         </div>
                         <div className='col col_tablet-count-8'>
@@ -86,19 +92,22 @@ export default class ProjectLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.props.routeId !== ROUTE_PROJECT_NEWS && (
-                                <>
-                                    {this.props.project.status === ProjectStatusEnum.VOTING && (
-                                        <VotingForm project={this.props.project}/>
-                                    )}
-                                    {this.props.project.status === ProjectStatusEnum.CROWDFUND && (
-                                        <DonateForm project={this.props.project}/>
-                                    )}
-                                    {this.props.project.status === ProjectStatusEnum.WAITING_GRANT && this.props.user.role === UserRole.WHALE && (
-                                        <GrantForm project={this.props.project}/>
-                                    )}
-                                </>
-                            )}
+                            {this.props.routeId !== ROUTE_PROJECT_NEWS
+                                && this.props.project.author.address !== this.props.user.address
+                                && (
+                                    <>
+                                        {this.props.project.status === ProjectStatusEnum.VOTING && this.props.user.role !== UserRole.WHALE && (
+                                            <VotingForm project={this.props.project}/>
+                                        )}
+                                        {this.props.project.status === ProjectStatusEnum.CROWDFUND && this.props.user.role !== UserRole.WHALE && (
+                                            <DonateForm project={this.props.project}/>
+                                        )}
+                                        {this.props.project.status === ProjectStatusEnum.WAITING_GRANT && this.props.user.role === UserRole.WHALE && (
+                                            <GrantForm project={this.props.project}/>
+                                        )}
+                                    </>
+                                )
+                            }
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent

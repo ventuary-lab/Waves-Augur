@@ -51,7 +51,7 @@ export default class Layout extends React.PureComponent {
                 title: __('Install Waves Keeper'),
                 description: __('You Need a WAVES Wallet to Join Us'),
                 submitLabel: __('Install'),
-                onSubmit: () => location.href = 'https://wavesplatform.com/products-keeper',
+                url: 'https://wavesplatform.com/products-keeper',
             }));
         }
     }

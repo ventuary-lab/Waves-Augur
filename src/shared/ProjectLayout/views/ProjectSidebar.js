@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 
@@ -11,15 +12,20 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
 import {ROUTE_PROJECT_NEWS} from 'routes';
-import VotingForm from 'shared/VotingForm';
-import DonateForm from 'shared/DonateForm';
+import Link from 'yii-steroids/ui/nav/Link';
+import {openModal} from 'yii-steroids/actions/modal';
+import ProjectWizardModal from 'modals/ProjectWizardModal';
+import UserSchema from 'types/UserSchema';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
 
+@connect()
 export default class ProjectSidebar extends React.PureComponent {
 
     static propTypes = {
         project: ProjectSchema,
+        user: UserSchema,
     };
 
     render() {
@@ -82,17 +88,30 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
-                    {this.props.routeId !== ROUTE_PROJECT_NEWS && [ProjectStatusEnum.VOTING, ProjectStatusEnum.CROWDFUND].indexOf(this.props.project.status) !== -1 && (
-                        <div className={bem.element('action')}>
-                            <Button
-                                label={this.props.project.status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
-                                onClick={() => {
-                                    window.scrollTo(0, 200);
-                                    const el = document.querySelector('textarea[name=review]');
-                                    el && el.focus();
-                                }}
-                            />
-                        </div>
+                    {this.props.routeId !== ROUTE_PROJECT_NEWS
+                        && [ProjectStatusEnum.VOTING, ProjectStatusEnum.CROWDFUND].indexOf(this.props.project.status) !== -1
+                        && this.props.project.author.address !== this.props.user.address
+                        && this.props.user.role !== UserRole.WHALE
+                        && (
+                            <div className={bem.element('action')}>
+                                <Button
+                                    label={this.props.project.status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
+                                    onClick={() => {
+                                        window.scrollTo(0, 200);
+                                        const el = document.querySelector('textarea[name=review]');
+                                        el && el.focus();
+                                    }}
+                                />
+                            </div>
+                        )
+                    }
+                    {this.props.project.author.address === this.props.user.address && (
+                        <Link
+                            label={__('Edit project')}
+                            onClick={() => this.props.dispatch(openModal(ProjectWizardModal, {
+                                project: this.props.project,
+                            }))}
+                        />
                     )}
                 </div>
             </div>

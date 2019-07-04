@@ -33,8 +33,6 @@ export default class FieldLayoutView extends React.PureComponent {
     };
 
     render() {
-        console.log(111);
-
         return (
             <div className={bem(
                 bem.block({
