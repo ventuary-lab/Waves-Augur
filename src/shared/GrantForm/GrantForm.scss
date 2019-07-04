@@ -65,7 +65,6 @@
     padding: 5px;
     cursor: pointer;
 
-
     &_hovered {
       #{$root}__count-item {
         background-color: $color-brand-light-green;
@@ -80,12 +79,6 @@
       }
     }
 
-    &_active {
-      #{$root}__count-item {
-        background-color: $color-brand-light-green;
-        border-color: $color-brand-light-green;
-      }
-    }
   }
 
   &__count-item {
@@ -103,4 +96,30 @@
   &__unlike {
     margin-right: 14px;
   }
+
+  &__donate-control {
+    position: relative;
+  }
+
+  &__percent-block {
+    position: absolute;
+    top: 22px;
+    left: -5px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__balance {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    color: $color-gg-4;
+    margin-right: 10px;
+  }
+
+  &__percent {
+    font-weight: 500;
+    color: $color-brand-green;
+  }
+
 }

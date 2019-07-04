@@ -9,7 +9,7 @@ import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 
 import {dal, html} from 'components';
-import userAvatarStub from 'static/images/user-avatar-stub.png';
+import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 
 import './GrantForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -52,7 +52,7 @@ export default class GrantForm extends React.PureComponent {
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
-                        src={this.props.user.profile.avatar || userAvatarStub}
+                        src={this.props.user.profile.avatar || whaleAvatarStub}
                         alt={this.props.user.profile.name}
                     />
                     <span className={bem.element('user-name')}>
@@ -96,34 +96,46 @@ export default class GrantForm extends React.PureComponent {
 
     renderDonateControl() {
         return (
-            <div className={bem.element('direction')}>
-                {this._tiers.map((tier, index) => (
-                    <div
-                        className={bem.element('count-container', {
-                            active: this.state.tierValue >= index,
-                            hovered: this.state.tierHovered >= index,
-                        })}
-                        key={index}
-                        onClick={() => {
-                            this.setState({
-                                tierValue: this.state.tierValue === index ? 0 : index,
-                            });
-                        }}
-                        onMouseOver={() => {
-                            this.setState({
-                                tierHovered: index,
-                            });
-                        }}
-                        onMouseLeave={() => {
-                            this.setState({
-                                tierHovered: null,
-                            });
-                        }}
-                    >
-                        <div className={bem.element('count-item')}/>
+            <>
+                {(this.state.tierHovered || this.state.tierValue > 0) && (
+                    <div className={bem.element('percent-block')}>
+                        <span className={bem.element('balance')}>
+                            {this.props.project.positiveBalance} W
+                        </span>
+                        <span className={bem.element('percent')}>
+                            +{(this.state.tierHovered || this.state.tierValue) * 10}%
+                        </span>
                     </div>
-                ))}
-            </div>
+                )}
+                <div className={bem.element('direction')}>
+                    {this._tiers.map((tier, index) => (
+                        <div
+                            className={bem.element('count-container', {
+                                active: this.state.tierValue >= (index + 1),
+                                hovered: this.state.tierHovered >= (index + 1),
+                            })}
+                            key={index}
+                            onClick={() => {
+                                this.setState({
+                                    tierValue: this.state.tierValue === (index + 1) ? 0 : (index + 1),
+                                });
+                            }}
+                            onMouseOver={() => {
+                                this.setState({
+                                    tierHovered: (index + 1),
+                                });
+                            }}
+                            onMouseLeave={() => {
+                                this.setState({
+                                    tierHovered: null,
+                                });
+                            }}
+                        >
+                            <div className={bem.element('count-item')}/>
+                        </div>
+                    ))}
+                </div>
+            </>
         );
     }
 }

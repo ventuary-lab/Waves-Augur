@@ -25,6 +25,7 @@ export default class UserCard extends React.PureComponent {
                         component: CardInfo,
                         componentProps: {
                             isProject: false,
+                            isWhale: this.props.item.profile.isWhale,
                             logoUrl: this.props.item.profile.avatar,
                             title: this.props.item.profile.name,
                             description: this.props.item.profile.title,

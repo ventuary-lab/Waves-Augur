@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {html} from 'components';
 import coverStub from '../../../static/images/cover-stub.png';
 import userAvatarStub from '../../../static/images/user-avatar-stub.png';
+import whaleAvatarStub from '../../../static/images/whale-avatar-stub.png';
 import projectAvatarStub from '../../../static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
@@ -30,6 +31,9 @@ export default class CardInfo extends React.PureComponent {
 
     render() {
 
+        const avatarStub = this.props.isWhale
+            ? whaleAvatarStub
+            : userAvatarStub;
         const isProject = this.props.isProject;
         const status = isProject ? this.props.status : null;
         const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
@@ -45,7 +49,7 @@ export default class CardInfo extends React.PureComponent {
                     >
                         <img
                             className={bem.element('avatar')}
-                            src={this.props.logoUrl || isProject ? projectAvatarStub : userAvatarStub}
+                            src={this.props.logoUrl || isProject ? projectAvatarStub : avatarStub}
                             alt='avatar'
                         />
                     </div>
