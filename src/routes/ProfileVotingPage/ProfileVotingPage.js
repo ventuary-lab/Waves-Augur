@@ -40,7 +40,7 @@ export default class ProfileVotingPage extends React.PureComponent {
                         <List
                             listId='ProfileDonationPage'
                             itemView={ProjectFeedCard}
-                            emptyText={__('No Donation')}
+                            emptyText={__('No Voting')}
                             items={this.props.items}
                         />
                     </div>
