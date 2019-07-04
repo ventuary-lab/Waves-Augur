@@ -386,6 +386,28 @@ export default class DalComponent {
         return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
+    async getMyGrants() {
+        const account = await this.getAccount();
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_whalereview/i.exec(key);
+                    if (match && match[2] === account.address) {
+                        const uid = match[1];
+                        return {
+                            review: data[key],
+                            reviewNumber: 1,
+                            type: FeedTypeEnum.WHALE,
+                            project: await this.getProject(uid),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
     /**
      * Return project feed: votes and donations, sorted by time desc
      * @param {string} uid
@@ -575,6 +597,7 @@ export default class DalComponent {
         const fund = await this.transport.nodeFetchKey('positive_fund_' + uid);
         const payment = fund * (this.contract.MULTIPLIER / 100);
 
+        data.tier = tier;
         data.createTime = DalHelper.dateNow();
 
         let result = null;
