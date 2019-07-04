@@ -11,6 +11,7 @@ import ProfileDonationPage from './ProfileDonationPage';
 import ProfileProjectsPage from './ProfileProjectsPage';
 import ProfileVotingPage from './ProfileVotingPage';
 import ProfileInvitedPage from './ProfileInvitedPage';
+import ProfileGrantsPage from './ProfileGrantsPage';
 import ProfileLayout from 'shared/ProfileLayout';
 import ProjectLayout from 'shared/ProjectLayout';
 import ProjectFeedPage from './ProjectFeedPage';
@@ -29,6 +30,7 @@ export const ROUTE_PROFILE_DONATION = 'profile_donation';
 export const ROUTE_PROFILE_PROJECTS = 'profile_projects';
 export const ROUTE_PROFILE_VOTING = 'profile_voting';
 export const ROUTE_PROFILE_INVITED = 'profile_invited';
+export const ROUTE_PROFILE_GRANTS = 'profile_grants';
 export const ROUTE_PROJECT = 'project';
 export const ROUTE_PROJECT_REDIRECT = 'project_redirect';
 export const ROUTE_PROJECT_FEED = 'project_feed';
@@ -128,6 +130,15 @@ export default {
                     label: __('Voting'),
                     icon: 'Icon__voting',
                     roles: [UserRole.REGISTERED],
+                    isShowImageLine: true,
+                },
+                [ROUTE_PROFILE_GRANTS]: {
+                    exact: true,
+                    path: '/profile/grants',
+                    component: ProfileGrantsPage,
+                    label: __('Grants'),
+                    icon: 'Icon__invite',
+                    roles: UserRole.WHALE,
                     isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_INVITED]: {

@@ -7,6 +7,7 @@ import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 import SocialLinks from 'shared/SocialLinks';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
+import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import {dal, html} from 'components';
 
 import './CardReview.scss';
@@ -32,11 +33,15 @@ export default class CardReview extends React.PureComponent {
     };
 
     render() {
+        const avatarStub = this.props.user.profile.isWhale
+            ? whaleAvatarStub
+            : userAvatarStub;
+
         return (
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || userAvatarStub}
+                    src={this.props.user.profile.avatar || avatarStub}
                     alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('info-container')}>
