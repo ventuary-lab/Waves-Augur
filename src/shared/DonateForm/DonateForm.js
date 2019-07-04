@@ -103,6 +103,11 @@ export default class DonateForm extends React.PureComponent {
     renderDonateControl() {
         return (
             <>
+                {(this.state.wavesHovered || this.state.wavesValue) && (
+                    <span className={bem.element('value')}>
+                        {this.state.wavesHovered || this.state.wavesValue} W
+                    </span>
+                )}
                 <div className={bem.element('direction')}>
                     {this._tiers.map((tier, index) => (
                         <div

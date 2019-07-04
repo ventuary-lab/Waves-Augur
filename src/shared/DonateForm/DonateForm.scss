@@ -138,4 +138,18 @@
   &__unlike {
     margin-right: 14px;
   }
+
+  &__donate-control {
+    position: relative;
+  }
+
+  &__value {
+    position: absolute;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    top: -2px;
+    right: 103px;
+    text-align: center;
+  }
 }
