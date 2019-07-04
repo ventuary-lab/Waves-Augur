@@ -24,10 +24,6 @@ export default class ProfileDonationPage extends React.PureComponent {
     };
 
     render() {
-        if (!this.props.items) {
-            return null;
-        }
-
         return (
             <div className={bem.block()}>
                 <Link
