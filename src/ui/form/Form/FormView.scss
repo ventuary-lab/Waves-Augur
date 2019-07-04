@@ -1,0 +1,7 @@
+.FormView {
+  &_submitting {
+    cursor: wait;
+    opacity: .3;
+    pointer-events: none;
+  }
+}

@@ -1,6 +1,6 @@
 // This is class also used in nodejs application!
 
-const {broadcast, nodeInteraction, invokeScript} = require('@waves/waves-transactions');
+const {broadcast, nodeInteraction, invokeScript, waitForTx} = require('@waves/waves-transactions');
 const _isString = require('lodash/isString');
 const _isInteger = require('lodash/isInteger');
 const _isObject = require('lodash/isObject');
@@ -182,7 +182,18 @@ export default class WavesTransport {
      */
     async nodePublish(method, args, payment) {
         const keeper = await this.getKeeper();
-        return keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment));
+        const result = await keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment));
+        if (result) {
+            const tx = JSON.parse(result);
+            this.dal.log(`Transaction ${tx.id} is published via keeper`);
+
+            return waitForTx(tx.id, {
+                apiBase: this.nodeUrl,
+                timeout: 10000,
+            }).then(() => result);
+        }
+        return result;
+
     }
 
     /**

@@ -336,6 +336,78 @@ export default class DalComponent {
         );
     }
 
+    async getMyVotings() {
+        const account = await this.getAccount();
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_votereview/i.exec(key);
+                    if (match && match[2] === account.address) {
+                        const uid = match[1];
+                        return {
+                            review: data[key],
+                            reviewNumber: 1,
+                            type: FeedTypeEnum.VOTE,
+                            vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
+                            amount: this.getVotePayment(),
+                            project: await this.getProject(uid),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
+    async getMyDonations() {
+        const account = await this.getAccount();
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_text_id:([0-9]+)/i.exec(key);
+                    if (match && match[2] === account.address) {
+                        const uid = match[1];
+                        const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[3]}`);
+                        const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[3]}`);
+                        return {
+                            review: data[key],
+                            reviewNumber: parseInt(match[3]),
+                            type: FeedTypeEnum.DONATE,
+                            vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
+                            amount: (mode === 'negative' ? -1 : 1) * this.contract.TIERS[tierNumber - 1],
+                            project: await this.getProject(uid),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
+    async getMyGrants() {
+        const account = await this.getAccount();
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_whalereview/i.exec(key);
+                    if (match && match[2] === account.address) {
+                        const uid = match[1];
+                        return {
+                            review: data[key],
+                            reviewNumber: 1,
+                            type: FeedTypeEnum.WHALE,
+                            project: await this.getProject(uid),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
     /**
      * Return project feed: votes and donations, sorted by time desc
      * @param {string} uid
@@ -525,6 +597,7 @@ export default class DalComponent {
         const fund = await this.transport.nodeFetchKey('positive_fund_' + uid);
         const payment = fund * (this.contract.MULTIPLIER / 100);
 
+        data.tier = tier;
         data.createTime = DalHelper.dateNow();
 
         let result = null;
