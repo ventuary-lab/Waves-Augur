@@ -12,6 +12,13 @@
     min-height: 60px;
   }
 
+  &__search {
+    .FieldLayoutView__field {
+      margin: 0;
+    }
+  }
+
+
   &__inner {
     position: relative;
     display: flex;

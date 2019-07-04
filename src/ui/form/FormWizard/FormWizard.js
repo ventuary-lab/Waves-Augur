@@ -69,24 +69,33 @@ export default class FormWizard extends React.PureComponent {
                     ))}
                 </div>
                 <div className={bem.element('content')}>
+                    {this.props.title && (
+                        <div className={bem.element('title')}>
+                            {this.props.title}
+                        </div>
+                    )}
                     {this.renderContent()}
                 </div>
                 <div className={bem.element('controls')}>
-                    {this.getActiveIndex() > 0 && (
+                    <div className={bem.element('control-back')}>
+                        {this.getActiveIndex() > 0 && (
+                            <Button
+                                color='primary'
+                                onClick={() => this.switchTab(-1)}
+                                link
+                            >
+                                {__('Back')}
+                            </Button>
+                        )}
+                    </div>
+                    <div className={bem.element('control-next')}>
                         <Button
+                            type='submit'
                             color='primary'
-                            onClick={() => this.switchTab(-1)}
-                            link
                         >
-                            {__('Back')}
+                            {__('Next')}
                         </Button>
-                    )}
-                    <Button
-                        type='submit'
-                        color='primary'
-                    >
-                        {__('Next')}
-                    </Button>
+                    </div>
                 </div>
             </Form>
         );

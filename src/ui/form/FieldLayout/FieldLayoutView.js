@@ -33,10 +33,13 @@ export default class FieldLayoutView extends React.PureComponent {
     };
 
     render() {
+        console.log(111);
+
         return (
             <div className={bem(
                 bem.block({
-                    layout: this.props.layout
+                    layout: this.props.layout,
+                    'has-errors': !!this.props.errors,
                 }),
                 this.props.layoutClassName,
                 this.props.layout === 'horizontal' && 'form-row',

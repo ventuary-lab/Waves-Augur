@@ -1,5 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import InputField from 'yii-steroids/ui/form/InputField';
+import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {html} from 'components';
 import TagsField from 'ui/form/TagsField';
@@ -7,8 +9,14 @@ import ConnectImageField from 'ui/form/ConnectImageField';
 
 
 import './AboutTab.scss';
+
 const bem = html.bem('AboutTab');
 
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class AboutTab extends React.Component {
 
     render() {
@@ -21,18 +29,21 @@ export default class AboutTab extends React.Component {
                 <div className={bem.element('grid')}>
                     <ConnectImageField
                         attribute='avatar'
-                        label={__('Avatar URL')}
+                        topLabel={this.props.isPhone ? __('Avatar URL') : ''}
+                        label={!this.props.isPhone ? __('Avatar URL') : ''}
                         layout={'horizontal'}
                     />
                     <InputField
                         attribute='title'
-                        label={__('Your Occupation')}
+                        topLabel={this.props.isPhone ? __('Your Occupation') : ''}
+                        label={!this.props.isPhone ? __('Your Occupation') : ''}
                         placeholder={__('Enter')}
                         layout={'horizontal'}
                     />
                     <TagsField
                         attribute='tags'
-                        label={__('Tags')}
+                        topLabel={this.props.isPhone ? __('Tags') : ''}
+                        label={!this.props.isPhone ? __('Tags') : ''}
                         placeholder={__('Enter')}
                         hint={__('Use ‘Enter’ to add a hashtag (10 max)')}
                         max={10}
@@ -40,7 +51,8 @@ export default class AboutTab extends React.Component {
                     />
                     <InputField
                         attribute='location'
-                        label={__('Your Country')}
+                        topLabel={this.props.isPhone ? __('Your Country') : ''}
+                        label={!this.props.isPhone ? __('Your Country') : ''}
                         placeholder={__('Enter')}
                         layout={'horizontal'}
                     />

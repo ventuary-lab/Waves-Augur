@@ -1,13 +1,20 @@
 import React from 'react';
+import {connect} from 'react-redux';
+
 import InputField from 'yii-steroids/ui/form/InputField';
+import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {html} from 'components';
+
 import SocialEnum from 'enums/SocialEnum';
-
 const bem = html.bem('LinksTab');
-
 import './LinksTab.scss';
 
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class LinksTab extends React.PureComponent {
     render() {
         return (
@@ -20,10 +27,12 @@ export default class LinksTab extends React.PureComponent {
                     <div key={socialId}>
                         <InputField
                             attribute={`socials.url_${socialId}`}
-                            label={SocialEnum.getLabel(socialId)}
-                            labelIconClass={SocialEnum.getCssClass(socialId)}
                             placeholder={__('Enter URL')}
                             layout={'horizontal'}
+
+                            topLabel={this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
+                            label={!this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
+                            labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(socialId) : ''}
                         />
                     </div>
                 ))}

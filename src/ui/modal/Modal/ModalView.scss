@@ -8,7 +8,7 @@
     left: 50%;
     transform: translateX(-50%);
     outline: none;
-    padding: 0 20px;
+    padding: 0 5px;
     border: none;
     width: 100%;
 
@@ -43,8 +43,8 @@
     display: block;
     width: 30px;
     height: 30px;
-    top: 17px;
-    right: 40px;
+    top: 15px;
+    right: 20px;
 
     &:hover::before,
     &:hover::after {
@@ -71,11 +71,6 @@
 
     &::after {
       transform: rotate(-45deg);
-    }
-
-    @include tablet {
-      top: 20px;
-      right: 30px;
     }
   }
 

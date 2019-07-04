@@ -36,6 +36,7 @@ export default class ProfileWizardModal extends React.Component {
                 className={bem.block()}
             >
                 <FormWizard
+                    title={__('')}
                     formId='ProfileWizardModal'
                     onSubmit={values => dal.saveUser(values)}
                     onComplete={this.props.onClose}

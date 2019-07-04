@@ -6,10 +6,12 @@ import {html} from 'components';
 import SvgIcon from 'shared/SvgIcon';
 import {profileSvg, arrowDown} from 'static/icons';
 
-const bem = html.bem('LinksTab');
+
+const bem = html.bem('WaitingTab');
 
 import './WaitingTab.scss';
 import UserSchema from 'types/UserSchema';
+
 
 export default class WaitingTab extends React.PureComponent {
 
@@ -30,11 +32,15 @@ export default class WaitingTab extends React.PureComponent {
                         <SvgIcon icon={arrowDown}/>
                     </>
                 ) || (
-                    <h3>{__('Edit profile')}</h3>
+                    <div className={bem.element('title')}>
+                        {__('Edit profile')}
+                    </div>
                 )}
-                <span>Your Nickname (Your Log In)</span>
+
                 <InputField
                     attribute='name'
+                    topLabel={__('Your Nickname (Your Log In)')}
+                    placeholder={__('Enter Your Name')}
                 />
             </div>
         );

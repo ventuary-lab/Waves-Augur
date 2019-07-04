@@ -49,6 +49,7 @@ export default class Header extends React.PureComponent {
                     <div className={bem.element('form')}>
                         <Form formId='HeaderSearch'>
                             <InputField
+                                layoutClassName={bem.element('search')}
                                 attribute='search'
                                 placeholder={__('Search')}
                                 view={InputSearchView}

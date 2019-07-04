@@ -30,8 +30,8 @@ export default class InputFieldView extends React.PureComponent {
                     className={bem(
                         bem.block({
                             size: this.props.size,
+                            'is-invalid': this.props.isInvalid
                         }),
-                        this.props.isInvalid && 'is-invalid',
                         this.props.className,
                     )}
                     {...this.props.inputProps}

@@ -4,13 +4,21 @@
 .FormWizard {
   $item-width: 6px;
 
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
   &__steps {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
 
-    padding: 0 70px;
+    padding: 0 60px;
 
     @include tablet {
       padding: 0;
@@ -63,9 +71,25 @@
   }
 
   &__controls {
-    margin-bottom: 25px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__control-back {
+    @include tablet {
+      width: 25%;
+    }
+  }
+
+  &__control-next {
+    @include tablet {
+      width: 70%;
+    }
   }
 }

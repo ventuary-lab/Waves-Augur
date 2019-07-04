@@ -1,7 +1,7 @@
 import React from 'react';
 import {InputField} from 'yii-steroids/ui/form';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
-import Button from 'yii-steroids/ui/form/Button';
+import ButtonView from 'yii-steroids/ui/form/Button/ButtonView';
 
 import {html} from 'components';
 
@@ -45,13 +45,14 @@ class ConnectImageField extends React.PureComponent {
                     </div>
                 </div>
                 <div className={bem.element('inner')}>
-                    <Button
+                    <ButtonView
                         className={bem.element('action')}
-                        label={__('Connect')}
                         color='primary'
-                        layout='default'
+                        type={'button'}
                         onClick={() => this.setState({imageUrl: this.state.value})}
-                    />
+                    >
+                        {__('Connect')}
+                    </ButtonView>
                     {this.state.imageUrl && (
                         <img
                             className={bem.element('avatar')}

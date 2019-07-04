@@ -28,31 +28,28 @@
     margin: 0 auto 40px;
   }
 
+  &__group {
+    margin-bottom: 43px;
+
+    @include phone-horizontal {
+      margin-right: 48px;
+      width: 320px;
+    }
+  }
+
   &__nickname {
-    margin-bottom: 20px;
+    .FieldLayoutView__field {
+      margin-bottom: 20px;
+    }
   }
 
   &__is-wale {
-    margin-bottom: 20px;
-
-    @include phone-horizontal {
+    .FieldLayoutView__field {
       margin-bottom: 0;
     }
-  }
 
-  &__address {
-    margin-bottom: 20px;
-
-    @include phone-horizontal {
-      margin-bottom: 12px;
-    }
-  }
-
-  &__message {
-    margin-bottom: 20px;
-
-    @include phone-horizontal {
-      margin-bottom: 30px;
+    .CheckboxFieldView {
+      margin-bottom: 10px;
     }
   }
 
@@ -66,14 +63,6 @@
     }
   }
 
-  &__group {
-    @include phone-horizontal {
-      margin-right: 48px;
-      margin-bottom: 32px;
-      width: 320px;
-    }
-  }
-
   &__icon {
     order: -1;
     background-position-x: center;
@@ -83,10 +72,16 @@
     @include phone-horizontal {
       margin-bottom: 0;
       order: 0;
+      position: relative;
+      top: -15px;
     }
   }
 
   &__action {
-    text-align: center;
+    .FieldLayoutView__field {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0;
+    }
   }
 }

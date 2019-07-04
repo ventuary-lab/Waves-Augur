@@ -11,17 +11,33 @@ import AutoSaveHelper from 'yii-steroids/ui/form/Form/AutoSaveHelper';
 
 import {dal, html} from 'components';
 
-import './ProjectWizardModal.scss';
 import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
+import {isPhone} from 'yii-steroids/reducers/screen';
+
 import {ROUTE_PROJECT} from 'routes';
+
+import './ProjectWizardModal.scss';
 
 const bem = html.bem('ProjectWizardModal');
 const FORM_ID = 'ProjectWizardModal';
 
-@connect()
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class ProjectWizardModal extends React.PureComponent {
+
+    constructor() {
+        super(...arguments);
+
+        this._stepName = this._stepName.bind(this);
+        this._stepProject = this._stepProject.bind(this);
+        this._stepContacts = this._stepContacts.bind(this);
+    }
+
 
     render() {
         return (
@@ -31,6 +47,7 @@ export default class ProjectWizardModal extends React.PureComponent {
             >
                 <FormWizard
                     formId={FORM_ID}
+                    title={__('You Are Creating New Project')}
                     onSubmit={values => {
                         return dal.saveProject(values)
                             .then(project => {
@@ -130,12 +147,14 @@ export default class ProjectWizardModal extends React.PureComponent {
                     'Icon Icon__new-project_lg')}
                 />
                 <InputField
-                    label={__('Project Name')}
+                    topLabel={this.props.isPhone ? __('Project Name') : ''}
+                    label={!this.props.isPhone ? __('Project Name') : ''}
                     attribute={'name'}
                     placeholder={__('Enter Your Project Name')}
                 />
                 <TextField
-                    label={__('Sort Description')}
+                    topLabel={this.props.isPhone ? __('Sort Description') : ''}
+                    label={!this.props.isPhone ? __('Sort Description') : ''}
                     attribute={'description'}
                     placeholder={__('Description')}
                 />
@@ -150,12 +169,14 @@ export default class ProjectWizardModal extends React.PureComponent {
                     {__('Project Details')}
                 </div>
                 <ConnectImageField
-                    label={__('Logo URL')}
+                    topLabel={this.props.isPhone ? __('Logo URL') : ''}
+                    label={!this.props.isPhone ? __('Logo URL') : ''}
                     attribute='logoUrl'
                     placeholder={__('Enter URL')}
                 />
                 <ConnectImageField
-                    label={__('Cover URL')}
+                    topLabel={this.props.isPhone ? __('Cover URL') : ''}
+                    label={!this.props.isPhone ? __('Cover URL') : ''}
                     attribute='coverUrl'
                     placeholder={__('Enter URL')}
                 />
@@ -204,12 +225,16 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 <TagsField
                     attribute='tags'
-                    label={__('Tags')}
-                    topLabel={__('Use ‘Enter’ to add a hashtag')}
+                    topLabel={this.props.isPhone
+                        ? __('Tags - Use ‘Enter’ to add a hashtag (10 max)')
+                        : __('Use ‘Enter’ to add a hashtag (10 max)')
+                    }
+                    label={!this.props.isPhone ? __('Tags') : ''}
                     placeholder={__('Enter Tags')}
                 />
                 <InputField
-                    label={__('Your Country')}
+                    topLabel={this.props.isPhone ? __('Your Country') : ''}
+                    label={!this.props.isPhone ? __('Your Country') : ''}
                     attribute={'location'}
                     placeholder={__('Enter')}
                 />
@@ -361,10 +386,11 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 {SocialEnum.getKeys().map(id => (
                     <InputField
+                        topLabel={this.props.isPhone ? SocialEnum.getLabel(id) : ''}
+                        label={!this.props.isPhone ? SocialEnum.getLabel(id) : ''}
+                        labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(id) : ''}
                         key={id}
                         attribute={`socials.url_${id}`}
-                        label={SocialEnum.getLabel(id)}
-                        labelIconClass={SocialEnum.getCssClass(id)}
                         placeholder={__('Enter URL')}
                         layout={'horizontal'}
                     />

@@ -30,10 +30,10 @@ export default class InviteUserModal extends React.PureComponent {
             >
                 <div className={bem.element('content')}>
                     <h1 className={bem.element('title')}>
-                        {__('Invite User')}
+                        {__('Invite New Member')}
                     </h1>
                     <div className={bem.element('invited-by')}>
-                        {__('You can invite users by sending them an invitation')}
+                        {__('You can invite new users to the platform by sending them an invitation')}
                     </div>
                     <Form
                         className={bem.element('form')}
@@ -52,13 +52,13 @@ export default class InviteUserModal extends React.PureComponent {
                         <div className={bem.element('form-inner')}>
                             <div className={bem.element('group')}>
                                 <InputField
-                                    className={bem.element('nickname')}
+                                    layoutClassName={bem.element('nickname')}
                                     attribute='name'
-                                    topHint={__('User’s Nickname (Optional)')}
+                                    topLabel={__('User’s Nickname (Optional)')}
                                     placeholder={__('Nickname')}
                                 />
                                 <CheckboxField
-                                    className={bem.element('is-wale')}
+                                    layoutClassName={bem.element('is-wale')}
                                     attribute='isWhale'
                                     label={__('It’s a Whale')}
                                 />
@@ -68,25 +68,22 @@ export default class InviteUserModal extends React.PureComponent {
                             )}/>
                         </div>
                         <InputField
-                            className={bem.element('address')}
                             attribute='address'
-                            label={__('Waves Address')}
-                            placeholder={__('Enter New User’s Waves Adress')}
+                            topLabel={__('Waves Address')}
+                            placeholder={__('Enter New User’s Waves Address')}
                         />
                         <TextField
-                            className={bem.element('message')}
+                            layoutClassName={bem.element('message')}
                             attribute='message'
-                            label={__('Your Message')}
+                            topLabel={__('Your Message')}
                             placeholder={__('Enter Your Message for New User')}
                         />
-                        <div className={bem.element('action')}>
-                            <Button
-                                className={bem.element('action')}
-                                label={__('Invite')}
-                                color='primary'
-                                type={'submit'}
-                            />
-                        </div>
+                        <Button
+                            layoutClassName={bem.element('action')}
+                            label={__('Invite')}
+                            color='primary'
+                            type={'submit'}
+                        />
                     </Form>
                 </div>
             </Modal>
