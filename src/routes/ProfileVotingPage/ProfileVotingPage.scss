@@ -1,3 +1,9 @@
 .ProfileVotingPage {
+  &__link-block {
+    text-decoration: none;
+  }
 
+  &__card-list {
+    margin: 30px 0;
+  }
 }

@@ -30,7 +30,7 @@ export default class ProfileInvitedPage extends React.PureComponent {
             <div className={bem.block()}>
                 <ActionButtonBlock
                     title={__('Invite New User')}
-                    iconClass={'Icon__new-project'}
+                    iconClass={'Icon__invite-user_small'}
                     onClick={() => this.props.dispatch(openModal(InviteUserModal))}
                 />
                 <div className={bem.element('card-list')}>

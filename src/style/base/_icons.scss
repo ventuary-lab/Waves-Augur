@@ -46,6 +46,12 @@ $icons-dir: '../static/icons';
     min-width: 120px;
     min-height: 120px;
     background-image: url('#{$icons-dir}/invite-user.svg');
+
+    &_small {
+      min-width: 69px;
+      min-height: 69px;
+      background-image: url('#{$icons-dir}/invite-user.svg');
+    }
   }
 
   &__invite-whale {
@@ -250,6 +256,18 @@ $icons-dir: '../static/icons';
     min-width: 38px;
     min-height: 38px;
     background-image: url('#{$icons-dir}/crowdfunded.svg');
+  }
+
+  &__crowdfunded-negative {
+    min-width: 38px;
+    min-height: 38px;
+    background-image: url('#{$icons-dir}/crowdfunded-negative.svg');
+  }
+
+  &__crowdfunded-positive {
+    min-width: 38px;
+    min-height: 38px;
+    background-image: url('#{$icons-dir}/crowdfunded-positive.svg');
   }
 
   &__grant {

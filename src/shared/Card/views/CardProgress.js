@@ -47,6 +47,14 @@ export default class CardProgress extends React.PureComponent {
                             }
                         </>
                     )}
+                    {status === ProjectStatusEnum.WAITING_GRANT && (
+                        <>
+                            {this.props.positiveBalance >= this.props.negativeBalance
+                                ? <span className={'Icon Icon__crowdfunded-positive'}/>
+                                : <span className={'Icon Icon__crowdfunded-negative'}/>
+                            }
+                        </>
+                    )}
                 </div>
                 <div className={bem.element('info')}>
                     <ProjectProgress
