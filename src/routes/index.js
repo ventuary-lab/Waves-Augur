@@ -20,6 +20,7 @@ import ProjectNewsPage from './ProjectNewsPage';
 
 export const ROUTE_ROOT = 'root';
 export const ROUTE_FEED = 'feed';
+export const ROUTE_ABOUT_REDIRECT = 'about_redirect';
 export const ROUTE_COMMUNITY = 'community';
 export const ROUTE_PROJECTS = 'projects';
 export const ROUTE_PROJECTS_REDIRECT = 'projects_redirect';
@@ -45,6 +46,16 @@ export default {
     roles: UserRole.getKeys(),
     label: __('Main'),
     items: {
+        [ROUTE_ABOUT_REDIRECT]: {
+            exact: true,
+            path: '/about',
+            component: Redirect,
+            componentProps: {
+                to: '/',
+            },
+            label: __('About'),
+            roles: UserRole.getKeys(),
+        },
         [ROUTE_PROJECTS_REDIRECT]: {
             exact: true,
             path: '/projects',
