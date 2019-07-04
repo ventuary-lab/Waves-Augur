@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from 'shared/Card';
-import CardReview from 'shared/Card/views/CardReview'
+import CardReview from 'shared/Card/views/CardReview';
 import {html} from 'components';
 import FeedSchema from 'types/FeedSchema';
 

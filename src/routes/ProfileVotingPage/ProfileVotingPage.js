@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
+import List from 'yii-steroids/ui/list/List';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';
-import {html} from 'components';
+import ProjectFeedCard from 'shared/ProjectFeedCard';
+import {dal, html} from 'components';
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 
 import './ProfileVotingPage.scss';
 
 const bem = html.bem('ProfileVotingPage');
 
+@dal.hoc(
+    () => dal.getMyVotings()
+        .then(items => ({items}))
+)
 export default class ProfileVotingPage extends React.PureComponent {
 
     static propTypes = {
@@ -30,7 +36,14 @@ export default class ProfileVotingPage extends React.PureComponent {
                     />
                 </Link>
                 <div className={bem.element('card-list')}>
-                    VotingPage
+                    <div className={bem.element('card-list')}>
+                        <List
+                            listId='ProfileDonationPage'
+                            itemView={ProjectFeedCard}
+                            emptyText={__('No Donation')}
+                            items={this.props.items}
+                        />
+                    </div>
                 </div>
             </div>
         );
