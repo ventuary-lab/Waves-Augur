@@ -6,6 +6,7 @@ import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import Tags from 'shared/Tags';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
+import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 
 import './ProfileSidebar.scss';
@@ -27,11 +28,15 @@ export default class ProfileSidebar extends React.PureComponent {
     };
 
     render() {
+        const avatarStub = this.props.user.profile.isWhale
+            ? whaleAvatarStub
+            : userAvatarStub;
+
         return (
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || userAvatarStub}
+                    src={this.props.user.profile.avatar || avatarStub}
                     alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>

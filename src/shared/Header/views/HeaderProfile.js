@@ -8,6 +8,7 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {html} from 'components';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
+import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
 import {ROUTE_PROFILE, ROUTE_ROOT} from 'routes';
 
@@ -57,11 +58,15 @@ export default class HeaderProfile extends React.PureComponent {
             );
         }
 
+        const avatarStub = this.props.user.profile.isWhale
+            ? whaleAvatarStub
+            : userAvatarStub;
+
         return (
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || userAvatarStub}
+                    src={this.props.user.profile.avatar || avatarStub}
                     alt={this.props.user.profile.name}
                 />
                 <div className={bem.element('inner')}>
