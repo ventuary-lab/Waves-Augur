@@ -4,10 +4,6 @@
 .ActionButtonBlock {
   cursor: pointer;
 
-  & > a {
-    text-decoration: none;
-  }
-
   &__container {
     box-shadow: 0 5px 10px rgba(12, 112, 23, 0.2);
     border-radius: 3px;

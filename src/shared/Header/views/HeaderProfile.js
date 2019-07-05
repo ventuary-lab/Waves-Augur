@@ -4,13 +4,15 @@ import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
+import {openModal} from 'yii-steroids/actions/modal';
 
 import {html} from 'components';
+import MessageModal from 'modals/MessageModal';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
-import {ROUTE_PROFILE, ROUTE_ROOT} from 'routes';
+import {ROUTE_PROFILE, ROUTE_COMMUNITY} from 'routes';
 
 import './HeaderProfile.scss';
 
@@ -52,8 +54,15 @@ export default class HeaderProfile extends React.PureComponent {
                 <Link
                     className={bem.element('login-link')}
                     label={__('Login')}
-                    toPage={ROUTE_ROOT}
                     noStyles
+                    onClick={() => this.props.dispatch(openModal(MessageModal, {
+                        icon: 'Icon__get-an-invitation',
+                        title: __('You Need An Invitation'),
+                        color: 'success',
+                        description: __('You must be invited by registered user'),
+                        submitLabel: __('Check out Community'),
+                        toRoute: ROUTE_COMMUNITY,
+                    }))}
                 />
             );
         }

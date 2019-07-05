@@ -48,7 +48,9 @@ export default class Layout extends React.PureComponent {
 
         if (!await dal.isKeeperInstalled()) {
             this.props.dispatch(openModal(MessageModal, {
+                icon: 'Icon__waves-keeper',
                 title: __('Install Waves Keeper'),
+                color: 'success',
                 description: __('You Need a WAVES Wallet to Join Us'),
                 submitLabel: __('Install'),
                 url: 'https://wavesplatform.com/products-keeper',

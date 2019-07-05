@@ -75,6 +75,7 @@
   }
 
   &__content {
+    height: 100%;
     padding: 30px 15px 15px;
 
     @include tablet {

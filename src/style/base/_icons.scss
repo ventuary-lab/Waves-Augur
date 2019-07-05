@@ -448,4 +448,16 @@ $icons-dir: '../static/icons';
     min-height: 69px;
     background-image: url('#{$icons-dir}/proposal-won-grant.svg');
   }
+
+  &__get-an-invitation {
+    min-width: 240px;
+    min-height: 240px;
+    background-image: url('#{$icons-dir}/get-an-invitation.svg');
+  }
+
+  &__waves-keeper {
+    min-width: 186px;
+    min-height: 186px;
+    background-image: url('#{$icons-dir}/waves-keeper.svg');
+  }
 }

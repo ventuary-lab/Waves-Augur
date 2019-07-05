@@ -155,4 +155,9 @@
       color: $color-brand-green;
     }
   }
+
+  &__login-link {
+    @include link;
+  }
 }
+

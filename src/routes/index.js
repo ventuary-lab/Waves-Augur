@@ -65,14 +65,16 @@ export default {
             },
             label: __('Projects'),
             roles: UserRole.getKeys(),
-        },
-        [ROUTE_PROJECTS]: {
-            exact: true,
-            path: '/projects/:state',
-            component: ProjectsPage,
-            label: __('Projects'),
-            isNavVisible: false,
-            roles: UserRole.getKeys(),
+            items: {
+                [ROUTE_PROJECTS]: {
+                    exact: true,
+                    path: '/projects/:state',
+                    component: ProjectsPage,
+                    label: __('Projects'),
+                    isNavVisible: false,
+                    roles: UserRole.getKeys(),
+                },
+            }
         },
         [ROUTE_COMMUNITY]: {
             exact: true,

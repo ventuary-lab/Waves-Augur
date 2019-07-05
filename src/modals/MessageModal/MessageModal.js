@@ -22,6 +22,11 @@ export default class MessageModal extends React.PureComponent {
         onCancel: PropTypes.func,
         onSubmit: PropTypes.func,
         url: PropTypes.string,
+        toRoute: PropTypes.string,
+    };
+
+    static defaultProps = {
+        color: 'default',
     };
 
     constructor() {
@@ -37,38 +42,49 @@ export default class MessageModal extends React.PureComponent {
                 {...this.props.modalProps}
                 className={bem.block()}
             >
-                <div className={bem.element('content')}>
-                    <h1 className={bem.element('title')}>
-                        {this.props.title}
-                    </h1>
-                    <div className={bem.element('description')}>
-                        {this.props.description}
+                <div className={bem.element('inner')}>
+                    <div className={bem.element('content')}>
+                        {this.props.icon && (
+                            <div className={bem.element('icon')}>
+                                <span className={`Icon ${this.props.icon}`}/>
+                            </div>
+                        )}
+                        <h1 className={bem.element('title', {
+                            color: this.props.color,
+                        })}>
+                            {this.props.title}
+                        </h1>
+                        <div className={bem.element('description')}>
+                            {this.props.description}
+                        </div>
                     </div>
-                    {this.props.type === 'confirm' && (
-                        <Button
-                            color='primary'
-                            onClick={this._onCancel}
-                            label={__('No')}
-                            outline
-                        />
-                    )}
-                    {this.props.url && (
-                        <a
-                            href={this.props.url}
-                            className='ButtonView ButtonView_color_primary'
-                            target='_blank'
-                        >
-                            {this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
-                        </a>
-                    ) || (
-                        <Button
-                            type='submit'
-                            color='primary'
-                            url={this.props.url}
-                            onClick={this._onSubmit}
-                            label={this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
-                        />
-                    )}
+                    <div className={bem.element('actions')}>
+                        {this.props.type === 'confirm' && (
+                            <Button
+                                color='primary'
+                                onClick={this._onCancel}
+                                label={__('No')}
+                                outline
+                            />
+                        )}
+                        {this.props.url && (
+                            <a
+                                href={this.props.url}
+                                className='ButtonView ButtonView_color_primary'
+                                target='_blank'
+                            >
+                                {this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
+                            </a>
+                        ) || (
+                            <Button
+                                type='submit'
+                                color='primary'
+                                toRoute={this.props.toRoute}
+                                onClick={this._onSubmit}
+                                label={this.props.submitLabel || (this.props.type === 'confirm' ? __('Yes') : __('Ok'))}
+                            />
+                        )}
+                    </div>
                 </div>
             </Modal>
         );
