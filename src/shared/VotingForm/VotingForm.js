@@ -67,7 +67,7 @@ export default class VotingForm extends React.PureComponent {
                         />
                         <Button
                             label={__('Reject')}
-                            onClick={() => this._onSubmit(ProjectVoteEnum.FEATURED)}
+                            onClick={() => this._onSubmit(ProjectVoteEnum.DELISTED)}
                             color={'danger'}
                         />
                     </div>

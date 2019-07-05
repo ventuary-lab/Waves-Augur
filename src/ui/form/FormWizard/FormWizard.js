@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {getFormValues} from 'redux-form';
 import _times from 'lodash-es/times';
 
 import {html} from 'components';
@@ -11,6 +13,12 @@ import './FormWizard.scss';
 
 const bem = html.bem('FormWizard');
 
+
+@connect(
+    (state, props) => ({
+        formValues: getFormValues(props.formId)(state),
+    })
+)
 export default class FormWizard extends React.PureComponent {
 
     static propTypes = {
@@ -90,7 +98,7 @@ export default class FormWizard extends React.PureComponent {
                     </div>
                     <div className={bem.element('control-next')}>
                         <Button
-                            type='submit'
+                            onClick={() => this._onSubmit(this.props.formValues)}
                             color='primary'
                         >
                             {__('Next')}

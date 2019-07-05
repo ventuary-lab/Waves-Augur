@@ -74,6 +74,14 @@ class TagsField extends React.PureComponent {
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('keydown', this._onKeyDown);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this._onKeyDown);
+    }
+
     componentWillReceiveProps(nextProps) {
         // Add by dataProviderHoc on enter click
         if (this.props.input.value !== nextProps.input.value && this.props.isOpened) {
