@@ -65,7 +65,7 @@ export default class CardReview extends React.PureComponent {
                         )}
                         {this.props.type === FeedTypeEnum.DONATE && (
                             <div className={bem.element('donate-amount')}>
-                                {_times(Math.abs(dal.contract.TIERS.indexOf(this.props.amount) + 1)).map((item, index) => (
+                                {_times(dal.contract.TIERS.indexOf(Math.abs(this.props.amount)) + 1).map((item, index) => (
                                     <div
                                         key={index}
                                         className={bem.element('wave-icon')}
