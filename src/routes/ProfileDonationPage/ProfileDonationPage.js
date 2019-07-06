@@ -14,28 +14,31 @@ const bem = html.bem('ProfileDonationPage');
 
 
 @dal.hoc(
-    () => dal.getMyDonations()
+    props => dal.getUserDonations(props.user.address)
         .then(items => ({items}))
 )
 export default class ProfileDonationPage extends React.PureComponent {
 
     static propTypes = {
         items: PropTypes.array,
+        isMe: PropTypes.bool,
     };
 
     render() {
         return (
             <div className={bem.block()}>
-                <Link
-                    toRoute={ROUTE_PROJECTS_REDIRECT}
-                    noStyles
-                    className={bem.element('link-block')}
-                >
-                    <ActionButtonBlock
-                        title={__('Explore New Ideas')}
-                        iconClass={'Icon__explore-ideas'}
-                    />
-                </Link>
+                {this.props.isMe && (
+                    <Link
+                        toRoute={ROUTE_PROJECTS_REDIRECT}
+                        noStyles
+                        className={bem.element('link-block')}
+                    >
+                        <ActionButtonBlock
+                            title={__('Explore New Ideas')}
+                            iconClass={'Icon__explore-ideas'}
+                        />
+                    </Link>
+                )}
                 <div className={bem.element('card-list')}>
                     <List
                         listId='ProfileDonationPage'

@@ -2,6 +2,7 @@ import _get from 'lodash/get';
 import _round from 'lodash/round';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
+import _trim from 'lodash/trim';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
@@ -132,7 +133,7 @@ export default class DalComponent {
             return null;
         }
         return {
-            address: address,
+            address: _trim(address),
             role: address === this.dApp
                 ? UserRole.GENESIS
                 : await this.transport.nodeFetchKey('wl_sts_' + address),
@@ -161,7 +162,7 @@ export default class DalComponent {
         return users;
     }
 
-    async getInvitedUsers() {
+    async getUserInvites() {
         const account = await this.getAccount();
         const data = await this.transport.nodeAllData();
         return Promise.all(
@@ -326,24 +327,22 @@ export default class DalComponent {
      * Return user projects (where user is owner)
      * @returns {Promise}
      */
-    async getMyProjects() {
-        const account = await this.getAccount();
+    async getUserProjects(address) {
         const data = await this.transport.nodeAllData();
         return Promise.all(
             Object.keys(data)
-                .filter(key => /^author_/.test(key) && data[key].value === account.address)
+                .filter(key => /^author_/.test(key) && data[key] === address)
                 .map(key => this.getProject(key.replace(/^author_/, '')))
         );
     }
 
-    async getMyVotings() {
-        const account = await this.getAccount();
+    async getUserVotings(address) {
         const data = await this.transport.nodeAllData();
         const result = await Promise.all(
             Object.keys(data)
                 .map(async key => {
                     const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_votereview/i.exec(key);
-                    if (match && match[2] === account.address) {
+                    if (match && match[2] === address) {
                         const uid = match[1];
                         return {
                             review: data[key],
@@ -360,14 +359,13 @@ export default class DalComponent {
         return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
-    async getMyDonations() {
-        const account = await this.getAccount();
+    async getUserDonations(address) {
         const data = await this.transport.nodeAllData();
         const result = await Promise.all(
             Object.keys(data)
                 .map(async key => {
                     const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_text_id:([0-9]+)/i.exec(key);
-                    if (match && match[2] === account.address) {
+                    if (match && match[2] === address) {
                         const uid = match[1];
                         const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[3]}`);
                         const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[3]}`);
@@ -386,14 +384,13 @@ export default class DalComponent {
         return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
-    async getMyGrants() {
-        const account = await this.getAccount();
+    async getUserGrants(address) {
         const data = await this.transport.nodeAllData();
         const result = await Promise.all(
             Object.keys(data)
                 .map(async key => {
                     const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_whalereview/i.exec(key);
-                    if (match && match[2] === account.address) {
+                    if (match && match[2] === address) {
                         const uid = match[1];
                         return {
                             review: data[key],

@@ -11,6 +11,9 @@ const bem = html.bem('WaitingTab');
 
 import './WaitingTab.scss';
 import UserSchema from 'types/UserSchema';
+import Link from 'yii-steroids/ui/nav/Link';
+import UserRole from 'enums/UserRole';
+import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 
 export default class WaitingTab extends React.PureComponent {
@@ -25,8 +28,19 @@ export default class WaitingTab extends React.PureComponent {
             <div className={bem.block()}>
                 {this.props.isCreate && (
                     <>
-                        <h3>We were waiting for you!</h3>
-                        <span>You was invited by <b>{this.props.invitedBy.profile.name}</b></span>
+                        <h3>{__('We were waiting for you!')}</h3>
+                        <span className={bem.element('invited-by')}>
+                            {__('You was invited by')}&nbsp;
+                            <Link
+                                toRoute={this.props.invitedBy.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                                toRouteParams={{
+                                    address: this.props.invitedBy.address,
+                                }}
+                                noStyles
+                            >
+                                <b>{this.props.invitedBy.profile.name}</b>
+                            </Link>
+                        </span>
                         <SvgIcon icon={profileSvg}/>
                         <h3>Please Register to Continue</h3>
                         <SvgIcon icon={arrowDown}/>

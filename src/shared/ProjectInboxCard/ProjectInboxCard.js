@@ -28,6 +28,7 @@ export default class ProjectInboxCard extends React.PureComponent {
                         component: CardInfo,
                         componentProps: {
                             isProject: true,
+                            uid: this.props.item.uid,
                             status: this.props.item.status,
                             coverUrl: this.props.item.coverUrl,
                             logoUrl: this.props.item.logoUrl,

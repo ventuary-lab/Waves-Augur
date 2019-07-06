@@ -9,6 +9,9 @@ import projectAvatarStub from '../../../static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import './CardInfo.scss';
+import Link from 'yii-steroids/ui/nav/Link';
+import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('CardInfo');
 
@@ -47,11 +50,26 @@ export default class CardInfo extends React.PureComponent {
                             backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
                         }}
                     >
-                        <img
-                            className={bem.element('avatar')}
-                            src={this.props.logoUrl || isProject ? projectAvatarStub : avatarStub}
-                            alt='avatar'
-                        />
+                        <Link
+                            toRoute={isProject
+                                ? ROUTE_PROJECT_FEED
+                                : (this.props.userRole === UserRole.WHALE
+                                    ? ROUTE_USER_GRANTS
+                                    : ROUTE_USER_DONATION
+                                )
+                            }
+                            toRouteParams={{
+                                uid: isProject && this.props.uid,
+                                address: !isProject && this.props.address,
+                            }}
+                            noStyles
+                        >
+                            <img
+                                className={bem.element('avatar')}
+                                src={this.props.logoUrl || isProject ? projectAvatarStub : avatarStub}
+                                alt='avatar'
+                            />
+                        </Link>
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('left-info')}>
@@ -78,9 +96,23 @@ export default class CardInfo extends React.PureComponent {
                 <div className={bem.element('column-right')}>
                     <div className={bem.element('top-info')}>
                         {this.props.title && (
-                            <div className={bem.element('title')}>
+                            <Link
+                                toRoute={isProject
+                                    ? ROUTE_PROJECT_FEED
+                                    : (this.props.userRole === UserRole.WHALE
+                                        ? ROUTE_USER_GRANTS
+                                        : ROUTE_USER_DONATION
+                                    )
+                                }
+                                toRouteParams={{
+                                    uid: isProject && this.props.uid,
+                                    address: !isProject && this.props.address,
+                                }}
+                                className={bem.element('title')}
+                                noStyles
+                            >
                                 {this.props.title}
-                            </div>
+                            </Link>
                         )}
                         {this.props.description && (
                             <p className={bem.element('description')}>

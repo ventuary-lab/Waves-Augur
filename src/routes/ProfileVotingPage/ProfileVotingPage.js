@@ -13,7 +13,7 @@ import './ProfileVotingPage.scss';
 const bem = html.bem('ProfileVotingPage');
 
 @dal.hoc(
-    () => dal.getMyVotings()
+    props => dal.getUserVotings(props.user.address)
         .then(items => ({items}))
 )
 export default class ProfileVotingPage extends React.PureComponent {
@@ -25,16 +25,18 @@ export default class ProfileVotingPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <Link
-                    toRoute={ROUTE_PROJECTS_REDIRECT}
-                    noStyles
-                    className={bem.element('link-block')}
-                >
-                    <ActionButtonBlock
-                        title={__('Explore New Ideas')}
-                        iconClass={'Icon__explore-ideas'}
-                    />
-                </Link>
+                {this.props.isMe && (
+                    <Link
+                        toRoute={ROUTE_PROJECTS_REDIRECT}
+                        noStyles
+                        className={bem.element('link-block')}
+                    >
+                        <ActionButtonBlock
+                            title={__('Explore New Ideas')}
+                            iconClass={'Icon__explore-ideas'}
+                        />
+                    </Link>
+                )}
                 <div className={bem.element('card-list')}>
                     <div className={bem.element('card-list')}>
                         <List

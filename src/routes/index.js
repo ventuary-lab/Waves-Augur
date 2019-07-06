@@ -32,11 +32,21 @@ export const ROUTE_PROFILE_PROJECTS = 'profile_projects';
 export const ROUTE_PROFILE_VOTING = 'profile_voting';
 export const ROUTE_PROFILE_INVITED = 'profile_invited';
 export const ROUTE_PROFILE_GRANTS = 'profile_grants';
+export const ROUTE_USER = 'user';
+export const ROUTE_USER_REDIRECT = 'user_redirect';
+export const ROUTE_USER_INBOX = 'user_inbox';
+export const ROUTE_USER_DONATION = 'user_donation';
+export const ROUTE_USER_PROJECTS = 'user_projects';
+export const ROUTE_USER_VOTING = 'user_voting';
+export const ROUTE_USER_INVITED = 'user_invited';
+export const ROUTE_USER_GRANTS = 'user_grants';
 export const ROUTE_PROJECT = 'project';
 export const ROUTE_PROJECT_REDIRECT = 'project_redirect';
 export const ROUTE_PROJECT_FEED = 'project_feed';
 export const ROUTE_PROJECT_DETAILS = 'project_details';
 export const ROUTE_PROJECT_NEWS = 'project_news';
+
+const baseUser = '/users/:address(\\w{35})';
 
 export default {
     id: ROUTE_ROOT,
@@ -161,6 +171,77 @@ export default {
                     label: __('Invited Users'),
                     icon: 'Icon__invite',
                     roles: [UserRole.REGISTERED, UserRole.WHALE, UserRole.GENESIS],
+                    isShowImageLine: true,
+                },
+            },
+        },
+        [ROUTE_USER]: {
+            path: baseUser,
+            component: ProfileLayout,
+            label: __('My profile'),
+            isNavVisible: false,
+            roles: UserRole.getKeys(),
+            rolesUser: UserRole.getAuth(),
+            items: {
+                /*[ROUTE_USER_INBOX]: {
+                    exact: true,
+                    path: baseUser + '/inbox',
+                    component: ProfileInboxPage,
+                    label: __('Inbox'),
+                    icon: 'Icon__notification',
+                    isNavVisible: false,
+                    roles: [UserRole.REGISTERED],
+                    rolesUser: [UserRole.REGISTERED],
+                    isShowImageLine: true,
+                },*/
+                [ROUTE_USER_DONATION]: {
+                    exact: true,
+                    path: baseUser + '/donation',
+                    component: ProfileDonationPage,
+                    label: __('Donation'),
+                    icon: 'Icon__rhombus',
+                    roles: UserRole.getKeys(),
+                    rolesUser: [UserRole.REGISTERED],
+                    isShowImageLine: true,
+                },
+                [ROUTE_USER_PROJECTS]: {
+                    exact: true,
+                    path: baseUser + '/projects',
+                    component: ProfileProjectsPage,
+                    label: __('Projects'),
+                    icon: 'Icon__rocket',
+                    roles: UserRole.getKeys(),
+                    rolesUser: [UserRole.REGISTERED],
+                    isShowImageLine: true,
+                },
+                [ROUTE_USER_VOTING]: {
+                    exact: true,
+                    path: baseUser + '/voiting',
+                    component: ProfileVotingPage,
+                    label: __('Voting'),
+                    icon: 'Icon__voting',
+                    roles: UserRole.getKeys(),
+                    rolesUser: [UserRole.REGISTERED],
+                    isShowImageLine: true,
+                },
+                [ROUTE_USER_GRANTS]: {
+                    exact: true,
+                    path: baseUser + '/grants',
+                    component: ProfileGrantsPage,
+                    label: __('Grants'),
+                    icon: 'Icon__invite',
+                    roles: UserRole.getKeys(),
+                    rolesUser: UserRole.WHALE,
+                    isShowImageLine: true,
+                },
+                [ROUTE_USER_INVITED]: {
+                    exact: true,
+                    path: baseUser + '/invited-users',
+                    component: ProfileInvitedPage,
+                    label: __('Invited Users'),
+                    icon: 'Icon__invite',
+                    roles: UserRole.getKeys(),
+                    rolesUser: [UserRole.REGISTERED, UserRole.WHALE, UserRole.GENESIS],
                     isShowImageLine: true,
                 },
             },

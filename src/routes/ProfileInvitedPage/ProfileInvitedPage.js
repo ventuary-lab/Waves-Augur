@@ -15,7 +15,7 @@ import UserSchema from 'types/UserSchema';
 const bem = html.bem('ProfileInvitedPage');
 
 @dal.hoc(
-    () => dal.getInvitedUsers()
+    props => dal.getUserInvites(props.user.address)
         .then(items => ({items}))
 )
 @connect()
@@ -23,16 +23,19 @@ export default class ProfileInvitedPage extends React.PureComponent {
 
     static propTypes = {
         items: PropTypes.arrayOf(UserSchema),
+        isMe: PropTypes.bool,
     };
 
     render() {
         return (
             <div className={bem.block()}>
-                <ActionButtonBlock
-                    title={__('Invite New User')}
-                    iconClass={'Icon__invite-user_small'}
-                    onClick={() => this.props.dispatch(openModal(InviteUserModal))}
-                />
+                {this.props.isMe && (
+                    <ActionButtonBlock
+                        title={__('Invite New User')}
+                        iconClass={'Icon__invite-user_small'}
+                        onClick={() => this.props.dispatch(openModal(InviteUserModal))}
+                    />
+                )}
                 <div className={bem.element('card-list')}>
                     <List
                         listId='ProfileInvitedPage'

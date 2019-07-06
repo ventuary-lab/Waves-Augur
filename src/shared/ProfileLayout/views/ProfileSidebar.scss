@@ -20,6 +20,21 @@
     padding: 113px 30px 100px;
   }
 
+  &__you {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    width: 70px;
+    margin-left: -35px;
+    background-color: $color-brand-green;
+    border-radius: 3px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+  }
+
   &__inner {
     display: flex;
     flex-direction: column;
@@ -87,11 +102,11 @@
     margin-bottom: 16px;
 
     & > span:first-child {
-      font-weight: 500;
     }
 
     & > span:last-child {
       margin-left: 10px;
+      font-weight: 500;
     }
   }
 

@@ -62,7 +62,7 @@ export default class Layout extends React.PureComponent {
         if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
             && nextProps.user && nextProps.user.role === UserRole.INVITED && nextProps.user.invitedBy
         ) {
-            this.props.dispatch(openModal(ProfileWizardModal));
+            this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
         }
     }
 

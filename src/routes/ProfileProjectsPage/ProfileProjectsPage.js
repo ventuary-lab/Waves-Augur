@@ -16,7 +16,7 @@ import List from 'yii-steroids/ui/list/List';
 const bem = html.bem('ProfileProjectsPage');
 
 @dal.hoc(
-    () => dal.getMyProjects()
+    props => dal.getUserProjects(props.user.address)
         .then(items => ({items}))
 )
 @connect()
@@ -24,16 +24,19 @@ export default class ProfileProjectsPage extends React.PureComponent {
 
     static propTypes = {
         items: PropTypes.arrayOf(ProjectSchema),
+        isMe: PropTypes.bool,
     };
 
     render() {
         return (
             <div className={bem.block()}>
-                <ActionButtonBlock
-                    title={__('Add New Project')}
-                    iconClass='Icon__new-project'
-                    onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
-                />
+                {this.props.isMe && (
+                    <ActionButtonBlock
+                        title={__('Add New Project')}
+                        iconClass='Icon__new-project'
+                        onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
+                    />
+                )}
                 <div className={bem.element('card-list')}>
                     <List
                         listId='ProfileProjectsPage'

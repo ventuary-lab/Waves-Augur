@@ -40,6 +40,7 @@ export default class ProjectFeedCard extends React.PureComponent {
                         component: CardInfo,
                         componentProps: {
                             isProject: true,
+                            uid: this.props.item.uid,
                             status: this.props.item.project.status,
                             coverUrl: this.props.item.project.coverUrl,
                             logoUrl: this.props.item.project.logoUrl,

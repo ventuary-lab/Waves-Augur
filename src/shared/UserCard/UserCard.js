@@ -25,6 +25,8 @@ export default class UserCard extends React.PureComponent {
                         component: CardInfo,
                         componentProps: {
                             isProject: false,
+                            address: this.props.item.address,
+                            userRole: this.props.item.role,
                             isWhale: this.props.item.profile.isWhale,
                             logoUrl: this.props.item.profile.avatar,
                             title: this.props.item.profile.name,
@@ -35,8 +37,7 @@ export default class UserCard extends React.PureComponent {
                     right={{
                         component: CardTags,
                         componentProps: {
-                            tags: this.props.item.profile.tags,
-                            socials: this.props.item.profile.socials,
+                            user: this.props.item,
                         },
                     }}
                 />

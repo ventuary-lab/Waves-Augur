@@ -62,6 +62,12 @@
     font-weight: 500;
     margin-bottom: 10px;
     text-align: center;
+    color: #abb3ac;
+    text-decoration: none;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 
   &__description {

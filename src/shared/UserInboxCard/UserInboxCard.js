@@ -28,6 +28,8 @@ export default class UserInboxCard extends React.PureComponent {
                         component: CardInfo,
                         componentProps: {
                             isProject: false,
+                            address: this.props.item.address,
+                            userRole: this.props.item.role,
                             logoUrl: this.props.item.profile.avatar,
                             title: this.props.item.profile.name,
                             description: this.props.item.profile.title,

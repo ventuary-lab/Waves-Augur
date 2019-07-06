@@ -11,6 +11,9 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import {dal, html} from 'components';
 
 import './CardReview.scss';
+import Link from 'yii-steroids/ui/nav/Link';
+import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('CardReview');
 
@@ -39,11 +42,19 @@ export default class CardReview extends React.PureComponent {
 
         return (
             <div className={bem.block()}>
-                <img
-                    className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || avatarStub}
-                    alt={this.props.user.profile.name}
-                />
+                <Link
+                    toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                    toRouteParams={{
+                        address: this.props.user.address,
+                    }}
+                    noStyles
+                >
+                    <img
+                        className={bem.element('avatar')}
+                        src={this.props.user.profile.avatar || avatarStub}
+                        alt={this.props.user.profile.name}
+                    />
+                </Link>
                 <div className={bem.element('info-container')}>
                     <div className={bem.element('info')}>
                         {this.props.type === FeedTypeEnum.VOTE && (

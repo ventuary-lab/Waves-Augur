@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {getUser} from 'yii-steroids/reducers/auth';
+import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
@@ -16,14 +16,11 @@ import ProfileWizardModal from 'modals/ProfileWizardModal';
 
 const bem = html.bem('ProfileSidebar');
 
-@connect(
-    state => ({
-        user: getUser(state),
-    })
-)
+@connect()
 export default class ProfileSidebar extends React.PureComponent {
 
     static propTypes = {
+        isMe: PropTypes.bool,
         user: UserSchema,
     };
 
@@ -39,6 +36,11 @@ export default class ProfileSidebar extends React.PureComponent {
                     src={this.props.user.profile.avatar || avatarStub}
                     alt={this.props.user.profile.name}
                 />
+                {this.props.isMe && (
+                    <div className={bem.element('you')}>
+                        {__('You')}
+                    </div>
+                )}
                 <div className={bem.element('inner')}>
                     <span className={bem.element('name')}>
                         {this.props.user.profile.name}
@@ -92,16 +94,20 @@ export default class ProfileSidebar extends React.PureComponent {
                             items={this.props.user.profile.tags}
                         />
                     )}
-                    <div className={bem.element('balance')}>
-                        <span>{__('Balance')}</span>
-                        <span>
-                            {this.props.user.balance} {__('WAVES')}
-                        </span>
-                    </div>
-                    <Link
-                        label={__('Edit profile')}
-                        onClick={() => this.props.dispatch(openModal(ProfileWizardModal))}
-                    />
+                    {this.props.isMe && (
+                        <div className={bem.element('balance')}>
+                            <span>{__('Balance')}:</span>
+                            <span>
+                                {this.props.user.balance} {__('WAVES')}
+                            </span>
+                        </div>
+                    )}
+                    {this.props.isMe && (
+                        <Link
+                            label={__('Edit profile')}
+                            onClick={() => this.props.dispatch(openModal(ProfileWizardModal))}
+                        />
+                    )}
                 </div>
             </div>
         );

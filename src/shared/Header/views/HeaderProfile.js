@@ -12,7 +12,7 @@ import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
-import {ROUTE_PROFILE, ROUTE_COMMUNITY} from 'routes';
+import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
 
 import './HeaderProfile.scss';
 
@@ -114,13 +114,17 @@ export default class HeaderProfile extends React.PureComponent {
                         </ul>
                     </div>
                 </div>
-                <Link
-                    className={bem.element('notification')}
-                    to={'/'}
-                    noStyles
-                >
-                    <span className={bem(bem.element('notification-icon'), 'MaterialIcon')}>notifications</span>
-                </Link>
+                {items.find(item => item.id === ROUTE_PROFILE_INBOX) && (
+                    <Link
+                        className={bem.element('notification')}
+                        toRoute={ROUTE_PROFILE_INBOX}
+                        noStyles
+                    >
+                        <span className={bem(bem.element('notification-icon'), 'MaterialIcon')}>
+                            notifications
+                        </span>
+                    </Link>
+                )}
             </div>
         );
     }

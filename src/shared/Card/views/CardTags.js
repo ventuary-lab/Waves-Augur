@@ -6,6 +6,10 @@ import SocialLinks from 'shared/SocialLinks';
 import {html} from 'components';
 
 import './CardTags.scss';
+import UserSchema from 'types/UserSchema';
+import Link from 'yii-steroids/ui/nav/Link';
+import UserRole from 'enums/UserRole';
+import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 const bem = html.bem('CardTags');
 
@@ -13,34 +17,33 @@ const bem = html.bem('CardTags');
 export default class CardTags extends React.PureComponent {
 
     static propTypes = {
-        tags: PropTypes.arrayOf(PropTypes.string),
-        socials: PropTypes.shape({
-            url_twitter: PropTypes.string,
-            url_facebook: PropTypes.string,
-            url_linkedin: PropTypes.string,
-            url_instagram: PropTypes.string,
-            url_telegram: PropTypes.string,
-            url_website: PropTypes.string,
-        }),
+        user: UserSchema,
     };
 
     render() {
         return (
             <div className={bem.block()}>
                 <div className={bem.element('tags')}>
-                    {this.props.tags && this.props.tags.length > 0 && (
+                    {this.props.user.tags && this.props.user.tags.length > 0 && (
                         <Tags
-                            items={this.props.tags}
+                            items={this.props.user.tags}
                         />
                     )}
                 </div>
                 <div className={bem.element('actions')}>
-                    <span className={bem.element('link')}>
+                    <Link
+                        toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                        toRouteParams={{
+                            address: this.props.user.address,
+                        }}
+                        className={bem.element('link')}
+                        noStyles
+                    >
                         {__('Read More')}
-                    </span>
+                    </Link>
                     <div className={bem.element('socials')}>
                         <SocialLinks
-                            urls={this.props.socials}
+                            urls={this.props.user.socials}
                         />
                     </div>
                 </div>

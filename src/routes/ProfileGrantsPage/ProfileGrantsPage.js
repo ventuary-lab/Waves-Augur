@@ -14,29 +14,32 @@ import './ProfileGrantsPage.scss';
 const bem = html.bem('ProfileGrantsPage');
 
 @dal.hoc(
-    () => dal.getMyGrants()
+    props => dal.getUserGrants(props.user.address)
         .then(items => ({items}))
 )
 @connect()
 export default class ProfileGrantsPage extends React.PureComponent {
 
     static propTypes = {
-        // items: PropTypes.arrayOf(UserSchema), //todo
+        items: PropTypes.array,
+        isMe: PropTypes.bool,
     };
 
     render() {
         return (
             <div className={bem.block()}>
-                <Link
-                    toRoute={ROUTE_PROJECTS_REDIRECT}
-                    noStyles
-                    className={bem.element('link-block')}
-                >
-                    <ActionButtonBlock
-                        title={__('Explore New Ideas')}
-                        iconClass={'Icon__explore-ideas'}
-                    />
-                </Link>
+                {this.props.isMe && (
+                    <Link
+                        toRoute={ROUTE_PROJECTS_REDIRECT}
+                        noStyles
+                        className={bem.element('link-block')}
+                    >
+                        <ActionButtonBlock
+                            title={__('Explore New Ideas')}
+                            iconClass={'Icon__explore-ideas'}
+                        />
+                    </Link>
+                )}
                 <div className={bem.element('card-list')}>
                     <List
                         listId='ProfileDonationPage'

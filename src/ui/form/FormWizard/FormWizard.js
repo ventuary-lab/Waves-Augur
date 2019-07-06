@@ -54,7 +54,7 @@ export default class FormWizard extends React.PureComponent {
                 className={bem(bem.block(), this.props.className)}
             >
                 <div className={bem.element('steps')}>
-                    {_times(this.props.items.length).map((item, index) => (
+                    {this.props.items.map((item, index) => (
                         <div
                             key={index}
                             className={bem.element('step', {
@@ -72,6 +72,7 @@ export default class FormWizard extends React.PureComponent {
                                 className={bem.element('step-point', {
                                     filled: index <= this.getActiveIndex(),
                                 })}
+                                onClick={() => this.setState({activeId: item.id})}
                             />
                         </div>
                     ))}
