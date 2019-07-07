@@ -90,6 +90,7 @@ export default class ProjectSidebar extends React.PureComponent {
                     </table>
                     {this.props.routeId !== ROUTE_PROJECT_NEWS
                         && [ProjectStatusEnum.VOTING, ProjectStatusEnum.CROWDFUND].indexOf(this.props.project.status) !== -1
+                        && !(this.props.project.status === ProjectStatusEnum.VOTING && this.props.project.isImVoted)
                         && this.props.project.author.address !== this.props.user.address
                         && this.props.user.role !== UserRole.WHALE
                         && (

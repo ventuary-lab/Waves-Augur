@@ -16,7 +16,7 @@ export default class ProjectStateEnum extends Enum {
     }
 
     static getState(status) {
-        if (status === ProjectStatusEnum.VOTING) {
+        if (status === ProjectStatusEnum.VOTING || status === ProjectStatusEnum.REJECTED) {
             return this.FEATURED;
         }
 

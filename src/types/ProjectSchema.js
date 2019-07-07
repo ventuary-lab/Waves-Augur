@@ -14,6 +14,7 @@ const ProjectSchema = PropTypes.shape({
     targetWaves: PropTypes.number,
     tags: PropTypes.arrayOf(PropTypes.string),
     country: PropTypes.string,
+    isImVoted: PropTypes.bool,
     contents: PropTypes.shape({
         problem: PropTypes.string,
         solution: PropTypes.string,

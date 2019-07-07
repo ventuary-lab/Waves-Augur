@@ -236,6 +236,7 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProject(uid) {
+        const account = await this.getAccount();
         const [
             project,
             status,
@@ -248,6 +249,7 @@ export default class DalComponent {
             blockVotingEnd,
             blockCrowdfundEnd,
             blockWhaleEnd,
+            myVote,
         ] = await this.transport.nodeFetchKeys([
             'datajson_' + uid,
             'status_' + uid,
@@ -260,6 +262,7 @@ export default class DalComponent {
             'expiration_block_' + uid,
             'expiration_one_' + uid,
             'expiration_two_' + uid,
+            'commit_' + uid + '_' + account.address
         ]);
         if (!project) {
             return null;
@@ -285,6 +288,7 @@ export default class DalComponent {
             createTime: '2000-01-01 00:00:00',
             ...project,
             blocks,
+            isImVoted: !!myVote,
             status: statusMap[status] || ProjectStatusEnum.getStatus(blocks, height),
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,

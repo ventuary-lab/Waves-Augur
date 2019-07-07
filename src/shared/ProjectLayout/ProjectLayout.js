@@ -96,9 +96,13 @@ export default class ProjectLayout extends React.PureComponent {
                                 && this.props.project.author.address !== this.props.user.address
                                 && (
                                     <>
-                                        {this.props.project.status === ProjectStatusEnum.VOTING && this.props.user.role !== UserRole.WHALE && (
-                                            <VotingForm project={this.props.project}/>
-                                        )}
+                                        {this.props.project.status === ProjectStatusEnum.VOTING
+                                            && this.props.user.role !== UserRole.WHALE
+                                            && !this.props.project.isImVoted
+                                            && (
+                                                <VotingForm project={this.props.project}/>
+                                            )
+                                        }
                                         {this.props.project.status === ProjectStatusEnum.CROWDFUND && this.props.user.role !== UserRole.WHALE && (
                                             <DonateForm project={this.props.project}/>
                                         )}

@@ -64,27 +64,15 @@ export default class CardProgress extends React.PureComponent {
                     />
                 </div>
                 <div className={bem.element('actions')}>
-                    {isNew && (
-                        <Link
-                            className={bem.element('link')}
-                            toRoute={ROUTE_PROJECT_FEED}
-                            toRouteParams={{
-                                uid: this.props.uid
-                            }}
-                            label={'Voting'}
-                            noStyles
-                        />
-                    ) || (
-                        <Link
-                            className={bem.element('link')}
-                            toRoute={ROUTE_PROJECT_DETAILS}
-                            toRouteParams={{
-                                uid: this.props.uid
-                            }}
-                            label={'Read More'}
-                            noStyles
-                        />
-                    )}
+                    <Link
+                        className={bem.element('link')}
+                        toRoute={ROUTE_PROJECT_DETAILS}
+                        toRouteParams={{
+                            uid: this.props.uid
+                        }}
+                        label={'Read More'}
+                        noStyles
+                    />
                 </div>
             </div>
         );
