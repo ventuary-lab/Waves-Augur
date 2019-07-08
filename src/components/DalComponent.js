@@ -1,5 +1,4 @@
 import _get from 'lodash/get';
-import _round from 'lodash/round';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
@@ -23,7 +22,7 @@ export default class DalComponent {
 
     constructor() {
         this.isTestMode = (process.env.APP_MODE || 'test') === 'test';
-        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
+        this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
