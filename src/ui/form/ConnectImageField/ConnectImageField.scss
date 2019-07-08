@@ -29,10 +29,11 @@
     padding-left: 46px !important;
     padding-right: 46px !important;
 
+    width: 130px;
     max-width: 160px;
 
     @include tablet {
-      margin-left: 20px !important;
+      margin-left: 14px !important;
       //padding: 13px 77px !important;
     }
   }

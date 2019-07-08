@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getFormValues} from 'redux-form';
-import _times from 'lodash-es/times';
 
 import {html} from 'components';
 import Form from 'yii-steroids/ui/form/Form';
@@ -89,6 +88,7 @@ export default class FormWizard extends React.PureComponent {
                     <div className={bem.element('control-back')}>
                         {this.getActiveIndex() > 0 && (
                             <Button
+                                layout={'default'}
                                 color='primary'
                                 onClick={() => this.switchTab(-1)}
                                 link
@@ -101,6 +101,7 @@ export default class FormWizard extends React.PureComponent {
                         <Button
                             onClick={() => this._onSubmit(this.props.formValues)}
                             color='primary'
+                            layout={'default'}
                         >
                             {__('Next')}
                         </Button>

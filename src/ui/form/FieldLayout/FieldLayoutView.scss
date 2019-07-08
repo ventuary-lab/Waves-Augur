@@ -11,16 +11,17 @@
 
   &__field {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 38px;
   }
 
   &__label-icon {
-    margin-right: 5px;
+    margin-right: 15px;
   }
 
   &__label-inner {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 
   &__label {

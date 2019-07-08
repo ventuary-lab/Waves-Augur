@@ -1,17 +1,55 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
 .WaitingTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include tablet {
+    padding: 0 100px 0;
+  }
 
   &__title {
     font-weight: 500;
     font-size: 20px;
     line-height: 24px;
     text-align: center;
-    margin-bottom: 30px;
+    margin: 0 0 10px;
+
+    &_is-edit {
+      margin: 0 0 30px;
+    }
   }
 
   &__invited-by {
+    margin-bottom: 30px;
+
     div {
+      color: $color-brand-green;
       display: inline;
       width: auto;
     }
+
+    a {
+      @include link;
+    }
+  }
+
+  &__icon-invite {
+    margin-bottom: 15px;
+  }
+
+  &__icon-arrow {
+    margin-bottom: 33px;
+  }
+
+  &__request {
+    margin-bottom: 12px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: $color-gg-4;
   }
 }

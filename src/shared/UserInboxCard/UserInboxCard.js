@@ -11,7 +11,7 @@ import InboxTypeEnum from 'enums/InboxTypeEnum';
 import './UserInboxCard.scss';
 import UserSchema from 'types/UserSchema';
 
-const bem = html.bem('UserCard');
+const bem = html.bem('UserInboxCard');
 
 export default class UserInboxCard extends React.PureComponent {
 

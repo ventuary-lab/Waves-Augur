@@ -11,7 +11,7 @@ import {html} from 'components';
 import './ProjectInboxCard.scss';
 import ProjectSchema from 'types/ProjectSchema';
 
-const bem = html.bem('ProjectCard');
+const bem = html.bem('ProjectInboxCard');
 
 export default class ProjectInboxCard extends React.PureComponent {
 
