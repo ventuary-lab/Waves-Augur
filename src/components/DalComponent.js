@@ -482,6 +482,35 @@ export default class DalComponent {
     }
 
     /**
+     * @returns {Promise}
+     */
+    async getProjectsDonations() {
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_text_id:([0-9]+)/i.exec(key);
+                    if (match) {
+                        const uid = match[1];
+                        const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[3]}`);
+                        const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[3]}`);
+                        return {
+                            review: data[key],
+                            reviewNumber: parseInt(match[3]),
+                            type: FeedTypeEnum.DONATE,
+                            vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
+                            amount: (mode === 'negative' ? -1 : 1) * this.contract.TIERS[tierNumber - 1],
+                            project: await this.getProject(uid),
+                            user: await this.getUser(match[2]),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
+    /**
      * Create or update project
      * @param {object} data
      * @returns {Promise<*>}
