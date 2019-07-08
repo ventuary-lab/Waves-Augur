@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import UserInboxCard from 'shared/UserInboxCard';
 import ProjectInboxCard from 'shared/ProjectInboxCard';
 import InboxTypeEnum from 'enums/InboxTypeEnum';
 
@@ -18,40 +17,27 @@ export default class ProfileInboxPage extends React.PureComponent {
     };
 
     render() {
-
-        const userItem = {
-            profile: {
-                name: 'Anton Semenov',
-                title: 'Founder & CEO @Ventuary',
-                location: 'Russia'
-            },
-        };
-
         const projectItem = {
-            status: 'Voting',
+            status: 'voting',
             name: 'SmartChain Media',
             description: 'Build Blockchain-related applications and uild applications ser',
-            location: 'Russia'
+            location: 'Russia',
+            expireVoting: '2019-07-18 11:37:16',
+            uid: '638df850-71e6-469b-9278-cd7a5bab790b',
         };
 
         return (
             <div className={bem.block()}>
-
-                <UserInboxCard
-                    item={userItem}
-                    type={InboxTypeEnum.INVITATION_ACCEPTED}
-                />
-
                 {InboxTypeEnum.getKeys()
                     .filter(type => type !== InboxTypeEnum.INVITATION_ACCEPTED)
-                    .map(type => (
+                    .map((type, index) => (
                         <ProjectInboxCard
                             item={projectItem}
                             type={type}
+                            key={index}
                         />
                     ))
                 }
-
             </div>
         );
     }

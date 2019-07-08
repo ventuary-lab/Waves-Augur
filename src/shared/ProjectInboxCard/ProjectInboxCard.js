@@ -35,12 +35,15 @@ export default class ProjectInboxCard extends React.PureComponent {
                             title: this.props.item.name,
                             description: this.props.item.description,
                             country: this.props.item.location,
+                            expireVoting: this.props.item.expireVoting,
                         }
                     }}
                     right={{
                         component: CardInbox,
                         componentProps: {
                             type: this.props.type,
+                            uid: this.props.item.uid,
+                            isProject: this.props.item.uid,
                         }
                     }}
                 />
