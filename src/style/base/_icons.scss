@@ -10,10 +10,6 @@ $icons-dir: '../static/icons';
 
   &__pencil {
     background-image: url('#{$icons-dir}/pencil.svg');
-
-    &_green {
-      background-image: url('#{$icons-dir}/pencil-green.svg');
-    }
   }
 
   &__trash {
