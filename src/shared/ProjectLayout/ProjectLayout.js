@@ -92,26 +92,19 @@ export default class ProjectLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.props.routeId !== ROUTE_PROJECT_NEWS
-                                && this.props.project.author.address !== this.props.user.address
-                                && (
-                                    <>
-                                        {this.props.project.status === ProjectStatusEnum.VOTING
-                                            && this.props.user.role !== UserRole.WHALE
-                                            && !this.props.project.isImVoted
-                                            && (
-                                                <VotingForm project={this.props.project}/>
-                                            )
-                                        }
-                                        {this.props.project.status === ProjectStatusEnum.CROWDFUND && this.props.user.role !== UserRole.WHALE && (
-                                            <DonateForm project={this.props.project}/>
-                                        )}
-                                        {this.props.project.status === ProjectStatusEnum.WAITING_GRANT && this.props.user.role === UserRole.WHALE && (
-                                            <GrantForm project={this.props.project}/>
-                                        )}
-                                    </>
-                                )
-                            }
+                            {this.props.routeId !== ROUTE_PROJECT_NEWS && (
+                                <>
+                                    {this.props.project.canVote && (
+                                        <VotingForm project={this.props.project}/>
+                                    )}
+                                    {this.props.project.canDonate && (
+                                        <DonateForm project={this.props.project}/>
+                                    )}
+                                    {this.props.project.canWhale && (
+                                        <GrantForm project={this.props.project}/>
+                                    )}
+                                </>
+                            )}
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent
