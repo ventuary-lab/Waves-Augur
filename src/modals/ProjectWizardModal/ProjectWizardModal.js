@@ -13,6 +13,7 @@ import {dal, html} from 'components';
 
 import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';
+import ProjectContentEnum from 'enums/ProjectContentEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
@@ -40,7 +41,7 @@ export default class ProjectWizardModal extends React.PureComponent {
 
         this._stepName = this._stepName.bind(this);
         this._stepProject = this._stepProject.bind(this);
-        this._stepContacts = this._stepContacts.bind(this);
+        this._stepIdeaThreeContacts= this._stepIdeaThreeContacts.bind(this);
     }
 
     render() {
@@ -51,7 +52,7 @@ export default class ProjectWizardModal extends React.PureComponent {
             >
                 <FormWizard
                     formId={FORM_ID}
-                    title={__('You Are Creating New Project')}
+                    title={__('New Project')}
                     onSubmit={values => {
                         return dal.saveProject(values)
                             .then(project => {
@@ -68,13 +69,11 @@ export default class ProjectWizardModal extends React.PureComponent {
                             name: this.props.project.name,
                             description: this.props.project.description,
                             logoUrl: this.props.project.logoUrl,
-                            coverUrl: this.props.project.coverUrl,
                             expireVoting: this.props.project.expireVoting,
                             expireCrowd: this.props.project.expireCrowd,
                             expireWhale: this.props.project.expireWhale,
                             targetWaves: this.props.project.targetWaves,
                             tags: this.props.project.tags,
-                            location: this.props.project.location,
                             contents: this.props.project.contents,
                             socials: this.props.project.socials,
                         }
@@ -88,7 +87,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                                     expireWhale: moment().add(12, 'day').format('YYYY-MM-DD'),
                                     targetWaves: 10,
                                     tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
-                                    location: 'Russia',
                                     socials: {
                                         url_twitter: 'https://twitter.com/MarsCuriosity',
                                     }
@@ -132,24 +130,16 @@ export default class ProjectWizardModal extends React.PureComponent {
                             ],
                         },
                         {
-                            id: 'idea-problem',
-                            component: this._stepIdeaProblem,
+                            id: 'idea-one',
+                            component: this._stepIdeaOne,
                         },
                         {
-                            id: 'idea-mvp',
-                            component: this._stepIdeaMvp,
+                            id: 'idea-two',
+                            component: this._stepIdeaTwo,
                         },
                         {
-                            id: 'idea-impact',
-                            component: this._stepIdeaImpact,
-                        },
-                        {
-                            id: 'idea-code',
-                            component: this._stepIdeaCode,
-                        },
-                        {
-                            id: 'contacts',
-                            component: this._stepContacts,
+                            id: 'idea-three-contacts',
+                            component: this._stepIdeaThreeContacts,
                             validators: [
                                 ['socials.url_' + SocialEnum.TWITTER, 'required'],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
@@ -165,23 +155,23 @@ export default class ProjectWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('You Need To Give All Necessary Information About It')}
+                    {__('Please fill all necessary fields to add your awesome idea')}
                 </div>
                 <span className={bem(
                     bem.element('new-project-icon'),
                     'Icon Icon__new-project_lg')}
                 />
                 <InputField
-                    topLabel={this.props.isPhone ? __('Project Name') : ''}
-                    label={!this.props.isPhone ? __('Project Name') : ''}
+                    layout={'default'}
+                    topLabel={__('Your Project Name')}
                     attribute={'name'}
-                    placeholder={__('Enter Your Project Name')}
+                    placeholder={__('Example: Coupon Bazaar')}
                 />
                 <TextField
-                    topLabel={this.props.isPhone ? __('Sort Description') : ''}
-                    label={!this.props.isPhone ? __('Sort Description') : ''}
+                    layout={'default'}
+                    topLabel={__('Sort Description')}
                     attribute={'description'}
-                    placeholder={__('Description')}
+                    placeholder={__('Example: Web3 coupon marketplace.  Coupon — is a digital asset which represents a special discount from ...')}
                 />
             </>
         );
@@ -191,18 +181,12 @@ export default class ProjectWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Project Details')}
+                    {__('Please fill all necessary fields to add your awesome idea')}
                 </div>
                 <ConnectImageField
                     topLabel={this.props.isPhone ? __('Logo URL') : ''}
                     label={!this.props.isPhone ? __('Logo URL') : ''}
                     attribute='logoUrl'
-                    placeholder={__('Enter URL')}
-                />
-                <ConnectImageField
-                    topLabel={this.props.isPhone ? __('Cover URL') : ''}
-                    label={!this.props.isPhone ? __('Cover URL') : ''}
-                    attribute='coverUrl'
                     placeholder={__('Enter URL')}
                 />
                 <div className={'form-row'}>
@@ -254,176 +238,124 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 <TagsField
                     attribute='tags'
+                    layoutClassName={bem.element('tags')}
                     topLabel={this.props.isPhone
-                        ? __('Tags - Use ‘Enter’ to add a hashtag (10 max)')
-                        : __('Use ‘Enter’ to add a hashtag (10 max)')
+                        ? __('Tags - Use ‘Enter’ to add a hashtag (5 tags max)')
+                        : __('Use ‘Enter’ to add a hashtag (5 tags max)')
                     }
                     label={!this.props.isPhone ? __('Tags') : ''}
                     placeholder={__('Enter Tags')}
+                    max={5}
+                />
+            </>
+        );
+    }
+
+    _stepIdeaOne() {
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('Please fill all necessary fields to add your awesome idea')}
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.PROBLEM)}
+                        attribute={'contents.problem'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.PROBLEM)}
+                        layout={'default'}
+                    />
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.SOLUTION)}
+                        attribute={'contents.solution'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.SOLUTION)}
+                        layout={'default'}
+                    />
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.X_FACTOR)}
+                        attribute={'contents.xFactor'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.X_FACTOR)}
+                        layout={'default'}
+                    />
+                </div>
+            </>
+        );
+    }
+
+    _stepIdeaTwo() {
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('Please fill all necessary fields to add your awesome idea')}
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.WHY_SMART_CONTRACTS)}
+                        attribute={'contents.whySmartContracts'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.WHY_SMART_CONTRACTS)}
+                        layout={'default'}
+                    />
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.NEW_FEATURES_OR_MVP)}
+                        attribute={'contents.newFeaturesOrMvp'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.NEW_FEATURES_OR_MVP)}
+                        layout={'default'}
+                    />
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.MARKET_STRATEGY)}
+                        attribute={'contents.marketStrategy'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.MARKET_STRATEGY)}
+                        layout={'default'}
+                    />
+                </div>
+            </>
+        );
+    }
+
+    _stepIdeaThreeContacts() {
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('Please fill all necessary fields to add your awesome idea')}
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.IMPACT_ON_COMMUNITY)}
+                        attribute={'contents.impactOnCommunity'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.IMPACT_ON_COMMUNITY)}
+                        layout={'default'}
+                    />
+                </div>
+                <div className={'form-row'}>
+                    <TextField
+                        topLabel={ProjectContentEnum.getLabel(ProjectContentEnum.CURRENT_STAGE)}
+                        attribute={'contents.currentStage'}
+                        placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.CURRENT_STAGE)}
+                        layout={'default'}
+                    />
+                </div>
+                <InputField
+                    layoutClassName={bem.element('presentation')}
+                    attribute={'presentation'}
+                    placeholder={__('https://medium.com/ma......')}
+                    label={!this.props.isPhone ? __('Presentation') : ''}
+                    topLabel={this.props.isPhone ? __('Presentation') : ''}
                 />
                 <InputField
-                    topLabel={this.props.isPhone ? __('Your Country') : ''}
-                    label={!this.props.isPhone ? __('Your Country') : ''}
-                    attribute={'location'}
-                    placeholder={__('Enter')}
+                    attribute={'socials.url_twitter'}
+                    placeholder={__('https://medium.com/ma......')}
+                    topLabel={this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}
+                    label={!this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}
+                    labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(SocialEnum.TWITTER) : ''}
                 />
-            </>
-        );
-    }
 
-    _stepIdeaProblem() {
-        return (
-            <>
-                <div className={bem.element('sub-title')}>
-                    {__('Project Details')}
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Problem'}
-                        attribute={'contents.problem'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Solution'}
-                        attribute={'contents.solution'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'X-Factor'}
-                        attribute={'contents.xFactor'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-            </>
-        );
-    }
-
-    _stepIdeaMvp() {
-        return (
-            <>
-                <div className={bem.element('sub-title')}>
-                    {__('Idea Canvas')}
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'MVP'}
-                        attribute={'contents.mvp'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Large Scale Adoption'}
-                        attribute={'contents.largeScaleAdoption'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-            </>
-        );
-    }
-
-    _stepIdeaImpact() {
-        return (
-            <>
-                <div className={bem.element('sub-title')}>
-                    {__('Idea Canvas')}
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Impact on User'}
-                        attribute={'contents.impactOnUser'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Impact on User Context'}
-                        attribute={'contents.impactOnUserContext'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Impact on User Society'}
-                        attribute={'contents.impactOnUserSociety'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-            </>
-        );
-    }
-
-    _stepIdeaCode() {
-        return (
-            <>
-                <div className={bem.element('sub-title')}>
-                    {__('Idea Canvas')}
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Code Validation'}
-                        attribute={'contents.codeValidation'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Legal Arrangements'}
-                        attribute={'contents.legalArrangements'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Open-source strategy'}
-                        attribute={'contents.openSourceStrategy'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-                <div className={'form-row'}>
-                    <TextField
-                        topLabel={'Interconnectedness'}
-                        attribute={'contents.interconnectedness'}
-                        placeholder={__('Text')}
-                        layout={'default'}
-                    />
-                </div>
-            </>
-        );
-    }
-
-    _stepContacts() {
-        return (
-            <>
-                <div className={bem.element('sub-title')}>
-                    {__('Contacts')}
-                </div>
-                {SocialEnum.getKeys().map(id => (
-                    <InputField
-                        topLabel={this.props.isPhone ? SocialEnum.getLabel(id) : ''}
-                        label={!this.props.isPhone ? SocialEnum.getLabel(id) : ''}
-                        labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(id) : ''}
-                        key={id}
-                        attribute={`socials.url_${id}`}
-                        placeholder={__('Enter URL')}
-                        layout={'horizontal'}
-                    />
-                ))}
             </>
         );
     }

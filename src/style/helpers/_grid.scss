@@ -195,6 +195,7 @@ $col-width: percentage(100/$col-length)/100;
   display: none;
 
   @include tablet {
+    text-align: right;
     display: block;
     padding-top: 15px;
     padding-right: 10px;

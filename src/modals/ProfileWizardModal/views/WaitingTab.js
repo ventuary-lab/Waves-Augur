@@ -28,25 +28,36 @@ export default class WaitingTab extends React.PureComponent {
             <div className={bem.block()}>
                 {this.props.isCreate && (
                     <>
-                        <h3>{__('We were waiting for you!')}</h3>
+                        <div className={bem.element('title')}>
+                            {__('We were waiting for you!')}
+                        </div>
                         <span className={bem.element('invited-by')}>
                             {__('You was invited by')}&nbsp;
                             <Link
+                                layoutClassName={bem.element('link')}
                                 toRoute={this.props.invitedBy.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
                                 toRouteParams={{
                                     address: this.props.invitedBy.address,
                                 }}
                                 noStyles
                             >
-                                <b>{this.props.invitedBy.profile.name}</b>
+                                {this.props.invitedBy.profile.name}
                             </Link>
                         </span>
-                        <SvgIcon icon={profileSvg}/>
-                        <h3>Please Register to Continue</h3>
-                        <SvgIcon icon={arrowDown}/>
+                        <div className={bem.element('icon-invite')}>
+                            <SvgIcon
+                                icon={profileSvg}
+                            />
+                        </div>
+                        <span className={bem.element('request')}>
+                            {__('Please Register to Continue')}
+                        </span>
+                        <div className={bem.element('icon-arrow')}>
+                            <SvgIcon icon={arrowDown}/>
+                        </div>
                     </>
                 ) || (
-                    <div className={bem.element('title')}>
+                    <div className={bem.element('title', 'is-edit')}>
                         {__('Edit profile')}
                     </div>
                 )}

@@ -5,31 +5,41 @@ export default class ProjectContentEnum extends Enum {
     static PROBLEM = 'problem';
     static SOLUTION = 'solution';
     static X_FACTOR = 'xFactor';
-    static MVP = 'mvp';
-    static LARGE_SCALE_ADOPTION = 'largeScaleAdoption';
-    static IMPACT_ON_USER = 'impactOnUser';
-    static IMPACT_ON_USER_CONTEXT = 'impactOnUserContext';
-    static IMPACT_ON_USER_SOCIETY = 'impactOnUserSociety';
-    static CODE_VALIDATION = 'codeValidation';
-    static LEGAL_ARRANGEMENTS = 'legalArrangements';
-    static OPEN_SOURCE_STRATEGY = 'openSourceStrategy';
-    static INTERCONNECTEDNESS = 'interconnectedness';
+
+    static WHY_SMART_CONTRACTS = 'whySmartContracts';
+    static NEW_FEATURES_OR_MVP = 'newFeaturesOrMvp';
+    static MARKET_STRATEGY = 'marketStrategy';
+    static IMPACT_ON_COMMUNITY = 'impactOnCommunity';
+    static CURRENT_STAGE = 'currentStage';
 
     static getLabels() {
         return {
             [this.PROBLEM]: __('Problem'),
             [this.SOLUTION]: __('Solution'),
             [this.X_FACTOR]: __('X-Factor'),
-            [this.MVP]: __('MVP'),
-            [this.LARGE_SCALE_ADOPTION]: __('Large Scale Adoption'),
-            [this.IMPACT_ON_USER]: __('Impact On User'),
-            [this.IMPACT_ON_USER_CONTEXT]: __('Impact On User Context'),
-            [this.IMPACT_ON_USER_SOCIETY]: __('Impact On User Society'),
-            [this.CODE_VALIDATION]: __('Code Validation'),
-            [this.LEGAL_ARRANGEMENTS]: __('Legal Arrangements'),
-            [this.OPEN_SOURCE_STRATEGY]: __('Open Source Strategy'),
-            [this.INTERCONNECTEDNESS]: __('Interconnectedness'),
+            [this.WHY_SMART_CONTRACTS]: __('Why smart contracts and DLT?'),
+            [this.NEW_FEATURES_OR_MVP]: __('New features or MVP description '),
+            [this.MARKET_STRATEGY]: __('Go to market strategy'),
+            [this.IMPACT_ON_COMMUNITY]: __('Impact on community'),
+            [this.CURRENT_STAGE]: __('Current stage of the project'),
         };
+    }
+
+    static getPlaceholders() {
+        return {
+            [this.PROBLEM]: __('Example: Coupons and discounts are very popular now. However, in order to use them, many operations from customers are required: registration, credit card, e-mail...'),
+            [this.SOLUTION]: __('Example: Decentralized coupon marketplace. Where each coupon — is a digital smart asset which represents a special discount from suppliers with certain automated logic...'),
+            [this.X_FACTOR]: __('Example: It\'s easy to become supplier. It\'s easy to become customer. It works everythere in the world because of crypto and smart contracts. It\'s not censored ...'),
+            [this.WHY_SMART_CONTRACTS]: __('Example: Payments in crypto. Supplier\'s operations automatization. Buy/Sell operations, transfers and exchanges of tokenized coupons ...'),
+            [this.NEW_FEATURES_OR_MVP]: __('Example:  1. Mainnet launch;  2. Supplier\'s account page; ...'),
+            [this.MARKET_STRATEGY]: __('Example: Marketplaces are creating more use cases for DLT & Smart Contracts as well as more liquidity for crypto in general ... '),
+            [this.IMPACT_ON_COMMUNITY]: __('Example: Marketplaces are creating more use cases for DLT & Smart Contracts as well as more liquidity for crypto in general ...'),
+            [this.CURRENT_STAGE]: __('Example: 1. Product design and users journey - DONE; 2. Smart Contracts and business logic - DONE; 3. Application UI - IN PROGRESS; 4. Marketing materials - IN PROGRESS...'),
+        };
+    }
+
+    static getPlaceholder(id) {
+        return this.getPlaceholders()[id] || '';
     }
 
 }

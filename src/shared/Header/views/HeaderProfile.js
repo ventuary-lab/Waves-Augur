@@ -7,13 +7,15 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 
 import {html} from 'components';
+import UserRole from 'enums/UserRole';
 import MessageModal from 'modals/MessageModal';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import UserSchema from 'types/UserSchema';
-import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
 
+import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
 
 const bem = html.bem('HeaderProfile');
@@ -55,14 +57,20 @@ export default class HeaderProfile extends React.PureComponent {
                     className={bem.element('login-link')}
                     label={__('Login')}
                     noStyles
-                    onClick={() => this.props.dispatch(openModal(MessageModal, {
-                        icon: 'Icon__get-an-invitation',
-                        title: __('You Need An Invitation'),
-                        color: 'success',
-                        description: __('You must be invited by registered user'),
-                        submitLabel: __('Check out Community'),
-                        toRoute: ROUTE_COMMUNITY,
-                    }))}
+                    onClick={() => {
+                        if (this.props.user.role === UserRole.INVITED) {
+                            return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+                        }
+
+                        return this.props.dispatch(openModal(MessageModal, {
+                            icon: 'Icon__get-an-invitation',
+                            title: __('You Need An Invitation'),
+                            color: 'success',
+                            description: __('You must be invited by registered user'),
+                            submitLabel: __('Check out Community'),
+                            toRoute: ROUTE_COMMUNITY,
+                        }));
+                    }}
                 />
             );
         }
