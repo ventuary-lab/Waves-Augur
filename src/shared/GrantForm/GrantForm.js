@@ -100,7 +100,7 @@ export default class GrantForm extends React.PureComponent {
                 {(this.state.tierHovered || this.state.tierValue > 0) && (
                     <div className={bem.element('percent-block')}>
                         <span className={bem.element('balance')}>
-                            {this.props.project.positiveBalance} W
+                            {this.props.project.positiveBalance} 🔹
                         </span>
                         <span className={bem.element('percent')}>
                             +{(this.state.tierHovered || this.state.tierValue) * 10}%

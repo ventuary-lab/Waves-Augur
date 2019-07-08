@@ -48,6 +48,10 @@ const ProjectSchema = PropTypes.shape({
         crowdfundEnd: PropTypes.number,
         whaleEnd: PropTypes.number,
     }),
+    votesCount: PropTypes.shape({
+        featured: PropTypes.number,
+        delisted: PropTypes.number,
+    }),
 });
 
 export default ProjectSchema;

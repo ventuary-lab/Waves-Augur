@@ -80,7 +80,7 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
-                    {this.props.routeId !== ROUTE_PROJECT_NEWS && (this.props.project.canVote || this.props.project.canDonate) && (
+                    {(this.props.project.canVote || this.props.project.canDonate) && (
                         <div className={bem.element('action')}>
                             <Button
                                 label={this.props.project.canVote === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}

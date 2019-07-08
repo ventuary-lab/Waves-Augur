@@ -23,10 +23,10 @@ export default class ProjectProgress extends React.PureComponent {
                 <div className={bem.element('progress')}>
                     <div className={bem.element('progress-info')}>
                         <span className={bem.element('current-waves')}>
-                            {this.props.positiveBalance || 0} W
+                            {this.props.positiveBalance || 0} 🔹
                         </span>
                         <span className={bem.element('against-waves')}>
-                            {this.props.negativeBalance || 0} W {__('against')}
+                            {this.props.negativeBalance || 0} 🔹 {__('against')}
                         </span>
                         <span className={bem.element('percent')}>
                             {percent}%
@@ -40,7 +40,7 @@ export default class ProjectProgress extends React.PureComponent {
                     </div>
                 </div>
                 <div className={bem.element('target-waves')}>
-                    {this.props.targetWaves} W <span>{__('target sum')}</span>
+                    {this.props.targetWaves} 🔹 <span>{__('target sum')}</span>
                 </div>
             </div>
         );

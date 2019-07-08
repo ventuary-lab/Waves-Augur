@@ -42,29 +42,32 @@ export default class ProjectsPage extends React.PureComponent{
 
     getProjects(projectsState) {
         if (projectsState === ProjectStateEnum.FEED) {
-            this.setState({
-                projects: null,
-                feed: dal.getProjectsDonations(),
-            });
+            dal.getProjectsDonations()
+                .then(feed => {
+                    this.setState({
+                        projects: null,
+                        feed,
+                    });
+                });
         } else {
             dal.getProjects()
-                .then(items => {
-                    items = items.filter(item => item.status !== ProjectStatusEnum.VOTING);
-
+                .then(projects => {
                     switch (projectsState) {
                         case ProjectStateEnum.FEATURED:
-                            items = _orderBy(items, 'positiveBalance', 'desc');
+                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = _orderBy(projects, 'positiveBalance', 'desc');
                             break;
                         case ProjectStateEnum.NEW:
-                            items = _orderBy(items, 'createTime', 'asc');
+                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = _orderBy(projects, 'createTime', 'asc');
                             break;
                         case ProjectStateEnum.FINISHED:
-                            items = items.filter(item => item.positiveBalance > 0 && [ProjectStatusEnum.WAITING_GRANT, ProjectStatusEnum.GRANT].includes(item.status));
-                            items = _orderBy(items, 'positiveBalance', 'desc');
+                            projects = projects.filter(item => item.positiveBalance > 0 && [ProjectStatusEnum.WAITING_GRANT, ProjectStatusEnum.GRANT].includes(item.status));
+                            projects = _orderBy(projects, 'positiveBalance', 'desc');
                             break;
                     }
                     this.setState({
-                        projects: items.filter(item => ProjectStateEnum.getState(item.status) === projectsState),
+                        projects,
                         feed: null,
                     });
                 });
@@ -72,7 +75,7 @@ export default class ProjectsPage extends React.PureComponent{
     }
 
     render() {
-        if (!this.state.projects) {
+        if (!this.state.projects && !this.state.feed) {
             return null;
         }
 

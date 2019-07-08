@@ -105,7 +105,7 @@ export default class DonateForm extends React.PureComponent {
             <>
                 {(this.state.wavesHovered || this.state.wavesValue) && (
                     <span className={bem.element('value')}>
-                        {this.state.wavesHovered || this.state.wavesValue} W
+                        {this.state.wavesHovered || this.state.wavesValue} 🔹
                     </span>
                 )}
                 <div className={bem.element('direction')}>

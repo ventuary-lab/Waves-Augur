@@ -66,6 +66,9 @@ export default class DalComponent {
 
     async getAccount() {
         const keeper = await this.transport.getKeeper();
+        if (!keeper) {
+            return {};
+        }
         const userData = await keeper.publicState();
         return userData.account;
     }
@@ -83,7 +86,7 @@ export default class DalComponent {
                 name: account.name,
                 ...user.profile,
             },
-            balance: _round(_toInteger(account.balance.available) / Math.pow(10, 8), 2),
+            balance: Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8)),
         };
 
         if (this._authInterval) {
@@ -132,8 +135,13 @@ export default class DalComponent {
         if (!address) {
             return null;
         }
+
+        // positive_fund_{uid}_{address}
+        // negative_fund_{uid}_{address}
+
         return {
             address: _trim(address),
+            activity: 1, // TODO
             role: address === this.dApp
                 ? UserRole.GENESIS
                 : await this.transport.nodeFetchKey('wl_sts_' + address),
@@ -166,7 +174,7 @@ export default class DalComponent {
         const data = await this.transport.nodeAllData();
         return Promise.all(
             Object.keys(data)
-                .filter(key => /^wl_ref_/.test(key) && data[key].value === address)
+                .filter(key => /^wl_ref_/.test(key) && data[key] === address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
         );
     }
@@ -307,19 +315,21 @@ export default class DalComponent {
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
-        if (project.author.address !== account.address) {
-            if (project.author.role !== UserRole.WHALE) {
-                if (project.isVotingAvailable && !project.isImVoted) {
-                    project.canVote = true;
+        if (account.address) {
+            if (project.author.address !== account.address) {
+                if (project.author.role !== UserRole.WHALE) {
+                    if (project.isVotingAvailable && !project.isImVoted) {
+                        project.canVote = true;
+                    }
+                    if (project.status === ProjectStatusEnum.CROWDFUND) {
+                        project.canDonate = true;
+                    }
+                } else if (project.status === ProjectStatusEnum.WAITING_GRANT) {
+                    project.canWhale = true;
                 }
-                if (project.status === ProjectStatusEnum.CROWDFUND) {
-                    project.canDonate = true;
-                }
-            } else if (project.status === ProjectStatusEnum.WAITING_GRANT) {
-                project.canWhale = true;
+            } else {
+                project.canEdit = true;
             }
-        } else {
-            project.canEdit = true;
         }
 
         return project;
@@ -557,7 +567,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.dateToHeight(data.expireVoting),
+                    this.isTestMode ? 4 : this.dateToHeight(data.expireVoting),
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,

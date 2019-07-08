@@ -70,7 +70,7 @@ export default class ProjectLayout extends React.PureComponent {
                             <div className={bem.element('nav-container')}>
                                 <div className={bem.element('nav')}>
                                     {this.props.profileNavItems
-                                        .filter(item => item.roles.includes(this.props.user.role))
+                                        .filter(item => item.roles.includes(this.props.user && this.props.user.role || null))
                                         .map(item => (
                                             <Link
                                                 key={item.id}
@@ -92,18 +92,14 @@ export default class ProjectLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.props.routeId !== ROUTE_PROJECT_NEWS && (
-                                <>
-                                    {this.props.project.canVote && (
-                                        <VotingForm project={this.props.project}/>
-                                    )}
-                                    {this.props.project.canDonate && (
-                                        <DonateForm project={this.props.project}/>
-                                    )}
-                                    {this.props.project.canWhale && (
-                                        <GrantForm project={this.props.project}/>
-                                    )}
-                                </>
+                            {this.props.project.canVote && (
+                                <VotingForm project={this.props.project}/>
+                            )}
+                            {this.props.project.canDonate && (
+                                <DonateForm project={this.props.project}/>
+                            )}
+                            {this.props.project.canWhale && (
+                                <GrantForm project={this.props.project}/>
                             )}
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
