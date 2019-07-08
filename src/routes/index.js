@@ -93,13 +93,6 @@ export default {
             label: __('Community'),
             roles: UserRole.getKeys(),
         },
-        [ROUTE_FEED]: {
-            exact: true,
-            path: '/feed',
-            component: NewsPage,
-            label: __('Feed'),
-            roles: UserRole.getKeys(),
-        },
         [ROUTE_PROFILE_REDIRECT]: {
             exact: true,
             path: '/profile',
