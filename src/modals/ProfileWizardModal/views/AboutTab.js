@@ -31,22 +31,25 @@ export default class AboutTab extends React.Component {
                         attribute='avatar'
                         topLabel={this.props.isPhone ? __('Avatar URL') : ''}
                         label={!this.props.isPhone ? __('Avatar URL') : ''}
+                        placeholder={__('Enter URL')}
                         layout={'horizontal'}
                     />
                     <InputField
                         attribute='title'
                         topLabel={this.props.isPhone ? __('Your Occupation') : ''}
                         label={!this.props.isPhone ? __('Your Occupation') : ''}
-                        placeholder={__('Enter')}
+                        placeholder={__('Enter Your Occupation / Specialty')}
                         layout={'horizontal'}
                     />
                     <TagsField
                         attribute='tags'
-                        topLabel={this.props.isPhone ? __('Tags') : ''}
                         label={!this.props.isPhone ? __('Tags') : ''}
-                        placeholder={__('Enter')}
-                        hint={__('Use ‘Enter’ to add a hashtag (10 max)')}
-                        max={10}
+                        topLabel={this.props.isPhone
+                            ? __('Tags - Use ‘Enter’ to add a hashtag (5 tags max)')
+                            : __('Use ‘Enter’ to add a hashtag (5 tags max)')
+                        }
+                        placeholder={__('Enter Tags')}
+                        max={5}
                         layout={'horizontal'}
                     />
                     <InputField

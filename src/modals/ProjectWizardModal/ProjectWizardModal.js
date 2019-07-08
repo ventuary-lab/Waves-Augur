@@ -245,7 +245,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     }
                     label={!this.props.isPhone ? __('Tags') : ''}
                     placeholder={__('Enter Tags')}
-
+                    max={5}
                 />
             </>
         );
