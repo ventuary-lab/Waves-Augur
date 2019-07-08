@@ -2,6 +2,7 @@
 @import '../../../style/helpers/mixins';
 
 .ProfileSidebar {
+  $root: &;
 
   position: relative;
   margin-left: -$grid-offset-mobile;
@@ -112,5 +113,52 @@
 
   &__social-links {
     margin-bottom: 25px;
+  }
+
+  &__edit {
+    font-family: $ff-roboto;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-gg-4;
+    text-transform: capitalize;
+    outline: none;
+
+    .ButtonView__label {
+      display: flex;
+      align-items: center;
+    }
+
+    &-icon {
+      display: block;
+      margin-right: 9px;
+      fill: #abb3ac;
+    }
+
+    &:active {
+      color: $color-brand-green;
+
+      #{$root}__edit-icon {
+        fill: $color-brand-green;
+      }
+    }
+
+    &:visited {
+      color: $color-gg-4;
+
+      #{$root}__edit-icon {
+        fill: $color-gg-4;
+      }
+    }
+
+    @include desktop {
+      &:hover, &:focus {
+        color: $color-brand-green;
+
+        #{$root}__edit-icon {
+          fill: $color-brand-green;
+        }
+      }
+    }
   }
 }
