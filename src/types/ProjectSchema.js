@@ -15,6 +15,11 @@ const ProjectSchema = PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),
     country: PropTypes.string,
     isImVoted: PropTypes.bool,
+    isVotingAvailable: PropTypes.bool,
+    canEdit: PropTypes.bool,
+    canVote: PropTypes.bool,
+    canDonate: PropTypes.bool,
+    canWhale: PropTypes.bool,
     contents: PropTypes.shape({
         problem: PropTypes.string,
         solution: PropTypes.string,

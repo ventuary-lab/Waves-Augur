@@ -69,9 +69,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                             name: this.props.project.name,
                             description: this.props.project.description,
                             logoUrl: this.props.project.logoUrl,
-                            expireVoting: this.props.project.expireVoting,
                             expireCrowd: this.props.project.expireCrowd,
-                            expireWhale: this.props.project.expireWhale,
                             targetWaves: this.props.project.targetWaves,
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
@@ -82,9 +80,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 ? {
                                     name: 'proj' + (new Date()).getTime(),
                                     description: 'Build Blockchain-related applications and uild applications ser',
-                                    expireVoting: moment().add(4, 'day').format('YYYY-MM-DD'),
                                     expireCrowd: moment().add(8, 'day').format('YYYY-MM-DD'),
-                                    expireWhale: moment().add(12, 'day').format('YYYY-MM-DD'),
                                     targetWaves: 10,
                                     tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
                                     socials: {
@@ -109,24 +105,9 @@ export default class ProjectWizardModal extends React.PureComponent {
                             id: 'project',
                             component: this._stepProject,
                             validators: this.props.project ? [] : [
-                                [['expireVoting', 'expireCrowd', 'expireWhale', 'targetWaves'], 'required'],
-                                [['expireVoting', 'expireCrowd', 'expireWhale'], 'date'],
+                                [['expireCrowd', 'targetWaves'], 'required'],
+                                [['expireCrowd'], 'date'],
                                 ['targetWaves', 'integer', {min: 1}],
-                                ['expireVoting', function(values, attribute) {
-                                    if (values[attribute] && values[attribute] <= moment().format('YYYY-MM-DD')) {
-                                        return __('Voting date must be in future');
-                                    }
-                                }],
-                                ['expireCrowd', function(values, attribute) {
-                                    if (values[attribute] && values.expireVoting && values[attribute] <= values.expireVoting) {
-                                        return __('Crowdfunding date must be more than Voting');
-                                    }
-                                }],
-                                ['expireWhale', function(values, attribute) {
-                                    if (values[attribute] && values.expireCrowd && values[attribute] <= values.expireCrowd) {
-                                        return __('Whale date must be more than Crowdfunding');
-                                    }
-                                }],
                             ],
                         },
                         {
@@ -199,12 +180,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                         <div className={bem.element('dates-fields')}>
                             <DateField
                                 layout={'default'}
-                                attribute='expireVoting'
-                                topLabel={__('Voting')}
-                                disabled={!!this.props.project}
-                            />
-                            <DateField
-                                layout={'default'}
                                 attribute='expireCrowd'
                                 topLabel={__('Crowdfunding')}
                                 disabled={!!this.props.project}
@@ -225,13 +200,11 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 attribute='targetWaves'
                                 placeholder={__('Enter Your Project Name')}
                                 layout={'default'}
-                                disabled={!!this.props.project}
                             />
                             <DateField
                                 layout={'default'}
-                                attribute='expireWhale'
-                                topLabel={__('Whale date')}
-                                disabled={!!this.props.project}
+                                attribute='demoDay'
+                                topLabel={__('Demo day')}
                             />
                         </div>
                     </div>
@@ -343,7 +316,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 <InputField
                     layoutClassName={bem.element('presentation')}
-                    attribute={'presentation'}
+                    attribute={'presentationUrl'}
                     placeholder={__('https://medium.com/ma......')}
                     label={!this.props.isPhone ? __('Presentation') : ''}
                     topLabel={this.props.isPhone ? __('Presentation') : ''}
