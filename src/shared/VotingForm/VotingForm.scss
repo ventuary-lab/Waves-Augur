@@ -7,6 +7,10 @@
 
   display: flex;
 
+  .FieldLayoutView__field {
+    margin-bottom: 0;
+  }
+
 
   &__user-info {
     min-width: 150px;
