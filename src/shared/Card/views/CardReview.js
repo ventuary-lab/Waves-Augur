@@ -43,6 +43,7 @@ export default class CardReview extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <Link
+                    className={bem.element('avatar-link')}
                     toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
                     toRouteParams={{
                         address: this.props.user.address,
@@ -100,9 +101,15 @@ export default class CardReview extends React.PureComponent {
                     )}
                 </div>
                 <div className={bem.element('actions')}>
-                    <span className={bem.element('link')}>
-                        {/*__('Read More')*/}
-                    </span>
+                    <Link
+                        className={bem(bem.element('link'), 'read-more-link')}
+                        toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                        toRouteParams={{
+                            address: this.props.user.address,
+                        }}
+                        label={__('Read More')}
+                        noStyles
+                    />
                     <div className={bem.element('socials')}>
                         <SocialLinks
                             urls={this.props.user.profile.socials}

@@ -32,15 +32,14 @@ export default class CardTags extends React.PureComponent {
                 </div>
                 <div className={bem.element('actions')}>
                     <Link
+                        className={bem(bem.element('link'), 'read-more-link')}
                         toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
                         toRouteParams={{
                             address: this.props.user.address,
                         }}
-                        className={bem.element('link')}
+                        label={__('Read More')}
                         noStyles
-                    >
-                        {__('Read More')}
-                    </Link>
+                    />
                     <div className={bem.element('socials')}>
                         <SocialLinks
                             urls={this.props.user.profile.socials}
