@@ -66,7 +66,7 @@ export default class CardInfo extends React.PureComponent {
                         >
                             <img
                                 className={bem.element('avatar')}
-                                src={this.props.logoUrl || isProject ? projectAvatarStub : avatarStub}
+                                src={this.props.logoUrl || (isProject ? projectAvatarStub : avatarStub)}
                                 alt='avatar'
                             />
                         </Link>
