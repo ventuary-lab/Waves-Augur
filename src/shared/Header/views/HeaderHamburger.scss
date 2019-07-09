@@ -1,0 +1,124 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.HeaderHamburger {
+  $root: &;
+
+  display: flex;
+  width: 39px;
+  height: 20px;
+  position: relative;
+
+  &__toggle {
+    width: 39px;
+    height: 20px;
+    display: inline-block;
+    position: relative;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    outline: none;
+
+    @include desktop {
+      &:hover, &:focus {
+        cursor: pointer;
+      }
+    }
+
+    &_active {
+      #{$root}__line {
+        &:first-child {
+          transform: rotate(-45deg) translate(-6px, 8px);
+        }
+
+        &:nth-child(2) {
+          display: none;
+        }
+
+        &:last-child {
+          transform: rotate(45deg) translate(-5px, -6px);
+        }
+      }
+    }
+  }
+
+  &__line {
+    width: 30px;
+    height: 2px;
+    background-color: $color-base-revert;
+    border-radius: 4px;
+    position: absolute;
+    transition-property: -webkit-transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+
+    &:first-child {
+      top: 0;
+    }
+
+    &:nth-child(2) {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:last-child {
+      bottom: 0;
+    }
+  }
+
+  &__list {
+    display: none;
+    position: absolute;
+    top: 34px;
+    left: 0;
+    z-index: $zi-popup;
+    margin: 0;
+    padding: 20px 40px;
+    background-color: $color-base;
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+    border-radius: 0 0 2px 2px;
+    min-width: 182px;
+    list-style: none;
+
+    @include phone-horizontal {
+      top: 40px;
+    }
+
+    &_active {
+      display: block;
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: 10px 0;
+    color: $color-base-revert;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:active {
+      color: $color-brand-green;
+    }
+
+    @include desktop {
+      &:hover,
+      &:focus {
+        color: $color-brand-green;
+      }
+    }
+
+    &_logout {
+      padding-top: 15px;
+    }
+
+    &_active {
+      color: $color-brand-green;
+    }
+  }
+}
