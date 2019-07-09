@@ -79,6 +79,9 @@ export default class ProfileLayout extends React.PureComponent {
                                                     'is-active': item.isActive,
                                                 })}
                                                 toRoute={item.id}
+                                                toRouteParams={{
+                                                    address: this.props.user.address,
+                                                }}
                                                 noStyles
                                             >
                                                 <div className={bem.element('nav-icon')}>
