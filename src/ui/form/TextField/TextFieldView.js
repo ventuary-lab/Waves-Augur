@@ -29,10 +29,8 @@ export default class TextFieldView extends React.PureComponent {
                     className={bem(
                         bem.block({
                             size: this.props.size,
+                            'is-invalid': this.props.isInvalid
                         }),
-                        'form-control',
-                        'form-control-' + this.props.size,
-                        this.props.isInvalid && 'is-invalid',
                         this.props.className
                     )}
                     {...this.props.inputProps}

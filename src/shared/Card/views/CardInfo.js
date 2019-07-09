@@ -67,7 +67,7 @@ export default class CardInfo extends React.PureComponent {
                         >
                             <img
                                 className={bem.element('avatar')}
-                                src={this.props.logoUrl || isProject ? projectAvatarStub : avatarStub}
+                                src={this.props.logoUrl || (isProject ? projectAvatarStub : avatarStub)}
                                 alt='avatar'
                             />
                         </Link>
@@ -121,15 +121,6 @@ export default class CardInfo extends React.PureComponent {
                             <p className={bem.element('description')}>
                                 {this.props.description}
                             </p>
-                        )}
-                    </div>
-                    <div className={bem.element('bottom-info')}>
-                        {this.props.country && (
-                            <div className={bem.element('country')}>
-                                <span className={'MaterialIcon'}>location_on</span>
-                                &nbsp;
-                                <span>{this.props.country}</span>
-                            </div>
                         )}
                     </div>
                 </div>

@@ -23,24 +23,23 @@ class ConnectImageField extends React.PureComponent {
             value: '',
             imageUrl: '',
         };
-
-        this._onChange = this._onChange.bind(this);
     }
 
     render() {
         const InputFieldInternal = InputField.WrappedComponent;
 
         return (
-            <div className={bem.block()}>
+            <div className={bem.block({
+                'is-invalid': this.props.isInvalid
+            })}>
                 <div className={bem.element('field')}>
                     <div className={bem.element('input')}>
                         <InputFieldInternal
                             placeholder={this.props.placeholder}
                             input={{
-                                value: this.state.value,
-                                onChange: this._onChange,
-                                onFocus: this._onFocus,
+                                ...this.props.input,
                             }}
+                            isInvalid={this.props.isInvalid}
                         />
                     </div>
                 </div>
@@ -49,7 +48,7 @@ class ConnectImageField extends React.PureComponent {
                         className={bem.element('action')}
                         color='primary'
                         type={'button'}
-                        onClick={() => this.setState({imageUrl: this.state.value})}
+                        onClick={() => this.setState({imageUrl: this.props.input.value})}
                     >
                         {__('Connect')}
                     </ButtonView>
@@ -63,9 +62,5 @@ class ConnectImageField extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    _onChange(value) {
-        this.setState({value});
     }
 }

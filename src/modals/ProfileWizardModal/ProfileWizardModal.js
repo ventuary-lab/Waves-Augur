@@ -51,14 +51,15 @@ export default class ProfileWizardModal extends React.Component {
                             },
                             validators: [
                                 ['name', 'required'],
-                                ['name', 'string'],
+                                ['name', 'string', {min: 3, max: 150}],
                             ],
                         },
                         {
                             id: 'links',
                             component: LinksTab,
                             validators: [
-                                ['socials.url_' + SocialEnum.TELEGRAM, 'required'],
+                                [['socials.url_' + SocialEnum.TELEGRAM, 'socials.url_' + SocialEnum.TWITTER], 'required'],
+                                [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'string', {max: 250}],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
                             ],
                         },
@@ -66,7 +67,10 @@ export default class ProfileWizardModal extends React.Component {
                             id: 'about',
                             component: AboutTab,
                             validators: [
-                                [['avatar', 'title', 'location'], 'string'],
+                                [['title', 'tags', 'location'], 'required'],
+                                ['title', 'string', {min: 3, max: 250}],
+                                ['avatar', 'string', {max: 250}],
+                                ['location', 'string', {max: 150}],
                             ],
                         },
                     ]}

@@ -42,8 +42,17 @@
   }
 
   &_isInvalid {
-    border-color: $color-brand-red;
+    border-color: $color-brand-light-red;
     color: $color-brand-red;
+
+    &:hover,
+    &:focus {
+      border-color: $color-brand-red;
+    }
+
+    &::placeholder {
+      color: $color-brand-light-red;
+    }
   }
 
   &:disabled {

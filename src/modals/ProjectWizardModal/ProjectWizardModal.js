@@ -97,33 +97,47 @@ export default class ProjectWizardModal extends React.PureComponent {
                             id: 'name',
                             component: this._stepName,
                             validators: [
-                                ['name', 'required'],
-                                [['name', 'description'], 'string'],
+                                [['name', 'description'], 'required'],
+                                [['name'], 'string', {min: 3, max: 150}],
+                                [['description'], 'string', {min: 10, max: 250}],
                             ],
                         },
                         {
                             id: 'project',
                             component: this._stepProject,
-                            validators: this.props.project ? [] : [
-                                [['expireCrowd', 'targetWaves'], 'required'],
-                                [['expireCrowd'], 'date'],
+                            // validators: this.props.project ? [] : [
+                            validators: [
+                                [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
+                                [['expireCrowd', 'demoDay'], 'date'],
                                 ['targetWaves', 'integer', {min: 1}],
+                                ['logoUrl', 'string', {max: 250}],
                             ],
                         },
                         {
                             id: 'idea-one',
                             component: this._stepIdeaOne,
+                            validators: [
+                                [['contents.problem', 'contents.solution', 'contents.xFactor'], 'required'],
+                                [['contents.problem', 'contents.solution', 'contents.xFactor'], 'string', {min: 20, max: 500}],
+                            ],
                         },
                         {
                             id: 'idea-two',
                             component: this._stepIdeaTwo,
+                            validators: [
+                                [['contents.whySmartContracts', 'contents.newFeaturesOrMvp', 'contents.marketStrategy'], 'required'],
+                                [['contents.whySmartContracts', 'contents.newFeaturesOrMvp'], 'string', {min: 20, max: 500}],
+                                ['contents.marketStrategy', 'string', {min: 20, max: 250}],
+                            ],
                         },
                         {
                             id: 'idea-three-contacts',
                             component: this._stepIdeaThreeContacts,
                             validators: [
-                                ['socials.url_' + SocialEnum.TWITTER, 'required'],
-                                [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
+                                [['contents.impactOnCommunity', 'contents.currentStage', 'presentationUrl', 'socials.url_' + SocialEnum.TWITTER], 'required'],
+                                [['contents.impactOnCommunity', 'contents.currentStage'], 'string', {min: 20, max: 250}],
+                                ['socials.url_' + SocialEnum.TWITTER, 'social'],
+                                [['presentationUrl', 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                             ],
                         },
                     ]}

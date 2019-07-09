@@ -5,7 +5,6 @@ export default class ProjectContentEnum extends Enum {
     static PROBLEM = 'problem';
     static SOLUTION = 'solution';
     static X_FACTOR = 'xFactor';
-
     static WHY_SMART_CONTRACTS = 'whySmartContracts';
     static NEW_FEATURES_OR_MVP = 'newFeaturesOrMvp';
     static MARKET_STRATEGY = 'marketStrategy';

@@ -109,6 +109,7 @@ class TagsField extends React.PureComponent {
                                 onKeyDown: this._onKeyDown
                             }}
                             disabled={this.props.max > 0 && this.getValues().length >= this.props.max}
+                            isInvalid={this.props.isInvalid}
                         />
                     </div>
                 </div>
@@ -166,10 +167,13 @@ class TagsField extends React.PureComponent {
 
     _onKeyDown(e) {
         // On enter
-        if (e.which === 13 && !this.props.hoveredItem) {
+        if (e.which === 13) {
             e.preventDefault();
             e.stopPropagation();
-            this._onAdd(this.state.value);
+
+            if (!this.props.hoveredItem) {
+                this._onAdd(this.state.value);
+            }
         }
     }
 }
