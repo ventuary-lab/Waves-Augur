@@ -29,7 +29,7 @@
 
   &__info {
     align-items: flex-end;
-    padding: 20px;
+    padding: 50px 20px 20px;
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
@@ -37,6 +37,10 @@
     font-weight: 300;
     font-size: 13px;
     line-height: 14px;
+
+    @include tablet {
+      padding: 20px;
+    }
   }
 
   &__status {
@@ -96,5 +100,10 @@
 
   &__right-info {
     text-align: right;
+  }
+
+  &__time-is-over {
+    display: block;
+    padding-right: 10px;
   }
 }
