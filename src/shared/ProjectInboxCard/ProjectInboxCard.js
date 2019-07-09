@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {push} from 'react-router-redux';
 
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
 import CardInbox from 'shared/Card/views/CardInbox';
 import InboxTypeEnum from 'enums/InboxTypeEnum';
+import ProjectSchema from 'types/ProjectSchema';
 
-import {html} from 'components';
+import {html, store} from 'components';
 
 import './ProjectInboxCard.scss';
-import ProjectSchema from 'types/ProjectSchema';
 
 const bem = html.bem('ProjectInboxCard');
 
@@ -46,6 +47,7 @@ export default class ProjectInboxCard extends React.PureComponent {
                             isProject: this.props.item.uid,
                         }
                     }}
+                    onClick={() => store.dispatch(push(`/projects/${this.props.item.uid}/feed`))}
                 />
             </div>
         );
