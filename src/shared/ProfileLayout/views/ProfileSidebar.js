@@ -78,18 +78,6 @@ export default class ProfileSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (
-                        <ul className={bem.element('tags-list')}>
-                            {this.props.user.profile.tags.map((item, index) => (
-                                <li
-                                    key={index}
-                                    className={bem.element('tags-item')}
-                                >
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                    {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (
                         <Tags
                             items={this.props.user.profile.tags}
                         />
@@ -98,7 +86,7 @@ export default class ProfileSidebar extends React.PureComponent {
                         <div className={bem.element('balance')}>
                             <span>{__('Balance')}:</span>
                             <span>
-                                {this.props.user.balance} {__('WAVES')}
+                                {this.props.user.balance} 🔹
                             </span>
                         </div>
                     )}

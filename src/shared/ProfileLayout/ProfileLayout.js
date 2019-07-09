@@ -71,7 +71,7 @@ export default class ProfileLayout extends React.PureComponent {
                             <div className={bem.element('nav-container')}>
                                 <div className={bem.element('nav')}>
                                     {this.props.profileNavItems
-                                        .filter(item => (item.rolesUser || item.roles).includes(this.props.user.role))
+                                        .filter(item => (item.rolesUser || item.roles).includes(this.props.user && this.props.user.role || null))
                                         .map(item => (
                                             <Link
                                                 key={item.id}

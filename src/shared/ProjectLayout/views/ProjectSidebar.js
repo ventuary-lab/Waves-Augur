@@ -59,14 +59,6 @@ export default class ProjectSidebar extends React.PureComponent {
                             {ProjectStatusEnum.getLabel(status)}
                         </span>
                     </div>
-
-                    {this.props.project.country && (
-                        <div className={bem.element('country')}>
-                            <span className={'MaterialIcon'}>location_on</span>
-                            &nbsp;
-                            <span>{this.props.project.country}</span>
-                        </div>
-                    )}
                     {this.props.project.tags && this.props.project.tags.length > 0 && (
                         <div className={bem.element('tags')}>
                             <Tags
@@ -88,25 +80,19 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
-                    {this.props.routeId !== ROUTE_PROJECT_NEWS
-                        && [ProjectStatusEnum.VOTING, ProjectStatusEnum.CROWDFUND].indexOf(this.props.project.status) !== -1
-                        && !(this.props.project.status === ProjectStatusEnum.VOTING && this.props.project.isImVoted)
-                        && this.props.project.author.address !== this.props.user.address
-                        && this.props.user.role !== UserRole.WHALE
-                        && (
-                            <div className={bem.element('action')}>
-                                <Button
-                                    label={this.props.project.status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
-                                    onClick={() => {
-                                        window.scrollTo(0, 200);
-                                        const el = document.querySelector('textarea[name=review]');
-                                        el && el.focus();
-                                    }}
-                                />
-                            </div>
-                        )
-                    }
-                    {this.props.project.author.address === this.props.user.address && (
+                    {(this.props.project.canVote || this.props.project.canDonate) && (
+                        <div className={bem.element('action')}>
+                            <Button
+                                label={this.props.project.canVote === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
+                                onClick={() => {
+                                    window.scrollTo(0, 200);
+                                    const el = document.querySelector('textarea[name=review]');
+                                    el && el.focus();
+                                }}
+                            />
+                        </div>
+                    )}
+                    {this.props.project.canEdit && (
                         <Link
                             label={__('Edit project')}
                             onClick={() => this.props.dispatch(openModal(ProjectWizardModal, {

@@ -171,7 +171,7 @@ export default {
         [ROUTE_USER]: {
             path: baseUser,
             component: ProfileLayout,
-            label: __('My profile'),
+            label: __('Profile'),
             isNavVisible: false,
             roles: UserRole.getKeys(),
             rolesUser: UserRole.getAuth(),
@@ -257,7 +257,7 @@ export default {
             component: ProjectLayout,
             label: __('Project'),
             isNavVisible: false,
-            roles: UserRole.getAuth(),
+            roles: UserRole.getKeys(),
             isShowImageLine: true,
             items: {
                 [ROUTE_PROJECT_FEED]: {
@@ -267,7 +267,7 @@ export default {
                     label: __('Feed'),
                     icon: 'Icon__feed',
                     isNavVisible: false,
-                    roles: [UserRole.REGISTERED, UserRole.WHALE],
+                    roles: UserRole.getKeys(),
                     isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_DETAILS]: {
@@ -276,7 +276,7 @@ export default {
                     component: ProjectDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
-                    roles: [UserRole.REGISTERED, UserRole.WHALE],
+                    roles: UserRole.getKeys(),
                     isShowImageLine: true,
                 },
                 [ROUTE_PROJECT_NEWS]: {
@@ -285,7 +285,7 @@ export default {
                     component: ProjectNewsPage,
                     label: __('News'),
                     icon: 'Icon__news',
-                    roles: [UserRole.REGISTERED, UserRole.WHALE],
+                    roles: UserRole.getKeys(),
                     isShowImageLine: true,
                 },
             },

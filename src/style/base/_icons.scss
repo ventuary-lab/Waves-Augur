@@ -72,6 +72,12 @@ $icons-dir: '../static/icons';
     background-image: url('#{$icons-dir}/twitter.svg');
   }
 
+  &__reddit {
+    min-width: 20px;
+    min-height: 16px;
+    background-image: url('#{$icons-dir}/reddit.svg');
+  }
+
   &__facebook {
     background-image: url('#{$icons-dir}/facebook.svg');
   }

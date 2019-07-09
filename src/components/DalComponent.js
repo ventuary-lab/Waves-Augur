@@ -1,5 +1,4 @@
 import _get from 'lodash/get';
-import _round from 'lodash/round';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
@@ -23,7 +22,7 @@ export default class DalComponent {
 
     constructor() {
         this.isTestMode = (process.env.APP_MODE || 'test') === 'test';
-        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
+        this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
@@ -66,6 +65,9 @@ export default class DalComponent {
 
     async getAccount() {
         const keeper = await this.transport.getKeeper();
+        if (!keeper) {
+            return {};
+        }
         const userData = await keeper.publicState();
         return userData.account;
     }
@@ -83,7 +85,7 @@ export default class DalComponent {
                 name: account.name,
                 ...user.profile,
             },
-            balance: _round(_toInteger(account.balance.available) / Math.pow(10, 8), 2),
+            balance: Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8)),
         };
 
         if (this._authInterval) {
@@ -132,8 +134,13 @@ export default class DalComponent {
         if (!address) {
             return null;
         }
+
+        // positive_fund_{uid}_{address}
+        // negative_fund_{uid}_{address}
+
         return {
             address: _trim(address),
+            activity: 1, // TODO
             role: address === this.dApp
                 ? UserRole.GENESIS
                 : await this.transport.nodeFetchKey('wl_sts_' + address),
@@ -162,12 +169,11 @@ export default class DalComponent {
         return users;
     }
 
-    async getUserInvites() {
-        const account = await this.getAccount();
+    async getUserInvites(address) {
         const data = await this.transport.nodeAllData();
         return Promise.all(
             Object.keys(data)
-                .filter(key => /^wl_ref_/.test(key) && data[key].value === account.address)
+                .filter(key => /^wl_ref_/.test(key) && data[key] === address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
         );
     }
@@ -238,8 +244,8 @@ export default class DalComponent {
     async getProject(uid) {
         const account = await this.getAccount();
         const [
-            project,
-            status,
+            data,
+            internalStatus,
             positiveBalance,
             negativeBalance,
             votesFeaturedCount,
@@ -250,6 +256,7 @@ export default class DalComponent {
             blockCrowdfundEnd,
             blockWhaleEnd,
             myVote,
+            nCommits,
         ] = await this.transport.nodeFetchKeys([
             'datajson_' + uid,
             'status_' + uid,
@@ -262,9 +269,10 @@ export default class DalComponent {
             'expiration_block_' + uid,
             'expiration_one_' + uid,
             'expiration_two_' + uid,
-            'commit_' + uid + '_' + account.address
+            'commit_' + uid + '_' + account.address,
+            'ncommits_' + uid
         ]);
-        if (!project) {
+        if (!data) {
             return null;
         }
 
@@ -283,22 +291,47 @@ export default class DalComponent {
             crowdfundEnd: blockCrowdfundEnd,
             whaleEnd: blockWhaleEnd,
         };
-
-        return {
-            createTime: '2000-01-01 00:00:00',
-            ...project,
+        const project = {
+            ...data,
+            uid,
             blocks,
-            isImVoted: !!myVote,
-            status: statusMap[status] || ProjectStatusEnum.getStatus(blocks, height),
+            isVotingAvailable: false,
+            canEdit: false,
+            canVote: false,
+            canDonate: false,
+            canWhale: false,
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
+            status: statusMap[internalStatus] || ProjectStatusEnum.getStatus(blocks, height),
+            isImVoted: !!myVote,
+            author: await this.getUser(authorAddress),
             votesCount: {
                 [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
                 [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
-            author: await this.getUser(authorAddress),
-            uid,
         };
+
+        if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
+            project.isVotingAvailable = true;
+        }
+        if (account.address) {
+            if (project.author.address !== account.address) {
+                if (project.author.role !== UserRole.WHALE) {
+                    if (project.isVotingAvailable && !project.isImVoted) {
+                        project.canVote = true;
+                    }
+                    if (project.status === ProjectStatusEnum.CROWDFUND) {
+                        project.canDonate = true;
+                    }
+                } else if (project.status === ProjectStatusEnum.WAITING_GRANT) {
+                    project.canWhale = true;
+                }
+            } else {
+                project.canEdit = true;
+            }
+        }
+
+        return project;
     }
 
     /**
@@ -458,6 +491,35 @@ export default class DalComponent {
     }
 
     /**
+     * @returns {Promise}
+     */
+    async getProjectsDonations() {
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_text_id:([0-9]+)/i.exec(key);
+                    if (match) {
+                        const uid = match[1];
+                        const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[3]}`);
+                        const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[3]}`);
+                        return {
+                            review: data[key],
+                            reviewNumber: parseInt(match[3]),
+                            type: FeedTypeEnum.DONATE,
+                            vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
+                            amount: (mode === 'negative' ? -1 : 1) * this.contract.TIERS[tierNumber - 1],
+                            project: await this.getProject(uid),
+                            user: await this.getUser(match[2]),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+    }
+
+    /**
      * Create or update project
      * @param {object} data
      * @returns {Promise<*>}
@@ -467,40 +529,33 @@ export default class DalComponent {
             name: '',
             description: null,
             logoUrl: null,
-            coverUrl: null,
-            expireVoting: '', // YYYY-MM-DD
             expireCrowd: '', // YYYY-MM-DD
-            expireWhale: '', // YYYY-MM-DD
+            demoDay: '', // YYYY-MM-DD
             targetWaves: 0,
             tags: [],
-            location: '',
             contents: {
                 problem: '',
                 solution: '',
                 xFactor: '',
-                mvp: '',
-                largeScaleAdoption: '',
-                impactOnUser: '',
-                impactOnUserContext: '',
-                impactOnUserSociety: '',
-                codeValidation: '',
-                legalArrangements: '',
-                openSourceStrategy: '',
-                interconnectedness: '',
+                whySmartContracts: '',
+                newFeaturesOrMvp: '',
+                marketStrategy: '',
+                impactOnCommunity: '',
+                currentStage: '',
                 ...data.contents,
             },
             socials: {
                 url_twitter: null,
-                url_facebook: null,
-                url_linkedin: null,
-                url_instagram: null,
-                url_telegram: null,
-                url_website: null,
                 ...data.socials,
             },
+            presentationUrl: null,
             uid: DalHelper.generateUid(),
             ...data,
         };
+
+        data.expireVoting = moment.utc().add(2, 'hour').format('YYYY-MM-DD HH:mm:ss');
+        data.expireCrowd = moment.utc(data.expireCrowd).format('YYYY-MM-DD 00:00:00');
+        data.expireWhale = moment.utc(data.expireCrowd).add(5, 'day').format('YYYY-MM-DD 00:00:00');
 
         this.transport.resetCache();
 
@@ -511,7 +566,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.dateToHeight(data.expireVoting),
+                    this.isTestMode ? 4 : this.dateToHeight(data.expireVoting),
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,

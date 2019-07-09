@@ -24,9 +24,9 @@ export default class CardTags extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <div className={bem.element('tags')}>
-                    {this.props.user.tags && this.props.user.tags.length > 0 && (
+                    {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (
                         <Tags
-                            items={this.props.user.tags}
+                            items={this.props.user.profile.tags}
                         />
                     )}
                 </div>
@@ -43,7 +43,7 @@ export default class CardTags extends React.PureComponent {
                     </Link>
                     <div className={bem.element('socials')}>
                         <SocialLinks
-                            urls={this.props.user.socials}
+                            urls={this.props.user.profile.socials}
                         />
                     </div>
                 </div>
