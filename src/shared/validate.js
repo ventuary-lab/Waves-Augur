@@ -71,6 +71,10 @@ const validate = function (data, rules) {
                             errors[attribute] = __('String is too long, max: {max}', {
                                 max: params.max,
                             });
+                        } else if ((params.min || params.min === 0) && _size(value) < params.min) {
+                            errors[attribute] = __('String is too short, min: {min}', {
+                                min: params.min,
+                            });
                         }
                     }
                     break;

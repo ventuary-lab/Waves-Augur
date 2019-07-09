@@ -30,7 +30,8 @@
     border-color: $color-brand-light-red;
     color: $color-brand-red;
 
-    &:hover {
+    &:hover,
+    &:focus {
       border-color: $color-brand-red;
     }
 

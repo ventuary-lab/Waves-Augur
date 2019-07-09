@@ -32,10 +32,8 @@ export default class DateFieldView extends React.PureComponent {
                         className: bem(
                             bem.block({
                                 size: this.props.size,
+                                isInvalid: this.props.isInvalid,
                             }),
-                            'form-control',
-                            'form-control-' + this.props.size,
-                            this.props.isInvalid && 'is-invalid',
                             this.props.className,
                         ),
                         disabled: this.props.disabled,
