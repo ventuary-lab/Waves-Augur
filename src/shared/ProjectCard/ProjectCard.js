@@ -1,13 +1,14 @@
 import React from 'react';
+import {push} from 'react-router-redux';
 
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
 import CardProgress from 'shared/Card/views/CardProgress';
+import ProjectSchema from 'types/ProjectSchema';
 
-import {html} from 'components';
+import {html, store} from 'components';
 
 import './ProjectCard.scss';
-import ProjectSchema from 'types/ProjectSchema';
 
 const bem = html.bem('ProjectCard');
 
@@ -44,6 +45,7 @@ export default class ProjectCard extends React.PureComponent {
                             targetWaves: this.props.item.targetWaves,
                         }
                     }}
+                    onClick={() => store.dispatch(push(`/projects/${this.props.item.uid}/feed`))}
                 />
             </div>
         );

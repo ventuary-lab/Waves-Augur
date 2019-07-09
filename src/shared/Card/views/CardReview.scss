@@ -2,6 +2,8 @@
 @import '../../../style/helpers/mixins';
 
 .CardReview {
+  $root: &;
+
   position: relative;
   height: 100%;
   padding: 20px 20px 20px 70px;
@@ -9,14 +11,27 @@
   flex-direction: column;
   justify-content: space-between;
 
-  &__avatar {
+  &__avatar-link {
     position: absolute;
-    object-fit: cover;
     width: 38px;
     height: 38px;
     top: 20px;
     left: 18px;
     border-radius: 50%;
+    overflow: hidden;
+
+    .ButtonView__label {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include image-hover;
+  }
+
+  &__avatar {
+    object-fit: cover;
+    height: 100%;
   }
 
   &__actions {

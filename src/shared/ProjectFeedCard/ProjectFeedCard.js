@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { push } from 'react-router-redux';
 
 import {getUser} from 'yii-steroids/reducers/auth';
 import Card from 'shared/Card';
@@ -56,6 +57,7 @@ export default class ProjectFeedCard extends React.PureComponent {
                             user: this.props.user,
                         }
                     }}
+                    onClick={() => this.props.dispatch(push(`/projects/${this.props.item.project.uid}/feed`))}
                 />
             </div>
         );

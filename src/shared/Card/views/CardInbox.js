@@ -46,9 +46,20 @@ export default class CardInbox extends React.PureComponent {
                     </div>
                 </div>
                 <div className={bem.element('actions')}>
-                    <span className={bem.element('link')}>
-                        {__('Read More')}
-                    </span>
+                    <Link
+                        className={bem(bem.element('link'), 'read-more-link')}
+                        toRoute={
+                            this.props.isProject
+                                ? ROUTE_PROJECT_DETAILS
+                                : null
+                        }
+                        toRouteParams={{
+                            uid: this.props.isProject && this.props.uid,
+                            address: !this.props.isProject && this.props.address
+                        }}
+                        label={__('Read More')}
+                        noStyles
+                    />
                 </div>
             </div>
         );

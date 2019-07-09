@@ -20,6 +20,7 @@ export default class Card extends React.PureComponent {
             component: PropTypes.func,
             componentProps: PropTypes.object,
         }),
+        onClick: PropTypes.func,
 
     };
 
@@ -28,7 +29,10 @@ export default class Card extends React.PureComponent {
         const RightComponent = _get(this.props, 'right.component');
 
         return (
-            <div className={bem.block()}>
+            <div
+                className={bem.block()}
+                onClick={this.props.onClick || null}
+            >
                 {_get(this.props, 'left.component') && (
                     <div className={bem.element('column-left')}>
                         {LeftComponent && (

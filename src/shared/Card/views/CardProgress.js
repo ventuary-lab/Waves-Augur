@@ -65,12 +65,12 @@ export default class CardProgress extends React.PureComponent {
                 </div>
                 <div className={bem.element('actions')}>
                     <Link
-                        className={bem.element('link')}
+                        className={bem(bem.element('link'), 'read-more-link')}
                         toRoute={ROUTE_PROJECT_DETAILS}
                         toRouteParams={{
                             uid: this.props.uid
                         }}
-                        label={'Read More'}
+                        label={__('Read More')}
                         noStyles
                     />
                 </div>

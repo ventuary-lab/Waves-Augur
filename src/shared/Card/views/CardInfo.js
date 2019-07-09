@@ -51,6 +51,7 @@ export default class CardInfo extends React.PureComponent {
                         }}
                     >
                         <Link
+                            className={bem.element('avatar-link')}
                             toRoute={isProject
                                 ? ROUTE_PROJECT_FEED
                                 : (this.props.userRole === UserRole.WHALE

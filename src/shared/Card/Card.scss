@@ -8,6 +8,8 @@
   min-height: 150px;
   margin-bottom: 30px;
 
+  @include card-hover;
+
   @include desktop {
     flex-direction: row;
   }

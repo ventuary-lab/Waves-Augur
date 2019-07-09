@@ -43,15 +43,22 @@
     color: $color-brand-green;
   }
 
-  &__avatar {
+  &__avatar-link {
     position: absolute;
     top: 30px;
     left: 50%;
     transform: translateX(-50%);
-    border-radius: 50%;
     width: 74px;
     height: 74px;
+
+    @include image-hover;
+  }
+
+  &__avatar {
     object-fit: cover;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
   }
 
   &__top-info {

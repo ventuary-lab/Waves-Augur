@@ -104,3 +104,58 @@
   }
 
 }
+
+@mixin image-hover {
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: 3px solid $color-brand-light-green;
+    border-radius: 50%;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+
+  &:active {
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  @include desktop {
+    &:hover, &:focus {
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@mixin card-hover {
+  transition: all 0.3s;
+
+  &:active {
+    border-color: #c8ccc957;
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.2);
+    cursor: pointer;
+
+    .read-more-link {
+      font-weight: 500;
+    }
+  }
+
+  @include desktop {
+    &:hover, &:focus {
+      border-color: #c8ccc957;
+      box-shadow: 0 0 30px rgba(12, 112, 23, 0.2);
+      cursor: pointer;
+
+      .read-more-link {
+        font-weight: 500;
+      }
+    }
+  }
+}
