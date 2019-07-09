@@ -108,6 +108,7 @@ class TagsField extends React.PureComponent {
                                 onChange: this._onChange,
                                 onKeyDown: this._onKeyDown
                             }}
+                            disabled={this.props.max > 0 && this.getValues().length >= this.props.max}
                         />
                     </div>
                 </div>

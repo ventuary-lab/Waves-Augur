@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
+import _orderBy from 'lodash/orderBy';
 
 import {dal, html} from 'components';
 import ProjectSchema from 'types/ProjectSchema';
@@ -9,7 +10,8 @@ import ProjectStateEnum from 'enums/ProjectStateEnum';
 import ProjectCard from 'shared/ProjectCard';
 
 import './ProjectsPage.scss';
-
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import ProjectFeedCard from 'shared/ProjectFeedCard';
 
 const bem = html.bem('ProjectsPage');
 
@@ -24,6 +26,7 @@ export default class ProjectsPage extends React.PureComponent{
 
         this.state = {
             projects: null,
+            feed: null,
         };
     }
 
@@ -37,18 +40,42 @@ export default class ProjectsPage extends React.PureComponent{
         }
     }
 
-
     getProjects(projectsState) {
-        dal.getProjects()
-            .then(items => {
-                this.setState({
-                    projects: items.filter(item => ProjectStateEnum.getState(item.status) === projectsState)
+        if (projectsState === ProjectStateEnum.FEED) {
+            dal.getProjectsDonations()
+                .then(feed => {
+                    this.setState({
+                        projects: null,
+                        feed,
+                    });
                 });
-            });
+        } else {
+            dal.getProjects()
+                .then(projects => {
+                    switch (projectsState) {
+                        case ProjectStateEnum.FEATURED:
+                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = _orderBy(projects, 'positiveBalance', 'desc');
+                            break;
+                        case ProjectStateEnum.NEW:
+                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = _orderBy(projects, 'createTime', 'asc');
+                            break;
+                        case ProjectStateEnum.FINISHED:
+                            projects = projects.filter(item => item.positiveBalance > 0 && [ProjectStatusEnum.WAITING_GRANT, ProjectStatusEnum.GRANT].includes(item.status));
+                            projects = _orderBy(projects, 'positiveBalance', 'desc');
+                            break;
+                    }
+                    this.setState({
+                        projects,
+                        feed: null,
+                    });
+                });
+        }
     }
 
     render() {
-        if (!this.state.projects) {
+        if (!this.state.projects && !this.state.feed) {
             return null;
         }
 
@@ -84,13 +111,22 @@ export default class ProjectsPage extends React.PureComponent{
                                         })}
                                     </div>
                                 </div>
-
-                                <List
-                                    listId='ProjectsList'
-                                    itemView={ProjectCard}
-                                    emptyText={__('No projects')}
-                                    items={this.state.projects}
-                                />
+                                {this.state.projects && (
+                                    <List
+                                        listId='ProjectsList'
+                                        itemView={ProjectCard}
+                                        emptyText={__('No projects')}
+                                        items={this.state.projects}
+                                    />
+                                )}
+                                {this.state.feed && (
+                                    <List
+                                        listId='FeedList'
+                                        itemView={ProjectFeedCard}
+                                        emptyText={__('No feed')}
+                                        items={this.state.feed}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

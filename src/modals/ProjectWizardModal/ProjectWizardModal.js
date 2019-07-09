@@ -184,23 +184,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 topLabel={__('Crowdfunding')}
                                 disabled={!!this.props.project}
                             />
-                        </div>
-                    </div>
-                </div>
-                <div className={'form-row'}>
-                    <div className={'form-label-col'}>
-                        <label>
-                            {__('Target (Waves)')}
-                        </label>
-                    </div>
-                    <div className={'form-field-col'}>
-                        <div className={bem.element('dates-fields')}>
-                            <InputField
-                                topLabel={__('Waves') }
-                                attribute='targetWaves'
-                                placeholder={__('Enter Your Project Name')}
-                                layout={'default'}
-                            />
                             <DateField
                                 layout={'default'}
                                 attribute='demoDay'
@@ -209,6 +192,12 @@ export default class ProjectWizardModal extends React.PureComponent {
                         </div>
                     </div>
                 </div>
+                <InputField
+                    label={__('Target (Waves)')}
+                    topLabel={__('Waves') }
+                    attribute='targetWaves'
+                    placeholder={__('Enter Your Project Name')}
+                />
                 <TagsField
                     attribute='tags'
                     layoutClassName={bem.element('tags')}

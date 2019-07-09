@@ -8,6 +8,10 @@ $icons-dir: '../static/icons';
   min-width: 16px;
   min-height: 16px;
 
+  &__pencil {
+    background-image: url('#{$icons-dir}/pencil.svg');
+  }
+
   &__trash {
     background-image: url('#{$icons-dir}/trash.svg');
   }

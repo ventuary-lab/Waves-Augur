@@ -4,36 +4,25 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 export default class ProjectStateEnum extends Enum {
 
     static FEATURED = 'featured';
-    static DONATION = 'donation';
-    static SUCCESS = 'success';
+    static FEED = 'feed';
+    static NEW = 'new';
+    static FINISHED = 'finished';
 
     static getLabels() {
         return {
             [this.FEATURED]: __('Featured'),
-            [this.DONATION]: __('Donation'),
-            [this.SUCCESS]: __('Success'),
+            [this.FEED]: __('Feed'),
+            [this.NEW]: __('New'),
+            [this.FINISHED]: __('Finished'),
         };
-    }
-
-    static getState(status) {
-        if (status === ProjectStatusEnum.VOTING || status === ProjectStatusEnum.REJECTED) {
-            return this.FEATURED;
-        }
-
-        if (status === ProjectStatusEnum.CROWDFUND) {
-            return this.DONATION;
-        }
-
-        if (status === ProjectStatusEnum.WAITING_GRANT || ProjectStatusEnum.GRANT) {
-            return this.SUCCESS;
-        }
     }
 
     static getCssClasses() {
         return {
             [this.FEATURED]: 'Icon__star',
-            [this.DONATION]: 'Icon__donation',
-            [this.SUCCESS]: 'Icon__rocket-success',
+            [this.FEED]: 'Icon__donation',
+            [this.NEW]: 'Icon__star',
+            [this.FINISHED]: 'Icon__rocket-success',
         };
     }
 

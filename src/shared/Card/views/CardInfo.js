@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {html} from 'components';
-import coverStub from '../../../static/images/cover-stub.png';
+import coverStub from '../../../static/images/cover-stub.jpg';
 import userAvatarStub from '../../../static/images/user-avatar-stub.png';
 import whaleAvatarStub from '../../../static/images/whale-avatar-stub.png';
 import projectAvatarStub from '../../../static/images/project-avatar-stub.png';
@@ -79,7 +79,7 @@ export default class CardInfo extends React.PureComponent {
                                         count: daysLeft,
                                     })}
                                 </span>
-                            )}
+                            ) || __('Time is over')}
                         </div>
                         <div className={bem.element('right-info')}>
                             {!isProject && this.props.activity && (

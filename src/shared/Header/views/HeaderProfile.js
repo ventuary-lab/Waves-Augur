@@ -58,7 +58,7 @@ export default class HeaderProfile extends React.PureComponent {
                     label={__('Login')}
                     noStyles
                     onClick={() => {
-                        if (this.props.user.role === UserRole.INVITED) {
+                        if (this.props.user && this.props.user.role === UserRole.INVITED) {
                             return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
                         }
 
@@ -88,7 +88,7 @@ export default class HeaderProfile extends React.PureComponent {
                 />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('balance')}>
-                        {this.props.user.balance} W
+                        {this.props.user.balance}
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('name')}>
