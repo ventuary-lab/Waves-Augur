@@ -79,7 +79,7 @@ export default class CardInfo extends React.PureComponent {
                                         count: daysLeft,
                                     })}
                                 </span>
-                            )}
+                            ) || __('Time is over')}
                         </div>
                         <div className={bem.element('right-info')}>
                             {!isProject && this.props.activity && (
