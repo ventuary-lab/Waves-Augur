@@ -30,12 +30,14 @@ export default class CommunityPage extends React.PureComponent {
                 <div className={'wrapper'}>
                     <div className={'row'}>
                         <div className={'col'}>
-                            <List
-                                listId='CommunityPage'
-                                itemView={UserCard}
-                                emptyText={__('No users')}
-                                items={this.props.items}
-                            />
+                            <div className={bem.element('inner')}>
+                                <List
+                                    listId='CommunityPage'
+                                    itemView={UserCard}
+                                    emptyText={__('No users')}
+                                    items={this.props.items}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

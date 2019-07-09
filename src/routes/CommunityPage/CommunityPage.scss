@@ -1,3 +1,12 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
 .CommunityPage {
   margin-top: 30px;
+
+  &__inner {
+    @include sitewidth {
+      padding: 0 110px;
+    }
+  }
 }

@@ -122,15 +122,6 @@ export default class CardInfo extends React.PureComponent {
                             </p>
                         )}
                     </div>
-                    <div className={bem.element('bottom-info')}>
-                        {this.props.country && (
-                            <div className={bem.element('country')}>
-                                <span className={'MaterialIcon'}>location_on</span>
-                                &nbsp;
-                                <span>{this.props.country}</span>
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
         );
