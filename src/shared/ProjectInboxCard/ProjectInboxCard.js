@@ -44,7 +44,7 @@ export default class ProjectInboxCard extends React.PureComponent {
                         componentProps: {
                             type: this.props.type,
                             uid: this.props.item.uid,
-                            isProject: this.props.item.uid,
+                            isProject: !!this.props.item.uid,
                         }
                     }}
                     onClick={() => store.dispatch(push(`/projects/${this.props.item.uid}/feed`))}

@@ -34,6 +34,7 @@ export default class UserInboxCard extends React.PureComponent {
                             title: this.props.item.profile.name,
                             description: this.props.item.profile.title,
                             country: this.props.item.profile.location,
+                            createTime: this.props.item.profile.createTime,
                         },
                     }}
                     right={{

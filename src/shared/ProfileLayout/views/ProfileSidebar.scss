@@ -94,6 +94,10 @@
   &__invited-by {
     margin-bottom: 15px;
 
+    a {
+      @include link;
+    }
+
     & > span:last-child {
       color: $color-brand-green;
     }

@@ -58,9 +58,13 @@ export default class ProfileWizardModal extends React.Component {
                             id: 'links',
                             component: LinksTab,
                             validators: [
-                                [['socials.url_' + SocialEnum.TELEGRAM, 'socials.url_' + SocialEnum.TWITTER], 'required'],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'string', {max: 250}],
                                 [SocialEnum.getKeys().map(id => `socials.url_${id}`), 'social'],
+                                ['socials.url_' + SocialEnum.TWITTER, function(values, attribute) {
+                                    if (!_get(values, attribute) && !_get(values, 'socials.url_' + SocialEnum.TELEGRAM)) {
+                                        return __('Twitter or telegram is required');
+                                    }
+                                }]
                             ],
                         },
                         {
