@@ -70,10 +70,12 @@ export default class ProjectWizardModal extends React.PureComponent {
                             description: this.props.project.description,
                             logoUrl: this.props.project.logoUrl,
                             expireCrowd: this.props.project.expireCrowd,
+                            demoDay: this.props.project.demoDay,
                             targetWaves: this.props.project.targetWaves,
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
                             socials: this.props.project.socials,
+                            presentationUrl: this.props.project.presentationUrl,
                         }
                         : (
                             dal.isTestMode
@@ -210,7 +212,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     label={__('Target (Waves)')}
                     topLabel={__('Waves') }
                     attribute='targetWaves'
-                    placeholder={__('Enter Your Project Name')}
+                    placeholder={7000}
                 />
                 <TagsField
                     attribute='tags'

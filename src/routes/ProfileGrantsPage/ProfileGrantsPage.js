@@ -44,7 +44,7 @@ export default class ProfileGrantsPage extends React.PureComponent {
                     <List
                         listId='ProfileDonationPage'
                         itemView={ProjectFeedCard}
-                        emptyText={__('No Donation')}
+                        emptyText={__('No grants')}
                         items={this.props.items}
                     />
                 </div>

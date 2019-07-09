@@ -271,4 +271,14 @@
       }
     }
   }
+
+  &__hamburger {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+
+    @include desktop {
+      display: none;
+    }
+  }
 }

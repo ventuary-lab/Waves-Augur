@@ -51,9 +51,13 @@ export default class ProjectDetailsPage extends React.PureComponent {
                                             <div className={bem.element('title')}>
                                                 {ProjectContentEnum.getLabel(attribute)}
                                             </div>
-                                            <p className={bem.element('description')}>
-                                                {this.props.project.contents[attribute]}
-                                            </p>
+                                            <div className={bem.element('description')}>
+                                                {this.props.project.contents[attribute].split('\n').map((item, index) => (
+                                                    <p key={index}>
+                                                        {item}
+                                                    </p>
+                                                ))}
+                                            </div>
                                         </div>
                                     ))
                                 }

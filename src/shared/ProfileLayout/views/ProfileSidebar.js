@@ -13,6 +13,8 @@ import './ProfileSidebar.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
+import UserRole from 'enums/UserRole';
+import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 const bem = html.bem('ProfileSidebar');
 
@@ -68,13 +70,19 @@ export default class ProfileSidebar extends React.PureComponent {
                             <span>{this.props.user.profile.location}</span>
                         </div>
                     )}
-                    {this.props.user.profile.invitedBy && this.props.user.profile.invitedBy.name && (
+                    {this.props.user.invitedBy && this.props.user.invitedBy.profile.name && (
                         <div className={bem.element('invited-by')}>
                             <span>{__('Invited by')}</span>
                             &nbsp;
-                            <span>
-                                {this.props.user.profile.invitedBy.name}
-                            </span>
+                            <Link
+                                toRoute={this.props.user.invitedBy.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                                toRouteParams={{
+                                    address: this.props.user.invitedBy.address,
+                                }}
+                                noStyles
+                            >
+                                {this.props.user.invitedBy.profile.name}
+                            </Link>
                         </div>
                     )}
                     {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (

@@ -11,6 +11,7 @@ import InputSearchView from 'shared/Header/views/InputSearchView';
 import {ROUTE_ROOT} from 'routes';
 import HeaderNav from './views/HeaderNav';
 import HeaderProfile from './views/HeaderProfile';
+import HeaderHamburger from './views/HeaderHamburger';
 import logoSvg from 'static/icons/logo.svg';
 
 import './Header.scss';
@@ -32,6 +33,9 @@ export default class Header extends React.PureComponent {
         return (
             <header className={bem.block()}>
                 <div className={bem.element('inner')}>
+                    <div className={bem.element('hamburger')}>
+                        <HeaderHamburger/>
+                    </div>
                     <Link
                         className={bem.element('logo')}
                         to={this.props.indexPageUrl}

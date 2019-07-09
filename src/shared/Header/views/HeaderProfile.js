@@ -5,6 +5,7 @@ import Link from 'yii-steroids/ui/nav/Link';
 import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
+import enhanceWithClickOutside from 'react-click-outside';
 
 import {html} from 'components';
 import UserRole from 'enums/UserRole';
@@ -28,6 +29,7 @@ const bem = html.bem('HeaderProfile');
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
     })
 )
+@enhanceWithClickOutside
 export default class HeaderProfile extends React.PureComponent {
 
     static propTypes = {
@@ -135,5 +137,9 @@ export default class HeaderProfile extends React.PureComponent {
                 )}
             </div>
         );
+    }
+
+    handleClickOutside() {
+        this.setState({isMenuOpen: false});
     }
 }

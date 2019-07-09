@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import {html} from 'components';
 import coverStub from '../../../static/images/cover-stub.jpg';
@@ -39,7 +40,9 @@ export default class CardInfo extends React.PureComponent {
             : userAvatarStub;
         const isProject = this.props.isProject;
         const status = isProject ? this.props.status : null;
-        const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
+        const daysLeft = isProject
+            ? ProjectStatusEnum.getDaysLeft(status, this.props)
+            : moment().diff(moment(this.props.createTime), 'days');
 
         return (
             <div className={bem.block()}>
