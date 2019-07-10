@@ -19,7 +19,7 @@ const bem = html.bem('ProjectReviewPage');
     ])
         .then(result => {
 
-            if (_get(props, 'match.params.type') === 'voting') {
+            if (_get(props, 'match.params.type') === 'vote') {
                 return  dal.getUserVotings(result[1].address)
                     .then(votings => ({
                         review: votings.find(item => item.project.uid === result[0].uid),

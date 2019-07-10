@@ -13,7 +13,7 @@ import UserRole from 'enums/UserRole';
 import {dal, html} from 'components';
 import './CardReview.scss';
 import Link from 'yii-steroids/ui/nav/Link';
-import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
+import {ROUTE_PROJECT_REVIEW, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 const bem = html.bem('CardReview');
 
@@ -136,9 +136,11 @@ export default class CardReview extends React.PureComponent {
                         {!this.props.isReviewPage && (
                             <Link
                                 className={bem(bem.element('link'), 'read-more-link')}
-                                toRoute={this.props.user.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
+                                toRoute={ROUTE_PROJECT_REVIEW}
                                 toRouteParams={{
                                     address: this.props.user.address,
+                                    uid: this.props.uid,
+                                    type: this.props.type,
                                 }}
                                 label={__('Read More')}
                                 noStyles

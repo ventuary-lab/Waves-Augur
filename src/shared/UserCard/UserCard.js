@@ -1,4 +1,5 @@
 import React from 'react';
+import { push } from 'react-router-redux';
 
 import {html} from 'components';
 
@@ -41,6 +42,7 @@ export default class UserCard extends React.PureComponent {
                             user: this.props.item,
                         },
                     }}
+                    onClick={() => this.props.dispatch(push(`/users/${this.props.item.address}/donation`))}
                 />
             </div>
         );

@@ -35,6 +35,9 @@ export default class ProjectFeedPage extends React.PureComponent {
                     <List
                         listId='ProjectFeedPage'
                         itemView={FeedCard}
+                        itemProps={{
+                            uid: this.props.projectUid,
+                        }}
                         emptyText={__('No items')}
                         items={this.props.items}
                     />
