@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 
 import {html} from 'components';
@@ -12,6 +13,7 @@ import UserSchema from 'types/UserSchema';
 
 const bem = html.bem('UserCard');
 
+@connect()
 export default class UserCard extends React.PureComponent {
 
     static propTypes = {

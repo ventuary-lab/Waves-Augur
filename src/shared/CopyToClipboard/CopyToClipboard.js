@@ -37,7 +37,7 @@ export default class CopyToClipboard extends React.PureComponent {
                         )
                     }
                 >
-                    <span>{this.props.children || __('Copy to clipboard')}</span>
+                    {this.props.children || <span>{__('Copy to clipboard')}</span>}
                 </CopyToBuffer>
                 {this.state.isCopied && (
                     <div className={bem.element('message')}>
