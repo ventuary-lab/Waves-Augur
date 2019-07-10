@@ -347,6 +347,7 @@ export default class DalComponent {
                 .map(key => this.getProject(key.replace(/^author_/, '')))
         );
 
+        projects = projects.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
         projects = _orderBy(projects, 'createTime', 'desc');
 
         return projects;
@@ -526,6 +527,8 @@ export default class DalComponent {
      * @returns {Promise<*>}
      */
     async saveProject(data) {
+        const isNew = !data.uid;
+
         data = {
             name: '',
             description: null,
@@ -560,7 +563,7 @@ export default class DalComponent {
 
         this.transport.resetCache();
 
-        const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
+        //const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
         if (isNew) {
             data.createTime = DalHelper.dateNow();
             await this.transport.nodePublish(
