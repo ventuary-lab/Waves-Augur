@@ -53,7 +53,7 @@ export default class ProjectFeedCard extends React.PureComponent {
                         component: CardReview,
                         componentProps: {
                             ...this.props.item,
-                            user: this.props.user,
+                            user: this.props.item.user || this.props.user,
                         }
                     }}
                     // onClick={() => this.props.dispatch(push(`/projects/${this.props.item.project.uid}/feed`))}

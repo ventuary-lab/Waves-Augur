@@ -213,6 +213,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     topLabel={__('Waves') }
                     attribute='targetWaves'
                     placeholder={7000}
+                    disabled={!!this.props.project}
                 />
                 <TagsField
                     attribute='tags'
