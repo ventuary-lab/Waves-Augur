@@ -1,0 +1,22 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.ReviewBlock {
+  width: 100%;
+  @include card;
+
+  &__review {
+    @include tablet {
+      padding-left: 34px;
+      padding-top: 15px;
+    }
+
+    margin-bottom: 20px;
+  }
+
+  &__project {
+    .Card {
+      margin-bottom: 0;
+    }
+  }
+}

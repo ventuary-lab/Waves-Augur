@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {push} from 'react-router-redux';
 
 import Card from 'shared/Card';
@@ -16,11 +17,14 @@ export default class ProjectCard extends React.PureComponent {
 
     static propTypes = {
         item: ProjectSchema,
+        isReviewPage: PropTypes.bool,
     };
 
     render() {
         return (
-            <div className={bem.block()}>
+            <div className={bem.block({
+                'is-review-page': this.props.isReviewPage,
+            })}>
                 <Card
                     left={{
                         component: CardInfo,

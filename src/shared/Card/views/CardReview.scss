@@ -6,17 +6,89 @@
 
   position: relative;
   height: 100%;
-  padding: 20px 20px 20px 70px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding: 20px;
+
+  &_is-review-page {
+    display: flex;
+
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
+    }
+
+
+
+    #{$root}__column-left {
+      margin-right: 0;
+      position: relative;
+      top: -70px;
+      margin-bottom: -30px;
+
+      @include tablet {
+        position: static;
+        margin-right: 80px;
+        margin-bottom: 0;
+      }
+    }
+
+    #{$root}__avatar-link {
+
+      margin-bottom: 20px;
+      width: 100px;
+      height: 100px;
+
+      @include tablet {
+        width: 74px;
+        height: 74px;
+      }
+    }
+
+    #{$root}__name {
+      font-weight: 500;
+      color: #000;
+      margin-bottom: 6px;
+
+      @include tablet {
+        color: $color-gg-4;
+      }
+    }
+
+    #{$root}__title {
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 14px;
+      color: $color-gg-4;
+      margin: 0;
+    }
+
+    #{$root}__actions {
+      justify-content: flex-end;
+    }
+  }
+
+  &__column-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin-right: 15px;
+  }
+
+  &__column-right {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    //height: 100%;
+    justify-content: space-between;
+  }
 
   &__avatar-link {
-    position: absolute;
+    position: relative;
+    display: block;
     width: 38px;
     height: 38px;
-    top: 20px;
-    left: 18px;
     border-radius: 50%;
     overflow: hidden;
 

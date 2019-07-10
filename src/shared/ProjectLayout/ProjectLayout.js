@@ -7,7 +7,7 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
-import {ROUTE_PROJECT, ROUTE_PROJECT_NEWS, ROUTE_PROJECTS_REDIRECT} from 'routes';
+import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
@@ -67,6 +67,7 @@ export default class ProjectLayout extends React.PureComponent {
                             <div className={bem.element('nav-container')}>
                                 <div className={bem.element('nav')}>
                                     {this.props.profileNavItems
+                                        .filter(item => item.isNavVisible !== false)
                                         .filter(item => item.roles.includes(this.props.user && this.props.user.role || null))
                                         .map(item => (
                                             <Link
