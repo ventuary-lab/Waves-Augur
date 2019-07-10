@@ -35,7 +35,7 @@ export default class ProjectDetailsPage extends React.PureComponent {
                                         urls={this.props.project.socials}
                                     />
                                 </div>
-                                <CopyToClipboard copyText={document.location}>
+                                <CopyToClipboard copyText={document.location.toString()}>
                                     {__('Share Project')}
                                 </CopyToClipboard>
                             </div>
