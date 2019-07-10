@@ -141,7 +141,7 @@ export default class DalComponent {
 
         return {
             address: _trim(address),
-            activity: 1, // TODO
+            activity: await this.getUserActivity(address),
             role: address === this.dApp
                 ? UserRole.GENESIS
                 : await this.transport.nodeFetchKey('wl_sts_' + address),
@@ -420,6 +420,18 @@ export default class DalComponent {
                 })
         );
         return _orderBy(result, 'review.createTime', 'asc').filter(Boolean);
+    }
+
+    async getUserActivity(address) {
+        const userDonations = await this.getUserDonations(address);
+        let activity = 0;
+
+        if (!userDonations || !userDonations.length) {
+            return activity;
+        }
+
+        userDonations.map(donate => activity = activity + Math.abs(donate.amount));
+        return activity;
     }
 
     async getUserGrants(address) {

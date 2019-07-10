@@ -55,11 +55,11 @@ export default class ProfileSidebar extends React.PureComponent {
                             <SocialLinks urls={this.props.user.profile.socials}/>
                         </div>
                     )}
-                    {this.props.user.profile.activity && (
+                    {this.props.user.activity && (
                         <div className={bem.element('activity')}>
                             <span>{__('Activity')}:</span>
                             <span>
-                                {this.props.user.profile.activity}
+                                {this.props.user.activity}
                             </span>
                         </div>
                     )}
