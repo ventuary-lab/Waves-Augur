@@ -43,6 +43,23 @@
   }
 
   &__share-link {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
+    font-family: $ff-roboto;
+    outline: none;
+
+    &:active {
+      font-weight: 500;
+    }
+
+    @include desktop {
+      &:hover, &:focus {
+        cursor: pointer;
+        font-weight: 500;
+      }
+    }
+
     @include link;
   }
 
