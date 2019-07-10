@@ -424,7 +424,7 @@ export default class DalComponent {
 
     async getUserActivity(address) {
         const userDonations = await this.getUserDonations(address);
-        let activity = 0;
+        let activity = 1; // 1 point for registration
 
         if (!userDonations || !userDonations.length) {
             return activity;
