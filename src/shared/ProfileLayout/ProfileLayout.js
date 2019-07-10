@@ -50,6 +50,12 @@ export default class ProfileLayout extends React.PureComponent {
         profileNavItems: PropTypes.arrayOf(NavItemSchema),
     };
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.address !== nextProps.address) {
+            this.props.fetch();
+        }
+    };
+
     render() {
         console.log('---123123', this.props.test);
 
