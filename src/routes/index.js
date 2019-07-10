@@ -127,7 +127,6 @@ export default {
                     component: ProfileInboxPage,
                     label: __('Inbox'),
                     icon: 'Icon__notification',
-                    isNavVisible: false,
                     roles: [UserRole.REGISTERED],
                     isShowImageLine: true,
                 },

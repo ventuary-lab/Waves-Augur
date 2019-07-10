@@ -3,41 +3,42 @@ import PropTypes from 'prop-types';
 
 import ProjectInboxCard from 'shared/ProjectInboxCard';
 import InboxTypeEnum from 'enums/InboxTypeEnum';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import ProjectSchema from 'types/ProjectSchema';
 
-import {html} from 'components';
-
+import {dal, html} from 'components';
 import './ProfileInboxPage.scss';
 
 const bem = html.bem('ProfileInboxPage');
 
+
+@dal.hoc(
+    () => dal.getProjects()
+        .then(items => {
+            return {
+                items: items.filter(item => item.status === ProjectStatusEnum.VOTING && !item.isImVoted && item.isVotingAvailable),
+            };
+        }))
 export default class ProfileInboxPage extends React.PureComponent {
 
     static propTypes = {
-        items: PropTypes.array,
+        items: PropTypes.arrayOf(ProjectSchema),
     };
 
     render() {
-        const projectItem = {
-            status: 'voting',
-            name: 'SmartChain Media',
-            description: 'Build Blockchain-related applications and uild applications ser',
-            location: 'Russia',
-            expireVoting: '2019-07-18 11:37:16',
-            uid: '638df850-71e6-469b-9278-cd7a5bab790b',
-        };
+        if (!this.props.items) {
+            return null;
+        }
 
         return (
             <div className={bem.block()}>
-                {InboxTypeEnum.getKeys()
-                    .filter(type => type !== InboxTypeEnum.INVITATION_ACCEPTED)
-                    .map((type, index) => (
-                        <ProjectInboxCard
-                            item={projectItem}
-                            type={type}
-                            key={index}
-                        />
-                    ))
-                }
+                {this.props.items.map(item => (
+                    <ProjectInboxCard
+                        key={item.uid}
+                        item={item}
+                        type={InboxTypeEnum.INVITATION_VOTING}
+                    />
+                ))}
             </div>
         );
     }
