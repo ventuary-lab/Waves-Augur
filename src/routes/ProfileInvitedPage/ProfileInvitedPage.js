@@ -11,6 +11,8 @@ import UserCard from 'shared/UserCard';
 import './ProfileInvitedPage.scss';
 import List from 'yii-steroids/ui/list/List';
 import UserSchema from 'types/UserSchema';
+import {ROUTE_PROJECTS_REDIRECT} from '../index';
+import Link from 'yii-steroids/ui/nav/Link';
 
 const bem = html.bem('ProfileInvitedPage');
 
@@ -35,6 +37,17 @@ export default class ProfileInvitedPage extends React.PureComponent {
                         iconClass={'Icon__invite-user_small'}
                         onClick={() => this.props.dispatch(openModal(InviteUserModal))}
                     />
+                ) || (
+                    <Link
+                        toRoute={ROUTE_PROJECTS_REDIRECT}
+                        noStyles
+                        className={bem.element('link-block')}
+                    >
+                        <ActionButtonBlock
+                            title={__('Explore New Ideas')}
+                            iconClass={'Icon__explore-ideas'}
+                        />
+                    </Link>
                 )}
                 <div className={bem.element('card-list')}>
                     <List

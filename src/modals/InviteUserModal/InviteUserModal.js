@@ -1,4 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {getFormValues} from 'redux-form';
+import _get from 'lodash-es/get';
 import PropTypes from 'prop-types';
 
 import {html, dal} from 'components';
@@ -15,11 +18,16 @@ import './InviteUserModal.scss';
 const bem = html.bem('InviteUserModal');
 const FORM_ID = 'invite_user';
 
+
+@connect(
+    state => ({
+        formValues: getFormValues(FORM_ID)(state),
+    })
+)
 export default class InviteUserModal extends React.PureComponent {
 
     static propTypes = {
         modalProps: PropTypes.object,
-        isWhale: PropTypes.bool,
     };
 
     render() {
@@ -64,7 +72,7 @@ export default class InviteUserModal extends React.PureComponent {
                                 />
                             </div>
                             <div className={bem(
-                                bem.element('icon'), this.props.isWhale ? 'Icon__invite-whale' : 'Icon__invite-user'
+                                bem.element('icon'), _get(this.props, 'formValues.isWhale') ? 'Icon__invite-whale' : 'Icon__invite-user'
                             )}/>
                         </div>
                         <InputField
