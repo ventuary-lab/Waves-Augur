@@ -26,21 +26,19 @@ export default class CopyToClipboard extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                <button className={bem.element('button')}>
-                    <CopyToBuffer
-                        text={this.props.copyText}
-                        onCopy={
-                            () => this.setState(
-                                {isCopied: true},
-                                () => setTimeout(
-                                    () => this.setState({isCopied: false}), 2000
-                                )
+                <CopyToBuffer
+                    text={this.props.copyText}
+                    onCopy={
+                        () => this.setState(
+                            {isCopied: true},
+                            () => setTimeout(
+                                () => this.setState({isCopied: false}), 2000
                             )
-                        }
-                    >
-                        <span>{this.props.children || __('Copy to clipboard')}</span>
-                    </CopyToBuffer>
-                </button>
+                        )
+                    }
+                >
+                    <span>{this.props.children || __('Copy to clipboard')}</span>
+                </CopyToBuffer>
                 {this.state.isCopied && (
                     <div className={bem.element('message')}>
                         {__('Text has been copied to clipboard')}
