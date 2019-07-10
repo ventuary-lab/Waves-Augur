@@ -2,6 +2,7 @@ import React from 'react';
 
 import {html} from 'components';
 import ProjectSchema from 'types/ProjectSchema';
+import CopyToClipboard from 'shared/CopyToClipboard';
 
 import UserCard from 'shared/UserCard';
 import SocialLinks from 'shared/SocialLinks';
@@ -34,12 +35,9 @@ export default class ProjectDetailsPage extends React.PureComponent {
                                         urls={this.props.project.socials}
                                     />
                                 </div>
-                                <a
-                                    className={bem.element('share-link')}
-                                    href={'javascript:void(0)'}
-                                >
+                                <CopyToClipboard copyText={document.location}>
                                     {__('Share Project')}
-                                </a>
+                                </CopyToClipboard>
                             </div>
                         </div>
                         <div className={'col col_desk-count-7'}>

@@ -1,0 +1,48 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.CopyToClipboard {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+
+  &__button {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
+    font-family: $ff-roboto;
+    outline: none;
+
+    &:active {
+      font-weight: 500;
+    }
+
+    @include desktop {
+      &:hover, &:focus {
+        cursor: pointer;
+        font-weight: 500;
+      }
+    }
+
+    @include link;
+  }
+
+  &__message {
+    position: absolute;
+    right: -240px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: $color-base;
+    border: 1px solid #f1f6f2;
+    box-shadow: 0 0 30px rgba($color-brand-green, 0.1);
+    border-radius: 3px;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 14px;
+    color: $color-base-revert;
+    padding: 8px 15px;
+  }
+}
