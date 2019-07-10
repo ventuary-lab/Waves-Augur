@@ -6,8 +6,9 @@ import Button from 'yii-steroids/ui/form/Button';
 import {dal, html,} from 'components';
 import ReviewBlock from './views/ReviewBlock';
 import UserSchema from 'types/UserSchema';
-import ProjectSchema from 'types/ProjectSchema';
+import CopyToClipboard from 'shared/CopyToClipboard';
 
+import ProjectSchema from 'types/ProjectSchema';
 import './ProjectReviewPage.scss';
 
 const bem = html.bem('ProjectReviewPage');
@@ -74,9 +75,11 @@ export default class ProjectReviewPage extends React.PureComponent {
                                                 />
                                             </div>
                                             <div className={bem.element('action')}>
-                                                <Button
-                                                    label={__('Share')}
-                                                />
+                                                <CopyToClipboard copyText={document.location.toString()}>
+                                                    <Button
+                                                        label={__('Share')}
+                                                    />
+                                                </CopyToClipboard>
                                             </div>
                                         </>
                                     )}
