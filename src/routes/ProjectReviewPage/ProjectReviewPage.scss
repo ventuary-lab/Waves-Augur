@@ -1,0 +1,34 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ProjectReviewPage {
+  &__inner {
+    max-width: 730px;
+    margin: 0 auto;
+    padding: 40px 0 90px;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 0 40px;
+  }
+
+  &__review-block {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  &__action {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__loading {
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+  }
+}

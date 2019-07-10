@@ -25,18 +25,16 @@ export default class ProfileVotingPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                {this.props.isMe && (
-                    <Link
-                        toRoute={ROUTE_PROJECTS_REDIRECT}
-                        noStyles
-                        className={bem.element('link-block')}
-                    >
-                        <ActionButtonBlock
-                            title={__('Explore New Ideas')}
-                            iconClass={'Icon__explore-ideas'}
-                        />
-                    </Link>
-                )}
+                <Link
+                    toRoute={ROUTE_PROJECTS_REDIRECT}
+                    noStyles
+                    className={bem.element('link-block')}
+                >
+                    <ActionButtonBlock
+                        title={__('Explore New Ideas')}
+                        iconClass={'Icon__explore-ideas'}
+                    />
+                </Link>
                 <div className={bem.element('card-list')}>
                     <div className={bem.element('card-list')}>
                         <List

@@ -40,9 +40,9 @@ export default class CardInfo extends React.PureComponent {
             : userAvatarStub;
         const isProject = this.props.isProject;
         const status = isProject ? this.props.status : null;
-        const daysLeft = isProject
-            ? ProjectStatusEnum.getDaysLeft(status, this.props)
-            : moment().diff(moment(this.props.createTime), 'days');
+        const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
+        // const daysAgo = !isProject ? this.daysAgoFormatter(this.props.createTime) : null;
+        const daysAgo = null;
 
         return (
             <div className={bem.block()}>
@@ -77,13 +77,29 @@ export default class CardInfo extends React.PureComponent {
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('left-info')}>
-                            {daysLeft && (
-                                <span className={bem.element('days-left')}>
-                                    {__('{count} {count, plural, one{day} few{days} many{days}} left', {
-                                        count: daysLeft,
-                                    })}
-                                </span>
-                            ) || __('Time is over')}
+                            {isProject && (
+                                <>
+                                    {daysLeft && (
+                                        <span className={bem.element('days-left')}>
+                                            {__('{count} {count, plural, one{day} few{days} many{days}} left', {
+                                                count: daysLeft,
+                                            })}
+                                        </span>
+                                    ) || (
+                                        <span className={bem.element('time-is-over')}>
+                                            {__('Time is over')}
+                                        </span>
+                                    )}
+                                </>
+                            ) || (
+                                <>
+                                    {daysAgo && (
+                                        <span>
+                                            {daysAgo}
+                                        </span>
+                                    ) || ''}
+                                </>
+                            )}
                         </div>
                         <div className={bem.element('right-info')}>
                             {!isProject && this.props.activity && (
@@ -129,5 +145,42 @@ export default class CardInfo extends React.PureComponent {
                 </div>
             </div>
         );
+    }
+
+    daysAgoFormatter(value) {
+        const seconds = moment().diff(moment(value), 'seconds');
+        if (seconds < 60) {
+            return (
+                <>
+                    {__('{count} {count, plural, one{second} few{seconds} many{seconds}}', {
+                        count: seconds,
+                    })}
+                </>
+            );
+        }
+
+        const minutes = moment().diff(moment(value), 'minutes');
+        if (minutes < 60) {
+            return (
+                <>
+                    {__('{count} {count, plural, one{minute} few{minutes} many{minutes}}', {
+                        count: minutes,
+                    })}
+                </>
+            );
+        }
+
+        const hours = moment().diff(moment(value), 'hours');
+        if (hours < 24) {
+            return (
+                <>
+                    {__('{count} {count, plural, one{hour} few{hours} many{hours}}', {
+                        count: hours,
+                    })}
+                </>
+            );
+        }
+
+        return moment().diff(moment(value), 'months');
     }
 }

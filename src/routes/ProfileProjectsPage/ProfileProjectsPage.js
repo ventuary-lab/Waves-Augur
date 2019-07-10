@@ -12,6 +12,8 @@ import './ProfileProjectsPage.scss';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import ProjectSchema from 'types/ProjectSchema';
 import List from 'yii-steroids/ui/list/List';
+import {ROUTE_PROJECTS_REDIRECT} from '../index';
+import Link from 'yii-steroids/ui/nav/Link';
 
 const bem = html.bem('ProfileProjectsPage');
 
@@ -36,6 +38,17 @@ export default class ProfileProjectsPage extends React.PureComponent {
                         iconClass='Icon__new-project'
                         onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
                     />
+                ) || (
+                    <Link
+                        toRoute={ROUTE_PROJECTS_REDIRECT}
+                        noStyles
+                        className={bem.element('link-block')}
+                    >
+                        <ActionButtonBlock
+                            title={__('Explore New Ideas')}
+                            iconClass={'Icon__explore-ideas'}
+                        />
+                    </Link>
                 )}
                 <div className={bem.element('card-list')}>
                     <List

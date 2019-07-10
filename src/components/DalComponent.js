@@ -394,7 +394,7 @@ export default class DalComponent {
                     return null;
                 })
         );
-        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+        return _orderBy(result, 'review.createTime', 'asc').filter(Boolean);
     }
 
     async getUserDonations(address) {
@@ -419,7 +419,7 @@ export default class DalComponent {
                     return null;
                 })
         );
-        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
+        return _orderBy(result, 'review.createTime', 'asc').filter(Boolean);
     }
 
     async getUserGrants(address) {

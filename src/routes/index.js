@@ -17,6 +17,7 @@ import ProjectLayout from 'shared/ProjectLayout';
 import ProjectFeedPage from './ProjectFeedPage';
 import ProjectDetailsPage from './ProjectDetailsPage';
 import ProjectNewsPage from './ProjectNewsPage';
+import ProjectReviewPage from './ProjectReviewPage';
 
 export const ROUTE_ROOT = 'root';
 export const ROUTE_FEED = 'feed';
@@ -45,6 +46,7 @@ export const ROUTE_PROJECT_REDIRECT = 'project_redirect';
 export const ROUTE_PROJECT_FEED = 'project_feed';
 export const ROUTE_PROJECT_DETAILS = 'project_details';
 export const ROUTE_PROJECT_NEWS = 'project_news';
+export const ROUTE_PROJECT_REVIEW = 'project_review';
 
 const baseUser = '/users/:address(\\w{35})';
 
@@ -92,6 +94,14 @@ export default {
             component: CommunityPage,
             label: __('Community'),
             roles: UserRole.getKeys(),
+        },
+        [ROUTE_PROJECT_REVIEW]: {
+            exact: true,
+            path: '/review/:address(\\w{35})/project/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/:type/:index?',
+            component: ProjectReviewPage,
+            label: __('Review'),
+            roles: UserRole.getKeys(),
+            isNavVisible: false,
         },
         [ROUTE_PROFILE_REDIRECT]: {
             exact: true,
@@ -266,7 +276,7 @@ export default {
                     component: ProjectFeedPage,
                     label: __('Feed'),
                     icon: 'Icon__feed',
-                    isNavVisible: false,
+                    // isNavVisible: false,
                     roles: UserRole.getKeys(),
                     isShowImageLine: true,
                 },
