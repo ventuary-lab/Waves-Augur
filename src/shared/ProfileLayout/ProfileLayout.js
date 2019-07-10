@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import {getCurrentItem} from 'yii-steroids/reducers/navigation';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
@@ -28,6 +29,7 @@ const bem = html.bem('ProfileLayout');
             user: isMe ? getUser(state) : null,
             routeId: _get(getCurrentRoute(state), 'id'),
             profileNavItems: getNavItems(state, isMe ? ROUTE_PROFILE : ROUTE_USER, {address}),
+            test: getCurrentItem(state),
         };
     }
 )
@@ -49,6 +51,8 @@ export default class ProfileLayout extends React.PureComponent {
     };
 
     render() {
+        console.log('---123123', this.props.test);
+
         if (!this.props.user) {
             return null;
         }
