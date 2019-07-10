@@ -56,8 +56,7 @@ export default class ProjectFeedCard extends React.PureComponent {
                             user: this.props.item.user || this.props.user,
                         }
                     }}
-                    // onClick={() => this.props.dispatch(push(`/projects/${this.props.item.project.uid}/feed`))}
-                    onClick={() => this.props.dispatch(push(`/review/${this.props.user.address}/project/${this.props.item.project.uid}/${this.props.item.type}`))}
+                    onClick={() => this.props.dispatch(push(`/review/${this.props.item.user.address}/project/${this.props.item.project.uid}/${this.props.item.type}/${this.props.item.type === 'donate' ? this.props.item.reviewNumber : ''}`))}
                 />
             </div>
         );

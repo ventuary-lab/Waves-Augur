@@ -18,8 +18,6 @@ export default class FeedCard extends React.PureComponent {
     };
 
     render() {
-        console.log(1, this.props)
-
         return (
             <div className={bem.block()}>
                 <Card
@@ -30,7 +28,7 @@ export default class FeedCard extends React.PureComponent {
                             uid: this.props.uid,
                         }
                     }}
-                    onClick={() => this.props.dispatch(push(`/review/${this.props.item.user.address}/project/${this.props.uid}/${this.props.item.type}`))}
+                    onClick={() => this.props.dispatch(push(`/review/${this.props.item.user.address}/project/${this.props.uid}/${this.props.item.type}/${this.props.item.type === 'donate' ? this.props.item.reviewNumber : ''}`))}
                 />
             </div>
         );
