@@ -1,6 +1,7 @@
 import React from 'react';
+import { push } from 'react-router-redux';
 
-import {html} from 'components';
+import { html, store } from 'components';
 
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
@@ -41,6 +42,7 @@ export default class UserCard extends React.PureComponent {
                             user: this.props.item,
                         },
                     }}
+                    onClick={() => store.dispatch(push(`/users/${this.props.item.address}`))}
                 />
             </div>
         );
