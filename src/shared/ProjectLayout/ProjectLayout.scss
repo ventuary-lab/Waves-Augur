@@ -3,6 +3,14 @@
 
 .ProjectLayout {
 
+  &__form {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
   &__nav-container {
     display: flex;
     justify-content: center;
