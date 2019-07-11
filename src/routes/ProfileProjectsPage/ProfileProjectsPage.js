@@ -14,6 +14,8 @@ import ProjectSchema from 'types/ProjectSchema';
 import List from 'yii-steroids/ui/list/List';
 import {ROUTE_PROJECTS_REDIRECT} from '../index';
 import Link from 'yii-steroids/ui/nav/Link';
+import {isPhone} from 'yii-steroids/reducers/screen';
+import MessageModal from '../../modals/MessageModal';
 
 const bem = html.bem('ProfileProjectsPage');
 
@@ -21,7 +23,11 @@ const bem = html.bem('ProfileProjectsPage');
     props => dal.getUserProjects(props.user.address)
         .then(items => ({items}))
 )
-@connect()
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class ProfileProjectsPage extends React.PureComponent {
 
     static propTypes = {
@@ -36,7 +42,18 @@ export default class ProfileProjectsPage extends React.PureComponent {
                     <ActionButtonBlock
                         title={__('Add New Project')}
                         iconClass='Icon__new-project'
-                        onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
+                        onClick={() => {
+                            if (this.props.isPhone) {
+                                this.props.dispatch(openModal(MessageModal, {
+                                    icon: 'Icon__log-in-from-pc',
+                                    title: __('Log in from PC'),
+                                    color: 'success',
+                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                }));
+                            } else {
+                                this.props.dispatch(openModal(ProjectWizardModal));
+                            }
+                        }}
                     />
                 ) || (
                     <Link
