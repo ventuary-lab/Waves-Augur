@@ -348,7 +348,7 @@ export default class DalComponent {
         );
 
         projects = projects.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
-        projects = _orderBy(projects, 'blocks.create', 'desc');
+        projects = _orderBy(projects, 'createTime', 'desc');
         return projects;
     }
 
