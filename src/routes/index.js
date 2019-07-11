@@ -77,7 +77,7 @@ export default {
         },
         [ROUTE_PROJECT_REVIEW]: {
             exact: true,
-            path: '/review/:address(\\w{35})/project/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/:type/:index?',
+            path: '/review/:address(\\w{35})/project/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/:type/:number?',
             component: ProjectReviewPage,
             label: __('Review'),
             roles: UserRole.getKeys(),

@@ -6,6 +6,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
 import CardReview from 'shared/Card/views/CardReview';
+import FeedTypeEnum from 'enums/FeedTypeEnum';
 
 import {html} from 'components';
 import ProjectSchema from 'types/ProjectSchema';
@@ -29,7 +30,9 @@ export default class ProjectFeedCard extends React.PureComponent {
     };
 
     render() {
-        if (!this.props.user) {
+        const user = this.props.item.user || this.props.user;
+
+        if (!user) {
             return null;
         }
 
@@ -53,10 +56,19 @@ export default class ProjectFeedCard extends React.PureComponent {
                         component: CardReview,
                         componentProps: {
                             ...this.props.item,
-                            user: this.props.item.user || this.props.user,
+                            user: user,
                         }
                     }}
-                    onClick={() => this.props.dispatch(push(`/review/${this.props.item.user.address}/project/${this.props.item.project.uid}/${this.props.item.type}/${this.props.item.type === 'donate' ? this.props.item.reviewNumber : ''}`))}
+                    onClick={() => {
+                        const address = user.address;
+                        const uid = this.props.item.project.uid;
+                        const type = this.props.item.type;
+                        const number = this.props.item.type === FeedTypeEnum.DONATE
+                            ? this.props.item.reviewNumber
+                            : '';
+
+                        return this.props.dispatch(push(`/review/${address}/project/${uid}/${type}/${number}`));
+                    }}
                 />
             </div>
         );

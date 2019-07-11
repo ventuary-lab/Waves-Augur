@@ -32,7 +32,9 @@ const bem = html.bem('ProjectReviewPage');
             if (_get(props, 'match.params.type') === 'donate') {
                 return  dal.getUserDonations(result[1].address)
                     .then(donations => ({
-                        review: donations.filter(item => item.project.uid === result[0].uid)[_get(props, 'match.params.index') - 1],
+                        review: donations
+                            .filter(item => item.project.uid === result[0].uid)
+                            .find(item => item.reviewNumber === parseInt(_get(props, 'match.params.number'))),
                         project: result[0],
                         user: result[1],
                     }));

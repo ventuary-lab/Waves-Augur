@@ -139,8 +139,11 @@ export default class CardReview extends React.PureComponent {
                                 toRoute={ROUTE_PROJECT_REVIEW}
                                 toRouteParams={{
                                     address: this.props.user.address,
-                                    uid: this.props.uid,
+                                    uid: this.props.uid || this.props.project.uid,
                                     type: this.props.type,
+                                    number: this.props.type === FeedTypeEnum.DONATE
+                                        ? this.props.reviewNumber
+                                        : null,
                                 }}
                                 label={__('Read More')}
                                 noStyles

@@ -3,6 +3,7 @@ import { push } from 'react-router-redux';
 
 import Card from 'shared/Card';
 import CardReview from 'shared/Card/views/CardReview';
+import FeedTypeEnum from 'enums/FeedTypeEnum';
 import {html} from 'components';
 import FeedSchema from 'types/FeedSchema';
 
@@ -28,7 +29,16 @@ export default class FeedCard extends React.PureComponent {
                             uid: this.props.uid,
                         }
                     }}
-                    onClick={() => this.props.dispatch(push(`/review/${this.props.item.user.address}/project/${this.props.uid}/${this.props.item.type}/${this.props.item.type === 'donate' ? this.props.item.reviewNumber : ''}`))}
+                    onClick={() => {
+                        const address = this.props.item.user.address;
+                        const uid = this.props.uid;
+                        const type = this.props.item.type;
+                        const number = this.props.item.type === FeedTypeEnum.DONATE
+                            ? this.props.item.reviewNumber
+                            : '';
+
+                        return this.props.dispatch(push(`/review/${address}/project/${uid}/${type}/${number}`));
+                    }}
                 />
             </div>
         );
