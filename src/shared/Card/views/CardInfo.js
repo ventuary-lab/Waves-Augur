@@ -41,8 +41,7 @@ export default class CardInfo extends React.PureComponent {
         const isProject = this.props.isProject;
         const status = isProject ? this.props.status : null;
         const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
-        // const daysAgo = !isProject ? this.daysAgoFormatter(this.props.createTime) : null;
-        const daysAgo = null;
+        const daysAgo = (!isProject && this.props.createTime) ? this.daysAgoFormatter(this.props.createTime) : null;
 
         return (
             <div className={bem.block()}>

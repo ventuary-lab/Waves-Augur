@@ -22,8 +22,8 @@ export default class DalComponent {
 
     constructor() {
         this.isTestMode = (process.env.APP_MODE || 'test') === 'test';
-        // this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id
-        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id
+        // this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id new
+        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id old
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
@@ -347,6 +347,7 @@ export default class DalComponent {
                 .map(key => this.getProject(key.replace(/^author_/, '')))
         );
 
+        projects = projects.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
         projects = _orderBy(projects, 'createTime', 'desc');
 
         return projects;
@@ -394,7 +395,7 @@ export default class DalComponent {
                     return null;
                 })
         );
-        return _orderBy(result, 'review.createTime', 'asc').filter(Boolean);
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
     async getUserDonations(address) {
@@ -419,7 +420,7 @@ export default class DalComponent {
                     return null;
                 })
         );
-        return _orderBy(result, 'review.createTime', 'asc').filter(Boolean);
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
     async getUserActivity(address) {
@@ -500,7 +501,7 @@ export default class DalComponent {
                     return null;
                 })
         );
-        return result.filter(Boolean);
+        return _orderBy(result, 'review.createTime', 'desc').filter(Boolean);
     }
 
     /**
@@ -538,6 +539,8 @@ export default class DalComponent {
      * @returns {Promise<*>}
      */
     async saveProject(data) {
+        const isNew = !data.uid;
+
         data = {
             name: '',
             description: null,
@@ -572,7 +575,7 @@ export default class DalComponent {
 
         this.transport.resetCache();
 
-        const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
+        //const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
         if (isNew) {
             data.createTime = DalHelper.dateNow();
             await this.transport.nodePublish(

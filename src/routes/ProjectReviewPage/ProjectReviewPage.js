@@ -6,8 +6,9 @@ import Button from 'yii-steroids/ui/form/Button';
 import {dal, html,} from 'components';
 import ReviewBlock from './views/ReviewBlock';
 import UserSchema from 'types/UserSchema';
-import ProjectSchema from 'types/ProjectSchema';
+import CopyToClipboard from 'shared/CopyToClipboard';
 
+import ProjectSchema from 'types/ProjectSchema';
 import './ProjectReviewPage.scss';
 
 const bem = html.bem('ProjectReviewPage');
@@ -19,7 +20,7 @@ const bem = html.bem('ProjectReviewPage');
     ])
         .then(result => {
 
-            if (_get(props, 'match.params.type') === 'voting') {
+            if (_get(props, 'match.params.type') === 'vote') {
                 return  dal.getUserVotings(result[1].address)
                     .then(votings => ({
                         review: votings.find(item => item.project.uid === result[0].uid),
@@ -31,7 +32,9 @@ const bem = html.bem('ProjectReviewPage');
             if (_get(props, 'match.params.type') === 'donate') {
                 return  dal.getUserDonations(result[1].address)
                     .then(donations => ({
-                        review: donations.find(item => item.project.uid === result[0].uid),
+                        review: donations
+                            .filter(item => item.project.uid === result[0].uid)
+                            .find(item => item.reviewNumber === parseInt(_get(props, 'match.params.number'))),
                         project: result[0],
                         user: result[1],
                     }));
@@ -74,9 +77,11 @@ export default class ProjectReviewPage extends React.PureComponent {
                                                 />
                                             </div>
                                             <div className={bem.element('action')}>
-                                                <Button
-                                                    label={__('Share')}
-                                                />
+                                                <CopyToClipboard copyText={document.location.toString()}>
+                                                    <Button
+                                                        label={__('Share')}
+                                                    />
+                                                </CopyToClipboard>
                                             </div>
                                         </>
                                     )}

@@ -7,7 +7,6 @@ import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
 import ConnectImageField from 'ui/form/ConnectImageField';
-import AutoSaveHelper from 'yii-steroids/ui/form/Form/AutoSaveHelper';
 
 import {dal, html} from 'components';
 
@@ -17,7 +16,7 @@ import ProjectContentEnum from 'enums/ProjectContentEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
-import {ROUTE_PROJECT, ROUTE_PROJECT_FEED} from 'routes';
+import {ROUTE_PROJECT_FEED} from 'routes';
 
 import './ProjectWizardModal.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -61,7 +60,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                     }}
                     onComplete={() => {
                         this.props.onClose();
-                        AutoSaveHelper.remove(FORM_ID);
                     }}
                     initialValues={this.props.project
                         ? {
@@ -92,7 +90,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 : undefined
                         )
                     }
-                    autoSave
                     layout={'horizontal'}
                     items={[
                         {
@@ -213,6 +210,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                     topLabel={__('Waves') }
                     attribute='targetWaves'
                     placeholder={7000}
+                    disabled={!!this.props.project}
                 />
                 <TagsField
                     attribute='tags'

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import {getCurrentItem} from 'yii-steroids/reducers/navigation';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
@@ -25,7 +26,7 @@ const bem = html.bem('ProfileLayout');
         return {
             address,
             isMe,
-            user: isMe ? getUser(state) : null,
+            contextUser: isMe ? getUser(state) : null,
             routeId: _get(getCurrentRoute(state), 'id'),
             profileNavItems: getNavItems(state, isMe ? ROUTE_PROFILE : ROUTE_USER, {address}),
         };
@@ -37,13 +38,14 @@ const bem = html.bem('ProfileLayout');
             return {};
         }
         return dal.getUser(props.address)
-            .then(user => ({user}));
+            .then(profileUser => ({profileUser}));
     }
 )
 export default class ProfileLayout extends React.PureComponent {
 
     static propTypes = {
-        user: UserSchema,
+        contextUser: UserSchema,
+        profileUser: UserSchema,
         routeId: PropTypes.string,
         profileNavItems: PropTypes.arrayOf(NavItemSchema),
     };
@@ -55,7 +57,8 @@ export default class ProfileLayout extends React.PureComponent {
     };
 
     render() {
-        if (!this.props.user) {
+        const user = this.props.isMe ? this.props.contextUser : this.props.profileUser;
+        if (!user) {
             return null;
         }
 
@@ -69,7 +72,7 @@ export default class ProfileLayout extends React.PureComponent {
                             <div className={bem.element('sidebar')}>
                                 <ProfileSidebar
                                     isMe={this.props.isMe}
-                                    user={this.props.user}
+                                    user={user}
                                 />
                             </div>
                         </div>
@@ -78,7 +81,7 @@ export default class ProfileLayout extends React.PureComponent {
                                 <div className={bem.element('nav')}>
                                     {this.props.profileNavItems
                                         .filter(item => item.isNavVisible !== false)
-                                        .filter(item => (item.rolesUser || item.roles).includes(this.props.user && this.props.user.role || null))
+                                        .filter(item => (item.rolesUser || item.roles).includes(user.role || null))
                                         .map(item => (
                                             <Link
                                                 key={item.id}
@@ -87,7 +90,7 @@ export default class ProfileLayout extends React.PureComponent {
                                                 })}
                                                 toRoute={item.id}
                                                 toRouteParams={{
-                                                    address: this.props.user.address,
+                                                    address: user.address,
                                                 }}
                                                 noStyles
                                             >
@@ -104,7 +107,7 @@ export default class ProfileLayout extends React.PureComponent {
                                 {ContentComponent && (
                                     <ContentComponent
                                         isMe={this.props.isMe}
-                                        user={this.props.user}
+                                        user={user}
                                     />
                                 )}
                             </div>

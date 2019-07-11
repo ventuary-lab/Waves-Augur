@@ -1,7 +1,8 @@
 import React from 'react';
-import { push } from 'react-router-redux';
+import {connect} from 'react-redux';
+import {push} from 'react-router-redux';
 
-import { html, store } from 'components';
+import {html} from 'components';
 
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
@@ -12,6 +13,7 @@ import UserSchema from 'types/UserSchema';
 
 const bem = html.bem('UserCard');
 
+@connect()
 export default class UserCard extends React.PureComponent {
 
     static propTypes = {
@@ -42,7 +44,7 @@ export default class UserCard extends React.PureComponent {
                             user: this.props.item,
                         },
                     }}
-                    onClick={() => store.dispatch(push(`/users/${this.props.item.address}`))}
+                    onClick={() => this.props.dispatch(push(`/users/${this.props.item.address}/donation`))}
                 />
             </div>
         );

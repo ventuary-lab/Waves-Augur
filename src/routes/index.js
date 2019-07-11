@@ -68,26 +68,6 @@ export default {
             label: __('About'),
             roles: UserRole.getKeys(),
         },
-        [ROUTE_PROJECTS_REDIRECT]: {
-            exact: true,
-            path: '/projects',
-            component: Redirect,
-            componentProps: {
-                to: '/projects/featured',
-            },
-            label: __('Projects'),
-            roles: UserRole.getKeys(),
-            items: {
-                [ROUTE_PROJECTS]: {
-                    exact: true,
-                    path: '/projects/:state',
-                    component: ProjectsPage,
-                    label: __('Projects'),
-                    isNavVisible: false,
-                    roles: UserRole.getKeys(),
-                },
-            }
-        },
         [ROUTE_COMMUNITY]: {
             exact: true,
             path: '/community',
@@ -97,7 +77,7 @@ export default {
         },
         [ROUTE_PROJECT_REVIEW]: {
             exact: true,
-            path: '/review/:address(\\w{35})/project/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/:type/:index?',
+            path: '/review/:address(\\w{35})/project/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/:type/:number?',
             component: ProjectReviewPage,
             label: __('Review'),
             roles: UserRole.getKeys(),
@@ -127,7 +107,6 @@ export default {
                     component: ProfileInboxPage,
                     label: __('Inbox'),
                     icon: 'Icon__notification',
-                    isNavVisible: false,
                     roles: [UserRole.REGISTERED],
                     isShowImageLine: true,
                 },
@@ -177,6 +156,22 @@ export default {
                     isShowImageLine: true,
                 },
             },
+        },
+        [ROUTE_USER_REDIRECT]: {
+            exact: true,
+            path: baseUser,
+            component: Route,
+            componentProps: {
+
+                //TODO if is WHALE redirect to /grants
+                render: ({match}) => (
+                    <Redirect to={`/users/${match.params.address}/donation`}/>
+                )
+            },
+            label: __('Project'),
+            isNavVisible: false,
+            roles: UserRole.getKeys(),
+            rolesUser: UserRole.getAuth(),
         },
         [ROUTE_USER]: {
             path: baseUser,
@@ -299,6 +294,26 @@ export default {
                     isShowImageLine: true,
                 },
             },
+        },
+        [ROUTE_PROJECTS_REDIRECT]: {
+            exact: true,
+            path: '/projects',
+            component: Redirect,
+            componentProps: {
+                to: '/projects/featured',
+            },
+            label: __('Projects'),
+            roles: UserRole.getKeys(),
+            items: {
+                [ROUTE_PROJECTS]: {
+                    exact: true,
+                    path: '/projects/:state(featured|feed|new|finished)',
+                    component: ProjectsPage,
+                    label: __('Projects'),
+                    isNavVisible: false,
+                    roles: UserRole.getKeys(),
+                },
+            }
         },
     },
 };
