@@ -18,6 +18,7 @@ import UserSchema from 'types/UserSchema';
 
 import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
+import {isPhone} from 'yii-steroids/reducers/screen';
 
 const bem = html.bem('HeaderProfile');
 
@@ -27,6 +28,7 @@ const bem = html.bem('HeaderProfile');
         isAuthorized: isAuthorized(state),
         user: getUser(state),
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
+        isPhone: isPhone(state),
     })
 )
 @enhanceWithClickOutside
@@ -60,18 +62,29 @@ export default class HeaderProfile extends React.PureComponent {
                     label={__('Login')}
                     noStyles
                     onClick={() => {
-                        if (this.props.user && this.props.user.role === UserRole.INVITED) {
-                            return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+
+                        if (this.props.isPhone) {
+                            this.props.dispatch(openModal(MessageModal, {
+                                icon: 'Icon__log-in-from-pc',
+                                title: __('Log in from PC'),
+                                color: 'success',
+                                description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                            }));
+                        } else {
+                            if (this.props.user && this.props.user.role === UserRole.INVITED) {
+                                return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+                            }
+
+                            this.props.dispatch(openModal(MessageModal, {
+                                icon: 'Icon__get-an-invitation',
+                                title: __('You Need An Invitation'),
+                                color: 'success',
+                                description: __('You must be invited by registered user'),
+                                submitLabel: __('Check out Community'),
+                                toRoute: ROUTE_COMMUNITY,
+                            }));
                         }
 
-                        return this.props.dispatch(openModal(MessageModal, {
-                            icon: 'Icon__get-an-invitation',
-                            title: __('You Need An Invitation'),
-                            color: 'success',
-                            description: __('You must be invited by registered user'),
-                            submitLabel: __('Check out Community'),
-                            toRoute: ROUTE_COMMUNITY,
-                        }));
                     }}
                 />
             );
