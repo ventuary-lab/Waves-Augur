@@ -106,7 +106,7 @@
   }
 
   &__balance {
-    margin-bottom: 16px;
+    margin-bottom: 22px;
 
     & > span:first-child {
     }
@@ -128,7 +128,7 @@
     line-height: 24px;
     color: $color-gg-4;
     text-transform: capitalize;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     outline: none;
 
     .ButtonView__label {
@@ -171,5 +171,9 @@
 
   &__share-link {
     @include share-link;
+  }
+
+  &__tags {
+    margin-bottom: 22px;
   }
 }
