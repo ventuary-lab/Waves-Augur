@@ -3,6 +3,7 @@ import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
 import _sum from 'lodash/sum';
+import _set from 'lodash/set';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
@@ -280,6 +281,11 @@ export default class DalComponent {
         ]);
         if (!data) {
             return null;
+        }
+
+        // TODO Legacy
+        if (!_get(data, 'socials.url_website') && data.presentationUrl) {
+            _set(data, 'socials.url_website', data.presentationUrl);
         }
 
         const height = await this.transport.nodeHeight();
@@ -567,9 +573,9 @@ export default class DalComponent {
             },
             socials: {
                 url_twitter: null,
+                url_website: null,
                 ...data.socials,
             },
-            presentationUrl: null,
             uid: DalHelper.generateUid(),
             ...data,
         };

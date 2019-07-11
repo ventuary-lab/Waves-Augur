@@ -1,11 +1,10 @@
 import React from 'react';
-import {push} from 'react-router-redux';
+import {replace} from 'react-router-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
-import {getCurrentItem} from 'yii-steroids/reducers/navigation';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
@@ -56,7 +55,7 @@ export default class ProfileLayout extends React.PureComponent {
 
     componentWillMount() {
         if (this.props.isNeedRedirect) {
-            this.props.dispatch(push('/profile/projects'));
+            this.props.dispatch(replace('/profile/projects'));
         }
     }
 

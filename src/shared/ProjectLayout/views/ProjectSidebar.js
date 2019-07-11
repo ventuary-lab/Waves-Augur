@@ -11,12 +11,10 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
-import {ROUTE_PROJECT_NEWS} from 'routes';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import UserSchema from 'types/UserSchema';
-import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
 

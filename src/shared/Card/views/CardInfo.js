@@ -80,7 +80,8 @@ export default class CardInfo extends React.PureComponent {
                                 <>
                                     {daysLeft && (
                                         <span className={bem.element('days-left')}>
-                                            {__('{count} {count, plural, one{day} few{days} many{days}} left', {
+                                            <b>{daysLeft}</b>
+                                            <br />{__('{count, plural, one{day} few{days} many{days}} left', {
                                                 count: daysLeft,
                                             })}
                                         </span>
