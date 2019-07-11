@@ -208,9 +208,8 @@ export default class DalComponent {
         const user = await this.getUser(account.address);
 
         // Detect user exists
-        const isNew = !(await this.transport.nodeFetchKey('wl_sts_' + account.address));
-        const method = isNew ? 'signup' : 'userupdate';
-        if (isNew) {
+        const method = user.role === UserRole.INVITED ? 'signup' : 'userupdate';
+        if (!profile.createTime) {
             profile.createTime = DalHelper.dateNow();
         }
 
@@ -280,8 +279,8 @@ export default class DalComponent {
         const height = await this.transport.nodeHeight();
         const statusMap = {
             'new': ProjectStatusEnum.VOTING,
-            'reveal': ProjectStatusEnum.VOTING,
-            'commit': ProjectStatusEnum.VOTING,
+            'voting_reveal': ProjectStatusEnum.VOTING,
+            'voting_commit': ProjectStatusEnum.VOTING,
             //'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
             'delisted': ProjectStatusEnum.REJECTED,
             'buyout': ProjectStatusEnum.GRANT,
