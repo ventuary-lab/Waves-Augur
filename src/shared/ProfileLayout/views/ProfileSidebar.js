@@ -87,9 +87,11 @@ export default class ProfileSidebar extends React.PureComponent {
                         </div>
                     )}
                     {this.props.user.profile.tags && this.props.user.profile.tags.length > 0 && (
-                        <Tags
-                            items={this.props.user.profile.tags}
-                        />
+                        <div className={bem.element('tags')}>
+                            <Tags
+                                items={this.props.user.profile.tags}
+                            />
+                        </div>
                     )}
                     {this.props.isMe && (
                         <>
