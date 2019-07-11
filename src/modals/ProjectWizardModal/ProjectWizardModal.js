@@ -73,22 +73,8 @@ export default class ProjectWizardModal extends React.PureComponent {
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
                             socials: this.props.project.socials,
-                            presentationUrl: this.props.project.presentationUrl,
                         }
-                        : (
-                            dal.isTestMode
-                                ? {
-                                    name: 'proj' + (new Date()).getTime(),
-                                    description: 'Build Blockchain-related applications and uild applications ser',
-                                    expireCrowd: moment().add(8, 'day').format('YYYY-MM-DD'),
-                                    targetWaves: 10,
-                                    tags: ['Consulting', 'RND', 'Analytics', 'Management', 'Research and Development'],
-                                    socials: {
-                                        url_twitter: 'https://twitter.com/MarsCuriosity',
-                                    }
-                                }
-                                : undefined
-                        )
+                        : undefined
                     }
                     layout={'horizontal'}
                     items={[
@@ -133,10 +119,10 @@ export default class ProjectWizardModal extends React.PureComponent {
                             id: 'idea-three-contacts',
                             component: this._stepIdeaThreeContacts,
                             validators: [
-                                [['contents.impactOnCommunity', 'contents.currentStage', 'presentationUrl', 'socials.url_' + SocialEnum.TWITTER], 'required'],
+                                [['contents.impactOnCommunity', 'contents.currentStage', 'socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'required'],
                                 [['contents.impactOnCommunity', 'contents.currentStage'], 'string', {min: 20, max: 250}],
                                 ['socials.url_' + SocialEnum.TWITTER, 'social'],
-                                [['presentationUrl', 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
+                                [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                             ],
                         },
                     ]}
@@ -319,13 +305,13 @@ export default class ProjectWizardModal extends React.PureComponent {
                 </div>
                 <InputField
                     layoutClassName={bem.element('presentation')}
-                    attribute={'presentationUrl'}
+                    attribute={'socials.url_' + SocialEnum.WEBSITE}
                     placeholder={__('https://medium.com/ma......')}
                     label={!this.props.isPhone ? __('Presentation') : ''}
                     topLabel={this.props.isPhone ? __('Presentation') : ''}
                 />
                 <InputField
-                    attribute={'socials.url_twitter'}
+                    attribute={'socials.url_' + SocialEnum.TWITTER}
                     placeholder={__('https://medium.com/ma......')}
                     topLabel={this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}
                     label={!this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}

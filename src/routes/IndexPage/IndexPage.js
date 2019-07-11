@@ -17,6 +17,8 @@ import ProjectWizardModal from 'modals/ProjectWizardModal';
 import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS} from 'routes/index';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getNavItem} from 'yii-steroids/reducers/navigation';
+import {isPhone} from 'yii-steroids/reducers/screen';
+import MessageModal from '../../modals/MessageModal';
 
 const bem = html.bem('IndexPage');
 
@@ -27,6 +29,7 @@ const bem = html.bem('IndexPage');
 
         return {
             canAddProject: user && (item.roles || []).includes(user.role),
+            isPhone: isPhone(state),
         };
     }
 )
@@ -56,7 +59,18 @@ export default class IndexPage extends React.PureComponent {
                                     {this.props.canAddProject && (
                                         <Button
                                             className={bem.element('hero-action', 'primary')}
-                                            onClick={() => this.props.dispatch(openModal(ProjectWizardModal))}
+                                            onClick={() => {
+                                                if (this.props.isPhone) {
+                                                    this.props.dispatch(openModal(MessageModal, {
+                                                        icon: 'Icon__log-in-from-pc',
+                                                        title: __('Log in from PC'),
+                                                        color: 'success',
+                                                        description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                                    }));
+                                                } else {
+                                                    this.props.dispatch(openModal(ProjectWizardModal));
+                                                }
+                                            }}
                                             noStyles
                                         >
                                             {__('Add project')}

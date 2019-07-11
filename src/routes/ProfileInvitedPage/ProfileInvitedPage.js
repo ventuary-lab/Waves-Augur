@@ -13,6 +13,8 @@ import List from 'yii-steroids/ui/list/List';
 import UserSchema from 'types/UserSchema';
 import {ROUTE_PROJECTS_REDIRECT} from '../index';
 import Link from 'yii-steroids/ui/nav/Link';
+import MessageModal from '../../modals/MessageModal';
+import {isPhone} from 'yii-steroids/reducers/screen';
 
 const bem = html.bem('ProfileInvitedPage');
 
@@ -20,7 +22,11 @@ const bem = html.bem('ProfileInvitedPage');
     props => dal.getUserInvites(props.user.address)
         .then(items => ({items}))
 )
-@connect()
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class ProfileInvitedPage extends React.PureComponent {
 
     static propTypes = {
@@ -35,7 +41,19 @@ export default class ProfileInvitedPage extends React.PureComponent {
                     <ActionButtonBlock
                         title={__('Invite New User')}
                         iconClass={'Icon__invite-user_small'}
-                        onClick={() => this.props.dispatch(openModal(InviteUserModal))}
+                        onClick={() => {
+
+                            if (this.props.isPhone) {
+                                this.props.dispatch(openModal(MessageModal, {
+                                    icon: 'Icon__log-in-from-pc',
+                                    title: __('Log in from PC'),
+                                    color: 'success',
+                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                }));
+                            } else {
+                                this.props.dispatch(openModal(InviteUserModal));
+                            }
+                        }}
                     />
                 ) || (
                     <Link

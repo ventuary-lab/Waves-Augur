@@ -465,6 +465,12 @@ $icons-dir: '../static/icons';
     background-image: url('#{$icons-dir}/get-an-invitation.svg');
   }
 
+  &__log-in-from-pc {
+    min-width: 186px;
+    min-height: 186px;
+    background-image: url('#{$icons-dir}/log-in-from-pc.svg');
+  }
+
   &__waves-keeper {
     min-width: 186px;
     min-height: 186px;

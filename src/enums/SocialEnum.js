@@ -7,7 +7,7 @@ export default class SocialEnum extends Enum {
     static LINKEDIN = 'linkedin';
     // static INSTAGRAM = 'instagram';
     static TELEGRAM = 'telegram';
-    // static WEBSITE = 'website';
+     static WEBSITE = 'website';
     static REDDIT = 'reddit';
 
     static getLabels() {
@@ -17,7 +17,7 @@ export default class SocialEnum extends Enum {
             [this.LINKEDIN]: __('Linkedin'),
             // [this.INSTAGRAM]: __('Instagram'),
             [this.TELEGRAM]: __('Telegram'),
-            // [this.WEBSITE]: __('Website'),
+            [this.WEBSITE]: __('Website'),
             [this.REDDIT]: __('Reddit'),
         };
     }
@@ -29,7 +29,7 @@ export default class SocialEnum extends Enum {
             [this.LINKEDIN]: 'Icon Icon__linkedin',
             // [this.INSTAGRAM]: 'Icon Icon__instagram',
             [this.TELEGRAM]: 'Icon Icon__telegram',
-            // [this.WEBSITE]: 'Icon Icon__website',
+            [this.WEBSITE]: 'Icon Icon__website',
             [this.REDDIT]: 'Icon Icon__reddit',
         };
     }
@@ -42,7 +42,7 @@ export default class SocialEnum extends Enum {
             // [this.INSTAGRAM]: /(www\.)?instagram\.com\//,
             [this.TELEGRAM]: /(www\.)?tg\.me\//,
             [this.REDDIT]: /(www\.)?reddit\.com\//,
-            // [this.WEBSITE]: /[a-z]+\:\/\//,
+            [this.WEBSITE]: /[a-z]+\:\/\//,
             //[this.VK]: /(www\.)?vk\.com\//,
             //[this.YOUTUBE]: /(www\.)?youtube\.com\//,
             //[this.ODNOKLASSNIKI]: /(www\.)?ok\.ru\//,

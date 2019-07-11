@@ -15,7 +15,8 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
-import validate from 'shared/validate';
+import {goToPage} from 'yii-steroids/actions/navigation';
+import {ROUTE_PROFILE_INBOX} from 'routes';
 
 const FORM_ID = 'VotingForm';
 
@@ -84,6 +85,7 @@ export default class VotingForm extends React.PureComponent {
 
         return dal.voteProject(this.props.project.uid, vote, {
             comment: _get(this.props, 'formValues.review') || null,
-        });
+        })
+            .then(() => this.props.dispatch(goToPage(ROUTE_PROFILE_INBOX)));
     }
 }

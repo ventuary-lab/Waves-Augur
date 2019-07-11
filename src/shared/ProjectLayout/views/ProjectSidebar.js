@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
+import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {html} from 'components';
 import Tags from 'shared/Tags';
@@ -11,16 +12,19 @@ import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
-import {ROUTE_PROJECT_NEWS} from 'routes';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
+import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
-import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
 
-@connect()
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class ProjectSidebar extends React.PureComponent {
 
     static propTypes = {
@@ -85,13 +89,23 @@ export default class ProjectSidebar extends React.PureComponent {
                             <Button
                                 label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
                                 onClick={() => {
-                                    window.scrollTo(0, 200);
-                                    const el = document.querySelector('textarea[name=review]');
-                                    el && el.focus();
+                                    if (this.props.isPhone) {
+                                        this.props.dispatch(openModal(MessageModal, {
+                                            icon: 'Icon__log-in-from-pc',
+                                            title: __('Log in from PC'),
+                                            color: 'success',
+                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                        }));
+                                    } else {
+                                        window.scrollTo(0, 200);
+                                        const el = document.querySelector('textarea[name=review]');
+                                        el && el.focus();
+                                    }
                                 }}
                             />
                         </div>
                     )}
+
                     {this.props.project.canEdit && (
                         <Link
                             label={__('Edit project')}

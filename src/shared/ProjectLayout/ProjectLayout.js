@@ -90,15 +90,17 @@ export default class ProjectLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.props.project.canVote && (
-                                <VotingForm project={this.props.project}/>
-                            )}
-                            {this.props.project.canDonate && (
-                                <DonateForm project={this.props.project}/>
-                            )}
-                            {this.props.project.canWhale && (
-                                <GrantForm project={this.props.project}/>
-                            )}
+                            <div className={bem.element('form')}>
+                                {this.props.project.canVote && (
+                                    <VotingForm project={this.props.project}/>
+                                )}
+                                {this.props.project.canDonate && (
+                                    <DonateForm project={this.props.project}/>
+                                )}
+                                {this.props.project.canWhale && (
+                                    <GrantForm project={this.props.project}/>
+                                )}
+                            </div>
                             {!this.props.project.canVote && !this.props.project.canDonate && !this.props.project.canWhale && (
                                 <Link
                                     toRoute={ROUTE_PROJECTS_REDIRECT}

@@ -3,6 +3,7 @@ import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
 import _sum from 'lodash/sum';
+import _set from 'lodash/set';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
@@ -87,7 +88,6 @@ export default class DalComponent {
                 name: account.name,
                 ...user.profile,
             },
-            balance: Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8)),
         };
 
         if (this._authInterval) {
@@ -140,7 +140,13 @@ export default class DalComponent {
         // positive_fund_{uid}_{address}
         // negative_fund_{uid}_{address}
 
+        const account = await this.getAccount();
+        const balance = account.address === address
+            ? Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8))
+            : null;
+
         return {
+            balance,
             address: _trim(address),
             activity: await this.getUserActivity(address),
             role: address === this.dApp
@@ -209,9 +215,8 @@ export default class DalComponent {
         const user = await this.getUser(account.address);
 
         // Detect user exists
-        const isNew = !(await this.transport.nodeFetchKey('wl_sts_' + account.address));
-        const method = isNew ? 'signup' : 'userupdate';
-        if (isNew) {
+        const method = user.role === UserRole.INVITED ? 'signup' : 'userupdate';
+        if (!profile.createTime) {
             profile.createTime = DalHelper.dateNow();
         }
 
@@ -247,7 +252,7 @@ export default class DalComponent {
         const account = await this.getAccount();
         const [
             data,
-            internalStatus,
+            contractStatus,
             positiveBalance,
             negativeBalance,
             votesFeaturedCount,
@@ -278,15 +283,12 @@ export default class DalComponent {
             return null;
         }
 
+        // TODO Legacy
+        if (!_get(data, 'socials.url_website') && data.presentationUrl) {
+            _set(data, 'socials.url_website', data.presentationUrl);
+        }
+
         const height = await this.transport.nodeHeight();
-        const statusMap = {
-            'new': ProjectStatusEnum.VOTING,
-            'reveal': ProjectStatusEnum.VOTING,
-            'commit': ProjectStatusEnum.VOTING,
-            //'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
-            'delisted': ProjectStatusEnum.REJECTED,
-            'buyout': ProjectStatusEnum.GRANT,
-        };
         const blocks = {
             create: blockCreate,
             votingEnd: blockVotingEnd,
@@ -304,7 +306,7 @@ export default class DalComponent {
             canWhale: false,
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
-            status: statusMap[internalStatus] || ProjectStatusEnum.getStatus(blocks, height),
+            status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
             isImVoted: !!myVote,
             author: await this.getUser(authorAddress),
             votesCount: {
@@ -571,9 +573,9 @@ export default class DalComponent {
             },
             socials: {
                 url_twitter: null,
+                url_website: null,
                 ...data.socials,
             },
-            presentationUrl: null,
             uid: DalHelper.generateUid(),
             ...data,
         };
@@ -640,6 +642,8 @@ export default class DalComponent {
             this.error(e);
         }
 
+        this.transport.resetCache();
+
         return result;
     }
 
@@ -664,6 +668,8 @@ export default class DalComponent {
             this.error(e);
         }
 
+        this.transport.resetCache();
+
         return result;
     }
 
@@ -687,6 +693,8 @@ export default class DalComponent {
         } catch (e) {
             this.error(e);
         }
+
+        this.transport.resetCache();
 
         return result;
     }
