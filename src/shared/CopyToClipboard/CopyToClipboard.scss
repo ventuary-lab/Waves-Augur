@@ -31,10 +31,10 @@
   }
 
   &__message {
+    min-width: 175px;
     position: absolute;
-    right: -200px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translateX(-50%);
     background: $color-base;
     border: 1px solid #f1f6f2;
     box-shadow: 0 0 30px rgba($color-brand-green, 0.1);
