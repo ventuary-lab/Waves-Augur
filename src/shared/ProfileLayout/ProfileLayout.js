@@ -1,4 +1,5 @@
 import React from 'react';
+import {push} from 'react-router-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
@@ -23,10 +24,13 @@ const bem = html.bem('ProfileLayout');
     state => {
         const address = _get(getCurrentRoute(state), 'params.address');
         const isMe = !address;
+        const contextUser = getUser(state);
+        const isNeedRedirect = address === contextUser.address;
         return {
             address,
             isMe,
-            contextUser: isMe ? getUser(state) : null,
+            isNeedRedirect,
+            contextUser: isMe ? contextUser : null,
             routeId: _get(getCurrentRoute(state), 'id'),
             profileNavItems: getNavItems(state, isMe ? ROUTE_PROFILE : ROUTE_USER, {address}),
         };
@@ -49,6 +53,12 @@ export default class ProfileLayout extends React.PureComponent {
         routeId: PropTypes.string,
         profileNavItems: PropTypes.arrayOf(NavItemSchema),
     };
+
+    componentWillMount() {
+        if (this.props.isNeedRedirect) {
+            this.props.dispatch(push('/profile/projects'));
+        }
+    }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.address !== nextProps.address) {
