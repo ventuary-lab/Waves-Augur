@@ -7,6 +7,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import Tags from 'shared/Tags';
+import {isPhone} from 'yii-steroids/reducers/screen';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
@@ -16,10 +17,13 @@ import UserRole from 'enums/UserRole';
 import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 import './ProfileSidebar.scss';
+import MessageModal from '../../../modals/MessageModal';
 
 const bem = html.bem('ProfileSidebar');
 
-@connect()
+@connect(state => ({
+    isPhone: isPhone(state),
+}))
 export default class ProfileSidebar extends React.PureComponent {
 
     static propTypes = {
@@ -103,7 +107,18 @@ export default class ProfileSidebar extends React.PureComponent {
                             </div>
                             <Link
                                 className={bem.element('edit')}
-                                onClick={() => this.props.dispatch(openModal(ProfileWizardModal))}
+                                onClick={() => {
+                                    if (this.props.isPhone) {
+                                        this.props.dispatch(openModal(MessageModal, {
+                                            icon: 'Icon__log-in-from-pc',
+                                            title: __('Log in from PC'),
+                                            color: 'success',
+                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                        }));
+                                    } else {
+                                        this.props.dispatch(openModal(ProfileWizardModal));
+                                    }
+                                }}
                                 noStyles
                             >
                                 <svg className={bem.element('edit-icon')} width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import _get from 'lodash-es/get';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
@@ -32,6 +33,7 @@ const bem = html.bem('Layout');
     state => ({
         isShowImageLine: getCurrentItemParam(state, 'isShowImageLine'),
         user: getUser(state),
+        maxPhoneWidth: _get(state, 'screen.media.tablet'),
     })
 )
 @screenWatcherHoc()
@@ -46,15 +48,18 @@ export default class Layout extends React.PureComponent {
     async componentDidMount() {
         dal.voteReveralMonitor.start();
 
-        if (!await dal.isKeeperInstalled()) {
-            this.props.dispatch(openModal(MessageModal, {
-                icon: 'Icon__waves-keeper',
-                title: __('Install Waves Keeper'),
-                color: 'success',
-                description: __('You Need a WAVES Wallet to Join Us'),
-                submitLabel: __('Install'),
-                url: 'https://wavesplatform.com/products-keeper',
-            }));
+        //not Phone
+        if (window.innerWidth >= this.props.maxPhoneWidth) {
+            if (!await dal.isKeeperInstalled()) {
+                this.props.dispatch(openModal(MessageModal, {
+                    icon: 'Icon__waves-keeper',
+                    title: __('Install Waves Keeper'),
+                    color: 'success',
+                    description: __('You Need a WAVES Wallet to Join Us'),
+                    submitLabel: __('Install'),
+                    url: 'https://wavesplatform.com/products-keeper',
+                }));
+            }
         }
     }
 
@@ -62,7 +67,10 @@ export default class Layout extends React.PureComponent {
         if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
             && nextProps.user && nextProps.user.role === UserRole.INVITED && nextProps.user.invitedBy
         ) {
-            this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+            //not Phone
+            if (window.innerWidth >= this.props.maxPhoneWidth) {
+                this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+            }
         }
     }
 
