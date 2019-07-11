@@ -128,6 +128,7 @@
     line-height: 24px;
     color: $color-gg-4;
     text-transform: capitalize;
+    margin-bottom: 10px;
     outline: none;
 
     .ButtonView__label {
@@ -166,5 +167,9 @@
         }
       }
     }
+  }
+
+  &__share-link {
+    @include share-link;
   }
 }

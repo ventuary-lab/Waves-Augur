@@ -86,7 +86,7 @@ export default class CardInfo extends React.PureComponent {
                                         </span>
                                     ) || (
                                         <span className={bem.element('time-is-over')}>
-                                            {__('Time is over')}
+                                            {__('Today')}
                                         </span>
                                     )}
                                 </>

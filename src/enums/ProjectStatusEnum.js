@@ -40,33 +40,31 @@ export default class ProjectStatusEnum extends Enum {
     }
 
     static getDaysLeft(status, project) {
+        const {expireVoting, expireCrowd, expireWhale} = project;
+
         if (status === this.VOTING) {
-            if (moment(project.expireVoting).diff(moment(), 'days') > 0) {
-                return moment(project.expireVoting).diff(moment(), 'days');
-            } else {
-                return 0;
-            }
+            return this.getDaysDiff(expireVoting);
         }
 
         if (status === this.CROWDFUND) {
-            if (moment(project.expireCrowd).diff(moment(), 'days') > 0) {
-                return moment(project.expireCrowd).diff(moment(), 'days');
-            } else {
-                return 0;
-            }
+            return this.getDaysDiff(expireCrowd);
         }
 
         if (status === this.WAITING_GRANT) {
-            if (moment(project.expireWhale).diff(moment(), 'days') > 0) {
-                return moment(project.expireWhale).diff(moment(), 'days');
-            } else {
-                return 0;
-            }
+            return this.getDaysDiff(expireWhale);
 
         }
 
         if (status === this.GRANT) {
             return null;
         }
+    }
+
+    static getDaysDiff(date) {
+        if (moment(date).diff(moment().utc(), 'days') < 0) {
+            return null;
+        }
+
+        return moment(date).diff(moment().utc(), 'days');
     }
 }
