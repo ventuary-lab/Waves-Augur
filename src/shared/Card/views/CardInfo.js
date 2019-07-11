@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import {html} from 'components';
 import coverStub from '../../../static/images/cover-stub.jpg';
@@ -136,9 +137,16 @@ export default class CardInfo extends React.PureComponent {
                             </Link>
                         )}
                         {this.props.description && (
-                            <p className={bem.element('description')}>
-                                {this.props.description}
-                            </p>
+                            <div className={bem.element('description')}>
+                                <LinesEllipsis
+                                    text={this.props.description}
+                                    maxLine='2'
+                                    ellipsis='...'
+                                    trimRight
+                                    basedOn='letters'
+                                    component='p'
+                                />
+                            </div>
                         )}
                     </div>
                 </div>

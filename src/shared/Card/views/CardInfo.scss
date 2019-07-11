@@ -83,6 +83,8 @@
     text-align: center;
     color: #abb3ac;
     text-decoration: none;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 
     &:hover {
       opacity: .7;
@@ -95,6 +97,10 @@
     line-height: 14px;
     text-align: center;
     margin-top: 0;
+
+    > p {
+      margin: 0;
+    }
   }
 
   &__country {

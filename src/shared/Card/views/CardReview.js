@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _times from 'lodash-es/times';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import UserSchema from 'types/UserSchema';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
@@ -128,7 +129,13 @@ export default class CardReview extends React.PureComponent {
                         </div>
                         {this.props.review.comment && (
                             <div className={bem.element('text')}>
-                                {this.props.review.comment}
+                                <LinesEllipsis
+                                    text={this.props.review.comment}
+                                    maxLine='2'
+                                    ellipsis='...'
+                                    trimRight
+                                    basedOn='letters'
+                                />
                             </div>
                         )}
                     </div>

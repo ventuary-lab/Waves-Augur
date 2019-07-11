@@ -133,6 +133,7 @@
     "react-highlight-words": "^0.15.1",
     "react-hot-loader": "^4.7.1",
     "react-input-mask": "^2.0.4",
+    "react-lines-ellipsis": "^0.14.1",
     "react-mde": "^4.0.3",
     "react-modal": "^3.6.1",
     "react-quill": "^1.2.6",
