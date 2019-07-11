@@ -2,6 +2,7 @@ import _get from 'lodash/get';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
+import _sum from 'lodash/sum';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
@@ -311,13 +312,14 @@ export default class DalComponent {
                 [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
         };
+        const user = await this.getUser(account.address);
 
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
         if (account.address) {
             if (project.author.address !== account.address) {
-                if (project.author.role !== UserRole.WHALE) {
+                if (user.role !== UserRole.WHALE) {
                     if (project.isVotingAvailable && !project.isImVoted) {
                         project.canVote = true;
                     }
@@ -389,6 +391,7 @@ export default class DalComponent {
                             vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
                             amount: this.getVotePayment(),
                             project: await this.getProject(uid),
+                            user: await this.getUser(match[2]),
                         };
                     }
                     return null;
@@ -414,6 +417,7 @@ export default class DalComponent {
                             vote: await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`),
                             amount: (mode === 'negative' ? -1 : 1) * this.contract.TIERS[tierNumber - 1],
                             project: await this.getProject(uid),
+                            user: await this.getUser(match[2]),
                         };
                     }
                     return null;
@@ -423,15 +427,21 @@ export default class DalComponent {
     }
 
     async getUserActivity(address) {
-        const userDonations = await this.getUserDonations(address);
-        let activity = 1; // 1 point for registration
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_text_id:([0-9]+)/i.exec(key);
+                    if (match && match[2] === address) {
+                        const uid = match[1];
+                        const tierNumber = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_tier_id:${match[3]}`);
+                        return this.contract.TIERS[tierNumber - 1];
+                    }
+                })
+                .filter(Boolean)
+        );
 
-        if (!userDonations || !userDonations.length) {
-            return activity;
-        }
-
-        userDonations.map(donate => activity = activity + Math.abs(donate.amount));
-        return activity;
+        return _sum(result) ? _sum(result) + 1 : 1;
     }
 
     async getUserGrants(address) {

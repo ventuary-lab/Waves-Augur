@@ -83,7 +83,7 @@ export default class ProjectSidebar extends React.PureComponent {
                     {(this.props.project.canVote || this.props.project.canDonate) && (
                         <div className={bem.element('action')}>
                             <Button
-                                label={this.props.project.canVote === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
+                                label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
                                 onClick={() => {
                                     window.scrollTo(0, 200);
                                     const el = document.querySelector('textarea[name=review]');
