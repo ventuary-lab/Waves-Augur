@@ -37,6 +37,9 @@ export default class ProjectCard extends React.PureComponent {
                             title: this.props.item.name,
                             description: this.props.item.description,
                             country: this.props.item.location,
+                            expireVoting: this.props.item.expireVoting,
+                            expireCrowd: this.props.item.expireCrowd,
+                            expireWhale: this.props.item.expireWhale,
                         }
                     }}
                     right={{

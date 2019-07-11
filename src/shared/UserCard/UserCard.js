@@ -36,6 +36,7 @@ export default class UserCard extends React.PureComponent {
                             description: this.props.item.profile.title,
                             country: this.props.item.profile.location,
                             createTime: this.props.item.profile.createTime,
+                            activity: this.props.item.activity,
                         },
                     }}
                     right={{
