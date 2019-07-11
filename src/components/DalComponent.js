@@ -87,7 +87,6 @@ export default class DalComponent {
                 name: account.name,
                 ...user.profile,
             },
-            balance: Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8)),
         };
 
         if (this._authInterval) {
@@ -140,7 +139,13 @@ export default class DalComponent {
         // positive_fund_{uid}_{address}
         // negative_fund_{uid}_{address}
 
+        const account = await this.getAccount();
+        const balance = account.address === address
+            ? Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8))
+            : null;
+
         return {
+            balance,
             address: _trim(address),
             activity: await this.getUserActivity(address),
             role: address === this.dApp
@@ -246,7 +251,7 @@ export default class DalComponent {
         const account = await this.getAccount();
         const [
             data,
-            internalStatus,
+            contractStatus,
             positiveBalance,
             negativeBalance,
             votesFeaturedCount,
@@ -278,14 +283,6 @@ export default class DalComponent {
         }
 
         const height = await this.transport.nodeHeight();
-        const statusMap = {
-            'new': ProjectStatusEnum.VOTING,
-            'voting_reveal': ProjectStatusEnum.VOTING,
-            'voting_commit': ProjectStatusEnum.VOTING,
-            //'featured': ProjectStatusEnum.CROWDFUND, // TODO Need wait status?
-            'delisted': ProjectStatusEnum.REJECTED,
-            'buyout': ProjectStatusEnum.GRANT,
-        };
         const blocks = {
             create: blockCreate,
             votingEnd: blockVotingEnd,
@@ -303,7 +300,7 @@ export default class DalComponent {
             canWhale: false,
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
-            status: statusMap[internalStatus] || ProjectStatusEnum.getStatus(blocks, height),
+            status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
             isImVoted: !!myVote,
             author: await this.getUser(authorAddress),
             votesCount: {
@@ -639,6 +636,8 @@ export default class DalComponent {
             this.error(e);
         }
 
+        this.transport.resetCache();
+
         return result;
     }
 
@@ -663,6 +662,8 @@ export default class DalComponent {
             this.error(e);
         }
 
+        this.transport.resetCache();
+
         return result;
     }
 
@@ -686,6 +687,8 @@ export default class DalComponent {
         } catch (e) {
             this.error(e);
         }
+
+        this.transport.resetCache();
 
         return result;
     }

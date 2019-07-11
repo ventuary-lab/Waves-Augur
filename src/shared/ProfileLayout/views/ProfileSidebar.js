@@ -18,7 +18,6 @@ import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 import './ProfileSidebar.scss';
 
 const bem = html.bem('ProfileSidebar');
-export const APP_DOMAIN = 'https://alpha-ventuary-dao.herokuapp.com';
 
 @connect()
 export default class ProfileSidebar extends React.PureComponent {
@@ -110,7 +109,7 @@ export default class ProfileSidebar extends React.PureComponent {
                                 </svg>
                                 {__('Edit profile')}
                             </Link>
-                            <CopyToClipboard copyText={`${APP_DOMAIN}/users/${this.props.user.address}`}>
+                            <CopyToClipboard copyText={`${location.origin}/users/${this.props.user.address}`}>
                                 <button className={bem.element('share-link')}>{__('Share Profile')}</button>
                             </CopyToClipboard>
                         </>

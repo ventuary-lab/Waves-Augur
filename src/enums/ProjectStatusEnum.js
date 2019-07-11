@@ -26,17 +26,37 @@ export default class ProjectStatusEnum extends Enum {
         };
     }
 
-    static getStatus(blocks, height) {
-        if (height < blocks.votingEnd) {
-            return this.VOTING;
+    /**
+     * Contract statuses
+     *   new               Новый
+     *   voting_commit     Голосование
+     *   voting_reveal     Набрано нужное количество голосов
+     *   featured          Результат голосования - YES, начался краудфайдинг
+     *   delisted          Результат голосования - NO, проект отменент
+     *   cashout           Выплачены призы
+     *   buyout            Выплачен грант
+     *
+     * @param {string} contractStatus
+     * @param {number} blocks
+     * @param {number} height
+     * @returns {string}
+     */
+    static getStatus(contractStatus, blocks, height) {
+        // Voting
+        if (['new', 'voting_commit', 'voting_reveal'].includes(contractStatus)) {
+            return height < blocks.votingEnd ? this.VOTING : this.REJECTED;
         }
-        if (height < blocks.crowdfundEnd) {
-            return this.CROWDFUND;
+
+        // Crowdfund
+        if (contractStatus === 'delisted') {
+            return this.REJECTED;
         }
-        if (height < blocks.whaleEnd) {
-            //return this.WAITING_GRANT;
+        if (contractStatus === 'featured') {
+            return height < blocks.crowdfundEnd ? this.CROWDFUND : this.WAITING_GRANT;
         }
-        return this.WAITING_GRANT;
+
+        // Granted
+        return contractStatus === 'buyout' ? this.GRANT : this.WAITING_GRANT;
     }
 
     static getDaysLeft(status, project) {
@@ -52,7 +72,6 @@ export default class ProjectStatusEnum extends Enum {
 
         if (status === this.WAITING_GRANT) {
             return this.getDaysDiff(expireWhale);
-
         }
 
         if (status === this.GRANT) {

@@ -74,7 +74,7 @@ export default class WavesTransport {
         if (this._heightTimeout) {
             clearTimeout(this._heightTimeout);
         }
-        this._heightTimeout = setTimeout(() => this._height = null, 2000);
+        this._heightTimeout = setTimeout(() => this._height = null, 10000);
 
         // Call callbacks
         this._heightCallbacks.forEach(resolve => resolve(this._height));

@@ -36,7 +36,7 @@ export default class ProjectDetailsPage extends React.PureComponent {
                                     />
                                 </div>
                                 <CopyToClipboard copyText={document.location.toString()}>
-                                    <span className={bem.element('share-link')}>{__('Share Project')}</span>
+                                    <button className={bem.element('share-link')}>{__('Share Project')}</button>
                                 </CopyToClipboard>
                             </div>
                         </div>
