@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {html} from 'components';
 import './FieldLayoutView.scss';
+
 const bem = html.bem('FieldLayoutView');
 
 export default class FieldLayoutView extends React.PureComponent {
@@ -47,7 +48,7 @@ export default class FieldLayoutView extends React.PureComponent {
                         bem.element('label', {
                             required: this.props.required
                         }),
-                        this.props.layout === 'horizontal' && 'form-label-col',
+                        this.getLayoutClass(false),
                     )}>
                         <span className={bem.element('label-inner')}>
                             {this.props.labelIconClass && (
@@ -60,7 +61,7 @@ export default class FieldLayoutView extends React.PureComponent {
                 <div
                     className={bem(
                         bem.element('field'),
-                        this.props.layout === 'horizontal' && 'form-field-col',
+                        this.getLayoutClass(true),
                     )}
                 >
                     {this.props.topLabel && (
@@ -86,5 +87,20 @@ export default class FieldLayoutView extends React.PureComponent {
                 </div>
             </div>
         );
+    }
+
+    getLayoutClass(isField) {
+        const className = isField ? 'form-field-col' : 'form-label-col';
+        const alignClassName = isField ? 'form-field-col_align-left' : 'form-label-col_align-left';
+
+        if (this.props.layout === 'horizontal') {
+            if (this.props.layoutProps && this.props.layoutProps.align) {
+                return this.props.layoutProps.align === 'left' ? `${className} ${alignClassName}` : className;
+            }
+
+            return className;
+        }
+
+        return null;
     }
 }

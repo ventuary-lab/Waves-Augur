@@ -205,6 +205,13 @@ $col-width: percentage(100/$col-length)/100;
       color: $color-gg-4;
     }
   }
+
+  &_align-left {
+    @include tablet {
+      display: flex;
+      align-items: flex-start;
+    }
+  }
 }
 
 .form-field-col {
@@ -212,6 +219,16 @@ $col-width: percentage(100/$col-length)/100;
 
   @include tablet {
     width: 70%;
+  }
+
+  &_align-left {
+    @include tablet {
+      display: flex;
+      align-items: flex-start;
+      flex-grow: 1;
+      margin-left: auto;
+      max-width: 360px;
+    }
   }
 }
 

@@ -29,7 +29,9 @@ export default class LinksTab extends React.PureComponent {
                             attribute={`socials.url_${socialId}`}
                             placeholder={__('Enter URL')}
                             layout={'horizontal'}
-
+                            layoutProps={{
+                                align: 'left',
+                            }}
                             topLabel={this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
                             label={!this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
                             labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(socialId) : ''}
