@@ -311,13 +311,14 @@ export default class DalComponent {
                 [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
         };
+        const user = await this.getUser(account.address);
 
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
         if (account.address) {
             if (project.author.address !== account.address) {
-                if (project.author.role !== UserRole.WHALE) {
+                if (user.role !== UserRole.WHALE) {
                     if (project.isVotingAvailable && !project.isImVoted) {
                         project.canVote = true;
                     }
