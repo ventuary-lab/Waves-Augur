@@ -312,7 +312,7 @@ export default class ProjectWizardModal extends React.PureComponent {
                 />
                 <InputField
                     attribute={'socials.url_' + SocialEnum.TWITTER}
-                    placeholder={__('https://medium.com/ma......')}
+                    placeholder={__('https://twitter.com/ma......')}
                     topLabel={this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}
                     label={!this.props.isPhone ? SocialEnum.getLabel(SocialEnum.TWITTER) : ''}
                     labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(SocialEnum.TWITTER) : ''}

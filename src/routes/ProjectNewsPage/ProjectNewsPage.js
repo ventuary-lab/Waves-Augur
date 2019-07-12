@@ -14,18 +14,24 @@ export default class ProjectNewsPage extends React.PureComponent {
     };
 
     componentDidMount() {
-        resource.loadTwitterWidget().then(twttr => {
-            twttr.widgets.createTimeline(
-                {
-                    sourceType: 'profile',
-                    screenName: this.getTwitterName(),
-                },
-                this.refs.twitter
-            );
-        });
+        if (this.getTwitterName()) {
+            resource.loadTwitterWidget().then(twttr => {
+                twttr.widgets.createTimeline(
+                    {
+                        sourceType: 'profile',
+                        screenName: this.getTwitterName(),
+                    },
+                    this.refs.twitter
+                );
+            });
+        }
     }
 
     render() {
+        if (!this.getTwitterName()) {
+            return null;
+        }
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('twitter')}>
@@ -45,6 +51,12 @@ export default class ProjectNewsPage extends React.PureComponent {
     }
 
     getTwitterName() {
+        const match = this.props.project.socials.url_twitter.match(/\/[A-Za-z0-9]+$/);
+
+        if (!match) {
+            return null;
+        }
+
         return this.props.project.socials.url_twitter.match(/\/[A-Za-z0-9]+$/)[0].substring(1);
     }
 }
