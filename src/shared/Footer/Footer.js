@@ -1,13 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {isPhone} from 'yii-steroids/reducers/screen';
+import {getNavItem, getNavUrl} from 'yii-steroids/reducers/navigation';
+import {openModal} from 'yii-steroids/actions/modal';
+import {getUser} from 'yii-steroids/reducers/auth';
+import Link from 'yii-steroids/ui/nav/Link';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
-import Link from 'yii-steroids/ui/nav/Link';
-import {ROUTE_ROOT} from 'routes';
-import { getNavUrl } from 'yii-steroids/reducers/navigation';
+import MessageModal from 'modals/MessageModal';
+import ProjectWizardModal from 'modals/ProjectWizardModal';
 import ventuaryLogo from 'static/icons/ventuary-logo-white.svg';
+import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS, ROUTE_ROOT} from 'routes';
 
 import './Footer.scss';
 
@@ -15,18 +20,23 @@ const bem = html.bem('Footer');
 
 // TODO replace page id when create project page will be reade
 @connect(
-    state => ({
-        createProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
-        findProjectPageUrl: getNavUrl(state, ROUTE_ROOT),
-        indexPageUrl: getNavUrl(state, ROUTE_ROOT),
-    })
+    state => {
+        const user = getUser(state);
+        const item = getNavItem(state, ROUTE_PROFILE_PROJECTS);
+
+        return {
+            indexPageUrl: getNavUrl(state, ROUTE_ROOT),
+            isPhone: isPhone(state),
+            canAddProject: user && (item.roles || []).includes(user.role),
+        };
+    }
 )
 export default class Footer extends React.PureComponent {
 
     static propTypes = {
-        createProjectPageUrl: PropTypes.string,
-        findProjectPageUrl: PropTypes.string,
         indexPageUrl: PropTypes.string,
+        isPhone: PropTypes.bool,
+        canAddProject: PropTypes.bool,
     };
 
     render() {
@@ -56,19 +66,32 @@ export default class Footer extends React.PureComponent {
                                     {__('Get started')}
                                 </strong>
                                 <ul className={bem.element('helper')}>
+                                    {this.props.canAddProject && (
+                                        <li className={bem.element('helper-item')}>
+                                            <Link
+                                                className={bem.element('helper-link')}
+                                                onClick={() => {
+                                                    if (this.props.isPhone) {
+                                                        this.props.dispatch(openModal(MessageModal, {
+                                                            icon: 'Icon__log-in-from-pc',
+                                                            title: __('Log in from PC'),
+                                                            color: 'success',
+                                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                                        }));
+                                                    } else {
+                                                        this.props.dispatch(openModal(ProjectWizardModal));
+                                                    }
+                                                }}
+                                                noStyles
+                                            >
+                                                {__('Add project')}
+                                            </Link>
+                                        </li>
+                                    )}
                                     <li className={bem.element('helper-item')}>
                                         <Link
                                             className={bem.element('helper-link')}
-                                            to={this.props.createProjectPageUrl}
-                                            noStyles
-                                        >
-                                            {__('Add project')}
-                                        </Link>
-                                    </li>
-                                    <li className={bem.element('helper-item')}>
-                                        <Link
-                                            className={bem.element('helper-link')}
-                                            to={this.props.findProjectPageUrl}
+                                            to={ROUTE_PROJECTS}
                                             noStyles
                                         >
                                             {__('Find project')}
