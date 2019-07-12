@@ -38,7 +38,7 @@ export default class ProfileWizardModal extends React.Component {
                 <FormWizard
                     title={__('')}
                     formId='ProfileWizardModal'
-                    onSubmit={values => dal.saveUser(values)}
+                    onSubmit={values => dal.saveUser(values).then(() => this.props.onClose())}
                     onComplete={this.props.onClose}
                     initialValues={_get(this.props, 'user.profile')}
                     items={[
