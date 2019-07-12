@@ -146,7 +146,7 @@ export default class CardReview extends React.PureComponent {
                                 </div>
                             )}
                             <div className={bem.element('amount')}>
-                                {this.props.amount} {__('Waves')}
+                                {Math.abs(this.props.amount)} {__('Waves')}
                             </div>
                         </div>
                         {this.props.review.comment && (

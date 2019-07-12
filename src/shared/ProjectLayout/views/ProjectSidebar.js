@@ -109,7 +109,6 @@ export default class ProjectSidebar extends React.PureComponent {
                     {this.props.project.canEdit && (
                         <Link
                             className={bem.element('edit')}
-                            label={__('Edit project')}
                             onClick={() => {
                                 if (this.props.isPhone) {
                                     this.props.dispatch(openModal(MessageModal, {

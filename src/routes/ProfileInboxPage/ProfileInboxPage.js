@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ProjectInboxCard from 'shared/ProjectInboxCard';
@@ -8,15 +9,23 @@ import ProjectSchema from 'types/ProjectSchema';
 
 import {dal, html} from 'components';
 import './ProfileInboxPage.scss';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 const bem = html.bem('ProfileInboxPage');
 
 
+@connect(
+    state => ({
+        user: getUser(state),
+    })
+)
 @dal.hoc(
-    () => dal.getProjects()
+    (props) => dal.getProjects()
         .then(items => {
             return {
-                items: items.filter(item => item.status === ProjectStatusEnum.VOTING && !item.isImVoted && item.isVotingAvailable),
+                items: items
+                    .filter(item => item.status === ProjectStatusEnum.VOTING && !item.isImVoted && item.isVotingAvailable && item.author.address !== props.user.address),
+
             };
         }))
 export default class ProfileInboxPage extends React.PureComponent {
