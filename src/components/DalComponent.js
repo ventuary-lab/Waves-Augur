@@ -8,6 +8,7 @@ import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 
+import {clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
@@ -249,6 +250,8 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProject(uid) {
+        const voteReveral = JSON.parse(clientStorage.get('vote_reveral') || [[]]);
+
         const account = await this.getAccount();
         const [
             data,
@@ -307,7 +310,7 @@ export default class DalComponent {
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
             status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
-            isImVoted: !!myVote,
+            isImVoted: this.isImVoted(uid, voteReveral),
             author: await this.getUser(authorAddress),
             votesCount: {
                 [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
@@ -719,6 +722,17 @@ export default class DalComponent {
                 description: message,
             }));
         }
+    }
+
+    isImVoted(uid, voteReveral) {
+        let isImVoted = false;
+        voteReveral.map(item => {
+            if ((item[0] || null) === uid) {
+                isImVoted = true;
+            }
+        });
+
+        return isImVoted;
     }
 
     async _authChecker() {
