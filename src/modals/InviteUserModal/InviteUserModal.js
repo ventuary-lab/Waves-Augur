@@ -53,7 +53,7 @@ export default class InviteUserModal extends React.PureComponent {
                                 [['name', 'message'], 'string'],
                             ]);
 
-                            dal.invite(values)
+                            return Promise.resolve(dal.invite(values))
                                 .then(() => this.props.onClose());
                         }}
                     >
