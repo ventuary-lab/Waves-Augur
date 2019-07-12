@@ -21,6 +21,7 @@ const bem = html.bem('CardReview');
 export default class CardReview extends React.PureComponent {
 
     static propTypes = {
+        isReviewPage: PropTypes.bool,
         type: PropTypes.string,
         user: UserSchema,
         review: PropTypes.shape({
@@ -32,9 +33,11 @@ export default class CardReview extends React.PureComponent {
         // VOTE
         vote: PropTypes.oneOf(ProjectVoteEnum.getKeys()),
 
-        // DONATE
+        // DONATE || WHALE
         amount: PropTypes.number,
-        isReviewPage: PropTypes.bool,
+
+        // WHALE
+        tierNumber: PropTypes.number,
     };
 
     render() {
@@ -90,7 +93,9 @@ export default class CardReview extends React.PureComponent {
 
                 <div className={bem.element('column-right')}>
                     <div className={bem.element('info-container')}>
-                        <div className={bem.element('info')}>
+                        <div className={bem.element('info', {
+                            type: this.props.type,
+                        })}>
                             {this.props.type === FeedTypeEnum.VOTE && (
                                 <div className={bem.element('vote-type')}>
                                     {this.props.vote === ProjectVoteEnum.FEATURED && (
@@ -123,8 +128,25 @@ export default class CardReview extends React.PureComponent {
                                     ))}
                                 </div>
                             )}
+                            {this.props.type === FeedTypeEnum.WHALE && (
+                                <div className={bem.element('grant-donate-container')}>
+                                    <div className={bem.element('donate-amount')}>
+                                        {_times(this.props.tierNumber).map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className={bem.element('wave-icon')}
+                                            >
+                                                <span className={'Icon Icon__wave_green'}/>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <span className={bem.element('grant-hint')}>
+                                        {__('Grant')} {this.props.tierNumber * 10}%
+                                    </span>
+                                </div>
+                            )}
                             <div className={bem.element('amount')}>
-                                {Math.abs(this.props.amount || 0)} {__('Waves')}
+                                {this.props.amount} {__('Waves')}
                             </div>
                         </div>
                         {this.props.review.comment && (

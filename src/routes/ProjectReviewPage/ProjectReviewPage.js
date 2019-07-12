@@ -7,6 +7,7 @@ import {dal, html,} from 'components';
 import ReviewBlock from './views/ReviewBlock';
 import UserSchema from 'types/UserSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
+import FeedTypeEnum from 'enums/FeedTypeEnum';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectReviewPage.scss';
@@ -20,7 +21,7 @@ const bem = html.bem('ProjectReviewPage');
     ])
         .then(result => {
 
-            if (_get(props, 'match.params.type') === 'vote') {
+            if (_get(props, 'match.params.type') === FeedTypeEnum.VOTE) {
                 return  dal.getUserVotings(result[1].address)
                     .then(votings => ({
                         review: votings.find(item => item.project.uid === result[0].uid),
@@ -29,12 +30,21 @@ const bem = html.bem('ProjectReviewPage');
                     }));
             }
 
-            if (_get(props, 'match.params.type') === 'donate') {
+            if (_get(props, 'match.params.type') === FeedTypeEnum.DONATE) {
                 return  dal.getUserDonations(result[1].address)
                     .then(donations => ({
                         review: donations
                             .filter(item => item.project.uid === result[0].uid)
                             .find(item => item.reviewNumber === parseInt(_get(props, 'match.params.number'))),
+                        project: result[0],
+                        user: result[1],
+                    }));
+            }
+
+            if (_get(props, 'match.params.type') === FeedTypeEnum.WHALE) {
+                return  dal.getUserGrants(result[1].address)
+                    .then(grants => ({
+                        review: grants.find(item => item.project.uid === result[0].uid),
                         project: result[0],
                         user: result[1],
                     }));

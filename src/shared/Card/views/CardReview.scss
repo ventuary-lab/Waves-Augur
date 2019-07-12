@@ -49,6 +49,7 @@
       font-weight: 500;
       color: #000;
       margin-bottom: 6px;
+      text-align: center;
 
       @include tablet {
         color: $color-gg-4;
@@ -145,6 +146,17 @@
     font-size: 13px;
     line-height: 14px;
     word-break: break-all;
+  }
+
+  &__grant-donate-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__grant-hint {
+    font-weight: 300;
+    color: $color-gg-4;
+    margin-left: 10px;
   }
 
   &__donate-amount {
