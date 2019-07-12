@@ -42,7 +42,7 @@ export default class ProfileGrantsPage extends React.PureComponent {
                 )}
                 <div className={bem.element('card-list')}>
                     <List
-                        listId='ProfileDonationPage'
+                        listId='ProfileGrantsPage'
                         itemView={ProjectFeedCard}
                         emptyText={__('No grants')}
                         items={this.props.items}

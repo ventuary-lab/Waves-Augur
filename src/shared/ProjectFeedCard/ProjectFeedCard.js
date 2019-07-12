@@ -30,6 +30,8 @@ export default class ProjectFeedCard extends React.PureComponent {
     };
 
     render() {
+        console.log('ProjectFeedCard', this.props);
+
         const user = this.props.item.user;
         // const user = this.props.item.user || this.props.user;
 

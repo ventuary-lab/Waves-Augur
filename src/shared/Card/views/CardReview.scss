@@ -147,6 +147,17 @@
     word-break: break-all;
   }
 
+  &__grant-donate-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__grant-hint {
+    font-weight: 300;
+    color: $color-gg-4;
+    margin-left: 10px;
+  }
+
   &__donate-amount {
     display: flex;
     align-items: center;

@@ -454,11 +454,17 @@ export default class DalComponent {
                     const match = /review_([0-9a-z-]+)_([0-9a-z-]+)_whalereview/i.exec(key);
                     if (match && match[2] === address) {
                         const uid = match[1];
+                        const positiveBalance = await this.transport.nodeFetchKey(`positive_fund_${uid}`);
+                        const whaleTierNumber = data[key].tier;
+
                         return {
                             review: data[key],
                             reviewNumber: 1,
+                            amount: positiveBalance + ((positiveBalance / 100) * (whaleTierNumber * 10)),
+                            tierNumber: whaleTierNumber,
                             type: FeedTypeEnum.WHALE,
                             project: await this.getProject(uid),
+                            user: await this.getUser(match[2]),
                         };
                     }
                     return null;
@@ -501,6 +507,11 @@ export default class DalComponent {
                                 break;
 
                             case 'whalereview':
+                                const positiveBalance = await this.transport.nodeFetchKey(`positive_fund_${uid}`);
+                                const whaleTierNumber = data[key].tier;
+
+                                item.amount = positiveBalance + ((positiveBalance / 100) * (whaleTierNumber * 10));
+                                item.tierNumber = whaleTierNumber;
                                 item.type = FeedTypeEnum.WHALE;
                                 break;
 
