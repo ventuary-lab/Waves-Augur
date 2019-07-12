@@ -162,8 +162,6 @@ export default {
             path: baseUser,
             component: Route,
             componentProps: {
-
-                //TODO if is WHALE redirect to /grants
                 render: ({match}) => (
                     <Redirect to={`/users/${match.params.address}/donation`}/>
                 )
