@@ -48,6 +48,11 @@ export default class ProfileInboxPage extends React.PureComponent {
                         type={InboxTypeEnum.INVITATION_VOTING}
                     />
                 ))}
+                {this.props.items && this.props.items.length === 0 && (
+                    <div>
+                        {__('Empty Inbox')}
+                    </div>
+                )}
             </div>
         );
     }

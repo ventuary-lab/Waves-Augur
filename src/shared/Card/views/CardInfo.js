@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import LinesEllipsis from 'react-lines-ellipsis';
+import _upperFirst from 'lodash-es/upperFirst';
 
 import {html} from 'components';
 import coverStub from '../../../static/images/cover-stub.jpg';
@@ -32,6 +33,9 @@ export default class CardInfo extends React.PureComponent {
         country: PropTypes.string,
         activity: PropTypes.number,
         isProject: PropTypes.bool,
+        role: PropTypes.string,
+        isInvitedPage: PropTypes.bool,
+        noHover: PropTypes.bool,
     };
 
     render() {
@@ -43,9 +47,12 @@ export default class CardInfo extends React.PureComponent {
         const status = isProject ? this.props.status : null;
         const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;
         const daysAgo = (!isProject && this.props.createTime) ? this.daysAgoFormatter(this.props.createTime) : null;
+        const isJustInvited = this.props.isInvitedPage && this.props.role === UserRole.INVITED;
 
         return (
-            <div className={bem.block()}>
+            <div className={bem.block({
+                'no-hover': this.props.noHover,
+            })}>
                 <div className={bem.element('column-left')}>
                     <div
                         className={bem.element('cover')}
@@ -55,13 +62,18 @@ export default class CardInfo extends React.PureComponent {
                     >
                         <Link
                             className={bem.element('avatar-link')}
-                            toRoute={isProject
-                                ? ROUTE_PROJECT_FEED
-                                : (this.props.userRole === UserRole.WHALE
-                                    ? ROUTE_USER_GRANTS
-                                    : ROUTE_USER_DONATION
-                                )
-                            }
+                            toRoute={(() => {
+                                if (isJustInvited) {
+                                    return null;
+                                }
+
+                                return isProject
+                                    ? ROUTE_PROJECT_FEED
+                                    : (this.props.userRole === UserRole.WHALE
+                                        ? ROUTE_USER_GRANTS
+                                        : ROUTE_USER_DONATION
+                                    );
+                            })()}
                             toRouteParams={{
                                 uid: isProject && this.props.uid,
                                 address: !isProject && this.props.address,
@@ -94,11 +106,20 @@ export default class CardInfo extends React.PureComponent {
                                 </>
                             ) || (
                                 <>
-                                    {daysAgo && (
-                                        <span>
-                                            {daysAgo}
-                                        </span>
-                                    ) || ''}
+                                    {this.props.isInvitedPage && (
+                                        <>
+                                            {_upperFirst(this.props.role)}
+                                        </>
+                                    ) || (
+                                        <>
+                                            {daysAgo && (
+                                                <span>
+                                                    {daysAgo}
+                                                </span>
+                                            ) || ''}
+                                        </>
+                                    )}
+
                                 </>
                             )}
                         </div>
@@ -120,13 +141,18 @@ export default class CardInfo extends React.PureComponent {
                     <div className={bem.element('top-info')}>
                         {this.props.title && (
                             <Link
-                                toRoute={isProject
-                                    ? ROUTE_PROJECT_FEED
-                                    : (this.props.userRole === UserRole.WHALE
-                                        ? ROUTE_USER_GRANTS
-                                        : ROUTE_USER_DONATION
-                                    )
-                                }
+                                toRoute={(() => {
+                                    if (isJustInvited) {
+                                        return null;
+                                    }
+
+                                    return isProject
+                                        ? ROUTE_PROJECT_FEED
+                                        : (this.props.userRole === UserRole.WHALE
+                                            ? ROUTE_USER_GRANTS
+                                            : ROUTE_USER_DONATION
+                                        );
+                                })()}
                                 toRouteParams={{
                                     uid: isProject && this.props.uid,
                                     address: !isProject && this.props.address,

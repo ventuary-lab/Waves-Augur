@@ -71,6 +71,9 @@ export default class ProfileInvitedPage extends React.PureComponent {
                     <List
                         listId='ProfileInvitedPage'
                         itemView={UserCard}
+                        itemProps={{
+                            isInvitedPage: true,
+                        }}
                         emptyText={__('No invited users')}
                         items={this.props.items}
                     />

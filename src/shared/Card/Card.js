@@ -21,6 +21,7 @@ export default class Card extends React.PureComponent {
             componentProps: PropTypes.object,
         }),
         onClick: PropTypes.func,
+        noHover: PropTypes.bool,
 
     };
 
@@ -30,7 +31,9 @@ export default class Card extends React.PureComponent {
 
         return (
             <div
-                className={bem.block()}
+                className={bem.block({
+                    'no-hover': this.props.noHover,
+                })}
                 onClick={this.props.onClick || null}
             >
                 {_get(this.props, 'left.component') && (
