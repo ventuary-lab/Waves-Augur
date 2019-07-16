@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getFormValues} from 'redux-form';
 import {getUser} from 'yii-steroids/reducers/auth';
+import _isFunction from 'lodash-es/isFunction';
 
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
@@ -13,7 +14,6 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './DonateForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
-import _get from 'lodash/get';
 import validate from 'shared/validate';
 
 const FORM_ID = 'DonateForm';
@@ -97,7 +97,12 @@ export default class DonateForm extends React.PureComponent {
         const amount = (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
         return dal.donateProject(this.props.project.uid, amount, {
             comment: values.review,
-        });
+        })
+            .then(() => {
+                if (this.props.onComplete && _isFunction(this.props.onComplete)) {
+                    this.props.onComplete();
+                }
+            });
     }
 
     renderDonateControl() {

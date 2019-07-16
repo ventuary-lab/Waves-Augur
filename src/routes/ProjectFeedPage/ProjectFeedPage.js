@@ -1,32 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import _get from 'lodash/get';
+import _isEqual from 'lodash-es/isEqual';
 
 import {dal, html} from 'components';
 
 import './ProjectFeedPage.scss';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import ProjectSchema from 'types/ProjectSchema';
 import FeedSchema from 'types/FeedSchema';
 import List from 'yii-steroids/ui/list/List';
 import FeedCard from 'shared/FeedCard';
 
 const bem = html.bem('ProjectFeedPage');
 
-@connect(
-    state => ({
-        projectUid: _get(getCurrentRoute(state), 'params.uid'),
-    })
-)
-@dal.hoc(
-    props => dal.getProjectFeed(props.projectUid)
-        .then(items => ({items}))
-)
 export default class ProjectFeedPage extends React.PureComponent {
 
     static propTypes = {
+        project: ProjectSchema,
         items: PropTypes.arrayOf(FeedSchema),
     };
+
+    constructor() {
+        super(...arguments);
+
+        this.state = {
+            items: null,
+        };
+    }
+
+    componentDidMount() {
+        this.getProjectFeed();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.project && nextProps.project && !_isEqual(this.props.project, nextProps.project)) {
+            this.getProjectFeed();
+        }
+    }
+
+    getProjectFeed() {
+        dal.getProjectFeed(this.props.project.uid)
+            .then(items => this.setState({items}));
+    }
 
     render() {
         return (
@@ -36,10 +50,10 @@ export default class ProjectFeedPage extends React.PureComponent {
                         listId='ProjectFeedPage'
                         itemView={FeedCard}
                         itemProps={{
-                            uid: this.props.projectUid,
+                            uid: this.props.project.uid,
                         }}
                         emptyText={__('No items')}
-                        items={this.props.items}
+                        items={this.state.items}
                     />
                 </div>
             </div>

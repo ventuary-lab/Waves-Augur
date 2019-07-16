@@ -298,6 +298,7 @@ export default class DalComponent {
             crowdfundEnd: blockCrowdfundEnd,
             whaleEnd: blockWhaleEnd,
         };
+        const user = await this.getUser(account.address);
         const project = {
             ...data,
             uid,
@@ -310,14 +311,13 @@ export default class DalComponent {
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
             status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
-            isImVoted: this.isImVoted(uid, voteReveral),
+            isImVoted: this.isImVoted(uid, user.address, voteReveral),
             author: await this.getUser(authorAddress),
             votesCount: {
                 [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
                 [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
         };
-        const user = await this.getUser(account.address);
 
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
@@ -607,7 +607,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.isTestMode ? 4 : this.dateToHeight(data.expireVoting),
+                    this.isTestMode ? 8 : this.dateToHeight(data.expireVoting),
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,
@@ -634,7 +634,7 @@ export default class DalComponent {
      * @param {object} data
      * @returns {Promise<any>}
      */
-    async voteProject(uid, vote, data = {}) {
+    async voteProject(uid, address, vote, data = {}) {
         const salt = DalHelper.generateUid();
         const hash = wavesCrypto.base58encode(wavesCrypto.sha256(wavesCrypto.stringToUint8Array(vote + salt)));
 
@@ -651,7 +651,7 @@ export default class DalComponent {
             result = await this.transport.broadcast(txCommit);
 
             // Wait and broadcast second
-            this.voteReveralMonitor.add(uid, txReveal);
+            this.voteReveralMonitor.add(uid, txReveal, address);
         } catch (e) {
             this.error(e);
         }
@@ -735,15 +735,21 @@ export default class DalComponent {
         }
     }
 
-    isImVoted(uid, voteReveral) {
+    isImVoted(uid, address, voteReveral) {
         let isImVoted = false;
-        voteReveral.map(item => {
-            if ((item[0] || null) === uid) {
-                isImVoted = true;
-            }
-        });
 
-        return isImVoted;
+        if (voteReveral && voteReveral.length > 0) {
+            voteReveral.map(item => {
+
+                if ((item[0] === uid) && (item[2] === address)) {
+                    isImVoted = true;
+                }
+            });
+
+            return isImVoted;
+        }
+
+        return false;
     }
 
     async _authChecker() {

@@ -19,8 +19,8 @@ export default class VoteReveralMonitor {
         this._check();
     }
 
-    add(uid, tx) {
-        this._transactions.push([uid, tx]);
+    add(uid, tx, address) {
+        this._transactions.push([uid, tx, address]);
         this._check();
     }
 
@@ -31,7 +31,7 @@ export default class VoteReveralMonitor {
 
     async _fetchNCommits(transactions) {
         return Promise.all(transactions.map(async item => {
-            item[2] = await this.dal.transport.nodeFetchKey('ncommits_' + item[0]);
+            item[3] = await this.dal.transport.nodeFetchKey('ncommits_' + item[0]);
             return item;
         }));
     }
@@ -40,7 +40,7 @@ export default class VoteReveralMonitor {
         await this._fetchNCommits(this._transactions);
         this._transactions = this._transactions.filter(item => {
             const transaction = item[1];
-            const nCommits = item[2];
+            const nCommits = item[3];
             if (nCommits >= 3) {
                 this.dal.transport.broadcast(transaction);
                 return false;

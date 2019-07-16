@@ -83,7 +83,7 @@ export default class VotingForm extends React.PureComponent {
             ['review', 'required'],
         ]);*/
 
-        return dal.voteProject(this.props.project.uid, vote, {
+        return dal.voteProject(this.props.project.uid, this.props.user.address, vote, {
             comment: _get(this.props, 'formValues.review') || null,
         })
             .then(() => this.props.dispatch(goToPage(ROUTE_PROFILE_INBOX)));

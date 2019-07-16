@@ -24,10 +24,6 @@ import ActionButtonBlock from '../ActionButtonBlock';
 
 const bem = html.bem('ProjectLayout');
 
-@dal.hoc(
-    props => dal.getProject(_get(props, 'match.params.uid'))
-        .then(project => ({project}))
-)
 @connect(
     (state) => ({
         user: getUser(state),
@@ -44,8 +40,28 @@ export default class ProjectLayout extends React.PureComponent {
         project: ProjectSchema,
     };
 
+    constructor() {
+        super(...arguments);
+
+        this.state = {
+            project: null,
+        };
+
+        this.getProject = this.getProject.bind(this);
+    }
+
+    componentDidMount() {
+        this.getProject();
+    }
+
+    getProject() {
+        dal.getProject(_get(this.props, 'match.params.uid'))
+            .then(project => this.setState({project}));
+    }
+
     render() {
-        if (!this.props.project) {
+        if (!this.state.project) {
+
             return null;
         }
 
@@ -58,7 +74,7 @@ export default class ProjectLayout extends React.PureComponent {
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
                                 <ProjectSidebar
-                                    project={this.props.project}
+                                    project={this.state.project}
                                     user={this.props.user}
                                 />
                             </div>
@@ -91,17 +107,20 @@ export default class ProjectLayout extends React.PureComponent {
                                 </div>
                             </div>
                             <div className={bem.element('form')}>
-                                {this.props.project.canVote && (
-                                    <VotingForm project={this.props.project}/>
+                                {this.state.project.canVote && (
+                                    <VotingForm project={this.state.project}/>
                                 )}
-                                {this.props.project.canDonate && (
-                                    <DonateForm project={this.props.project}/>
+                                {this.state.project.canDonate && (
+                                    <DonateForm
+                                        project={this.state.project}
+                                        onComplete={this.getProject}
+                                    />
                                 )}
-                                {this.props.project.canWhale && (
-                                    <GrantForm project={this.props.project}/>
+                                {this.state.project.canWhale && (
+                                    <GrantForm project={this.state.project}/>
                                 )}
                             </div>
-                            {!this.props.project.canVote && !this.props.project.canDonate && !this.props.project.canWhale && (
+                            {!this.state.project.canVote && !this.state.project.canDonate && !this.state.project.canWhale && (
                                 <Link
                                     toRoute={ROUTE_PROJECTS_REDIRECT}
                                     noStyles
@@ -116,7 +135,7 @@ export default class ProjectLayout extends React.PureComponent {
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent
-                                        project={this.props.project}
+                                        project={this.state.project}
                                     />
                                 )}
                             </div>
