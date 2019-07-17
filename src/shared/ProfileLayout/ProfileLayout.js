@@ -25,7 +25,7 @@ const bem = html.bem('ProfileLayout');
         const address = _get(getCurrentRoute(state), 'params.address');
         const isMe = !address;
         const contextUser = getUser(state);
-        const isRedirectToProfile = address === contextUser.address;
+        const isRedirectToProfile = address === _get(contextUser, 'address');
         const currentItem = getCurrentItem(state);
 
         return {
