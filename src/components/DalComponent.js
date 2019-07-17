@@ -251,8 +251,9 @@ export default class DalComponent {
      */
     async getProject(uid) {
         const voteReveral = JSON.parse(clientStorage.get('vote_reveral') || [[]]);
+        const store = require('components').store;
+        const user = getUser(store.getState());
 
-        const account = await this.getAccount();
         const [
             data,
             contractStatus,
@@ -265,7 +266,6 @@ export default class DalComponent {
             blockVotingEnd,
             blockCrowdfundEnd,
             blockWhaleEnd,
-            myVote,
             nCommits,
         ] = await this.transport.nodeFetchKeys([
             'datajson_' + uid,
@@ -279,7 +279,6 @@ export default class DalComponent {
             'expiration_block_' + uid,
             'expiration_one_' + uid,
             'expiration_two_' + uid,
-            'commit_' + uid + '_' + account.address,
             'ncommits_' + uid
         ]);
         if (!data) {
@@ -298,7 +297,7 @@ export default class DalComponent {
             crowdfundEnd: blockCrowdfundEnd,
             whaleEnd: blockWhaleEnd,
         };
-        const user = await this.getUser(account.address);
+
         const project = {
             ...data,
             uid,
@@ -311,7 +310,7 @@ export default class DalComponent {
             positiveBalance: positiveBalance || 0,
             negativeBalance: negativeBalance || 0,
             status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
-            isImVoted: this.isImVoted(uid, user.address, voteReveral),
+            isImVoted: this.isImVoted(uid, _get(user, 'address'), voteReveral),
             author: await this.getUser(authorAddress),
             votesCount: {
                 [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
@@ -322,8 +321,8 @@ export default class DalComponent {
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
-        if (account.address) {
-            if (project.author.address !== account.address) {
+        if (user.address) {
+            if (project.author.address !== user.address) {
                 if (user.role !== UserRole.WHALE) {
                     if (project.isVotingAvailable && !project.isImVoted) {
                         project.canVote = true;
@@ -347,6 +346,7 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProjects() {
+        console.time('getProjects time');
         const data = await this.transport.nodeAllData();
         let projects = await Promise.all(
             Object.keys(data)
@@ -356,6 +356,7 @@ export default class DalComponent {
 
         projects = projects.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
         projects = _orderBy(projects, 'createTime', 'desc');
+        console.timeEnd('getProjects time');
         return projects;
     }
 

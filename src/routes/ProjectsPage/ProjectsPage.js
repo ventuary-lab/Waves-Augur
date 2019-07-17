@@ -5,6 +5,7 @@ import List from 'yii-steroids/ui/list/List';
 import _orderBy from 'lodash/orderBy';
 
 import {dal, html} from 'components';
+import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectStateEnum from 'enums/ProjectStateEnum';
 import ProjectCard from 'shared/ProjectCard';
@@ -27,6 +28,7 @@ export default class ProjectsPage extends React.PureComponent{
         this.state = {
             projects: null,
             feed: null,
+            isLoading: false
         };
     }
 
@@ -42,14 +44,22 @@ export default class ProjectsPage extends React.PureComponent{
 
     getProjects(projectsState) {
         if (projectsState === ProjectStateEnum.FEED) {
+            this.setState({
+                isLoading: true,
+            });
+
             dal.getProjectsDonations()
                 .then(feed => {
                     this.setState({
                         projects: null,
                         feed,
+                        isLoading: false,
                     });
                 });
         } else {
+            this.setState({
+                isLoading: true,
+            });
             dal.getProjects()
                 .then(projects => {
                     switch (projectsState) {
@@ -69,6 +79,7 @@ export default class ProjectsPage extends React.PureComponent{
                     this.setState({
                         projects,
                         feed: null,
+                        isLoading: false,
                     });
                 });
         }
@@ -76,7 +87,19 @@ export default class ProjectsPage extends React.PureComponent{
 
     render() {
         if (!this.state.projects && !this.state.feed) {
-            return null;
+            return (
+                <section className={bem.block()}>
+                    <div className={'wrapper'}>
+                        <div className={'row'}>
+                            <div className={'col'}>
+                                <div className={bem.element('inner')}>
+                                    <Preloader/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
         }
 
         return (
@@ -112,20 +135,32 @@ export default class ProjectsPage extends React.PureComponent{
                                     </div>
                                 </div>
                                 {this.state.projects && (
-                                    <List
-                                        listId='ProjectsList'
-                                        itemView={ProjectCard}
-                                        emptyText={__('No projects')}
-                                        items={this.state.projects}
-                                    />
+                                    <>
+                                        {!this.state.isLoading && (
+                                            <List
+                                                listId='ProjectsList'
+                                                itemView={ProjectCard}
+                                                emptyText={__('No projects')}
+                                                items={this.state.projects}
+                                            />
+                                        ) || (
+                                            <Preloader/>
+                                        )}
+                                    </>
                                 )}
                                 {this.state.feed && (
-                                    <List
-                                        listId='FeedList'
-                                        itemView={ProjectFeedCard}
-                                        emptyText={__('No feed')}
-                                        items={this.state.feed}
-                                    />
+                                    <>
+                                        {!this.state.isLoading && (
+                                            <List
+                                                listId='FeedList'
+                                                itemView={ProjectFeedCard}
+                                                emptyText={__('No feed')}
+                                                items={this.state.feed}
+                                            />
+                                        ) || (
+                                            <Preloader/>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>
