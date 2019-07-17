@@ -321,7 +321,7 @@ export default class DalComponent {
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
-        if (user.address) {
+        if (_get(user, 'address')) {
             if (project.author.address !== user.address) {
                 if (user.role !== UserRole.WHALE) {
                     if (project.isVotingAvailable && !project.isImVoted) {
