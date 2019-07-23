@@ -4,6 +4,7 @@ import Router from 'yii-steroids/ui/nav/Router';
 import {ui} from 'components';
 import Layout from 'shared/Layout';
 import routes from './routes';
+import './static/images/favicon.ico';
 
 // Automatically import all views from yii-steroids
 ui.addViews({
