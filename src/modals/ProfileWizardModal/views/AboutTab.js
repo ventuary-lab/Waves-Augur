@@ -22,7 +22,7 @@ export default class AboutTab extends React.Component {
     render() {
         return (
             <div className={bem.block()}>
-                <h3 className={bem.element('title')}>{__('About tab')}</h3>
+                <h3 className={bem.element('title')}>{__('About')}</h3>
                 <div className={bem.element('sub-title')}>
                     {__('Add More Information about yourself')}
                 </div>

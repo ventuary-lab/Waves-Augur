@@ -63,7 +63,6 @@ export default class FormWizard extends React.PureComponent {
                                 className={bem.element('step-point', {
                                     filled: index <= this.getActiveIndex(),
                                 })}
-                                onClick={() => this.setState({activeId: item.id})}
                             />
                         </div>
                     ))}
