@@ -83,7 +83,11 @@ export default class CardReview extends React.PureComponent {
                             )}
                             {this.props.user.profile.title && (
                                 <p className={bem.element('title')}>
-                                    {this.props.user.profile.title}
+                                    <LinesEllipsis
+                                        text={this.props.user.profile.title}
+                                        maxLine={2}
+                                        basedOn='letters'
+                                    />
                                 </p>
                             )}
 
@@ -154,8 +158,6 @@ export default class CardReview extends React.PureComponent {
                                 <LinesEllipsis
                                     text={this.props.review.comment}
                                     maxLine={this.props.isReviewPage ? 1000000000 : 2}
-                                    ellipsis='...'
-                                    trimRight
                                     basedOn='letters'
                                 />
                             </div>
