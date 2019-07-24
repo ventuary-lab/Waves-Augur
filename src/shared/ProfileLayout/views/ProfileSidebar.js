@@ -11,11 +11,12 @@ import {isPhone} from 'yii-steroids/reducers/screen';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 import UserRole from 'enums/UserRole';
-import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
+import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 import './ProfileSidebar.scss';
 import MessageModal from '../../../modals/MessageModal';
 
@@ -34,7 +35,7 @@ export default class ProfileSidebar extends React.PureComponent {
     render() {
         const avatarStub = this.props.user.profile.isWhale
             ? whaleAvatarStub
-            : userAvatarStub;
+            : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
         return (
             <div className={bem.block()}>
@@ -53,7 +54,10 @@ export default class ProfileSidebar extends React.PureComponent {
                         {this.props.user.profile.name}
                     </span>
                     <span className={bem.element('description')}>
-                        {this.props.user.profile.title}
+                        {[UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role)
+                            ? this.props.user.address
+                            : this.props.user.profile.title
+                        }
                     </span>
                     {this.props.user.profile.socials && (
                         <div className={bem.element('social-links')}>
@@ -105,27 +109,29 @@ export default class ProfileSidebar extends React.PureComponent {
                                     {this.props.user.balance} 🔹
                                 </span>
                             </div>
-                            <Link
-                                className={bem.element('edit')}
-                                onClick={() => {
-                                    if (this.props.isPhone) {
-                                        this.props.dispatch(openModal(MessageModal, {
-                                            icon: 'Icon__log-in-from-pc',
-                                            title: __('Log in from PC'),
-                                            color: 'success',
-                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                        }));
-                                    } else {
-                                        this.props.dispatch(openModal(ProfileWizardModal));
-                                    }
-                                }}
-                                noStyles
-                            >
-                                <svg className={bem.element('edit-icon')} width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                                    <path d='M13.7725 3.14373C14.0758 2.84044 14.0758 2.33495 13.7725 2.04722L11.9528 0.227468C11.665 -0.0758228 11.1596 -0.0758228 10.8563 0.227468L9.42536 1.6506L12.3416 4.56687L13.7725 3.14373ZM0 11.0837V14H2.91626L11.5173 5.3912L8.60103 2.47493L0 11.0837Z' />
-                                </svg>
-                                {__('Edit profile')}
-                            </Link>
+                            {![UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role) && (
+                                <Link
+                                    className={bem.element('edit')}
+                                    onClick={() => {
+                                        if (this.props.isPhone) {
+                                            this.props.dispatch(openModal(MessageModal, {
+                                                icon: 'Icon__log-in-from-pc',
+                                                title: __('Log in from PC'),
+                                                color: 'success',
+                                                description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                            }));
+                                        } else {
+                                            this.props.dispatch(openModal(ProfileWizardModal));
+                                        }
+                                    }}
+                                    noStyles
+                                >
+                                    <svg className={bem.element('edit-icon')} width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                        <path d='M13.7725 3.14373C14.0758 2.84044 14.0758 2.33495 13.7725 2.04722L11.9528 0.227468C11.665 -0.0758228 11.1596 -0.0758228 10.8563 0.227468L9.42536 1.6506L12.3416 4.56687L13.7725 3.14373ZM0 11.0837V14H2.91626L11.5173 5.3912L8.60103 2.47493L0 11.0837Z' />
+                                    </svg>
+                                    {__('Edit profile')}
+                                </Link>
+                            )}
                             <CopyToClipboard copyText={`${location.origin}/users/${this.props.user.address}`}>
                                 <button className={bem.element('share-link')}>{__('Share Profile')}</button>
                             </CopyToClipboard>

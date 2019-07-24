@@ -152,7 +152,7 @@ export default class DalComponent {
             activity: await this.getUserActivity(address),
             role: address === this.dApp
                 ? UserRole.GENESIS
-                : await this.transport.nodeFetchKey('wl_sts_' + address),
+                : await this.transport.nodeFetchKey('wl_sts_' + address) || UserRole.ANONYMOUS,
             invitedBy: await this.getUser(await this.transport.nodeFetchKey('wl_ref_' + address)),
             profile: {
                 ...(await this.transport.nodeFetchKey('wl_bio_' + address)),

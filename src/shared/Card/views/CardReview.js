@@ -9,6 +9,7 @@ import FeedTypeEnum from 'enums/FeedTypeEnum';
 import SocialLinks from 'shared/SocialLinks';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserRole from 'enums/UserRole';
 
 import {dal, html} from 'components';
@@ -43,7 +44,8 @@ export default class CardReview extends React.PureComponent {
     render() {
         const avatarStub = this.props.user.profile.isWhale
             ? whaleAvatarStub
-            : userAvatarStub;
+            : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
+
 
         return (
             <div className={bem.block({

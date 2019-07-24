@@ -14,6 +14,7 @@ import ProfileWizardModal from 'modals/ProfileWizardModal';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 
 import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
@@ -92,7 +93,7 @@ export default class HeaderProfile extends React.PureComponent {
 
         const avatarStub = this.props.user.profile.isWhale
             ? whaleAvatarStub
-            : userAvatarStub;
+            : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
         return (
             <div className={bem.block()}>

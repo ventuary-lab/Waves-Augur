@@ -11,10 +11,12 @@ import Form from 'yii-steroids/ui/form/Form';
 
 import {dal, html} from 'components';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 
 import './DonateForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
 import validate from 'shared/validate';
+import UserRole from '../../enums/UserRole';
 
 const FORM_ID = 'DonateForm';
 
@@ -51,12 +53,18 @@ export default class DonateForm extends React.PureComponent {
     }
 
     render() {
+        const avatarStub = this.props.user.role === UserRole.REGISTERED
+            ? userAvatarStub
+            : anonymousAvatarStub;
+
+        const isAnonReview = [UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role);
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
-                        src={this.props.user.profile.avatar || userAvatarStub}
+                        src={this.props.user.profile.avatar || avatarStub}
                         alt={this.props.user.profile.name}
                     />
                     <span className={bem.element('user-name')}>
@@ -76,6 +84,7 @@ export default class DonateForm extends React.PureComponent {
                         <TextField
                             attribute={'review'}
                             placeholder={__('Donate comment...')}
+                            disabled={isAnonReview}
                         />
                     </div>
                     <div className={bem.element('actions')}>
@@ -90,13 +99,21 @@ export default class DonateForm extends React.PureComponent {
     }
 
     _onSubmit(values) {
+        const isAnonReview = [UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role);
+        const anonReviewText = this.state.directionValue === POSITIVE_DIRECTION
+            ? 'Anonymous donation...'
+            : 'Anonymous bet...';
+
+
         validate(values,[
-            ['review', 'required'],
+            !isAnonReview && ['review', 'required'],
         ]);
 
         const amount = (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
         return dal.donateProject(this.props.project.uid, amount, {
-            comment: values.review,
+            comment: isAnonReview
+                ? anonReviewText
+                : values.review,
         })
             .then(() => {
                 if (this.props.onComplete && _isFunction(this.props.onComplete)) {

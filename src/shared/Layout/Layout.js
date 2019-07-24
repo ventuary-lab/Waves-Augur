@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import _get from 'lodash-es/get';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
-import layoutHoc, {STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
+import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
 import {html, dal} from 'components';
@@ -83,10 +83,18 @@ export default class Layout extends React.PureComponent {
             <div className={bem.block()}>
                 <Header/>
                 <main className={bem.element('content')}>
-                    {this.props.isShowImageLine && (
-                        <div className={bem.element('image-line')}/>
+                    {this.props.status === STATUS_ACCESS_DENIED && (
+                        <div>
+                            Access denied
+                        </div>
+                    ) || (
+                        <>
+                            {this.props.isShowImageLine && (
+                                <div className={bem.element('image-line')}/>
+                            )}
+                            {this.props.status !== STATUS_LOADING && this.props.children}
+                        </>
                     )}
-                    {this.props.status !== STATUS_LOADING && this.props.children}
                 </main>
                 <Footer/>
                 <ModalWrapper/>

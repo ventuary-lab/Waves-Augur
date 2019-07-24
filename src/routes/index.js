@@ -116,7 +116,7 @@ export default {
                     component: ProfileDonationPage,
                     label: __('Donation'),
                     icon: 'Icon__rhombus',
-                    roles: [UserRole.REGISTERED],
+                    roles: [UserRole.REGISTERED, UserRole.INVITED, UserRole.ANONYMOUS],
                     isShowImageLine: true,
                 },
                 [ROUTE_PROFILE_PROJECTS]: {
