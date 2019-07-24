@@ -119,7 +119,7 @@ export default class DalComponent {
             if (user.role === UserRole.INVITED) {
                 return {
                     user,
-                    hash2: params.invitation,
+                    hash2: wavesCrypto.address(params.invitation),
                 };
             }
         }
