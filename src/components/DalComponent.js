@@ -7,6 +7,7 @@ import _set from 'lodash/set';
 import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
+import queryString from 'query-string';
 
 import {clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
@@ -24,7 +25,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 export default class DalComponent {
 
     constructor() {
-        this.isTestMode = (process.env.APP_MODE || 'test') === 'test';
+        this.isTestMode = false;//(process.env.APP_MODE || 'test') === 'test';
         // this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id new
         this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id old
         this.hoc = fetchHoc;
@@ -97,6 +98,33 @@ export default class DalComponent {
         this._authInterval = setInterval(this._authChecker, 1000);
 
         return user;
+    }
+
+    async generateInvitation() {
+        const account = await this.getAccount();
+        const salt = DalHelper.generateUid();
+        const hash1 = wavesCrypto.address(salt + account.address);
+        const hash2 = wavesCrypto.address(hash1);
+
+        return {
+            url: location.origin + '?invitation=' + hash1,
+            hash1,
+            hash2,
+        };
+    }
+
+    async searchInvitation() {
+        const params = queryString.parse(location.search);
+        if (params && params.invitation) {
+            const user = this.getUser(wavesCrypto.address(params.invitation));
+            if (user.role === UserRole.INVITED) {
+                return {
+                    user,
+                    hash2: params.invitation,
+                };
+            }
+        }
+        return null;
     }
 
     /**
@@ -190,9 +218,10 @@ export default class DalComponent {
     /**
      * Create or update context user
      * @param {object} profile
+     * @param {string} hash2
      * @returns {Promise}
      */
-    async saveUser(profile) {
+    async saveUser(profile, hash2) {
         profile = {
             name: '',
             avatar: null,
@@ -210,22 +239,21 @@ export default class DalComponent {
             },
             ...profile,
         };
+        if (!profile.createTime) {
+            profile.createTime = DalHelper.dateNow();
+        }
 
         // Get address
         const account = await this.getAccount();
         const user = await this.getUser(account.address);
 
-        // Detect user exists
-        const method = user.role === UserRole.INVITED ? 'signup' : 'userupdate';
-        if (!profile.createTime) {
-            profile.createTime = DalHelper.dateNow();
-        }
-
         this.transport.resetCache();
 
         // Save
         const type = profile.isWhale ? 'whale' : '';
-        const result = await this.transport.nodePublish(method, [profile, type]);
+        const result = hash2
+            ? await this.transport.nodePublish('signupbylink', [hash2, profile, type])
+            : await this.transport.nodePublish(user.role === UserRole.INVITED ? 'signup' : 'userupdate', [profile, type]);
 
         if (user.role === UserRole.INVITED) {
             user.role = UserRole.REGISTERED;
