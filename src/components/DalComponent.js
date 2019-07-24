@@ -53,13 +53,23 @@ export default class DalComponent {
     }
 
     dateToHeight(date) {
+
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
+
+        let hours = days < 1 // is Voting
+            ? Math.floor(moment().diff(date, 'hours', true))
+            : 0;
+
         if (this.isTestMode) {
             // In test mode one block = 1 day
             return days;
         } else {
             // One block = 2 minutes
-            return Math.round((days * 1440) / 2);
+
+            return hours
+                ? Math.round((hours * 60) / 2)
+                : Math.round((days * 1440) / 2);
+
         }
     }
 
@@ -100,23 +110,12 @@ export default class DalComponent {
         return user;
     }
 
-    async generateInvitation() {
-        const account = await this.getAccount();
-        const salt = DalHelper.generateUid();
-        const hash1 = wavesCrypto.address(salt + account.address);
-        const hash2 = wavesCrypto.address(hash1);
-
-        return {
-            url: location.origin + '?invitation=' + hash1,
-            hash1,
-            hash2,
-        };
-    }
-
-    async searchInvitation() {
+    async resolveInvitation() {
         const params = queryString.parse(location.search);
+
         if (params && params.invitation) {
-            const user = this.getUser(wavesCrypto.address(params.invitation));
+            const user = await this.getUser(wavesCrypto.address(params.invitation));
+
             if (user.role === UserRole.INVITED) {
                 return {
                     user,
@@ -133,19 +132,24 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async invite(data) {
+        const account = await this.getAccount();
+        const salt = DalHelper.generateUid();
+        const hash1 = wavesCrypto.address(salt + account.address);
+        const hash2 = wavesCrypto.address(hash1);
+
         data = {
-            address: '',
             name: '',
             message: null,
             ...data,
             isWhale: !!data.isWhale,
+            address: hash2,
         };
 
         try {
-            return await this.transport.nodePublish('inviteuser', [
+            await this.transport.nodePublish('inviteuser', [
                 data.address,
                 data,
-            ]);
+            ], null, false);
         } catch (e) {
             if (e.message && e.data) {
                 validate.error('address', e.data);
@@ -153,7 +157,10 @@ export default class DalComponent {
                 throw e;
             }
         }
-        return null;
+
+        return {
+            url: location.origin + '?invitation=' + hash1,
+        };
     }
 
     /**

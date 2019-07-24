@@ -178,12 +178,17 @@ export default class WavesTransport {
      * @param {string} method
      * @param {array} args
      * @param {number} payment
+     * @param {boolean} waitTx
      * @returns {Promise}
      */
-    async nodePublish(method, args, payment) {
+    async nodePublish(method, args, payment, waitTx = true) {
         const keeper = await this.getKeeper();
         const result = await keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment));
         if (result) {
+            if (!waitTx) {
+                return result;
+            }
+
             const tx = JSON.parse(result);
             this.dal.log(`Transaction ${tx.id} is published via keeper`);
 

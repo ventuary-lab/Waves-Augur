@@ -63,13 +63,20 @@ export default class Layout extends React.PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    async componentWillReceiveProps(nextProps) {
         if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
-            && nextProps.user && nextProps.user.role === UserRole.INVITED && nextProps.user.invitedBy
+            && nextProps.user && nextProps.user.role === UserRole.ANONYMOUS
         ) {
             //not Phone
             if (window.innerWidth >= this.props.maxPhoneWidth) {
-                this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+                const invitation = await dal.resolveInvitation();
+
+                if (invitation) {
+                    this.props.dispatch(openModal(ProfileWizardModal, {
+                        user: invitation.user,
+                        hash2: invitation.hash2,
+                    }));
+                }
             }
         }
     }

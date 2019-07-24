@@ -78,9 +78,14 @@
   }
 
   &__action {
+    display: flex;
+    justify-content: center;
+
+    .FieldLayoutView {
+      width: auto;
+    }
+
     .FieldLayoutView__field {
-      display: flex;
-      justify-content: center;
       margin-bottom: 0;
     }
   }

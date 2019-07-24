@@ -14,6 +14,7 @@ import Button from 'yii-steroids/ui/form/Button';
 import validate from 'shared/validate';
 
 import './InviteUserModal.scss';
+import CopyToClipboard from '../../shared/CopyToClipboard';
 
 const bem = html.bem('InviteUserModal');
 const FORM_ID = 'invite_user';
@@ -29,6 +30,14 @@ export default class InviteUserModal extends React.PureComponent {
     static propTypes = {
         modalProps: PropTypes.object,
     };
+
+    constructor() {
+        super(...arguments);
+
+        this.state = {
+            invitationLink: '',
+        };
+    }
 
     render() {
         return (
@@ -48,13 +57,18 @@ export default class InviteUserModal extends React.PureComponent {
                         formId={FORM_ID}
                         layout='default'
                         onSubmit={values => {
-                            validate(values,[
-                                ['address', 'required'],
-                                [['name', 'message'], 'string'],
-                            ]);
+                            if (!this.state.invitationLink) {
+                                validate(values,[
+                                    [['name', 'message'], 'string'],
+                                ]);
 
-                            return Promise.resolve(dal.invite(values))
-                                .then(() => this.props.onClose());
+                                return Promise.resolve(dal.invite(values))
+                                    .then((result) => {
+                                        this.setState({
+                                            invitationLink: result.url,
+                                        });
+                                    });
+                            }
                         }}
                     >
                         <div className={bem.element('form-inner')}>
@@ -64,34 +78,57 @@ export default class InviteUserModal extends React.PureComponent {
                                     attribute='name'
                                     topLabel={__('User’s Nickname (Optional)')}
                                     placeholder={__('Nickname')}
+                                    // disabled={!!this.state.invitationLink}
+
                                 />
                                 <CheckboxField
                                     layoutClassName={bem.element('is-wale')}
                                     attribute='isWhale'
                                     label={__('It’s a Whale')}
+                                    // disabled={!!this.state.invitationLink}
                                 />
                             </div>
                             <div className={bem(
                                 bem.element('icon'), _get(this.props, 'formValues.isWhale') ? 'Icon__invite-whale' : 'Icon__invite-user'
                             )}/>
                         </div>
-                        <InputField
-                            attribute='address'
-                            topLabel={__('Waves Address')}
-                            placeholder={__('Enter New User’s Waves Address')}
-                        />
+
+                        {this.state.invitationLink && (
+                            <InputField
+                                attribute='address'
+                                topLabel={__('Invitation link')}
+                                placeholder={__('Enter New User’s Waves Address')}
+                                disabled={true}
+                                inputProps={{
+                                    value: this.state.invitationLink,
+                                }}
+                            />
+                        )}
+
                         <TextField
                             layoutClassName={bem.element('message')}
                             attribute='message'
                             topLabel={__('Your Message')}
                             placeholder={__('Enter Your Message for New User')}
+                            // disabled={!!this.state.invitationLink}
                         />
-                        <Button
-                            layoutClassName={bem.element('action')}
-                            label={__('Invite')}
-                            color='primary'
-                            type={'submit'}
-                        />
+
+                        <div className={bem.element('action')}>
+                            {this.state.invitationLink && (
+                                <CopyToClipboard copyText={this.state.invitationLink}>
+                                    <Button
+                                        label={__('Copy link')}
+                                        color='primary'
+                                    />
+                                </CopyToClipboard>
+                            ) || (
+                                <Button
+                                    label={__('Invite')}
+                                    color='primary'
+                                    type={'submit'}
+                                />
+                            )}
+                        </div>
                     </Form>
                 </div>
             </Modal>

@@ -18,15 +18,15 @@ import SocialEnum from 'enums/SocialEnum';
 import UserSchema from 'types/UserSchema';
 
 @connect(
-    state => ({
-        user: getUser(state),
+    (state, props) => ({
+        user: props.user || getUser(state),
     })
 )
 export default class ProfileWizardModal extends React.Component {
 
     static propTypes = {
         user: UserSchema,
-        isCreate: PropTypes.bool,
+        hash2: PropTypes.string,
     };
 
     render() {
@@ -38,7 +38,7 @@ export default class ProfileWizardModal extends React.Component {
                 <FormWizard
                     title={__('')}
                     formId='ProfileWizardModal'
-                    onSubmit={values => dal.saveUser(values).then(() => this.props.onClose())}
+                    onSubmit={values => dal.saveUser(values, this.props.hash2).then(() => this.props.onClose())}
                     onComplete={this.props.onClose}
                     initialValues={_get(this.props, 'user.profile')}
                     items={[
@@ -46,7 +46,7 @@ export default class ProfileWizardModal extends React.Component {
                             id: 'waiting',
                             component: WaitingTab,
                             componentProps: {
-                                isCreate: this.props.isCreate,
+                                isCreate: !!this.props.hash2,
                                 invitedBy: this.props.user.invitedBy,
                             },
                             validators: [
