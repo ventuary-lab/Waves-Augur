@@ -36,15 +36,30 @@ export default class HeaderMobileMenu extends React.PureComponent {
                             key={navItem.id}
                             className={bem.element('item')}
                         >
-                            <Link
-                                className={bem.element('link', {
-                                    'active': navItem.isActive,
-                                })}
-                                to={navItem.url}
-                                label={navItem.label}
-                                onClick={this.props.onClose}
-                                noStyles
-                            />
+                            {navItem.externalLink && (
+                                <a
+                                    className={bem.element('link', {
+                                        'active': navItem.isActive,
+                                    })}
+                                    href={navItem.externalLink}
+                                    target='_blank'
+                                    onClick={this.props.onClose}
+                                >
+                                    <span className={'ButtonView__label'}>
+                                        {navItem.label}
+                                    </span>
+                                </a>
+                            ) || (
+                                <Link
+                                    className={bem.element('link', {
+                                        'active': navItem.isActive,
+                                    })}
+                                    to={navItem.url}
+                                    label={navItem.label}
+                                    onClick={this.props.onClose}
+                                    noStyles
+                                />
+                            )}
                         </li>
                     ))}
                 </ul>
