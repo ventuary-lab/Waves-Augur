@@ -58,7 +58,15 @@ export default class HeaderProfile extends React.PureComponent {
         const items = this.props.user && this.props.profileNavItems.filter(item => item.roles.includes(this.props.user.role)) || [];
         if (!this.props.isAuthorized || items.length === 0) {
             return (
-                <Link
+                <>
+                    <a
+                        href='https://forms.gle/uLwL83EM9MWSCBAp6'
+                        target={'_blank'}
+                        className={bem.element('login-link')}
+                    >
+                        {__('Login')}
+                    </a>
+                    {/*<Link
                     className={bem.element('login-link')}
                     label={__('Login')}
                     noStyles
@@ -72,22 +80,23 @@ export default class HeaderProfile extends React.PureComponent {
                                 description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
                             }));
                         } else {
-                            if (this.props.user && this.props.user.role === UserRole.INVITED) {
-                                return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
-                            }
-
-                            this.props.dispatch(openModal(MessageModal, {
-                                icon: 'Icon__get-an-invitation',
-                                title: __('You Need An Invitation'),
-                                color: 'success',
-                                description: __('You must be invited by registered user'),
-                                submitLabel: __('Check out Community'),
-                                toRoute: ROUTE_COMMUNITY,
-                            }));
+                            // if (this.props.user && this.props.user.role === UserRole.INVITED) {
+                            //     return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
+                            // }
+                            //
+                            // this.props.dispatch(openModal(MessageModal, {
+                            //     icon: 'Icon__get-an-invitation',
+                            //     title: __('You Need An Invitation'),
+                            //     color: 'success',
+                            //     description: __('You must be invited by registered user'),
+                            //     submitLabel: __('Check out Community'),
+                            //     toRoute: ROUTE_COMMUNITY,
+                            // }));
                         }
 
                     }}
-                />
+                />*/}
+                </>
             );
         }
 

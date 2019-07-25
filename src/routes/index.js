@@ -60,13 +60,14 @@ export default {
     items: {
         [ROUTE_ABOUT_REDIRECT]: {
             exact: true,
-            path: '/about',
-            component: Redirect,
-            componentProps: {
-                to: '/',
-            },
+            // path: '/about',
+            // component: Redirect,
+            // componentProps: {
+            //     to: '/',
+            // },
             label: __('About'),
             roles: UserRole.getKeys(),
+            externalLink: 'https://medium.com/@alexpupyshev/ventuary-dao-the-first-dao-on-waves-platform-f5fc1cb35b32'
         },
         [ROUTE_COMMUNITY]: {
             exact: true,

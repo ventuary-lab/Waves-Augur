@@ -27,19 +27,33 @@ export default class HeaderNav extends React.PureComponent {
         return (
             <nav className={bem.block()}>
                 <ul className={bem.element('list')}>
-                    {this.props.navItems.filter(item => item.isNavVisible !== false).map(navItem => (
+                    {this.props.navItems.filter(item => item.isNavVisible !== false).map(navItem => console.log(1, navItem) || (
                         <li
                             key={navItem.id}
                             className={bem.element('item')}
                         >
-                            <Link
-                                className={bem.element('link', {
-                                    'active': navItem.isActive,
-                                })}
-                                to={navItem.url}
-                                label={navItem.label}
-                                noStyles
-                            />
+                            {navItem.externalLink && (
+                                <a
+                                    className={bem.element('link', {
+                                        'active': navItem.isActive,
+                                    })}
+                                    href={navItem.externalLink}
+                                    target='_blank'
+                                >
+                                    <span className={'ButtonView__label'}>
+                                        {navItem.label}
+                                    </span>
+                                </a>
+                            ) || (
+                                <Link
+                                    className={bem.element('link', {
+                                        'active': navItem.isActive,
+                                    })}
+                                    to={navItem.url}
+                                    label={navItem.label}
+                                    noStyles
+                                />
+                            )}
                         </li>
                     ))}
                 </ul>
