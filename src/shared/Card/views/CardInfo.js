@@ -5,12 +5,13 @@ import LinesEllipsis from 'react-lines-ellipsis';
 import _upperFirst from 'lodash-es/upperFirst';
 
 import {html} from 'components';
-import coverStub from '../../../static/images/cover-stub.jpg';
-import userAvatarStub from '../../../static/images/user-avatar-stub.png';
-import whaleAvatarStub from '../../../static/images/whale-avatar-stub.png';
-import projectAvatarStub from '../../../static/images/project-avatar-stub.png';
-import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import coverStub from 'static/images/cover-stub.jpg';
+import userAvatarStub from 'static/images/user-avatar-stub.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
+import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
+import projectAvatarStub from 'static/images/project-avatar-stub.png';
 
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import './CardInfo.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
@@ -42,7 +43,8 @@ export default class CardInfo extends React.PureComponent {
 
         const avatarStub = this.props.isWhale
             ? whaleAvatarStub
-            : userAvatarStub;
+            : this.props.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
+
         const isProject = this.props.isProject;
         const status = isProject ? this.props.status : null;
         const daysLeft = isProject ? ProjectStatusEnum.getDaysLeft(status, this.props) : null;

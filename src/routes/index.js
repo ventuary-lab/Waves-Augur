@@ -197,7 +197,7 @@ export default {
                     label: __('Donation'),
                     icon: 'Icon__rhombus',
                     roles: UserRole.getKeys(),
-                    rolesUser: [UserRole.REGISTERED],
+                    rolesUser: [UserRole.REGISTERED, UserRole.INVITED, UserRole.ANONYMOUS],
                     isShowImageLine: true,
                 },
                 [ROUTE_USER_PROJECTS]: {
