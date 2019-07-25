@@ -208,7 +208,7 @@ export default class DalComponent {
         );
 
         users = users.filter(user => !!user.profile.name);
-        users = _orderBy(users, 'createTime', 'desc');
+        users = _orderBy(users, 'activity', 'desc');
 
         return users;
     }
