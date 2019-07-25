@@ -53,23 +53,13 @@ export default class DalComponent {
     }
 
     dateToHeight(date) {
-
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
-
-        let hours = days < 1 // is Voting
-            ? Math.floor(moment().diff(date, 'hours', true))
-            : 0;
-
         if (this.isTestMode) {
             // In test mode one block = 1 day
             return days;
         } else {
             // One block = 2 minutes
-
-            return hours
-                ? Math.round((hours * 60) / 2)
-                : Math.round((days * 1440) / 2);
-
+            return Math.round((days * 1440) / 2);
         }
     }
 
@@ -643,7 +633,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.isTestMode ? 8 : this.dateToHeight(data.expireVoting),
+                    this.isTestMode ? 8 : 60, //60 blocks = 2 hours,
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,
