@@ -78,14 +78,13 @@ export default class InviteUserModal extends React.PureComponent {
                                     attribute='name'
                                     topLabel={__('User’s Nickname (Optional)')}
                                     placeholder={__('Nickname')}
-                                    // disabled={!!this.state.invitationLink}
-
+                                    disabled={!!this.state.invitationLink}
                                 />
                                 <CheckboxField
                                     layoutClassName={bem.element('is-wale')}
                                     attribute='isWhale'
                                     label={__('It’s a Whale')}
-                                    // disabled={!!this.state.invitationLink}
+                                    disabled={!!this.state.invitationLink}
                                 />
                             </div>
                             <div className={bem(
@@ -110,7 +109,7 @@ export default class InviteUserModal extends React.PureComponent {
                             attribute='message'
                             topLabel={__('Your Message')}
                             placeholder={__('Enter Your Message for New User')}
-                            // disabled={!!this.state.invitationLink}
+                            disabled={!!this.state.invitationLink}
                         />
 
                         <div className={bem.element('action')}>
