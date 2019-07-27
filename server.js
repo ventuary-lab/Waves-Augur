@@ -3,11 +3,11 @@
 const express = require('express');
 const app = express();
 
-app.use(function(req, res) {
-    if(!res.secure){
-        res.redirect("https://" + req.headers.host + req.url);
-    }
-});
+// app.use(function(req, res) {
+//     if(!res.secure){
+//         res.redirect("https://" + req.headers.host + req.url);
+//     }
+// });
 
 app.use(express.static(__dirname + '/dist'));
 
