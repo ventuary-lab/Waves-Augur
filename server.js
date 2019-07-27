@@ -4,12 +4,12 @@ const express = require('express');
 const app = express();
 
 
-app.use(function(req, res, next) {
-    if (req.secure){
-        return next();
-    }
-    res.redirect("https://" + req.headers.host + req.url);
-});
+// app.use(function(req, res, next) {
+//     if (req.secure){
+//         return next();
+//     }
+//     res.redirect("https://" + req.headers.host + req.url);
+// });
 
 app.use(express.static(__dirname + '/dist'));
 
