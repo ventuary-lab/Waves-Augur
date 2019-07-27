@@ -4,6 +4,12 @@ const express = require('express');
 const app = express();
 
 app.use(express.static(__dirname + '/dist'));
+app.use(function(req, res, next) {
+    if (req.secure){
+        return next();
+    }
+    res.redirect("https://" + req.headers.host + req.url);
+});
 
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
