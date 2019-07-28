@@ -4,13 +4,13 @@ const express = require('express');
 const app = express();
 
 
-app.use(function(req, res, next) {
-    if(req.protocol === 'http'){
-        res.redirect("https://" + req.headers.host + req.url);
-    } else {
-        next();
-    }
-});
+// app.use(function(req, res, next) {
+//     if(req.protocol === 'http'){
+//         res.redirect("https://" + req.headers.host + req.url);
+//     } else {
+//         next();
+//     }
+// });
 app.use(express.static(__dirname + '/dist'));
 
 app.get('/*', (req, res) => {
