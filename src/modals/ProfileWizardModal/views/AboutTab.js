@@ -27,13 +27,6 @@ export default class AboutTab extends React.Component {
                     {__('Add More Information about yourself')}
                 </div>
                 <div className={bem.element('grid')}>
-                    <ConnectImageField
-                        attribute='avatar'
-                        topLabel={this.props.isPhone ? __('Avatar URL') : ''}
-                        label={!this.props.isPhone ? __('Avatar URL') : ''}
-                        placeholder={__('Enter URL')}
-                        layout={'horizontal'}
-                    />
                     <InputField
                         attribute='title'
                         topLabel={this.props.isPhone ? __('Your Occupation') : ''}

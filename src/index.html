@@ -10,6 +10,53 @@
 </head>
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--test from-->
+    <!--<form id="file-form" enctype="multipart/form-data"  method="PUT">
+        <input type="file" id="file-select" name="avatar"/>
+        <button type="submit" id="upload-button">Upload</button>
+    </form>
+    <div id="info"></div>
+
+    <img id="image"src="" alt="">-->
+    <!--test from-->
+
     <div id="root"></div>
+
+    <!--<script>
+        let form = document.getElementById('file-form');
+        const fileSelect = document.getElementById('file-select');
+        const uploadButton = document.getElementById('upload-button');
+
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            uploadButton.innerHTML = 'Uploading...';
+
+            const files = fileSelect.files;
+
+            form = document.getElementById('file-form');
+            const formData = new FormData();
+
+            formData.append('avatar', files[0]);
+            console.log('-&#45;&#45;3333', formData );
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', '/upload', true);
+            xhr.setRequestHeader('If-None-Match', '*');
+            xhr.setRequestHeader('If-Modified-Since', 'Mon, 26 Jul 1997 05:00:00 GMT');
+            xhr.setRequestHeader('Cache-Control', 'no-cache');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.onreadystatechange=function(){
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    uploadButton.innerHTML = 'Upload';
+                    const info = document.getElementById('info');
+                    const image = document.getElementById('image');
+                    info.innerHTML='Path to file: ' + xhr.responseText;
+                    image.src = xhr.responseText;
+                }
+            };
+            xhr.send(formData);
+        }
+    </script>-->
 </body>
 </html>

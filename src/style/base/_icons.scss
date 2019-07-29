@@ -476,4 +476,22 @@ $icons-dir: '../static/icons';
     min-height: 186px;
     background-image: url('#{$icons-dir}/waves-keeper.svg');
   }
+
+  &__cross {
+    background-image: url('#{$icons-dir}/cross.svg');
+  }
+
+  &__image {
+    min-width: 12px;
+    min-height: 14px;
+    background-image: url('#{$icons-dir}/image.svg');
+
+    @include icon-hover {
+      background-image: url('#{$icons-dir}/image_green.svg');
+    }
+
+    &_green {
+      background-image: url('#{$icons-dir}/image_green.svg');
+    }
+  }
 }

@@ -27,7 +27,7 @@ export default class HeaderNav extends React.PureComponent {
         return (
             <nav className={bem.block()}>
                 <ul className={bem.element('list')}>
-                    {this.props.navItems.filter(item => item.isNavVisible !== false).map(navItem => console.log(1, navItem) || (
+                    {this.props.navItems.filter(item => item.isNavVisible !== false).map(navItem => (
                         <li
                             key={navItem.id}
                             className={bem.element('item')}
