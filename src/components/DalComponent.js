@@ -34,9 +34,9 @@ export default class DalComponent {
         this.contract = {
             VOTERS: 3,
             QUORUM: 2,
-            LISTINGFEE: 0.005, // LISTINGFEE = 500000000/1000
-            VOTEBET: 0.0015, // VOTEBET = 150000000/1000
-            TIERS: [10, 50, 250, 1250, 6250],
+            LISTINGFEE: 3, // LISTINGFEE = 300000000/100000000
+            VOTEBET: 1, // VOTEBET = 10000000/100000000
+            TIERS: [3, 10, 100, 300, 1000],
             MULTIPLIER: 150,
         };
 
@@ -703,7 +703,7 @@ export default class DalComponent {
 
         let result = null;
         try {
-            result = await this.transport.nodePublish('donate', [uid, tierNumber, mode, data], tier / Math.pow(10, 8));
+            result = await this.transport.nodePublish('donate', [uid, tierNumber, mode, data], tier);
         } catch (e) {
             this.error(e);
         }
