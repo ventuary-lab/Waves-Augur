@@ -149,8 +149,7 @@ class ImageField extends React.PureComponent {
 
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                const responseData = xhr.responseText; //TODO
-                // console.log('res', responseData);
+                const responseData = JSON.parse(xhr.responseText).path;
 
                 this.setState({
                     isUploadFailed: false,
