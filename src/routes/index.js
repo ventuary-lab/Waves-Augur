@@ -115,7 +115,7 @@ export default {
                     exact: true,
                     path: '/profile/donation',
                     component: ProfileDonationPage,
-                    label: __('Donation'),
+                    label: __('Donations'),
                     icon: 'Icon__rhombus',
                     roles: [UserRole.REGISTERED, UserRole.INVITED, UserRole.ANONYMOUS],
                     isShowImageLine: true,
