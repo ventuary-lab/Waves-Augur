@@ -92,6 +92,7 @@
   }
 
   &__drop-zone-block {
+    position: relative;
     padding: 40px 135px;
     background: linear-gradient(0deg, rgba(98, 98, 98, 0.3), rgba(98, 98, 98, 0.3)), url('../../../static/images/image-upload-stub.png');
     background-size: cover;
@@ -122,6 +123,26 @@
     font-size: 16px;
     line-height: 24px;
     text-align: center;
+  }
+
+  &__upload-failed {
+    opacity: 0;
+    color: #fff;
+    position: absolute;
+    bottom: -50px;
+    right: 0;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    padding: 8px 12px;
+    border-radius: 3px;
+    background-color: $color-gg-4;
+
+    transition: opacity ease-in-out 0.7s;
+
+    &_visible {
+      opacity: 1;
+    }
   }
 
 }

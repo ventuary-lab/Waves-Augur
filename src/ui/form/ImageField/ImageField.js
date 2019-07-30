@@ -87,6 +87,11 @@ class ImageField extends React.PureComponent {
                             </div>
                         )}
                     </Dropzone>
+                    <div className={bem.element('upload-failed', {
+                        'visible': this.state.isUploadFailed,
+                    })}>
+                        {__('File failed to upload')}
+                    </div>
                 </div>
 
                 <span
@@ -159,7 +164,13 @@ class ImageField extends React.PureComponent {
                 this.props.input.onChange(responseData);
 
             } else {
-                this.setState({isUploadFailed: true});
+                this.setState({
+                    isUploadFailed: true
+                }, () => {
+                    return setTimeout(() => this.setState({
+                        isUploadFailed: false
+                    }), 3000);
+                });
             }
         };
         xhr.send(formData);
