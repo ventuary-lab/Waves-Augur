@@ -22,6 +22,8 @@ export default class WavesTransport {
         this.dal = dal;
         this.nodeUrl = NODE_URL;
         this.fee = 0.009;
+        this.isKeeperAvailable = null;
+        this.start = Date.now();
 
         this._cacheData = null;
         this._cacheTimeout = null;
@@ -43,13 +45,16 @@ export default class WavesTransport {
      * @returns {Promise}
      */
     async getKeeper() {
-        const start = Date.now();
         const checker = resolve => {
-            if (window.WavesKeeper && window.WavesKeeper.publicState) {
+            if (this.isKeeperAvailable === true || window.WavesKeeper && window.WavesKeeper.publicState) {
+                this.isKeeperAvailable = true;
                 resolve(window.WavesKeeper);
-            } else if (Date.now() - start > 1500) {
+
+            } else if (this.isKeeperAvailable === false || Date.now() - this.start > 1500) {
+                this.isKeeperAvailable = false;
                 resolve(null);
-            } else {
+            }
+            else if (this.isKeeperAvailable === null) {
                 setTimeout(() => checker(resolve), 100);
             }
         };
