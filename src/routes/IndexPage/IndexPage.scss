@@ -528,6 +528,17 @@ $icons-dir: '../../static/icons';
   }
 
   &__partners-logo {
+    width: 100%;
+
+    &_waves {
+      position: relative;
+      top: -5px;
+    }
+
+    &_tradisvs {
+      position: relative;
+      top: 7px;
+    }
 
     @include tablet {
       width: 162px;

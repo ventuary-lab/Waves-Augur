@@ -9,7 +9,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import landingHero from 'static/images/landing-hero.svg';
 import wavesLogo from 'static/icons/landing-waves-logo.svg';
 import tradisysLogo from 'static/icons/landing-tradisys-logo.svg';
-import blockdataLogo from 'static/icons/landing-blockdata-logo.png';
+import wavesDapp from 'static/icons/landing-waves-dapp-logo.jpg';
 import wavesLabsLogo from 'static/icons/landing-waves-labs-logo.svg';
 
 import './IndexPage.scss';
@@ -240,12 +240,12 @@ export default class IndexPage extends React.PureComponent {
                                     <a
                                         className={bem.element('partners-link')}
                                         target='_blank'
-                                        href='https://www.blockdata.tech/'
+                                        href='https://wavesdapp.com/'
                                     >
                                         <img
-                                            className={bem.element('partners-logo', 'blockdata')}
-                                            src={blockdataLogo}
-                                            alt='blockdata'
+                                            className={bem.element('partners-logo', 'waves-dapp')}
+                                            src={wavesDapp}
+                                            alt='waves-dapp'
                                         />
                                     </a>
                                 </li>
