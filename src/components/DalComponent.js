@@ -27,7 +27,8 @@ export default class DalComponent {
     constructor() {
         this.isTestMode = false;//(process.env.APP_MODE || 'test') === 'test';
         // this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id new
-        this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id old
+        // this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id old
+        this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
