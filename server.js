@@ -18,16 +18,15 @@ app.put('/upload', upload.middleware.single('avatar'), (request, response) => {
 
     sharp(upload.path.full + '/' + fileName)
         .resize(300, 300)
-        .toFile(upload.path.full + '/mini.' + fileName)
+        .toFile(upload.path.full + '/thumbnail.' + fileName)
         .then(info => {
-            // console.log(info);
+            response.send(JSON.stringify({
+                path: upload.path.short + '/thumbnail.' + fileName
+            }));
         })
         .catch(err => {
             // console.log(err);
         });
-    response.send(JSON.stringify({
-        path: upload.path.short + '/' + fileName
-    }));
 });
 
 
@@ -38,5 +37,5 @@ app.listen(port, () => {
     console.log('Listening Port ' + port); // eslint-disable-line no-console
 });
 
-require('./node/index');
+//require('./node/index');
 
