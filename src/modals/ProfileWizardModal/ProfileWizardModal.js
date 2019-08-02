@@ -6,6 +6,7 @@ import Modal from 'yii-steroids/ui/modal/Modal';
 
 import {html, dal} from 'components';
 import AboutTab from './views/AboutTab';
+import ImageTab from './views/ImageTab';
 import LinksTab from './views/LinksTab';
 import WaitingTab from './views/WaitingTab';
 import FormWizard from 'ui/form/FormWizard';
@@ -73,8 +74,15 @@ export default class ProfileWizardModal extends React.Component {
                             validators: [
                                 [['title', 'tags', 'location'], 'required'],
                                 ['title', 'string', {min: 3, max: 250}],
-                                ['avatar', 'string', {max: 250}],
                                 ['location', 'string', {max: 150}],
+                            ],
+                        },
+                        {
+                            id: 'image',
+                            component: ImageTab,
+                            validators: [
+                                ['avatar', 'required'],
+                                ['avatar', 'string'],
                             ],
                         },
                     ]}

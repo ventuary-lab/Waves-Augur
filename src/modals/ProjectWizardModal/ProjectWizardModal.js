@@ -1,12 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import moment from 'moment';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
-import ConnectImageField from 'ui/form/ConnectImageField';
+import ImageField from 'ui/form/ImageField';
 
 import {dal, html} from 'components';
 
@@ -95,7 +94,13 @@ export default class ProjectWizardModal extends React.PureComponent {
                                 [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
                                 [['expireCrowd', 'demoDay'], 'date'],
                                 ['targetWaves', 'integer', {min: 1}],
-                                ['logoUrl', 'string', {max: 250}],
+                            ],
+                        },
+                        {
+                            id: 'logo',
+                            component: this._stepLogo,
+                            validators: [
+                                ['logoUrl', 'string'],
                             ],
                         },
                         {
@@ -163,12 +168,6 @@ export default class ProjectWizardModal extends React.PureComponent {
                 <div className={bem.element('sub-title')}>
                     {__('Please fill all necessary fields to add your awesome idea')}
                 </div>
-                <ConnectImageField
-                    topLabel={this.props.isPhone ? __('Logo URL') : ''}
-                    label={!this.props.isPhone ? __('Logo URL') : ''}
-                    attribute='logoUrl'
-                    placeholder={__('Enter URL')}
-                />
                 <div className={'form-row'}>
                     <div className={'form-label-col'}>
                         <label>
@@ -208,6 +207,21 @@ export default class ProjectWizardModal extends React.PureComponent {
                     label={!this.props.isPhone ? __('Tags') : ''}
                     placeholder={__('Enter Tags')}
                     max={5}
+                />
+            </>
+        );
+    }
+
+    _stepLogo() {
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('Add Project Logo')}
+                </div>
+                <ImageField
+                    layout={'default'}
+                    uploadApi={'/upload'}
+                    attribute='logoUrl'
                 />
             </>
         );
