@@ -476,4 +476,10 @@ $icons-dir: '../static/icons';
     min-height: 186px;
     background-image: url('#{$icons-dir}/waves-keeper.svg');
   }
+
+  &__keeper-no-account{
+    min-width: 186px;
+    min-height: 186px;
+    background-image: url('#{$icons-dir}/keeper-no-account.svg');
+  }
 }
