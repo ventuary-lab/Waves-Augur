@@ -4,6 +4,7 @@ const express = require('express');
 const sharp = require('sharp');
 const upload = require('./node/upload');
 const app = express();
+const proxy = require('express-http-proxy');
 
 
 app.use(function(req, res, next) {
@@ -14,6 +15,7 @@ app.use(function(req, res, next) {
     next();
 });
 app.use(express.static(__dirname + '/dist'));
+app.use('/_webhook', proxy('127.0.0.1:8000'));
 
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});

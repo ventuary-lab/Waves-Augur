@@ -7,7 +7,7 @@ services:
     ports:
       - "5000:5000/tcp"
     environment:
-      - APP_DAPP_ADDRESS=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
+      - APP_DAPP_ADDRESS=3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
       - APP_DAPP_SEED=
     volumes:
       - /var/www/ventuary-dao/data:/data
@@ -36,10 +36,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WEBHOOK_SECRET=
-      - WEBHOOK_HOOKS_DIR=/app/dev/hooks
-      - WEBHOOK_BRANCH_LIST=master
+      - WEBHOOK_HOOKS_DIR=/app/hooks
+      - WEBHOOK_BRANCH_LIST=vkozhin
     expose:
       - 8000
+    networks:
+      - ventuary-dao
 
 networks:
   ventuary-dao:
