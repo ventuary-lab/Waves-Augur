@@ -197,7 +197,7 @@ export default class DalComponent {
         const data = await this.transport.nodeAllData();
         let users = await Promise.all(
             Object.keys(data)
-                .filter(key => /^wl_sts_/.test(key) && data[key].value !== UserRole.INVITED)
+                .filter(key => /^wl_sts_/.test(key) && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(data[key].value))
                 .map(key => this.getUser(key.replace(/^wl_sts_/, '')))
         );
 
@@ -213,6 +213,7 @@ export default class DalComponent {
             Object.keys(data)
                 .filter(key => /^wl_ref_/.test(key) && data[key] === address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
+                .filter(user => user.role !== UserRole.SPEND_INVITE)
         );
     }
 
