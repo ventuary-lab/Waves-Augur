@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ../..
+cd /src
 docker-compose build --pull && docker-compose up --build --remove-orphans -d
