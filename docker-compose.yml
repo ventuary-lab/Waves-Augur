@@ -53,7 +53,7 @@ services:
     expose:
       - 8000
     labels:
-      traefik.port: 80
+      traefik.port: 8000
       traefik.domain: ventuary-dao.dev.kozhindev.com
       traefik.frontend.headers.SSLRedirect: true
       traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com

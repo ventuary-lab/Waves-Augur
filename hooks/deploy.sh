@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd /src
-git reset --hard
 git pull
 chmod +x .
 docker stop ventuary-dao-app

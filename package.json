@@ -106,7 +106,6 @@
     "css-hot-loader": "^1.4.4",
     "domready": "^1.0.8",
     "express": "^4.16.4",
-    "express-http-proxy": "^1.5.1",
     "file-saver": "^2.0.0",
     "fileup-core": "^1.1.2",
     "fileup-redux": "^1.1.3",
