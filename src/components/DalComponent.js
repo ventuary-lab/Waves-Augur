@@ -197,11 +197,11 @@ export default class DalComponent {
         const data = await this.transport.nodeAllData();
         let users = await Promise.all(
             Object.keys(data)
-                .filter(key => /^wl_sts_/.test(key) && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(data[key].value))
+                .filter(key =>  /^wl_sts_/.test(key))
                 .map(key => this.getUser(key.replace(/^wl_sts_/, '')))
         );
 
-        users = users.filter(user => !!user.profile.name);
+        users = users.filter(user => !!user.profile.name && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(user.role));
         users = _orderBy(users, 'activity', 'desc');
 
         return users;
@@ -209,12 +209,15 @@ export default class DalComponent {
 
     async getUserInvites(address) {
         const data = await this.transport.nodeAllData();
-        return Promise.all(
+        let users = await Promise.all(
             Object.keys(data)
                 .filter(key => /^wl_ref_/.test(key) && data[key] === address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
-                .filter(user => user.role !== UserRole.SPEND_INVITE)
+
         );
+
+        users = users.filter(user => user.role !== UserRole.SPEND_INVITE);
+        return users;
     }
 
     /**
