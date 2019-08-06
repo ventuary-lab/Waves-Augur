@@ -1,4 +1,6 @@
 #!/bin/bash
 
 cd /src
-docker-compose build --pull && docker-compose up --build --remove-orphans -d
+git reset --hard
+git pull
+docker-compose up -d --no-deps --build app
