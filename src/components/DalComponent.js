@@ -73,8 +73,13 @@ export default class DalComponent {
         if (!keeper) {
             return {};
         }
-        const userData = await keeper.publicState();
-        return userData.account;
+
+        try {
+            const userData = await keeper.publicState();
+            return userData.account;
+        } catch {
+            return {};
+        }
     }
 
     /**
