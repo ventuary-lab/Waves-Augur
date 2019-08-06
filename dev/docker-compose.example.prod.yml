@@ -6,22 +6,23 @@ services:
     restart: unless-stopped
     environment:
       - APP_DAPP_ADDRESS=3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
+      - APP_DAPP_NETWORK=main
       - APP_DAPP_SEED=
-      - APP_WEBHOOK_HOST=ventuary-dao-webhook
+      - APP_WEBHOOK_HOST=ventuary-dao-prod-webhook
       - PORT=80
     volumes:
-      - /srv/ventuary-dao/data:/data
-    container_name: ventuary-dao-app
+      - /srv/ventuary-dao-prod/data:/data
+    container_name: ventuary-dao-prod-app
     networks:
       - app
-      - ventuary-dao
+      - ventuary-dao-prod
     labels:
       traefik.port: 80
-      traefik.domain: ventuary-dao.dev.kozhindev.com
+      traefik.domain: ventuary.space
       traefik.frontend.headers.SSLRedirect: true
-      traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLHost: ventuary.space
       traefik.frontend.headers.SSLForceHost: true
-      traefik.frontend.rule: "Host:ventuary-dao.dev.kozhindev.com"
+      traefik.frontend.rule: "Host:ventuary.space"
     depends_on:
       - redis
       - webhook
@@ -33,38 +34,39 @@ services:
       - 6379
     volumes:
       - /srv/redis/data:/data
-    container_name: ventuary-dao-redis
+    container_name: ventuary-dao-prod-redis
     networks:
-      - ventuary-dao
+      - ventuary-dao-prod
     labels:
       traefik.enable: false
 
   webhook:
     restart: unless-stopped
     image: staticfloat/docker-webhook
-    hostname: ventuary-dao-webhook
+    hostname: ventuary-dao-prod-webhook
     volumes:
       - ./:/src
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WEBHOOK_SECRET=m4HsAp2o9DcLK4B042glyJEiCxVjcWaj
+      - WEBHOOK_SECRET=
       - WEBHOOK_HOOKS_DIR=/src/hooks
-      - WEBHOOK_BRANCH_LIST=vkozhin
+      - WEBHOOK_BRANCH_LIST=prod
+      - DOCKER_APP_CONTAINER_NAME=ventuary-dao-prod-app
     expose:
       - 8000
     labels:
       traefik.port: 8000
-      traefik.domain: ventuary-dao.dev.kozhindev.com
+      traefik.domain: ventuary.space
       traefik.frontend.headers.SSLRedirect: true
-      traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLHost: ventuary.space
       traefik.frontend.headers.SSLForceHost: true
-      traefik.frontend.rule: "Host:ventuary-dao.dev.kozhindev.com;PathPrefixStrip:/_webhook"
+      traefik.frontend.rule: "Host:ventuary.space;PathPrefixStrip:/_webhook"
     networks:
       - app
-      - ventuary-dao
+      - ventuary-dao-prod
 
 networks:
-  ventuary-dao:
+  ventuary-dao-prod:
   app:
     external:
       name: app
