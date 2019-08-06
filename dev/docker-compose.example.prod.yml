@@ -33,7 +33,7 @@ services:
     expose:
       - 6379
     volumes:
-      - /srv/redis/data:/data
+      - /srv/ventuary-dao-prod/redis-data:/data
     container_name: ventuary-dao-prod-redis
     networks:
       - ventuary-dao-prod
