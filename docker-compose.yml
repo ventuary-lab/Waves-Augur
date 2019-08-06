@@ -7,7 +7,7 @@ services:
     environment:
       - APP_DAPP_ADDRESS=3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
       - APP_DAPP_SEED=
-      - APP_WEBHOOK_HOST=webhook
+      - APP_WEBHOOK_HOST=ventuary-dao-webhook
       - PORT=80
     volumes:
       - /srv/ventuary-dao/data:/data
@@ -42,7 +42,7 @@ services:
   webhook:
     restart: unless-stopped
     image: staticfloat/docker-webhook
-    hostname: webhook
+    hostname: ventuary-dao-webhook
     volumes:
       - ./:/src
       - /var/run/docker.sock:/var/run/docker.sock
@@ -52,7 +52,15 @@ services:
       - WEBHOOK_BRANCH_LIST=vkozhin
     expose:
       - 8000
+    labels:
+      traefik.port: 80
+      traefik.domain: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLRedirect: true
+      traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLForceHost: true
+      traefik.frontend.rule: "Host:ventuary-dao.dev.kozhindev.com;PathPrefixStrip:/_webhook"
     networks:
+      - app
       - ventuary-dao
 
 networks:
