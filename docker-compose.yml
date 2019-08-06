@@ -7,6 +7,7 @@ services:
     environment:
       - APP_DAPP_ADDRESS=3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
       - APP_DAPP_SEED=
+      - APP_WEBHOOK_HOST=webhook
       - PORT=80
     volumes:
       - /srv/ventuary-dao/data:/data
