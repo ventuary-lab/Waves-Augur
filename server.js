@@ -13,7 +13,8 @@ app.use(function(req, res, next) {
     }
     next();
 });
-app.use('/uploads', express.static('/data/uploads'));
+app.use(express.static('/data/uploads'));
+app.use(express.static(__dirname + '/dist'));
 
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
