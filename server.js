@@ -15,7 +15,7 @@ app.use(function(req, res, next) {
     next();
 });
 app.use(express.static(__dirname + '/dist'));
-app.use('/_webhook', proxy('127.0.0.1:8000'));
+app.use('/_webhook', proxy(process.env.APP_WEBHOOK_HOST + ':8000'));
 
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
