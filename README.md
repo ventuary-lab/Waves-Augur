@@ -31,3 +31,19 @@
 │       └── nav          # UI навигации
 └── webpack.js           # Конфигурация webpack
 ```
+
+
+## Run docker
+
+```sh
+docker build -t ventuary .
+docker run -itd --name ventuary --restart always -v ~/dev/ventuary:/data -p 5000:5000 ventuary
+```
+
+
+## Install to deploy
+
+```
+ln -s /var/www/ventuary-dao/repo/dev/nginx.conf /etc/nginx/sites-enabled/ventuary-dao.conf
+
+```

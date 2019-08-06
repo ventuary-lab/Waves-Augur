@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:5000/tcp"
+    environment:
+      - APP_DAPP_ADDRESS=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
+      - APP_DAPP_SEED=
+    volumes:
+      - /var/www/ventuary-dao/data:/data
+    container_name: ventuary-dao-app
+    networks:
+      - ventuary-dao
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379/tcp"
+    volumes:
+      - /srv/redis/data:/data
+    container_name: ventuary-dao-redis
+    networks:
+      - ventuary-dao
+    labels:
+      traefik.enable: false
+
+  webhook:
+    restart: unless-stopped
+    image: staticfloat/docker-webhook
+    volumes:
+      - ./:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WEBHOOK_SECRET=
+      - WEBHOOK_HOOKS_DIR=/app/dev/hooks
+      - WEBHOOK_BRANCH_LIST=master
+    expose:
+      - 8000
+
+networks:
+  ventuary-dao:
+
