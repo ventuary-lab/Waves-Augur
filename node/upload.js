@@ -1,10 +1,9 @@
-const path = require('path')
 const fs = require('fs');
 const multer = require('multer');
 const uuidv1 = require('uuid/v1');
 
 const uploadPath = {
-    full: path.join(__dirname, '../dist/uploads'),
+    full: '/data/uploads',
     short: '/uploads',
 };
 
