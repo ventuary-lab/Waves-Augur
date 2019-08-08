@@ -106,10 +106,10 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async initialAuth () {
-        const keeper = await this.getKeeper();
-
-        await keeper.auth();
-        return await this.auth();
+        const user = await this.auth();
+        // console.log({ user });
+        // alert(JSON.stringify(user));
+        return user;
     }
 
     async mapAuthenticatedUserData(accountResponse) {
@@ -126,7 +126,16 @@ export default class DalComponent {
         if (this._authInterval) {
             clearInterval(this._authInterval);
         }
-        this._authInterval = setInterval(this._authChecker, 1000);
+        const keeper = await this.transport.getKeeper();
+
+        try {
+            // await keeper.auth();
+            clearInterval(this._authInterval);
+
+            return user;
+        } catch {
+            // this._authInterval = setInterval(this._authChecker, 1000);
+        }
 
         return user;
     }

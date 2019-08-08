@@ -22,7 +22,7 @@ const bem = html.bem('Layout');
 
 // @layoutHoc()
 @layoutHoc(
-    () => dal.auth()
+    () => dal.initialAuth()
         .then(user => ({
             user,
         }))

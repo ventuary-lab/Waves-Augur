@@ -55,7 +55,9 @@ export default class HeaderProfile extends React.PureComponent {
     async onLoginClick () {
         dal
             .getAccount()
-            .then(accountResponse => {
+            .then(async accountResponse => {
+                console.log({ accountResponse });
+    
                 if (!_.get(accountResponse, 'address')) {
                     this.props.dispatch(openModal(MessageModal, {
                         icon: 'Icon__keeper-no-account',
@@ -79,8 +81,7 @@ export default class HeaderProfile extends React.PureComponent {
                     // store.dispatch(setUser(user));
                     // }
                     const store = require('components').store;
-                    const account = _.get(accountResponse, 'account');
-                    const mappedUser = dal.mapAuthenticatedUserData(account);
+                    const mappedUser = await dal.mapAuthenticatedUserData(accountResponse);
                     store.dispatch(setUser(mappedUser));
                     // (async () => {  await dal.auth(); })()
                 }
