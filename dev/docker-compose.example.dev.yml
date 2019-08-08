@@ -1,0 +1,72 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      - APP_DAPP_ADDRESS=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
+      - APP_DAPP_NETWORK=test
+      - APP_DAPP_SEED=
+      - APP_WEBHOOK_HOST=ventuary-dao-dev-webhook
+      - PORT=80
+    volumes:
+      - /srv/ventuary-dao-dev/data:/data
+    container_name: ventuary-dao-dev-app
+    networks:
+      - app
+      - ventuary-dao-dev
+    labels:
+      traefik.port: 80
+      traefik.domain: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLRedirect: true
+      traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLForceHost: true
+      traefik.frontend.rule: "Host:ventuary-dao.dev.kozhindev.com"
+    depends_on:
+      - redis
+      - webhook
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - /srv/ventuary-dao-dev/redis-data:/data
+    container_name: ventuary-dao-dev-redis
+    networks:
+      - ventuary-dao-dev
+    labels:
+      traefik.enable: false
+
+  webhook:
+    restart: unless-stopped
+    image: staticfloat/docker-webhook
+    hostname: ventuary-dao-dev-webhook
+    volumes:
+      - ./:/src
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WEBHOOK_SECRET=
+      - WEBHOOK_HOOKS_DIR=/src/hooks
+      - WEBHOOK_BRANCH_LIST=dev
+      - DOCKER_APP_CONTAINER_NAME=ventuary-dao-dev-app
+    expose:
+      - 8000
+    labels:
+      traefik.port: 8000
+      traefik.domain: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLRedirect: true
+      traefik.frontend.headers.SSLHost: ventuary-dao.dev.kozhindev.com
+      traefik.frontend.headers.SSLForceHost: true
+      traefik.frontend.rule: "Host:ventuary-dao.dev.kozhindev.com;PathPrefixStrip:/_webhook"
+    networks:
+      - app
+      - ventuary-dao-dev
+
+networks:
+  ventuary-dao-dev:
+  app:
+    external:
+      name: app

@@ -1,0 +1,72 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      - APP_DAPP_ADDRESS=3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
+      - APP_DAPP_NETWORK=main
+      - APP_DAPP_SEED=
+      - APP_WEBHOOK_HOST=ventuary-dao-prod-webhook
+      - PORT=80
+    volumes:
+      - /srv/ventuary-dao-prod/data:/data
+    container_name: ventuary-dao-prod-app
+    networks:
+      - app
+      - ventuary-dao-prod
+    labels:
+      traefik.port: 80
+      traefik.domain: ventuary.space
+      traefik.frontend.headers.SSLRedirect: true
+      traefik.frontend.headers.SSLHost: ventuary.space
+      traefik.frontend.headers.SSLForceHost: true
+      traefik.frontend.rule: "Host:ventuary.space"
+    depends_on:
+      - redis
+      - webhook
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - /srv/ventuary-dao-prod/redis-data:/data
+    container_name: ventuary-dao-prod-redis
+    networks:
+      - ventuary-dao-prod
+    labels:
+      traefik.enable: false
+
+  webhook:
+    restart: unless-stopped
+    image: staticfloat/docker-webhook
+    hostname: ventuary-dao-prod-webhook
+    volumes:
+      - ./:/src
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WEBHOOK_SECRET=
+      - WEBHOOK_HOOKS_DIR=/src/hooks
+      - WEBHOOK_BRANCH_LIST=prod
+      - DOCKER_APP_CONTAINER_NAME=ventuary-dao-prod-app
+    expose:
+      - 8000
+    labels:
+      traefik.port: 8000
+      traefik.domain: ventuary.space
+      traefik.frontend.headers.SSLRedirect: true
+      traefik.frontend.headers.SSLHost: ventuary.space
+      traefik.frontend.headers.SSLForceHost: true
+      traefik.frontend.rule: "Host:ventuary.space;PathPrefixStrip:/_webhook"
+    networks:
+      - app
+      - ventuary-dao-prod
+
+networks:
+  ventuary-dao-prod:
+  app:
+    external:
+      name: app
