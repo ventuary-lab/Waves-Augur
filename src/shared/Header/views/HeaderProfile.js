@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
@@ -6,8 +7,9 @@ import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
+import { setUser } from 'yii-steroids/actions/auth';
 
-import {html} from 'components';
+import { html, dal } from 'components';
 import UserRole from 'enums/UserRole';
 import MessageModal from 'modals/MessageModal';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
@@ -50,22 +52,66 @@ export default class HeaderProfile extends React.PureComponent {
         };
     }
 
+    async onLoginClick () {
+        dal
+            .getAccount()
+            .then(accountResponse => {
+                if (!_.get(accountResponse, 'address')) {
+                    this.props.dispatch(openModal(MessageModal, {
+                        icon: 'Icon__keeper-no-account',
+                        title: __('Create your Waves wallet'),
+                        color: 'success',
+                        description: __('Click “Add account” in Waves Keeper extension in your browser'),
+                        submitLabel: __('Ok, I understand'),
+                    }));
+                } else {
+                    // const userData = await keeper.publicState();
+                    // return userData.account;
+                    // const store = require('components').store;
+                    // const prevAddress = _get(getUser(store.getState()), 'address');
+
+                    // // Get next address
+                    // const account = await this.getAccount();
+                    // const nextAddress = account.address;
+
+                    // if (prevAddress !== nextAddress) {
+                    // const user = await this.auth();
+                    // store.dispatch(setUser(user));
+                    // }
+                    const store = require('components').store;
+                    const account = _.get(accountResponse, 'account');
+                    const mappedUser = dal.mapAuthenticatedUserData(account);
+                    store.dispatch(setUser(mappedUser));
+                    // (async () => {  await dal.auth(); })()
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        
+    }
+
     render() {
-        if (!this.props.isInitialized) {
-            return null;
-        }
+        // if (!this.props.isInitialized) {
+        //     return null;
+        // }
 
         const items = this.props.user && this.props.profileNavItems.filter(item => item.roles.includes(this.props.user.role)) || [];
         if (!this.props.isAuthorized || items.length === 0) {
             return (
                 <>
-                    <a
-                        href='https://forms.gle/uLwL83EM9MWSCBAp6'
+                    {/* <a
                         target={'_blank'}
                         className={bem.element('login-link')}
                     >
                         {__('Login')}
-                    </a>
+                    </a> */}
+                    <Link
+                        className={bem.element('login-link')}
+                        label={__('Login')}
+                        noStyles 
+                        onClick={() => this.onLoginClick.call(this)}
+                    />
                     {/*<Link
                     className={bem.element('login-link')}
                     label={__('Login')}

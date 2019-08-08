@@ -21,6 +21,7 @@ import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
+import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 
 export default class DalComponent {
 
@@ -78,9 +79,15 @@ export default class DalComponent {
         try {
             const userData = await keeper.publicState();
             return userData.account;
-        } catch {
+        } catch (err) {
+            // console.log(err);
             return {};
         }
+        // try {
+        //     return dalActions[INITIALIZE_AT_CLIENT]();
+        // } catch (e) {
+        //     return {};
+        // }
     }
 
     /**
@@ -88,12 +95,30 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async auth() {
-        const account = await this.getAccount();
-        let user = await this.getUser(account.address);
+        const accountResponse = await this.getAccount();
+        const mappedUser = await this.mapAuthenticatedUserData(accountResponse);
+
+        return mappedUser;
+    }
+
+    /**
+     * Trigger initial auth
+     * @returns {Promise}
+     */
+    async initialAuth () {
+        const keeper = await this.getKeeper();
+
+        await keeper.auth();
+        return await this.auth();
+    }
+
+    async mapAuthenticatedUserData(accountResponse) {
+        const { address } = accountResponse;
+        let user = await this.getUser(address);
         user = {
             ...user,
             profile: {
-                name: account.name,
+                name: accountResponse.name,
                 ...user.profile,
             },
         };
