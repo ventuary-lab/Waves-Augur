@@ -1,7 +1,7 @@
 @import '../../../style/helpers/vars';
 @import '../../../style/helpers/mixins';
 
-.CardInfo {
+.ContestCardInfo {
   $root: &;
   display: flex;
   height: 100%;
@@ -18,12 +18,6 @@
         cursor: pointer;
       }
     }
-  }
-
-  &__activity {
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 14px;
   }
 
   &__column-left {
@@ -46,65 +40,6 @@
     background-color: $color-brand-light-green;
     min-height: 67px;
     background-size: cover;
-  }
-
-  &__ribbons {
-    z-index: 2;
-    position: absolute;
-    transform: rotate(-90deg);
-    width: 77px;
-    height: 52px;
-    top: 12px;
-    left: -11px;
-
-    @include tablet {
-      left: -6px;
-    }
-
-    @include desktop {
-      left: -10px;
-    }
-  }
-
-  &__ribbon {
-    position: relative;
-    width: 77px;
-    height: 24px;
-    padding-left: 20px;
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
-    color: #0500ff;
-    background-color: #fff;
-    box-shadow: 2px 4px 10px rgba(47, 47, 47, 0.2);
-
-    &:not(:last-child) {
-      margin-bottom: 3px;
-    }
-
-    &::before {
-      display: block;
-      content: '';
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      border-style: solid;
-      border-color: #fff #fff #fff transparent;
-      left: -14px;
-      width: 30px;
-      border-width: 12px 14px;
-    }
-
-    &_winner {
-      color: #fff;
-      background-color: $color-brand-green;
-
-      &::before {
-        border-color: $color-brand-green $color-brand-green $color-brand-green transparent;
-      }
-    }
   }
 
   &__info {
@@ -145,7 +80,8 @@
     background-color: #fff;
   }
 
-  &__top-info {
+  &__top-info,
+  &__bottom-info {
     text-align: center;
   }
 
@@ -174,19 +110,15 @@
     }
   }
 
-  &__country {
+  &__platform {
     font-weight: 300;
     font-size: 13px;
-    line-height: 20px;
+    line-height: 14px;
+    color: #000;
     text-align: center;
   }
 
   &__right-info {
     text-align: right;
-  }
-
-  &__time-is-over {
-    display: block;
-    padding-right: 10px;
   }
 }

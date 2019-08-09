@@ -1,7 +1,7 @@
 @import '../../../style/helpers/vars';
 @import '../../../style/helpers/mixins';
 
-.ProjectSidebar {
+.ContestSidebar {
 
   $root: &;
 
@@ -11,8 +11,6 @@
   background-color: #fff;
   padding: 90px 20px 15px;
 
-
-
   @include tablet {
     background-color: transparent;
     margin-left: auto;
@@ -21,65 +19,6 @@
 
   @include desktop {
     padding: 113px 30px 100px;
-  }
-
-  &__ribbons {
-    position: absolute;
-    transform: rotate(-90deg);
-    width: 120px;
-    height: 60px;
-    top: -62px;
-    left: -12px;
-
-    @include tablet {
-      left: -55px;
-    }
-
-    @include desktop {
-      top: -131px;
-      left: -35px;
-    }
-  }
-
-  &__ribbon {
-    position: relative;
-    width: 120px;
-    height: 24px;
-    padding-left: 20px;
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
-    color: #0500ff;
-    background-color: #fff;
-    box-shadow: 2px 4px 10px rgba(47, 47, 47, 0.2);
-
-    &:not(:last-child) {
-      margin-bottom: 8px;
-    }
-
-    &::before {
-      display: block;
-      content: '';
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      border-style: solid;
-      border-color: #fff #fff #fff transparent;
-      left: -14px;
-      width: 30px;
-      border-width: 12px 14px;
-    }
-
-    &_winner {
-      color: #fff;
-      background-color: $color-brand-green;
-
-      &::before {
-        border-color: $color-brand-green $color-brand-green $color-brand-green transparent;
-      }
-    }
   }
 
   &__inner {
@@ -126,18 +65,14 @@
     text-align: center;
   }
 
-  &__status {
+  &__status,
+  &__reward {
     margin-bottom: 16px;
 
     & > span:last-child {
       font-weight: 500;
       margin-left: 10px;
     }
-  }
-
-  &__progress {
-    width: 100%;
-    margin-bottom: 18px;
   }
 
   &__tags {
@@ -150,7 +85,7 @@
     margin-bottom: 8px;
   }
 
-  &__crowdfunding {
+  &__dates {
     margin-bottom: 22px;
 
     & > tbody > tr > td {

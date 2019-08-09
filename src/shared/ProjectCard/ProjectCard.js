@@ -32,7 +32,7 @@ export default class ProjectCard extends React.PureComponent {
                             isProject: true,
                             uid: this.props.item.uid,
                             status: this.props.item.status,
-                            coverUrl: this.props.item.coverUrl,
+                            coverSmallUrl: this.props.item.coverSmallUrl,
                             logoUrl: this.props.item.logoUrl,
                             title: this.props.item.name,
                             description: this.props.item.description,
@@ -40,6 +40,8 @@ export default class ProjectCard extends React.PureComponent {
                             expireVoting: this.props.item.expireVoting,
                             expireCrowd: this.props.item.expireCrowd,
                             expireWhale: this.props.item.expireWhale,
+                            contest: this.props.item.contest,
+                            contestWinner: this.props.item.contestWinner,
                         }
                     }}
                     right={{
