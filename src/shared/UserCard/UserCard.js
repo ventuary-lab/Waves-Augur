@@ -9,6 +9,7 @@ import UserRole from 'enums/UserRole';
 import Card from 'shared/Card';
 import CardInfo from 'shared/Card/views/CardInfo';
 import CardTags from 'shared/Card/views/CardTags';
+import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 
 import './UserCard.scss';
 import UserSchema from 'types/UserSchema';
@@ -53,7 +54,12 @@ export default class UserCard extends React.PureComponent {
                         : {
                             component: CardTags,
                             componentProps: {
-                                user: this.props.item,
+                                tags: this.props.item.profile.tags,
+                                toRoute: this.props.item.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION,
+                                toRouteParams: {
+                                    address: this.props.item.address,
+                                },
+                                socials: this.props.item.profile.socials
                             },
                         }}
 

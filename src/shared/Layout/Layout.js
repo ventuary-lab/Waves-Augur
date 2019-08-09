@@ -9,6 +9,7 @@ import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 import {html, dal} from 'components';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
+import coverStub from 'static/images/cover-stub.jpg';
 
 import './Layout.scss';
 import {openModal} from 'yii-steroids/actions/modal';
@@ -33,9 +34,11 @@ const bem = html.bem('Layout');
     state => ({
         isShowImageLine: getCurrentItemParam(state, 'isShowImageLine'),
         user: getUser(state),
+        coverUrl: _get(state, 'layout.cover'),
         maxPhoneWidth: _get(state, 'screen.media.tablet'),
     })
 )
+
 @screenWatcherHoc()
 export default class Layout extends React.PureComponent {
 
@@ -109,7 +112,12 @@ export default class Layout extends React.PureComponent {
                     ) || (
                         <>
                             {this.props.isShowImageLine && (
-                                <div className={bem.element('image-line')}/>
+                                <div
+                                    className={bem.element('image-line')}
+                                    style={{
+                                        backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
+                                    }}
+                                />
                             )}
                             {this.props.status !== STATUS_LOADING && this.props.children}
                         </>

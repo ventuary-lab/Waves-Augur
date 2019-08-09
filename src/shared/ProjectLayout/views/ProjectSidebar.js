@@ -4,7 +4,7 @@ import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
-import {html} from 'components';
+import {html, dal} from 'components';
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
@@ -36,7 +36,23 @@ export default class ProjectSidebar extends React.PureComponent {
         const status = this.props.project.status;
 
         return (
-            <div className={bem.block()}>
+            <div className={bem.block({
+                contest: !!this.props.project.contest,
+                contestWinner: !!this.props.project.contestWinner,
+            })}>
+
+                {this.props.project.contest && (
+                    <div className={bem.element('ribbons')}>
+                        <div className={bem.element('ribbon')}>
+                            {__('contest')}
+                        </div>
+                        {this.props.project.contestWinner && (
+                            <div className={bem.element('ribbon', 'winner')}>
+                                {__('winner')}
+                            </div>
+                        )}
+                    </div>
+                )}
                 <img
                     className={bem.element('avatar')}
                     src={this.props.project.logoUrl || projectAvatarStub}
@@ -84,6 +100,26 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
+                    {(this.props.project.canContestWinner) && (
+                        <div className={bem.element('action')}>
+                            <Button
+                                label={__('Choose as a Winner')}
+                                onClick={() => {
+                                    if (this.props.isPhone) {
+                                        this.props.dispatch(openModal(MessageModal, {
+                                            icon: 'Icon__log-in-from-pc',
+                                            title: __('Log in from PC'),
+                                            color: 'success',
+                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                        }));
+                                    } else {
+                                        dal.chooseProjectAsContestWinner(this.props.project.uid, this.props.project.contest);
+                                    }
+                                }}
+                            />
+                        </div>
+                    )}
+
                     {(this.props.project.canVote || this.props.project.canDonate) && (
                         <div className={bem.element('action')}>
                             <Button

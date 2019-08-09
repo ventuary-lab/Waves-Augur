@@ -9,6 +9,7 @@ export default class UserRole extends Enum {
     static WHALE = 'whale';
     static GENESIS = 'genesis';
     static ANONYMOUS = 'anonymous';
+    static ADMIN = 'admin';
 
     static getKeys() {
         return [
@@ -19,6 +20,7 @@ export default class UserRole extends Enum {
             this.WHALE,
             this.GENESIS,
             this.ANONYMOUS,
+            this.ADMIN,
         ];
     }
 
@@ -27,6 +29,7 @@ export default class UserRole extends Enum {
             this.REGISTERED,
             this.WHALE,
             this.GENESIS,
+            this.ADMIN,
         ];
     }
 

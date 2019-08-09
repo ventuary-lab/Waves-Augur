@@ -24,7 +24,7 @@ export default class CardInfo extends React.PureComponent {
     static propTypes = {
         daysLeft: PropTypes.number,
         logoUrl: PropTypes.string,
-        coverUrl: PropTypes.string,
+        coverSmallUrl: PropTypes.string,
         expireVoting: PropTypes.string,
         expireCrowd: PropTypes.string,
         expireWhale: PropTypes.string,
@@ -37,6 +37,8 @@ export default class CardInfo extends React.PureComponent {
         role: PropTypes.string,
         isInvitedPage: PropTypes.bool,
         noHover: PropTypes.bool,
+        contest: PropTypes.string,
+        contestWinner: PropTypes.string,
     };
 
     render() {
@@ -56,10 +58,22 @@ export default class CardInfo extends React.PureComponent {
                 'no-hover': this.props.noHover,
             })}>
                 <div className={bem.element('column-left')}>
+                    {this.props.contest && (
+                        <div className={bem.element('ribbons')}>
+                            <div className={bem.element('ribbon')}>
+                                {__('contest')}
+                            </div>
+                            {this.props.contestWinner && (
+                                <div className={bem.element('ribbon', 'winner')}>
+                                    {__('winner')}
+                                </div>
+                            )}
+                        </div>
+                    )}
                     <div
                         className={bem.element('cover')}
                         style={{
-                            backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
+                            backgroundImage: `url(${this.props.coverSmallUrl ? this.props.coverSmallUrl : coverStub})`
                         }}
                     >
                         <Link

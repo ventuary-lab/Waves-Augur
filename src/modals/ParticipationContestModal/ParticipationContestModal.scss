@@ -1,0 +1,123 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ParticipationContestModal {
+
+  $root: &;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__inner {
+    padding-top: 60px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__container {
+    width: 100%;
+  }
+
+  &__form-progress {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 17px;
+    width: 100%;
+  }
+
+  &__project-link-field {
+    margin: 120px 0 90px;
+  }
+
+  &__action {
+    width: 100%;
+
+    &_already-have-project {
+      margin-bottom: 40px;
+    }
+
+    &_create-new-project {
+      margin-bottom: 60px;
+    }
+  }
+
+  &__new-project-icon {
+    margin: 45px 0 50px;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  &__sub-title {
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__dates-fields {
+    display: flex;
+    justify-content: space-between;
+
+    & > div {
+      width: 48%;
+    }
+  }
+
+  &__tags {
+    .FieldLayoutView__field {
+      margin-bottom: 30px;
+    }
+  }
+
+  &__presentation {
+    .FieldLayoutView__field {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__hint {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    color: $color-gg-4;
+    text-align: center;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .FieldLayoutView__field {
+      margin-bottom: 0;
+    }
+  }
+
+  &__control-back {
+    @include tablet {
+      width: 25%;
+    }
+  }
+
+  &__control-next {
+    @include tablet {
+      width: 70%;
+    }
+  }
+}
