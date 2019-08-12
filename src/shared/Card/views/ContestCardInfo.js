@@ -60,7 +60,7 @@ export default class ContestCardInfo extends React.PureComponent {
                             <div>
                                 {__('ends')}:
                                 <br/>
-                                {moment(this.props.expireImplementation).format('DD.MM.YYYY')}
+                                {moment(this.props.expireEntries).format('DD.MM.YYYY')}
                             </div>
                         </div>
                         <div className={bem.element('right-info')}>

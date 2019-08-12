@@ -52,7 +52,7 @@ export default class UserCard extends React.PureComponent {
                         },
                     }}
 
-                    onClick={() => this.props.dispatch(push(`/contest/${this.props.item.uid}/details`))}
+                    onClick={() => this.props.dispatch(push(`/contests/${this.props.item.uid}/details`))}
                 />
             </div>
         );

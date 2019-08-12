@@ -8,7 +8,7 @@ import {addCover, removeCover} from 'actions/layout';
 import _get from 'lodash/get';
 
 import {dal, html} from 'components';
-import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT} from 'routes';
+import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT, ROUTE_CONTEST_ENTRIES} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
@@ -112,6 +112,17 @@ export default class ProjectLayout extends React.PureComponent {
                                         ))
                                     }
                                 </div>
+                                {_get(this.state, 'project.contest') && (
+                                    <Link
+                                        className={bem.element('link-to-contest')}
+                                        toRoute={ROUTE_CONTEST_ENTRIES}
+                                        toRouteParams={{
+                                            uid: this.state.project.contest
+                                        }}
+                                        label={__('View all projects for the contest')}
+                                        noStyles
+                                    />
+                                )}
                             </div>
                             <div className={bem.element('form')}>
                                 {this.state.project.canVote && (

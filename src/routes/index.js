@@ -409,11 +409,11 @@ export default {
         },
         [ROUTE_CONTEST_REDIRECT]: {
             exact: true,
-            path: '/contest/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
+            path: '/contests/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
             component: Route,
             componentProps: {
                 render: ({match}) => (
-                    <Redirect to={`/contest/${match.params.uid}/details`}/>
+                    <Redirect to={`/contests/${match.params.uid}/details`}/>
                 )
             },
             label: __('Contest'),
@@ -421,7 +421,7 @@ export default {
             roles: UserRole.getKeys(),
         },
         [ROUTE_CONTEST]: {
-            path: '/contest/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
+            path: '/contests/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)',
             component: ContestLayout,
             label: __('Contest'),
             isNavVisible: false,
@@ -430,7 +430,7 @@ export default {
             items: {
                 [ROUTE_CONTEST_DETAILS]: {
                     exact: true,
-                    path: '/contest/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/details',
+                    path: '/contests/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/details',
                     component: ContestDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
@@ -439,7 +439,7 @@ export default {
                 },
                 [ROUTE_CONTEST_ENTRIES]: {
                     exact: true,
-                    path: '/contest/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/entries',
+                    path: '/contests/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/entries',
                     component: ContestEntriesPage,
                     label: __('Entries'),
                     icon: 'Icon__details',
