@@ -36,9 +36,6 @@ export default class ContestDetailsPage extends React.PureComponent {
     }
 
     render() {
-        console.log(1, this.props.contest);
-
-
         return (
             <div className={bem.block()}>
                 {this.props.contest.winner && this.props.contest.status === ContestStatusEnum.COMPLETED && (

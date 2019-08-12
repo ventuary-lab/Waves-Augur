@@ -34,6 +34,7 @@ export default class ProjectWizard extends React.PureComponent {
     static propTypes = {
         project: ProjectSchema,
         contest: PropTypes.string,
+        onFirstBack: PropTypes.func,
     };
 
     constructor() {
@@ -56,6 +57,7 @@ export default class ProjectWizard extends React.PureComponent {
                                 this.props.dispatch(goToPage(ROUTE_PROJECT_FEED, {uid: project.uid}));
                             });
                     }}
+                    onFirstBack={this.props.onFirstBack}
                     onComplete={() => {
                         this.props.onClose();
                     }}

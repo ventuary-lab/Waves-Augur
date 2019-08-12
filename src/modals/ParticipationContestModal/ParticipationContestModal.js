@@ -142,6 +142,9 @@ export default class ParticipationContestModal extends React.PureComponent {
 
                 {this.state.isNewProject === true && (
                     <ProjectWizard
+                        onFirstBack={() => this.setState({
+                            isNewProject: null,
+                        })}
                         contest={this.props.contest}
                         onClose={this.props.onClose}
                     />
