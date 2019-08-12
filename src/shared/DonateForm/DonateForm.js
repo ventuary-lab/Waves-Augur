@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getFormValues} from 'redux-form';
+import {getFormValues, change} from 'redux-form';
 import {getUser} from 'yii-steroids/reducers/auth';
 import _isFunction from 'lodash-es/isFunction';
 
@@ -104,7 +104,6 @@ export default class DonateForm extends React.PureComponent {
             ? 'Anonymous donation...'
             : 'Anonymous bet...';
 
-
         validate(values,[
             !isAnonReview && ['review', 'required'],
         ]);
@@ -116,6 +115,8 @@ export default class DonateForm extends React.PureComponent {
                 : values.review,
         })
             .then(() => {
+                this.props.dispatch(change(FORM_ID, 'review', ''));
+
                 if (this.props.onComplete && _isFunction(this.props.onComplete)) {
                     this.props.onComplete();
                 }
