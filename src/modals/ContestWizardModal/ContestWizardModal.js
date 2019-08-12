@@ -171,7 +171,7 @@ export default class ContestWizardModal extends React.PureComponent {
                 </div>
                 <ImageField
                     layout={'default'}
-                    uploadApi={'/upload'}
+                    uploadApi={'/upload?crop=true'}
                     attribute='logoUrl'
                 />
                 <ImageField

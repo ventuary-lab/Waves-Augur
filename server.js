@@ -25,17 +25,23 @@ app.put('/upload', upload.middleware.single('avatar'), (request, response) => {
 
     const fileName = request.file.filename;
 
-    sharp(upload.path.full + '/' + fileName)
-        .resize(300, 300)
-        .toFile(upload.path.full + '/thumbnail.' + fileName)
-        .then(info => {
-            response.send(JSON.stringify({
-                path: upload.path.short + '/thumbnail.' + fileName
-            }));
-        })
-        .catch(err => {
-            // console.log(err);
-        });
+    if (request.query.crop === 'true') {
+        sharp(upload.path.full + '/' + fileName)
+            .resize(300, 300)
+            .toFile(upload.path.full + '/thumbnail.' + fileName)
+            .then(info => {
+                response.send(JSON.stringify({
+                    path: upload.path.short + '/thumbnail.' + fileName
+                }));
+            })
+            .catch(err => {
+                // console.log(err);
+            });
+    } else {
+        response.send(JSON.stringify({
+            path: upload.path.short + fileName
+        }));
+    }
 });
 
 

@@ -222,7 +222,7 @@ export default class ProjectWizard extends React.PureComponent {
                 </div>
                 <ImageField
                     layout={'default'}
-                    uploadApi={'/upload'}
+                    uploadApi={'/upload?crop=true'}
                     attribute='logoUrl'
                 />
             </>
