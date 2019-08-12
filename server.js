@@ -39,7 +39,7 @@ app.put('/upload', upload.middleware.single('avatar'), (request, response) => {
             });
     } else {
         response.send(JSON.stringify({
-            path: upload.path.short + fileName
+            path: upload.path.short  + '/' + fileName
         }));
     }
 });
