@@ -163,6 +163,7 @@ export default class ParticipationContestModal extends React.PureComponent {
         ]);
         const projectUid = values.projectLink.match(/\w+-\w+-\w+-\w+-\w+/)[0];
 
-        dal.addContestToProject(this.props.contest, projectUid);
+        return dal.addContestToProject(this.props.contest, projectUid)
+            .then(() => this.props.onClose());
     }
 }
