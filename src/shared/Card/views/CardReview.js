@@ -135,25 +135,27 @@ export default class CardReview extends React.PureComponent {
                                 </div>
                             )}
                             {this.props.type === FeedTypeEnum.WHALE && (
-                                <div className={bem.element('grant-donate-container')}>
-                                    <div className={bem.element('donate-amount')}>
-                                        {_times(this.props.tierNumber).map((item, index) => (
-                                            <div
-                                                key={index}
-                                                className={bem.element('wave-icon')}
-                                            >
-                                                <span className={'Icon Icon__wave_green'}/>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <span className={bem.element('grant-hint')}>
-                                        {__('Grant')} {this.props.tierNumber * 10}%
-                                    </span>
+                                <div className={bem.element('donate-amount')}>
+                                    {_times(this.props.tierNumber).map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className={bem.element('wave-icon')}
+                                        >
+                                            <span className={'Icon Icon__wave_green'}/>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
-                            <div className={bem.element('amount')}>
-                                {Math.abs(this.props.amount)} {__('Waves')}
-                            </div>
+                            {this.props.type !== FeedTypeEnum.VOTE && (
+                                <div className={bem.element('amount')}>
+                                    {Math.abs(this.props.amount)} {__('Waves')}
+                                </div>
+                            )}
+                            {this.props.type === FeedTypeEnum.WHALE && (
+                                <span className={bem.element('grant-hint')}>
+                                    {__('Grant')} {this.props.tierNumber * 10}%
+                                </span>
+                            )}
                         </div>
                         {this.props.review.comment && (
                             <div className={bem.element('text')}>
