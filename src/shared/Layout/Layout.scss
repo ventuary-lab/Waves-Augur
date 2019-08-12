@@ -12,11 +12,10 @@
   &__image-line {
     height: 91px;
     //background-image: url('../../static/images/cover-stub.jpg');
-    background-position: bottom;
+    background-position: 50% 100%;
     background-size: cover;
 
     @include desktop {
-      background-position: right bottom;
       height: 160px;
     }
   }
