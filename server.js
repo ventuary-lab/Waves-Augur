@@ -52,5 +52,5 @@ app.listen(port, () => {
     console.log('Listening Port ' + port); // eslint-disable-line no-console
 });
 
-//require('./node/contract');
+require('./node/contract');
 
