@@ -18,7 +18,11 @@ class ImageField extends React.PureComponent {
 
     static propTypes = {
         attribute: PropTypes.string.isRequired,
-        uploadApi: PropTypes.string.isRequired
+        uploadApi: PropTypes.string.isRequired,
+        label: PropTypes.string,
+        title: PropTypes.string,
+        isCover: PropTypes.bool,
+        isCoverSmall: PropTypes.bool,
     };
 
     constructor() {
@@ -42,7 +46,10 @@ class ImageField extends React.PureComponent {
 
     render() {
         return (
-            <div className={bem.block()}>
+            <div className={bem.block({
+                'is-cover': this.props.isCover,
+                'is-cover-small': this.props.isCoverSmall,
+            })}>
                 {this.props.input.value && (
                     <div className={bem.element('image-container')}>
                         <img
@@ -75,23 +82,23 @@ class ImageField extends React.PureComponent {
                         accept={'image/jpeg, image/png, image/svg+xml'}
                     >
                         {({getRootProps, getInputProps}) => (
-                            <div className={bem.element('drop-zone-container')}>
-                                <div {...getRootProps({className: bem.element('drop-zone')})}>
-                                    <input
-                                        {...getInputProps()}
-                                        name={'avatar'}
-                                        onChange={this._onBrowseAccept}
-                                    />
-                                    <span>{__('Drop Your Image Here')}</span>
-                                </div>
+                            <div {...getRootProps({className: bem.element('drop-zone')})}>
+                                <input
+                                    {...getInputProps()}
+                                    name={'avatar'}
+                                    onChange={this._onBrowseAccept}
+                                />
+                                <span className={bem.element('drop-zone-title')}>
+                                    {this.props.title || __('Drop Your Image Here')}
+                                </span>
                             </div>
                         )}
                     </Dropzone>
-                    <div className={bem.element('upload-failed', {
-                        'visible': this.state.isUploadFailed,
-                    })}>
-                        {__('File failed to upload')}
-                    </div>
+                </div>
+                <div className={bem.element('upload-failed', {
+                    'visible': this.state.isUploadFailed,
+                })}>
+                    {__('File failed to upload')}
                 </div>
 
                 <span

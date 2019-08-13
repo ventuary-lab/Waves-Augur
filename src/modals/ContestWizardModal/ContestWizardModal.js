@@ -170,19 +170,30 @@ export default class ContestWizardModal extends React.PureComponent {
                     {__('Please fill all necessary fields to add your contest')}
                 </div>
                 <ImageField
+                    topLabel={__('Contest’s Logo')}
                     layout={'default'}
+                    layoutClassName={bem.element('image')}
                     uploadApi={'/upload?crop=true'}
                     attribute='logoUrl'
+                    title={__('Drop Your  Logo Here')}
                 />
                 <ImageField
+                    topLabel={__('Full-size Cover')}
                     layout={'default'}
+                    layoutClassName={bem.element('image')}
                     uploadApi={'/upload'}
                     attribute='coverUrl'
+                    title={__('Drop Cover (1920x160 px)')}
+                    isCover
                 />
                 <ImageField
+                    topLabel={__('Small Cover (for preview cards)')}
                     layout={'default'}
+                    layoutClassName={bem.element('image')}
                     uploadApi={'/upload'}
                     attribute='coverSmallUrl'
+                    title={__('Drop Cover (190x67 px)')}
+                    isCoverSmall
                 />
             </>
         );
@@ -279,30 +290,33 @@ export default class ContestWizardModal extends React.PureComponent {
                 <div className={bem.element('sub-title')}>
                     {__('Please fill all necessary fields to add your awesome idea')}
                 </div>
-                {[SocialEnum.FACEBOOK, SocialEnum.TWITTER, SocialEnum.TELEGRAM].map(socialId => (
-                    <div key={socialId}>
-                        <InputField
-                            attribute={`socials.url_${socialId}`}
-                            placeholder={__('Enter URL')}
-                            layoutProps={{
-                                align: 'left',
-                            }}
-                            topLabel={this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
-                            label={!this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
-                            labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(socialId) : ''}
-                        />
-                    </div>
-                ))}
-                <InputField
-                    layoutClassName={bem.element('presentation')}
-                    attribute={'socials.url_' + SocialEnum.WEBSITE}
-                    placeholder={__('https://medium.com/ma......')}
-                    layoutProps={{
-                        align: 'left',
-                    }}
-                    label={!this.props.isPhone ? __('Presentation') : ''}
-                    topLabel={this.props.isPhone ? __('Presentation') : ''}
-                />
+                <div className={bem.element('socials-block')}>
+                    {[SocialEnum.FACEBOOK, SocialEnum.TWITTER, SocialEnum.TELEGRAM].map(socialId => (
+                        <div key={socialId}>
+                            <InputField
+                                attribute={`socials.url_${socialId}`}
+                                placeholder={__('Enter URL')}
+                                layoutClassName={bem.element('socials')}
+                                layoutProps={{
+                                    align: 'left',
+                                }}
+                                topLabel={this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
+                                label={!this.props.isPhone ? SocialEnum.getLabel(socialId) : ''}
+                                labelIconClass={!this.props.isPhone ? SocialEnum.getCssClass(socialId) : ''}
+                            />
+                        </div>
+                    ))}
+                    <InputField
+                        layoutClassName={bem.element('presentation')}
+                        attribute={'socials.url_' + SocialEnum.WEBSITE}
+                        placeholder={__('https://medium.com/ma......')}
+                        layoutProps={{
+                            align: 'left',
+                        }}
+                        label={!this.props.isPhone ? __('Presentation') : ''}
+                        topLabel={this.props.isPhone ? __('Presentation') : ''}
+                    />
+                </div>
                 <TextField
                     topLabel={__('Links / Files')}
                     attribute={'contents.links'}
