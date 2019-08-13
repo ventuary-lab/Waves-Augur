@@ -68,11 +68,11 @@ export default class ButtonView extends React.PureComponent {
     renderLabel() {
         return (
             <>
-                {this.props.isLoading && (
+                {/*{this.props.isLoading && (
                     <div className={bem.element('preloader')}>
                         {__('Loading...')}
                     </div>
-                )}
+                )}*/}
                 <span
                     className={bem.element('label')}
                 >
