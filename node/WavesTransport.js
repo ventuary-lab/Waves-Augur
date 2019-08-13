@@ -173,9 +173,11 @@ class WavesTransport {
      * @returns {Promise}
      */
     async nodePublishBySeed(method, args, payment, seed) {
+        const transaction = this._buildTransaction(method, args, payment);
         return this.broadcast(invokeScript({
-            dApp: this.dal.dApp,
-            call: this._buildTransaction(method, args, payment).call,
+            dApp: transaction.data.dApp,
+            call: transaction.data.call,
+            chainId: process.env.APP_DAPP_NETWORK === 'main' ? 87 : 84,
         }, seed));
     }
 
@@ -220,7 +222,7 @@ class WavesTransport {
         };
 
         if (process.env.NODE_ENV !== 'production') {
-            console.log('Transaction:', transaction); // eslint-disable-line no-console
+            //console.log('Transaction:', transaction); // eslint-disable-line no-console
         }
 
         return transaction;
