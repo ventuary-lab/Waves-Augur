@@ -43,7 +43,7 @@ let port = process.env.PORT || 5000;
 
 app.listen(port, () => {
     console.log(__dirname); // eslint-disable-line no-console
-    console.log('Listening Port ' + port); // eslint-disable-line no-console
+    console.log('Listening Port ' + port, process.env.DAPP, process.env.NODE_URL); // eslint-disable-line no-console
 });
 
 //require('./node/contract');

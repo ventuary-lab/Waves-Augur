@@ -4,10 +4,6 @@ import {Provider} from 'react-redux';
 import {store} from 'components';
 
 import './style/index.scss';
-console.log({
-    1: process.env.APP_DAPP_NETWORK,
-    2: process.env.DAPP
-})
 
 (init => {
     if (window.Raven && process.env.NODE_ENV === 'production') {
