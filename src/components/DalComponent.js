@@ -26,10 +26,8 @@ import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 export default class DalComponent {
 
     constructor() {
-        this.isTestMode = false;//(process.env.APP_MODE || 'test') === 'test';
-        // this.dApp = '3N8Mm2G9ttNvpfuvbn5cqN1PKsMuEvzP29o'; // DApps id new
-        // this.dApp = '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // DApps id old
-        this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
+        this.isTestMode = process.env.APP_DAPP_NETWORK === 'test';
+        this.dApp = process.env.DAPP_ADDRESS || '777';
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);

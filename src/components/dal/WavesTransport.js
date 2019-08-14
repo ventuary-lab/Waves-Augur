@@ -14,7 +14,7 @@ const process400 = resp => resp.status === 400
     : resp;
 const validateStatus = status => status === 400 || status >= 200 && status < 300;
 
-const NODE_URL = 'https://nodes.wavesplatform.com/';
+const NODE_URL = process.env.APP_NODE_URL || 'https://testnodes.wavesnodes.com';
 
 export default class WavesTransport {
 

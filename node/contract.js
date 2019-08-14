@@ -2,10 +2,10 @@
 // This is backend for contract
 const WavesTransport = require('./WavesTransport');
 const transport = new WavesTransport({
-    dApp: '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R',
+    dApp: process.env.DAPP || '888',
 });
 // const seed = 'estate arrange bitter coast fruit sure ticket giggle concert hurry net wrestle';
-const seed = 'whale wash matter sample tent attack question glow grunt pond canoe fence address cancel absent';
+const seed = process.env.ORACLE_SEED || 'wheeeeeel';
 
 const checker = async () => {
     const regexp = /(status|reveal|final)_(.{36})(_(.+))?/;

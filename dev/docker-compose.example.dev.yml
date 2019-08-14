@@ -4,12 +4,12 @@ services:
   app:
     build: .
     restart: unless-stopped
-    environment:
-      - APP_DAPP_ADDRESS=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
-      - APP_DAPP_NETWORK=test
-      - APP_DAPP_SEED=
-      - APP_WEBHOOK_HOST=ventuary-dao-dev-webhook
-      - PORT=80
+    # environment:
+    #   - DAPP=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
+    #   - APP_DAPP_NETWORK=test
+    #   - APP_DAPP_SEED=
+    #   - APP_WEBHOOK_HOST=ventuary-dao-dev-webhook
+    #   - PORT=80
     volumes:
       - /srv/ventuary-dao-dev/data:/data
     container_name: ventuary-dao-dev-app
