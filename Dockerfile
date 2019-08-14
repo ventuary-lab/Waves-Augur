@@ -15,7 +15,8 @@ RUN yarn
 COPY node /app/node
 COPY src /app/src
 COPY webpack.js /app
-RUN npm run heroku-postbuild
+# RUN npm run heroku-postbuild
+CMD ["npm", "run", "heroku-postbuild"]
 
 COPY server.js /app
 
