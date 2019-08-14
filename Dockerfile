@@ -5,6 +5,9 @@ RUN apk add python python-dev py-pip vips-dev fftw-dev build-base --update \
 
 RUN apk add --update nodejs yarn tzdata
 ENV TZ Europe/Moscow
+ENV DAPP ${DAPP}
+ENV NODE_ENV ${NODE_ENV}
+ENV NODE_URL ${NODE_URL}
 
 RUN npm i forever -g
 
