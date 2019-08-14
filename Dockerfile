@@ -17,4 +17,5 @@ COPY src /app/src
 COPY webpack.js /app
 COPY server.js /app
 
-ENTRYPOINT npm run heroku-postbuild && forever /app/server.js
+RUN npm run heroku-postbuild
+ENTRYPOINT ["forever", "/app/server.js"]
