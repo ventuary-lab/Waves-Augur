@@ -23,11 +23,14 @@ import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
 import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 
+const APP_DAPP_NETWORK = process.env.APP_DAPP_NETWORK;
+const DAPP = process.env.DAPP;
+
 export default class DalComponent {
 
     constructor() {
-        this.isTestMode = process.env.APP_DAPP_NETWORK === 'test';
-        this.dApp = process.env.DAPP || '777';
+        this.isTestMode = APP_DAPP_NETWORK === 'test';
+        this.dApp = DAPP || '777';
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);

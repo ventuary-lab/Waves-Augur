@@ -4,13 +4,16 @@ const TransactionListener = require('./components/TransactionListener');
 const ScriptParser = require('./components/ScriptParser');
 const _isFunction = require('lodash/isFunction');
 
+const NODE_URL = process.env.NODE_URL;
+const DAPP = process.env.DAPP;
+
 module.exports = class WavesContractCache {
 
     constructor(params) {
         params = params || {};
 
-        this.nodeUrl = params.nodeUrl || 'https://testnodes.wavesnodes.com';
-        this.dApp = params.dApp || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF';
+        this.nodeUrl = NODE_URL || params.nodeUrl || 'https://testnodes.wavesnodes.com';
+        this.dApp =  DAPP || params.dApp || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF';
         this.contractMethods = {};
 
         // Create storage
