@@ -105,6 +105,7 @@
     "cross-env": "^5.2.0",
     "css-hot-loader": "^1.4.4",
     "domready": "^1.0.8",
+    "dotenv-webpack": "^1.7.0",
     "express": "^4.16.4",
     "file-saver": "^2.0.0",
     "fileup-core": "^1.1.2",
