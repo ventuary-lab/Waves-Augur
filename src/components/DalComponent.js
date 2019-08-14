@@ -27,7 +27,7 @@ export default class DalComponent {
 
     constructor() {
         this.isTestMode = process.env.APP_DAPP_NETWORK === 'test';
-        this.dApp = process.env.DAPP_ADDRESS || '777';
+        this.dApp = process.env.DAPP || '777';
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
