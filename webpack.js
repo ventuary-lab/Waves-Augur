@@ -1,4 +1,4 @@
-const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 
 require('yii-steroids/webpack')
     .config({
@@ -36,7 +36,14 @@ require('yii-steroids/webpack')
                 },
             },
             plugins: [
-                new Dotenv()
+                new webpack.DefinePlugin({
+                    'APP_DAPP_NETWORK': process.env.APP_DAPP_NETWORK,
+                    'DAPP': process.env.DAPP,
+                    'NODE_ENV': process.env.NODE_ENV,
+                    'NODE_URL': process.env.NODE_URL,
+                    'ORACLE': process.env.ORACLE,
+                    'ORACLE_SEED': process.env.ORACLE_SEED
+                })
             ]
         },
     })
