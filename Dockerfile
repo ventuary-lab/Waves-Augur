@@ -15,8 +15,7 @@ RUN yarn
 COPY node /app/node
 COPY src /app/src
 COPY webpack.js /app
-RUN echo "$DAPP"
-RUN node webpack --process.env.NODE_ENV=$NODE_ENV --process.env.NODE_URL=$NODE_URL --process.env.DAPP=$DAPP production
+RUN node webpack production
 
 COPY server.js /app
 

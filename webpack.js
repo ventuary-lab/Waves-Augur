@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 
 console.log('process.env.DAPP', process.env.DAPP);
+console.log(JSON.stringify(process.env));
 
 require('yii-steroids/webpack')
     .config({
