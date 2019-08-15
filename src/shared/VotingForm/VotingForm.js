@@ -11,8 +11,9 @@ import {getUser} from 'yii-steroids/reducers/auth';
 
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 
-import components, {html} from 'components';
-const dal = components.dal();
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
+
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';

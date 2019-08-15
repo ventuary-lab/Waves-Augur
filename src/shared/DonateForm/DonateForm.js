@@ -9,9 +9,9 @@ import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 
-import components, {html} from 'components';
-const dal = components.dal();
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 

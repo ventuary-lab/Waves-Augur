@@ -8,9 +8,9 @@ import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 
-import components, {html} from 'components';
-const dal = components.dal();
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 
 import './GrantForm.scss';

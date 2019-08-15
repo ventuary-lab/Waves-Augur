@@ -6,9 +6,9 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 
-import components, {html} from 'components';
-const dal = components.dal();
 import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';

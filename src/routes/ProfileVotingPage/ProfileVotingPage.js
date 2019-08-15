@@ -6,8 +6,9 @@ import List from 'yii-steroids/ui/list/List';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 
-import components, {html} from 'components';
-const dal = components.dal();
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
+
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 
 import './ProfileVotingPage.scss';
