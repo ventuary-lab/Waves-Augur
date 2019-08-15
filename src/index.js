@@ -6,27 +6,26 @@ import {store} from 'components';
 
 import './style/index.scss';
 
-class Wrapper extends React.Component {
-    constructor() {
-        this.state = {
-            varsInitialized: false
-        };
-    }
+const Wrapper = (props) => {
+    const [initFinished, setInitFinished] = React.useState(false);
 
-    componentDidMount () {
-        (async () => {
-            const response = await axios.get('/get-dapp-info');
-            const { APP_DAPP_NETWORK, DAPP } = response.data;
-            window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
-            window.DAPP = DAPP;
-            this.setState({ varsInitialized: true });
-        })();
-    }
+    React.useEffect(
+        () => {
+            (async () => {
+                const response = await axios.get('/get-dapp-info');
+        
+                const { APP_DAPP_NETWORK, DAPP } = response.data;
 
-    render() {
-        const { varsInitialized } = this.state;
-        return varsInitialized ? this.children : null;
-    }
+                window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
+                window.DAPP = DAPP;
+
+                setInitFinished(true);
+            })();
+        },
+        []
+    );
+
+    return initFinished ? props.children : null;
 }
 
 (init => {
