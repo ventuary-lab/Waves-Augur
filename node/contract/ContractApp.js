@@ -22,6 +22,12 @@ module.exports = class ContractApp {
             nodeUrl: this.nodeUrl,
             contractMethods: contractConfig.methods,
             updateHandler: this._onUpdate,
+            storage: {
+                redis: {
+                    host: process.env.REDIS_HOST || '127.0.0.1',
+                    port: process.env.REDIS_PORT || 6379,
+                }
+            },
             logger: {
                 level: 'debug',
             },

@@ -9,6 +9,7 @@ services:
       - APP_DAPP_NETWORK=main
       - APP_DAPP_SEED=
       - APP_WEBHOOK_HOST=ventuary-dao-prod-webhook
+        - REDIS_HOST=redis
       - PORT=80
     volumes:
       - /srv/ventuary-dao-prod/data:/data
