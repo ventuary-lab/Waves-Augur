@@ -35,6 +35,7 @@ export default class DalComponent {
             [this.adminAdress]: UserRole.ADMIN,
         };
         this.hoc = fetchHoc;
+        this.hoc2 = require('./dal/apiHoc').default;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
         this.contract = {
@@ -524,15 +525,6 @@ export default class DalComponent {
         projects = _orderBy(projects, 'createTime', 'desc');
         console.timeEnd('getProjects time');
         return projects;
-    }
-
-    /**
-     * Return projects with status CROWDFUND and next
-     * @returns {Promise}
-     */
-    async getVotedProjects() {
-        const projects = await this.getProjects();
-        return projects.filter(item => item.status !== ProjectStatusEnum.VOTING);
     }
 
     /**

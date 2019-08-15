@@ -21,17 +21,19 @@ module.exports = class TransactionListener {
         let lastTransactionId = await this.storage.get(this.STORAGE_LAST_TRANSACTION_ID_KEY);
         this._lastTransactionId = lastTransactionId;
 
+        this.app.logger.info('TransactionListener: Last transaction id: ' + (lastTransactionId || 'none (listen from end)'));
+
         // Get last transaction
         if (!lastTransactionId) {
             const transactions = await this._fetch(lastTransactionId, '', 1);
             if (transactions.length) {
                 this._lastTransactionId = transactions[0].id;
-                this.storage.set(this.STORAGE_LAST_TRANSACTION_ID_KEY, this._lastTransactionId);
+                await this.storage.set(this.STORAGE_LAST_TRANSACTION_ID_KEY, this._lastTransactionId);
             }
         }
 
-        // Start listener
-        this._next();
+        // Start transactionListener
+        return this._next();
     }
 
     /**
@@ -48,7 +50,7 @@ module.exports = class TransactionListener {
 
         // Trigger events with new transactions
         if (this.transactionsHandler) {
-            const appTransactions = transactions.filter(item => item.dApp === this.dApp && item.call);
+            const appTransactions = transactions.filter(item => item.dApp === this.app.dApp && item.call);
             if (appTransactions.length > 0) {
                 this.transactionsHandler(transactions.reverse());
             }

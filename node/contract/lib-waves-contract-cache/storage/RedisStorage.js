@@ -1,4 +1,5 @@
 const redis = require('redis');
+const _toArray = require('lodash/toArray');
 const BaseStorage = require('./BaseStorage');
 
 module.exports = class RedisStorage extends BaseStorage {
@@ -12,26 +13,46 @@ module.exports = class RedisStorage extends BaseStorage {
     }
 
     get(key) {
-        return new Promise((resolve, reject) => {
-            this._redisClient.get(this._namespace + ':' + key, (err, reply) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(reply || null);
-                }
-            });
-        });
+        return this._call('get', key);
     }
 
     set(key, value) {
+        return this._call('set', key, value);
+    }
+
+    hget(key, field) {
+        return this._call('hget', key, field);
+    }
+
+    hgetall(key) {
+        return this._call('hgetall', key);
+    }
+
+    hkeys(key) {
+        return this._call('hkeys', key);
+    }
+
+    hset(key, field, value) {
+        return this._call('hset', key, field, value);
+    }
+
+    _call() {
+        const args = _toArray(arguments);
+        const method = args.shift();
+
+        // Add namespace
+        args[0] = this._namespace + ':' + args[0];
+
         return new Promise((resolve, reject) => {
-            this._redisClient.set(this._namespace + ':' + key, value, err => {
+            const callback = (err, reply) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(reply);
                 }
-            });
+            };
+
+            this._redisClient[method].apply(this._redisClient, args.concat(callback));
         });
     }
 

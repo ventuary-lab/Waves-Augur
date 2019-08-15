@@ -145,6 +145,7 @@
     "react-transition-group": "=1.2.1",
     "reactstrap": "^6.4.0",
     "recharts": "^1.6.0",
+    "redis": "^2.8.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
@@ -158,6 +159,7 @@
     "stylelint-webpack-plugin": "^0.10.5",
     "uuid": "^3.3.2",
     "webpack-bundle-analyzer": "^3.0.2",
+    "winston": "^3.2.1",
     "yii-steroids": "^1.12.1",
     "yup": "^0.26.6"
   },
