@@ -24,20 +24,12 @@ import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
 import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 
-// const APP_DAPP_NETWORK = process.env.APP_DAPP_NETWORK;
-// const DAPP = process.env.DAPP;
+const APP_DAPP_NETWORK = process.env.APP_DAPP_NETWORK;
+const DAPP = process.env.DAPP;
 
 export default class DalComponent {
 
     constructor() {
-        return this.init();
-    }
-
-    async init () {
-        const serverResponse = await axios.get('/get-dapp-info');
-        const { APP_DAPP_NETWORK, DAPP } = serverResponse.data;
-        console.log({ APP_DAPP_NETWORK, DAPP });
-        
         this.isTestMode = APP_DAPP_NETWORK === 'test';
         this.dApp = DAPP || '777';
         this.hoc = fetchHoc;
@@ -58,8 +50,6 @@ export default class DalComponent {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {
             window.dal = this;
         }
-
-        return this;
     }
 
     getVotePayment() {

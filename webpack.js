@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack');
 
 require('yii-steroids/webpack')
     .config({
@@ -34,6 +35,12 @@ require('yii-steroids/webpack')
                     },
                 },
             },
+            plugins: [
+                new Dotenv({
+                    path: './.environment',
+                    systemvars: true
+                })
+            ]
         }
     })
     .base('./src/index.js');

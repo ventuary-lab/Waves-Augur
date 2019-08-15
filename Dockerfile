@@ -16,6 +16,9 @@ COPY node /app/node
 COPY src /app/src
 COPY webpack.js /app
 COPY server.js /app
+# RUN touch .env >
+RUN touch .environment
+RUN echo -e 'DAPP=$DAPP\nAPP_DAPP_NETWORK=$APP_DAPP_NETWORK' >> .environment
 
 RUN npm run heroku-postbuild
 ENTRYPOINT ["forever", "/app/server.js"]
