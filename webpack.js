@@ -1,5 +1,3 @@
-const webpack = require('webpack');
-
 require('yii-steroids/webpack')
     .config({
         port: 8081,
@@ -34,12 +32,7 @@ require('yii-steroids/webpack')
                         },
                     },
                 },
-            },
-            plugins: [
-                new webpack.DefinePlugin({
-                    'process.env.NODE_ENV': process.env.NODE_ENV
-                })
-            ]
+            }
         }
     })
     .base('./src/index.js');
