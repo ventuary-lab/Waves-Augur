@@ -27,7 +27,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 export default class DalComponent {
 
     constructor() {
-        console.log('window.APP_DAPP_NETWORK', window.APP_DAPP_NETWORK);
+        console.log('window.APP_DAPP_NETWORK', window.APP_DAPP_NETWORK, window.DAPP);
         this.isTestMode = window.APP_DAPP_NETWORK === 'test';
         this.dApp = window.DAPP || '777';
         this.hoc = fetchHoc;

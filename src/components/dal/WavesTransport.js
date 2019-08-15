@@ -14,13 +14,11 @@ const process400 = resp => resp.status === 400
     : resp;
 const validateStatus = status => status === 400 || status >= 200 && status < 300;
 
-const NODE_URL = process.env.NODE_URL || 'https://testnodes.wavesnodes.com';
-
 export default class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
-        this.nodeUrl = NODE_URL;
+        this.nodeUrl = window.NODE_URL || 'https://testnodes.wavesnodes.com';
         this.fee = 0.009;
         this.isKeeperAvailable = null;
         this.start = Date.now();
