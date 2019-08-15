@@ -9,6 +9,61 @@
   flex-direction: column;
   align-items: center;
 
+  &_is-cover {
+    #{$root}__drop-zone-block {
+      height: 70px;
+    }
+
+    #{$root}__drop-zone {
+      height: 40px;
+    }
+
+    #{$root}__drop-zone-title {
+      width: 100%;
+    }
+
+    #{$root}__image-container {
+      width: 510px;
+      height: 70px;
+    }
+
+    #{$root}__image {
+      border-radius: 0;
+    }
+
+    #{$root}__image-remove {
+      right: 40px;
+    }
+  }
+
+  &_is-cover-small {
+    #{$root}__drop-zone-block {
+      width: 190px;
+      height: 70px;
+      background-size: auto;
+    }
+
+    #{$root}__drop-zone {
+      width: 170px;
+      height: 40px;
+    }
+
+    #{$root}__drop-zone-title {
+      width: 100%;
+      padding: 5px;
+    }
+
+    #{$root}__image-container {
+      width: 190px;
+      height: 70px;
+    }
+
+    #{$root}__image {
+      border-radius: 0;
+    }
+  }
+
+
   &__image-container {
     position: relative;
     width: 180px;
@@ -92,8 +147,13 @@
   }
 
   &__drop-zone-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    padding: 40px 135px;
+    width: 510px;
+    height: 180px;
+
     background: linear-gradient(0deg, rgba(98, 98, 98, 0.3), rgba(98, 98, 98, 0.3)), url('../../../static/images/image-upload-stub.png');
     background-size: cover;
     margin-bottom: 24px;
@@ -105,31 +165,36 @@
 
     &_on-drag-enter {
       background: url('../../../static/images/image-upload-stub.png');
-      background-size: cover;
     }
   }
 
-  &__drop-zone-container {
-    display: flex;
-    flex-direction: column;
+  &__drop-zone-title {
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 14px;
+    color: #fff;
+    width: 110px;
+    text-align: center;
   }
 
   &__drop-zone {
-    padding: 24px 64px;
-    border: 3px dashed #fff;
-    color: #fff;
+    width: 240px;
+    height: 100px;
+    position: relative;
+    border: 2px dashed #fff;
     outline: none;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    text-align: center;
   }
 
   &__upload-failed {
     opacity: 0;
     color: #fff;
     position: absolute;
-    bottom: -50px;
+    bottom: 20px;
     right: 0;
     font-weight: 300;
     font-size: 13px;

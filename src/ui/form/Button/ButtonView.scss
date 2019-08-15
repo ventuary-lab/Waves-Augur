@@ -80,8 +80,17 @@
     }
   }
 
-  &_is-loading &__label {
-    opacity: 0;
+  //&_is-loading &__label {
+  //  opacity: 0;
+  //}
+
+  &_disabled {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover, &:focus {
+      box-shadow: none;
+    }
   }
 
   &__preloader {
