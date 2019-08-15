@@ -9,7 +9,9 @@ import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 import { setUser } from 'yii-steroids/actions/auth';
 
-import { html, dal } from 'components';
+
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 import UserRole from 'enums/UserRole';
 import MessageModal from 'modals/MessageModal';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
