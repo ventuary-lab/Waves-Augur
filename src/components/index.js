@@ -16,11 +16,7 @@ const locale = new LocaleComponent();
 const resource = new ResourceComponent();
 const store = new StoreComponent();
 const ui = new UiComponent();
-// const dal = new DalComponent();
-let dal;
-(async () => {
-    dal = await new DalComponent();
-})();
+const dal = new DalComponent();
 
 // Apply configuration
 const customConfig = store.getState().config || {};
