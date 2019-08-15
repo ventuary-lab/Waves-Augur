@@ -118,7 +118,7 @@ export default class ContestDetailsPage extends React.PureComponent {
                         {__('Links / Files')}
                     </div>
                     <span className={bem.element('description')}>
-                        {this.props.contest.contents.links.split('\n').map((item, index) => (
+                        {(this.props.contest.contents.links || '').split('\n').map((item, index) => (
                             <p key={index}>
                                 {/^(http|https):\/\//.test(item) && (
                                     <a

@@ -31,7 +31,7 @@ module.exports = class Users extends BaseCollection {
      */
     async getUsers() {
         let users = await this.getItemsAll();
-        users = users.filter(user => !!user.profile.name && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(user.role));
+        users = users.filter(user => user.profile && user.profile.name && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(user.role));
         users = _orderBy(users, 'activity', 'desc');
         return users;
     }

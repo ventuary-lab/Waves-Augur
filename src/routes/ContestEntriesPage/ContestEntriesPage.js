@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _isEqual from 'lodash-es/isEqual';
 
 import {dal, html} from 'components';
 
@@ -12,6 +11,12 @@ import ProjectCard from 'shared/ProjectCard';
 
 const bem = html.bem('ContestEntriesPage');
 
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/contests/${props.contest.uid}/projects`,
+        key: 'items',
+    })
+)
 export default class ContestEntriesPage extends React.PureComponent {
 
     static propTypes = {
@@ -19,30 +24,11 @@ export default class ContestEntriesPage extends React.PureComponent {
         items: PropTypes.arrayOf(ProjectSchema),
     };
 
-    constructor() {
-        super(...arguments);
-
-        this.state = {
-            items: null,
-        };
-    }
-
-    componentDidMount() {
-        this.getContestEntries();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.contest && nextProps.contest && !_isEqual(this.props.contest, nextProps.contest)) {
-            this.getContestEntries();
-        }
-    }
-
-    getContestEntries() {
-        dal.getContestEntries(this.props.contest.uid)
-            .then(items => this.setState({items}));
-    }
-
     render() {
+        if (this.props.isLoading) {
+            return null;
+        }
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('card-list')}>
@@ -53,7 +39,7 @@ export default class ContestEntriesPage extends React.PureComponent {
                             contestUid: this.props.contest.uid, //todo
                         }}
                         emptyText={__('No items')}
-                        items={this.state.items}
+                        items={this.props.items}
                     />
                 </div>
             </div>
