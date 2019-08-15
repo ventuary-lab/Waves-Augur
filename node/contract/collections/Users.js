@@ -20,19 +20,17 @@ module.exports = class Users extends BaseCollection {
 
     /**
      * @param {string} address
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getUser(address, userAddress = null) {
-        return await this.getItem(address, userAddress);
+    async getUser(address) {
+        return await this.getItem(address);
     }
 
     /**
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getUsers(userAddress = null) {
-        let users = await this.getItemsAll(userAddress);
+    async getUsers() {
+        let users = await this.getItemsAll();
         users = users.filter(user => !!user.profile.name && ![UserRole.INVITED, UserRole.SPEND_INVITE].includes(user.role));
         users = _orderBy(users, 'activity', 'desc');
         return users;
@@ -40,10 +38,9 @@ module.exports = class Users extends BaseCollection {
 
     /**
      * @param {string} address
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getUserInvites(address, userAddress = null) {
+    async getUserInvites(address) {
         let users = await this.getItemsAll();
         users = users.filter(user => user.invitedBy && user.invitedBy.address === address && user.role !== UserRole.SPEND_INVITE);
         users = _orderBy(users, 'createTime', 'desc');
@@ -83,7 +80,7 @@ module.exports = class Users extends BaseCollection {
         };
     }
 
-    async _prepareItemForUser(address, item, user) {
+    async _postProcessItem(address, item) {
         return {
             ...item,
             invitedBy: item.invitedBy

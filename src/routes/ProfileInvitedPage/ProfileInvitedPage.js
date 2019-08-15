@@ -18,9 +18,11 @@ import {isPhone} from 'yii-steroids/reducers/screen';
 
 const bem = html.bem('ProfileInvitedPage');
 
-@dal.hoc(
-    props => dal.getUserInvites(props.user.address)
-        .then(items => ({items}))
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/users/${props.user.address}/invites`,
+        key: 'items',
+    })
 )
 @connect(
     state => ({

@@ -12,10 +12,11 @@ import './ProfileDonationPage.scss';
 
 const bem = html.bem('ProfileDonationPage');
 
-
-@dal.hoc(
-    props => dal.getUserDonations(props.user.address)
-        .then(items => ({items}))
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/reviews/donations/user/${props.user.address}`,
+        key: 'items',
+    })
 )
 export default class ProfileDonationPage extends React.PureComponent {
 

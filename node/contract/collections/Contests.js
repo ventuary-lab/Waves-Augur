@@ -16,20 +16,18 @@ module.exports = class Contests extends BaseCollection {
 
     /**
      * @param {string} uid
-     * @param {string|null} userAddress
      * @returns {Promise<*|[]|any[]>}
      */
-    async getContest(uid, userAddress = null) {
-        return await this.getItem(uid, userAddress);
+    async getContest(uid) {
+        return await this.getItem(uid);
     }
 
     /**
      * @param {string|null} filterName
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getContests(filterName = null, userAddress = null) {
-        let contests = await this.getItemsAll(userAddress);
+    async getContests(filterName = null) {
+        let contests = await this.getItemsAll();
         switch (filterName) {
             case ContestFilter.FEATURED:
                 //TODO
@@ -67,11 +65,11 @@ module.exports = class Contests extends BaseCollection {
         };
     }
 
-    async _prepareItemForUser(id, item, user) {
+    /*async _postProcessItem(id, item) {
         return {
             ...item,
             canEdit: user && user.address === contractConfig.adminAddress,
         };
-    }
+    }*/
 
 };

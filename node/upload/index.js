@@ -9,7 +9,7 @@ const uploadPath = {
     short: '/uploads',
 };
 
-if (!fs.existsSync(uploadPath.full)) {
+/*if (!fs.existsSync(uploadPath.full)) {
     (async () => {
         await fs.mkdir(uploadPath.full, { recursive: true }, err => {
             if (err) {
@@ -17,7 +17,7 @@ if (!fs.existsSync(uploadPath.full)) {
             }
         });
     })();
-}
+}*/
 const getFileFormat = (fileName) => {
     return fileName.match(/\.\w+$/i)[0];
 };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import Button from 'yii-steroids/ui/form/Button';
 
-import {dal, html,} from 'components';
+import {dal, html} from 'components';
 import ReviewBlock from './views/ReviewBlock';
 import UserSchema from 'types/UserSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
@@ -14,46 +14,30 @@ import './ProjectReviewPage.scss';
 
 const bem = html.bem('ProjectReviewPage');
 
-@dal.hoc(
-    props => Promise.all([
-        dal.getProject(_get(props, 'match.params.uid')),
-        dal.getUser(_get(props, 'match.params.address'))
-    ])
-        .then(result => {
-
-            if (_get(props, 'match.params.type') === FeedTypeEnum.VOTE) {
-                return  dal.getUserVotings(result[1].address)
-                    .then(votings => ({
-                        review: votings.find(item => item.project.uid === result[0].uid),
-                        project: result[0],
-                        user: result[1]
-                    }));
-            }
-
-            if (_get(props, 'match.params.type') === FeedTypeEnum.DONATE) {
-                return  dal.getUserDonations(result[1].address)
-                    .then(donations => ({
-                        review: donations
-                            .filter(item => item.project.uid === result[0].uid)
-                            .find(item => item.reviewNumber === parseInt(_get(props, 'match.params.number'))),
-                        project: result[0],
-                        user: result[1],
-                    }));
-            }
-
-            if (_get(props, 'match.params.type') === FeedTypeEnum.WHALE) {
-                return  dal.getUserGrants(result[1].address)
-                    .then(grants => ({
-                        review: grants.find(item => item.project.uid === result[0].uid),
-                        project: result[0],
-                        user: result[1],
-                    }));
-            }
-
-            return null;
-        })
+@dal.hoc2(
+    props => ([
+        {
+            url: `/api/v1/projects/${_get(props, 'match.params.uid')}`,
+            key: 'project',
+        },
+        {
+            url: `/api/v1/user/${_get(props, 'match.params.address')}`,
+            key: 'project',
+        },
+        _get(props, 'match.params.type') === FeedTypeEnum.DONATE && {
+            url: `/api/v1/reviews/donations/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}_${_get(props, 'match.params.number')}`,
+            key: 'review',
+        },
+        _get(props, 'match.params.type') === FeedTypeEnum.VOTE && {
+            url: `/api/v1/reviews/votings/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}`,
+            key: 'review',
+        },
+        _get(props, 'match.params.type') === FeedTypeEnum.WHALE && {
+            url: `/api/v1/reviews/whales/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}`,
+            key: 'review',
+        },
+    ].filter(Boolean))
 )
-
 export default class ProjectReviewPage extends React.PureComponent {
 
     static propTypes = {

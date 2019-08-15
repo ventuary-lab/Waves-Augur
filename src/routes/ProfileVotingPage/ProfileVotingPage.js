@@ -12,9 +12,11 @@ import './ProfileVotingPage.scss';
 
 const bem = html.bem('ProfileVotingPage');
 
-@dal.hoc(
-    props => dal.getUserVotings(props.user.address)
-        .then(items => ({items}))
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/reviews/votings/user/${props.user.address}`,
+        key: 'items',
+    })
 )
 export default class ProfileVotingPage extends React.PureComponent {
 

@@ -30,7 +30,7 @@ const bem = html.bem('ProfileLayout');
 
         return {
             currentItem,
-            address,
+            address: address || contextUser.address,
             isMe,
             isRedirectToProfile,
             contextUser: isMe ? contextUser : null,
@@ -39,14 +39,11 @@ const bem = html.bem('ProfileLayout');
         };
     }
 )
-@dal.hoc(
-    props => {
-        if (!props.address) {
-            return {};
-        }
-        return dal.getUser(props.address)
-            .then(profileUser => ({profileUser}));
-    }
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/user/${props.address}`,
+        key: 'profileUser',
+    })
 )
 export default class ProfileLayout extends React.PureComponent {
 

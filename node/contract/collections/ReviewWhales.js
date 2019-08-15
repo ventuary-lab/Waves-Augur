@@ -15,14 +15,14 @@ module.exports = class ReviewWhales extends BaseCollection {
         ];
     }
 
-    async getWhales(userAddress = null) {
-        let reviews = await this.getItemsAll(userAddress);
+    async getWhales() {
+        let reviews = await this.getItemsAll();
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
 
-    async getUserWhales(address, userAddress = null) {
-        let reviews = await this.getItemsAll(userAddress);
+    async getUserWhales(address) {
+        let reviews = await this.getItemsAll();
         reviews = reviews.filter(review => review.user.address === address);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
@@ -49,7 +49,7 @@ module.exports = class ReviewWhales extends BaseCollection {
         };
     }
 
-    async _prepareItemForUser(id, item, user) {
+    async _postProcessItem(id, item) {
         const parts = id.split('_');
         const uid = parts[0];
         const address = parts[1];

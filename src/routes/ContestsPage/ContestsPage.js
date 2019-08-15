@@ -12,63 +12,24 @@ import ContestStatusEnum from 'enums/ContestStatusEnum';
 import ContestCard from 'shared/ContestCard';
 
 import './ContestsPage.scss';
+import ProjectStateEnum from 'enums/ProjectStateEnum';
 
 const bem = html.bem('ContestsPage');
 
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/contests/${props.match.params.state}`,
+        key: 'contests',
+    })
+)
 export default class ContestsPage extends React.PureComponent{
 
     static propTypes = {
         items: PropTypes.arrayOf(ContestSchema),
     };
 
-    constructor() {
-        super(...arguments);
-
-        this.state = {
-            contests: null,
-            isLoading: false
-        };
-    }
-
-    componentDidMount() {
-        this.getContests(this.props.match.params.state);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.match.params.state !== this.props.match.params.state) {
-            this.getContests(nextProps.match.params.state);
-        }
-    }
-
-    getContests(contestsState) {
-        this.setState({
-            isLoading: true,
-        });
-        dal.getContests()
-            .then(contests => {
-                switch (contestsState) {
-                    case ContestStateEnum.FEATURED: //TODO
-                        // contests = contests.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
-                        // contests = _orderBy(contests, 'positiveBalance', 'desc');
-
-                        break;
-                    case ContestStateEnum.NEW:
-                        contests = contests.filter(item => item.status === ContestStatusEnum.OPEN);
-                        contests = _orderBy(contests, 'createTime', 'asc');
-                        break;
-                    case ContestStateEnum.FINISHED:
-                        contests = contests.filter(item => item.status === ContestStatusEnum.COMPLETED);
-                        break;
-                }
-                this.setState({
-                    contests,
-                    isLoading: false,
-                });
-            });
-    }
-
     render() {
-        if (!this.state.contests) {
+        if (this.props.isLoading) {
             return (
                 <section className={bem.block()}>
                     <div className={'wrapper'}>
@@ -116,14 +77,14 @@ export default class ContestsPage extends React.PureComponent{
                                         })}
                                     </div>
                                 </div>
-                                {this.state.contests && (
+                                {this.props.contests && (
                                     <>
-                                        {!this.state.isLoading && (
+                                        {!this.props.isLoading && (
                                             <List
                                                 listId='ProjectsList'
                                                 itemView={ContestCard}
                                                 emptyText={__('No contests')}
-                                                items={this.state.contests}
+                                                items={this.props.contests}
                                             />
                                         ) || (
                                             <Preloader/>

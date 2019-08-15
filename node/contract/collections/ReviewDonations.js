@@ -21,22 +21,20 @@ module.exports = class ReviewDonations extends BaseCollection {
     /**
      *
      * @param {string} address
-     * @param {string|null} userAddress
      * @returns {Promise<*|[]|any[]>}
      */
-    async getUserDonations(address, userAddress = null) {
-        let reviews = await this.getItemsAll(userAddress);
+    async getUserDonations(address) {
+        let reviews = await this.getItemsAll();
         reviews = reviews.filter(review => review.user.address === address);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
 
     /**
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getDonations(userAddress = null) {
-        let reviews = await this.getItemsAll(userAddress);
+    async getDonations() {
+        let reviews = await this.getItemsAll();
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
@@ -59,7 +57,7 @@ module.exports = class ReviewDonations extends BaseCollection {
         };
     }
 
-    async _prepareItemForUser(id, item, user) {
+    async _postProcessItem(id, item) {
         const parts = id.split('_');
         const uid = parts[0];
         const address = parts[1];

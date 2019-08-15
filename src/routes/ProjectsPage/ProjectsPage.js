@@ -25,10 +25,6 @@ const bem = html.bem('ProjectsPage');
             : {
                 url: `/api/v1/projects/${props.match.params.state}`,
                 key: 'projects',
-                collection: {
-                    name: 'projects',
-                    primaryKey: 'uid',
-                },
             }
     ])
 )

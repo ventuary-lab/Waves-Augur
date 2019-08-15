@@ -18,9 +18,11 @@ import ContestWizardModal from 'modals/ContestWizardModal';
 
 const bem = html.bem('ProfileContestsPage');
 
-@dal.hoc(
-    () => dal.getContests()
-        .then(items => ({items}))
+@dal.hoc2(
+    () => ({
+        url: '/api/v1/contests',
+        key: 'items',
+    })
 )
 @connect(
     state => ({

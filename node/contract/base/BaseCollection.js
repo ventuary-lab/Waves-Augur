@@ -25,26 +25,23 @@ module.exports = class BaseCollection {
         return item;
     }
 
-    async _prepareItemForUser(id, item, user) {
+    async _postProcessItem(id, item) {
         return item;
     }
 
-    async getItem(id, userAddress) {
+    async getItem(id) {
         let item = await this.app.storage.hget(this.STORAGE_KEY_PREFIX + this.name, id);
         if (!item) {
             return null;
         }
 
         item = JSON.parse(item);
-        if (userAddress || userAddress === null) {
-            const user = userAddress ? this.app.collections.users.getItem(userAddress) : null;
-            item = await this._prepareItemForUser(id, item, user);
-        }
+        item.id = id;
+        item = await this._postProcessItem(id, item);
         return item;
     }
 
-    async getItemsAll(userAddress) {
-        const user = userAddress ? this.app.collections.users.getItem(userAddress) : null;
+    async getItemsAll() {
         const result = await this.app.storage.hgetall(this.STORAGE_KEY_PREFIX + this.name);
         if (!result) {
             return [];
@@ -53,9 +50,8 @@ module.exports = class BaseCollection {
         return Promise.all(
             Object.keys(result).map(async id => {
                 let item = JSON.parse(result[id]);
-                if (userAddress || userAddress === null) {
-                    item = await this._prepareItemForUser(id, item, user);
-                }
+                item.id = id;
+                item = await this._postProcessItem(id, item);
                 return item;
             })
         );

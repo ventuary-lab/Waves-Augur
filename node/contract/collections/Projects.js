@@ -32,20 +32,18 @@ module.exports = class Projects extends BaseCollection {
 
     /**
      * @param {string} uid
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getProject(uid, userAddress = null) {
-        return await this.getItem(uid, userAddress);
+    async getProject(uid) {
+        return await this.getItem(uid);
     }
 
     /**
      * @param {string|null} filterName
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getProjects(filterName = null, userAddress = null) {
-        let projects = await this.getItemsAll(userAddress);
+    async getProjects(filterName = null) {
+        let projects = await this.getItemsAll();
         switch (filterName) {
             case ProjectFilter.FEATURED:
                 projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND);
@@ -62,6 +60,11 @@ module.exports = class Projects extends BaseCollection {
                 projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
+            case ProjectFilter.VOTING:
+                projects = projects.filter(item => item.status === ProjectStatus.VOTING && item.isVotingAvailable);
+                projects = _orderBy(projects, 'createTime', 'asc');
+                break;
+
             default:
                 projects = _orderBy(projects, 'createTime', 'desc');
                 break;
@@ -70,23 +73,12 @@ module.exports = class Projects extends BaseCollection {
     }
 
     /**
-     * @param {string} address
-     * @param {string|null} userAddress
-     * @returns {Promise}
-     */
-    async getInboxProjects(address, userAddress = null) {
-        const projects = await this.getProjects(null, address);
-        return projects.filter(item => item.status === ProjectStatus.VOTING && !item.isImVoted && item.isVotingAvailable && item.author.address !== address);
-    }
-
-    /**
      * Return user projects (where user is owner)
      * @param {string} authorAddress
-     * @param {string|null} userAddress
      * @returns {Promise}
      */
-    async getAuthorProjects(authorAddress, userAddress = null) {
-        const projects = await this.getProjects(userAddress);
+    async getAuthorProjects(authorAddress) {
+        const projects = await this.getProjects();
         return projects.filter(item => item.author.address === authorAddress);
     }
 
@@ -135,14 +127,14 @@ module.exports = class Projects extends BaseCollection {
         };
     }
 
-    async _prepareItemForUser(uid, item, user) {
+    async _postProcessItem(uid, item) {
         item = {
             ...item,
-            canEdit: false,
-            canVote: false,
-            canDonate: false,
-            canWhale: false,
-            canContestWinner: false,
+            //canEdit: false,
+            //canVote: false,
+            //canDonate: false,
+            //canWhale: false,
+            //canContestWinner: false,
             author: item.author.address
                 ? await this.app.collections.users.getItem(item.author.address)
                 : null,
@@ -155,7 +147,7 @@ module.exports = class Projects extends BaseCollection {
             item.contestWinner = true;
         }
 
-        if (user) {
+        /*if (user) {
             if (item.author.address !== user.address) {
                 if (user.role !== UserRole.WHALE) {
                     if (item.isVotingAvailable && !item.isImVoted) {
@@ -176,7 +168,7 @@ module.exports = class Projects extends BaseCollection {
                     item.canContestWinner = true;
                 }
             }
-        }
+        }*/
 
         return item;
     }

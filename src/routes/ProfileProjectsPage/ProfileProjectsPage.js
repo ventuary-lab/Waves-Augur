@@ -19,9 +19,11 @@ import MessageModal from '../../modals/MessageModal';
 
 const bem = html.bem('ProfileProjectsPage');
 
-@dal.hoc(
-    props => dal.getUserProjects(props.user.address)
-        .then(items => ({items}))
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/projects/user/${props.user.address}`,
+        key: 'items',
+    })
 )
 @connect(
     state => ({

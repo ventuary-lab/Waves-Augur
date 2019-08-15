@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 
-require('./node/contract_legacy');
+if (process.env.APP_DAPP_ADDRESS) {
+    require('./node/contract_legacy');
+}
 require('./node/contract')(app);
 require('./node/upload')(app);
 
