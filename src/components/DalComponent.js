@@ -9,7 +9,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
 
-import {clientStorage} from 'components';
+import {http, clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
@@ -183,17 +183,19 @@ export default class DalComponent {
             ? Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8))
             : null;
 
+        const user = await http.get(`/api/v1/users/${address}`);
         return {
             balance,
             address: _trim(address),
-            activity: await this.getUserActivity(address),
+            ...user,
+            /*activity: await this.getUserActivity(address),
             role: address === this.dApp || address === this.adminAdress
                 ? this.specialRoles[address]
                 : await this.transport.nodeFetchKey('wl_sts_' + address) || UserRole.ANONYMOUS,
             invitedBy: await this.getUser(await this.transport.nodeFetchKey('wl_ref_' + address)),
             profile: {
                 ...(await this.transport.nodeFetchKey('wl_bio_' + address)),
-            },
+            },*/
         };
     }
 

@@ -16,6 +16,8 @@ module.exports = class ContractApp {
             nodeUrl: this.nodeUrl,
         });
 
+        this._onUpdate = this._onUpdate.bind(this);
+
         // Create contract cache instance
         this.contractCache = new WavesContractCache({
             dApp: this.dApp,
@@ -48,8 +50,6 @@ module.exports = class ContractApp {
             this.collections[name].name = name;
             this.collections[name].app = this;
         });
-
-        this._onUpdate = this._onUpdate.bind(this);
     }
 
     async start() {

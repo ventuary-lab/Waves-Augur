@@ -74,10 +74,13 @@ module.exports = async (app) => {
         '/api/v1/users': async () => {
             return contract.collections.users.getUsers();
         },
+        '/api/v1/users/:address': async (request) => {
+            return contract.collections.users.getUser(request.params.address);
+        },
         '/api/v1/users/:address/invites': async (request) => {
             return contract.collections.users.getUserInvites(request.params.address);
         },
-        '/api': async () => {
+        '/api/*': async () => {
             return {
                 version: 'v1',
                 methods: Object.keys(routes),

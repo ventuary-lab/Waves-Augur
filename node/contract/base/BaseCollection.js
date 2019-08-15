@@ -105,6 +105,8 @@ module.exports = class BaseCollection {
             return;
         }
 
+        // TODO multiple ids search
+
         if (id === true) {
             const ids = await this.app.storage.hkeys(this.STORAGE_KEY_PREFIX + this.name);
             await this._updateNext(ids);
