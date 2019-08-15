@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {html, dal} from 'components';
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 
 import './CommunityPage.scss';
 import ProjectSchema from 'types/ProjectSchema';
