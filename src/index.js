@@ -6,8 +6,9 @@ import {store} from 'components';
 
 import './style/index.scss';
 
-const Wrapper = (props) => {
+const AppEntry = () => {
     const [initFinished, setInitFinished] = React.useState(false);
+    const [mainApp, setMainApp] = React.useState(null);
 
     React.useEffect(
         () => {
@@ -20,12 +21,18 @@ const Wrapper = (props) => {
                 window.DAPP = DAPP;
 
                 setInitFinished(true);
+                const Application = require('./Application').default;
+                setMainApp(Application);
             })();
         },
         []
     );
 
-    return initFinished ? props.children : null;
+    return initFinished && mainApp ? (
+        <Provider store={store.store}>
+            {mainApp}
+        </Provider>
+    ) : null;
 }
 
 (init => {
@@ -36,13 +43,8 @@ const Wrapper = (props) => {
         init();
     }
 })(() => {
-    const Application = require('./Application').default;
     ReactDOM.render(
-        <Wrapper>
-            <Provider store={store.store}>
-                <Application/>
-            </Provider>
-        </Wrapper>,
+        <AppEntry />,
         document.getElementById('root'),
     );
 });

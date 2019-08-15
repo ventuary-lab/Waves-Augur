@@ -22,11 +22,12 @@ import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
-import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
+// import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 
 export default class DalComponent {
 
     constructor() {
+        console.log('window.APP_DAPP_NETWORK', window.APP_DAPP_NETWORK);
         this.isTestMode = window.APP_DAPP_NETWORK === 'test';
         this.dApp = window.DAPP || '777';
         this.hoc = fetchHoc;
