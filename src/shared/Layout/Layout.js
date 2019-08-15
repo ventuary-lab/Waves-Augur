@@ -6,7 +6,9 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
-import {html, dal} from 'components';
+
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 

@@ -4,7 +4,9 @@ import {getFormValues} from 'redux-form';
 import _get from 'lodash-es/get';
 import PropTypes from 'prop-types';
 
-import {html, dal} from 'components';
+
+import { dal as DalClass, html} from 'components';
+const dal = DalClass();
 import Modal from 'yii-steroids/ui/modal/Modal';
 import Form from 'yii-steroids/ui/form/Form';
 import InputField from 'yii-steroids/ui/form/InputField';
