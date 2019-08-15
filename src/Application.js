@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from 'yii-steroids/ui/nav/Router';
-import axios from 'axios';
 
 import {ui} from 'components';
 import Layout from 'shared/Layout';
@@ -21,31 +20,10 @@ ui.addViews({
 ui.addViews(require.context('./ui', true, /View.js$/));
 
 export default class Application extends React.PureComponent {
-    constructor() {
-        this.state = {
-            varsInitialized: false
-        };
-    }
-
-    componentDidMount () {
-        (async () => {
-            const response = await axios.get('/get-dapp-info');
-            const { APP_DAPP_NETWORK, DAPP } = response.data;
-            window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
-            window.DAPP = DAPP;
-            this.setState({ varsInitialized: true });
-        })();
-
-    }
-
     render() {
-        const { varsInitialized } = this.state;
-
-        return varsInitialized ? (
-            <Router
-                wrapperView={Layout}
-                routes={routes}
-            />
-        ) : null;
+        return <Router
+            wrapperView={Layout}
+            routes={routes}
+        />;
     }
 }
