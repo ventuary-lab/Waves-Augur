@@ -22,7 +22,7 @@ const AppEntry = () => {
 
                 setInitFinished(true);
                 const Application = require('./Application').default;
-                setMainApp(Application);
+                setMainApp(<Application />);
             })();
         },
         []
