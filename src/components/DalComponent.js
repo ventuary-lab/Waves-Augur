@@ -34,7 +34,8 @@ export default class DalComponent {
     }
 
     async init () {
-        const { APP_DAPP_NETWORK, DAPP } = await axios.get('/get-dapp-info').data;
+        const serverResponse = await axios.get('/get-dapp-info');
+        const { APP_DAPP_NETWORK, DAPP } = serverResponse.data;
         console.log({ APP_DAPP_NETWORK, DAPP });
 
         this.isTestMode = APP_DAPP_NETWORK === 'test';
