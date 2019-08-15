@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
-import {dal, html} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';

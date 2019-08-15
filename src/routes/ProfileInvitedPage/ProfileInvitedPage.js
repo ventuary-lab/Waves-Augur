@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {openModal} from 'yii-steroids/actions/modal';
 
-import {dal, html} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import InviteUserModal from 'modals/InviteUserModal';
 import UserCard from 'shared/UserCard';

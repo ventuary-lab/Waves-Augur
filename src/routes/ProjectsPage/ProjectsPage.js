@@ -4,7 +4,9 @@ import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 import _orderBy from 'lodash/orderBy';
 
-import {dal, html} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectStateEnum from 'enums/ProjectStateEnum';

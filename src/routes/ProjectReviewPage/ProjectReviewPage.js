@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 import Button from 'yii-steroids/ui/form/Button';
 
-import {dal, html,} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 import ReviewBlock from './views/ReviewBlock';
 import UserSchema from 'types/UserSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';

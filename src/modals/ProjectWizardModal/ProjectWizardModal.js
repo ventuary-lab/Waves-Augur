@@ -7,7 +7,8 @@ import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
 import ImageField from 'ui/form/ImageField';
 
-import {dal, html} from 'components';
+import components, {html} from 'components';
+const dal = components.dal();
 
 import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';

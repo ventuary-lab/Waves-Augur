@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash-es/isEqual';
 
-import {dal, html} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 
 import './ProjectFeedPage.scss';
 import ProjectSchema from 'types/ProjectSchema';

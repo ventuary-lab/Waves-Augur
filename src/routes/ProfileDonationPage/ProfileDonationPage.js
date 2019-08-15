@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
-import {dal, html} from 'components';
+import components, {html} from 'components';
+const dal = components.dal();
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';

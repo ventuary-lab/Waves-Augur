@@ -10,7 +10,9 @@ import Form from 'yii-steroids/ui/form/Form';
 import {getUser} from 'yii-steroids/reducers/auth';
 
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
-import {dal, html} from 'components';
+
+import components, {html} from 'components';
+const dal = components.dal();
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 
 import './VotingForm.scss';
