@@ -1,5 +1,3 @@
-import ContestStatusEnum from 'enums/ContestStatusEnum';
-
 const moment = require('moment');
 const _orderBy = require('lodash/orderBy');
 
