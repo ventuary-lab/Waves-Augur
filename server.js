@@ -16,10 +16,16 @@ app.use(function(req, res, next) {
 app.use(express.static('/data'));
 app.use(express.static(__dirname + '/dist'));
 
+app.get('/get-dapp-info', (req, res) => {
+    res.send({
+        DAPP: process.env.DAPP,
+        APP_DAPP_NETWORK: process.env.APP_DAPP_NETWORK
+    });
+});
+
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
 });
-
 
 app.put('/upload', upload.middleware.single('avatar'), (request, response) => {
 

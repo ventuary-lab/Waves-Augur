@@ -8,6 +8,7 @@ import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
+import axios from 'axios';
 
 import {clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
@@ -23,12 +24,19 @@ import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
 import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 
-const APP_DAPP_NETWORK = process.env.APP_DAPP_NETWORK;
-const DAPP = process.env.DAPP;
+// const APP_DAPP_NETWORK = process.env.APP_DAPP_NETWORK;
+// const DAPP = process.env.DAPP;
 
 export default class DalComponent {
 
     constructor() {
+        this.init();
+    }
+
+    async init () {
+        const { APP_DAPP_NETWORK, DAPP } = await axios.get('/get-dapp-info').data;
+        console.log({ APP_DAPP_NETWORK, DAPP });
+
         this.isTestMode = APP_DAPP_NETWORK === 'test';
         this.dApp = DAPP || '777';
         this.hoc = fetchHoc;
