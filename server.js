@@ -19,7 +19,8 @@ app.use(express.static(__dirname + '/dist'));
 app.get('/get-dapp-info', (req, res) => {
     res.send({
         DAPP: process.env.DAPP,
-        APP_DAPP_NETWORK: process.env.APP_DAPP_NETWORK
+        APP_DAPP_NETWORK: process.env.APP_DAPP_NETWORK,
+        NODE_URL: process.env.NODE_URL
     });
 });
 
