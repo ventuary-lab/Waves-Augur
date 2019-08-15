@@ -30,14 +30,14 @@ import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
 export default class DalComponent {
 
     constructor() {
-        this.init();
+        return this.init();
     }
 
     async init () {
         const serverResponse = await axios.get('/get-dapp-info');
         const { APP_DAPP_NETWORK, DAPP } = serverResponse.data;
         console.log({ APP_DAPP_NETWORK, DAPP });
-
+        
         this.isTestMode = APP_DAPP_NETWORK === 'test';
         this.dApp = DAPP || '777';
         this.hoc = fetchHoc;
@@ -58,6 +58,8 @@ export default class DalComponent {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {
             window.dal = this;
         }
+
+        return this;
     }
 
     getVotePayment() {
