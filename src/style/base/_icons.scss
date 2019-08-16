@@ -495,9 +495,15 @@ $icons-dir: '../static/icons';
     }
   }
 
-  &__keeper-no-account{
+  &__keeper-no-account {
     min-width: 186px;
     min-height: 186px;
     background-image: url('#{$icons-dir}/keeper-no-account.svg');
+  }
+
+  &__question-in-circle {
+    min-width: 20px;
+    min-height: 20px;
+    background-image: url('#{$icons-dir}/question-in-circle.svg');
   }
 }

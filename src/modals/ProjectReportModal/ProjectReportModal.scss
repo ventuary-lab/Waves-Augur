@@ -1,0 +1,78 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ProjectReportModal {
+
+  $root: &;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__inner {
+    padding-top: 60px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__container {
+    width: 100%;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  &__sub-title {
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__radio-list {
+    max-width: 340px;
+    margin: 0 auto;
+
+    .FieldLayoutView__field {
+      margin-bottom: 32px;
+    }
+  }
+
+  &__text {
+    color: $color-gg-4;
+    text-align: center;
+    margin-bottom: 30px;
+
+    p {
+      &:first-child {
+        margin: 0 0 15px;
+      }
+
+      &:last-child {
+        max-width: 340px;
+        margin: 0 auto
+      }
+    }
+  }
+
+  &__action {
+    display: flex;
+    justify-content: center;
+
+    .FieldLayoutView {
+      width: auto;
+    }
+
+    .FieldLayoutView__field {
+      margin-bottom: 0;
+    }
+  }
+}

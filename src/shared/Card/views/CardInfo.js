@@ -10,6 +10,7 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
+import DelistedLabel from 'shared/DelistedLabel';
 
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import './CardInfo.scss';
@@ -146,7 +147,9 @@ export default class CardInfo extends React.PureComponent {
                                 </span>
                             )}
                             {status && (
-                                <span className={bem.element('status')}>
+                                <span className={bem.element('status', {
+                                    gray: this.props.status === ProjectStatusEnum.MODERATION,
+                                })}>
                                     {ProjectStatusEnum.getLabel(status)}
                                 </span>
                             )}
@@ -190,6 +193,14 @@ export default class CardInfo extends React.PureComponent {
                                     component='p'
                                 />
                             </div>
+                        )}
+                    </div>
+                    <div className={bem.element('bottom-info')}>
+                        {this.props.isDelisted && (
+                            <DelistedLabel
+                                noMobileTooltip
+                                reason={this.props.delistedReason}
+                            />
                         )}
                     </div>
                 </div>

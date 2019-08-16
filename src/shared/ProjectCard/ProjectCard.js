@@ -42,6 +42,8 @@ export default class ProjectCard extends React.PureComponent {
                             expireWhale: this.props.item.expireWhale,
                             contest: this.props.item.contest,
                             contestWinner: this.props.item.contestWinner,
+                            isDelisted: this.props.item.isDelisted,
+                            delistedReason: this.props.item.delistedReason,
                         }
                     }}
                     right={{

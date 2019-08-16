@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import ProjectReportReasonsEnum from 'enums/ProjectReportReasonsEnum';
+import ProjectReportEnum from '../enums/ProjectReportEnum';
 
 const ProjectSchema = PropTypes.shape({
     uid: PropTypes.string,
@@ -20,6 +22,8 @@ const ProjectSchema = PropTypes.shape({
     canVote: PropTypes.bool,
     canDonate: PropTypes.bool,
     canWhale: PropTypes.bool,
+    canReport: PropTypes.bool,
+    canReportVoting: PropTypes.bool,
     canContestWinner: PropTypes.bool,
     contents: PropTypes.shape({
         problem: PropTypes.string,
@@ -52,6 +56,16 @@ const ProjectSchema = PropTypes.shape({
         featured: PropTypes.number,
         delisted: PropTypes.number,
     }),
+    lastReports: PropTypes.arrayOf(PropTypes.shape({
+        report: PropTypes.shape({
+            id: PropTypes.number,
+            direction: PropTypes.oneOf(ProjectReportEnum.getKeys()),
+        }),
+        author: PropTypes.string,
+    })),
+    nextReportId: PropTypes.number,
+    isDelisted: PropTypes.bool,
+    delistedReason: PropTypes.oneOf(ProjectReportReasonsEnum.getKeys()),
 });
 
 export default ProjectSchema;

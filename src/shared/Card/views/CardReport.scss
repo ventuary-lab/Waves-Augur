@@ -1,0 +1,176 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.CardReport {
+  $root: &;
+
+  position: relative;
+  height: 100%;
+  display: flex;
+  padding: 20px;
+
+  &_is-review-page {
+    display: flex;
+
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
+    }
+
+    #{$root}__column-left {
+      margin-right: 0;
+      position: relative;
+      top: -70px;
+      margin-bottom: -30px;
+
+      @include tablet {
+        position: static;
+        margin-right: 45px;
+        margin-bottom: 0;
+        width: 150px;
+      }
+    }
+
+    #{$root}__avatar-link {
+
+      margin-bottom: 20px;
+      width: 100px;
+      height: 100px;
+
+      @include tablet {
+        width: 74px;
+        height: 74px;
+      }
+    }
+
+    #{$root}__name {
+      font-weight: 500;
+      color: #000;
+      margin-bottom: 6px;
+      text-align: center;
+
+      @include tablet {
+        color: $color-gg-4;
+      }
+    }
+
+    #{$root}__title {
+      text-align: center;
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 14px;
+      color: $color-gg-4;
+      margin: 0;
+    }
+
+    #{$root}__actions {
+      justify-content: flex-end;
+    }
+  }
+
+  &__column-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin-right: 15px;
+  }
+
+  &__column-right {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    //height: 100%;
+    justify-content: space-between;
+  }
+
+  &__avatar-link {
+    position: relative;
+    display: block;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    .ButtonView__label {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include image-hover;
+  }
+
+  &__avatar {
+    background-color: #fff;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__link {
+    margin-right: 7px;
+    @include link;
+  }
+
+  &__featured-vote-icon {
+    font-size: 25px;
+    color: $color-brand-green;
+  }
+
+  &__delisted-vote-icon {
+    font-size: 22px;
+    color: $color-brand-red;
+  }
+
+  &__amount {
+    margin-left: 10px;
+    font-weight: 500;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+  }
+
+  &__info-container {
+    margin-bottom: 25px;
+  }
+
+  &__text {
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 14px;
+    word-break: break-word;
+  }
+
+  &__grant-donate-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__grant-hint {
+    font-weight: 300;
+    color: $color-gg-4;
+    margin-left: auto;
+  }
+
+  &__donate-amount {
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__wave-icon {
+    &:not(:last-child) {
+      margin-right: 1px;
+    }
+  }
+}

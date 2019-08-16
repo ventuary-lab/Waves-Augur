@@ -1,0 +1,32 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ReportVotingForm {
+  &__text {
+    > p {
+      margin: 0;
+
+      &:first-child {
+        margin-bottom: 15px;
+      }
+    }
+
+    color: $color-brand-red;
+    margin-bottom: 30px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &__action {
+    &:not(:last-child) {
+      margin-right: 70px;
+    }
+
+    padding: 5px 15px !important;
+    min-height: 38px !important;
+    min-width: 220px !important;
+  }
+}

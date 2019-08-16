@@ -64,15 +64,15 @@ export default class ProjectsPage extends React.PureComponent{
                 .then(projects => {
                     switch (projectsState) {
                         case ProjectStateEnum.FEATURED:
-                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = projects.filter(item => [ProjectStatusEnum.CROWDFUND, ProjectStatusEnum.MODERATION].includes(item.status) && !item.isDelisted);
                             projects = _orderBy(projects, 'positiveBalance', 'desc');
                             break;
                         case ProjectStateEnum.NEW:
-                            projects = projects.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                            projects = projects.filter(item => [ProjectStatusEnum.CROWDFUND, ProjectStatusEnum.MODERATION].includes(item.status) && !item.isDelisted);
                             projects = _orderBy(projects, 'createTime', 'asc');
                             break;
                         case ProjectStateEnum.FINISHED:
-                            projects = projects.filter(item => item.positiveBalance > 0 && [ProjectStatusEnum.WAITING_GRANT, ProjectStatusEnum.GRANT].includes(item.status));
+                            projects = projects.filter(item => item.positiveBalance > 0 && [ProjectStatusEnum.WAITING_GRANT, ProjectStatusEnum.GRANT, ProjectStatusEnum.MODERATION].includes(item.status) && !item.isDelisted);
                             projects = _orderBy(projects, 'positiveBalance', 'desc');
                             break;
                     }

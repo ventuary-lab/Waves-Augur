@@ -9,12 +9,14 @@ import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import DelistedLabel from 'shared/DelistedLabel';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
+import ProjectReportModal from 'modals/ProjectReportModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
 
@@ -79,6 +81,11 @@ export default class ProjectSidebar extends React.PureComponent {
                             {ProjectStatusEnum.getLabel(status)}
                         </span>
                     </div>
+                    {this.props.project.isDelisted && (
+                        <DelistedLabel
+                            reason={this.props.project.delistedReason}
+                        />
+                    )}
                     {this.props.project.tags && this.props.project.tags.length > 0 && (
                         <div className={bem.element('tags')}>
                             <Tags
@@ -166,6 +173,22 @@ export default class ProjectSidebar extends React.PureComponent {
                             </svg>
                             {__('Edit project')}
                         </Link>
+                    )}
+
+                    {this.props.project.canReport && (
+                        <span
+                            className={bem.element('report')}
+                            onClick={() => this.props.dispatch(openModal(ProjectReportModal, {
+                                project: this.props.project,
+                            }))}
+                        >
+                            <div className={bem.element('report-icon')}>
+                                <span className={'MaterialIcon'}>
+                                    block
+                                </span>
+                            </div>
+                            {__('Report')}
+                        </span>
                     )}
                 </div>
             </div>

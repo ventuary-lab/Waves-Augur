@@ -125,6 +125,10 @@
 
   &__status {
     color: $color-brand-green;
+
+    &_gray {
+      color: $color-gg-4;
+    }
   }
 
   &__avatar-link {
@@ -147,6 +151,11 @@
 
   &__top-info {
     text-align: center;
+  }
+
+  &__bottom-info {
+    display: flex;
+    justify-content: center;
   }
 
   &__title {

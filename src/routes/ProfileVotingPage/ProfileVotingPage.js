@@ -4,7 +4,7 @@ import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
 import ActionButtonBlock from 'shared/ActionButtonBlock';
-import ProjectFeedCard from 'shared/ProjectFeedCard';
+import ProjectReportCard from 'shared/ProjectReportCard';
 import {dal, html} from 'components';
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 
@@ -13,7 +13,7 @@ import './ProfileVotingPage.scss';
 const bem = html.bem('ProfileVotingPage');
 
 @dal.hoc(
-    props => dal.getUserVotings(props.user.address)
+    props => dal.getUserReports(props.user.address)
         .then(items => ({items}))
 )
 export default class ProfileVotingPage extends React.PureComponent {
@@ -38,8 +38,8 @@ export default class ProfileVotingPage extends React.PureComponent {
                 <div className={bem.element('card-list')}>
                     <div className={bem.element('card-list')}>
                         <List
-                            listId='ProfileDonationPage'
-                            itemView={ProjectFeedCard}
+                            listId='ProfileVotingPage'
+                            itemView={ProjectReportCard}
                             emptyText={__('No Voting')}
                             items={this.props.items}
                         />

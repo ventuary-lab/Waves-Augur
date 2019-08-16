@@ -212,4 +212,20 @@
       }
     }
   }
+
+  &__report {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: $color-brand-red;
+    margin: 15px 0;
+
+    &:hover {
+      font-weight: 500;
+    }
+  }
+
+  &__report-icon {
+    margin-right: 10px;
+  }
 }

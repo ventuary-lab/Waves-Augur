@@ -24,7 +24,7 @@ const bem = html.bem('ProfileInboxPage');
         .then(items => {
             return {
                 items: items
-                    .filter(item => item.status === ProjectStatusEnum.VOTING && !item.isImVoted && item.isVotingAvailable && item.author.address !== props.user.address),
+                    .filter(item => item.status === ProjectStatusEnum.MODERATION && item.author.address !== props.user.address),
 
             };
         }))

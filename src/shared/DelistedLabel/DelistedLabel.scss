@@ -1,0 +1,98 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.DelistedLabel {
+  $root: &;
+
+  display: flex;
+  align-items: center;
+
+  &_no-mobile-tooltip {
+    #{$root}__tooltip-container {
+      display: none;
+
+      @include tablet {
+        display: block;
+      }
+    }
+  }
+
+  &__label {
+    text-transform: uppercase;
+    color: $color-brand-red;
+    font-weight: 500;
+    margin-right: 10px;
+  }
+
+  &__icon {
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      #{$root}__tooltip-container {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+
+    @include tablet {
+      cursor: default;
+    }
+  }
+
+  &__tooltip-container {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity ease-in-out 0.3s;
+    position: absolute;
+    top: 30px;
+    left: -138px;
+    z-index: $zi-popup;
+
+    @include tablet {
+      padding-left: 15px;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+    }
+  }
+
+  &__tooltip {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    background-color: $color-gg-4;
+    font-size: 13px;
+    line-height: 14px;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    min-width: 224px;
+    min-height: 70px;
+    border-radius: 3px;
+
+    &:before {
+      display: block;
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 138px;
+
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid $color-gg-4;
+
+      @include tablet {
+        top: 50%;
+        transform: translateY(-50%);
+        left: -5px;
+
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid $color-gg-4;
+        border-left: none;
+      }
+    }
+  }
+}

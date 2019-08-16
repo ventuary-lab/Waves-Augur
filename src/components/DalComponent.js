@@ -18,10 +18,12 @@ import fetchHoc from './dal/fetchHoc';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
+import ProjectReportEnum from 'enums/ProjectReportEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
 import ContestStatusEnum from '../enums/ContestStatusEnum';
+import _max from 'lodash-es/max';
 
 export default class DalComponent {
 
@@ -44,6 +46,7 @@ export default class DalComponent {
             VOTEBET: 1, // VOTEBET = 10000000/100000000
             TIERS: [3, 10, 100, 300, 1000],
             MULTIPLIER: 150,
+            REPORT: 1,
         };
 
         this._authInterval = null;
@@ -337,28 +340,48 @@ export default class DalComponent {
             whaleEnd: blockWhaleEnd,
         };
 
+        const lastReports = await this.getProjectLastReports(uid);
+        const nextReportId = lastReports && lastReports.length > 0 //TODO refactor
+            ? lastReports.length >= 3 ? lastReports[0].report.id + 1 : lastReports[0].report.id
+            : 1;
+
         const project = {
             ...data,
             uid,
             blocks,
             isVotingAvailable: false,
+            isDelisted: false,
             canEdit: false,
             canVote: false,
             canDonate: false,
             canWhale: false,
             canContestWinner: false,
+            canReport: false,
+            canReportVoting: false,
             positiveBalance: (positiveBalance / Math.pow(10, 8)) || 0,
             negativeBalance: (negativeBalance / Math.pow(10, 8)) || 0,
-            status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
+            status: ProjectStatusEnum.getStatus(contractStatus, blocks, height, lastReports),
             isImVoted: this.isImVoted(uid, _get(user, 'address'), voteReveral),
             author: await this.getUser(authorAddress),
             votesCount: {
                 [ProjectVoteEnum.FEATURED]: votesFeaturedCount || 0,
                 [ProjectVoteEnum.DELISTED]: votesDelistedCount || 0,
             },
+            lastReports: lastReports,
+            nextReportId: nextReportId,
         };
 
         const contest = project.contest ? await this.getContest(project.contest) : null;
+
+        if (lastReports && lastReports.length > 0) {
+
+            const negativeReports = lastReports.filter(item => item.report.direction === ProjectReportEnum.NEGATIVE);
+
+            if (negativeReports && negativeReports.length >= 2) {
+                project.isDelisted = true;
+                project.delistedReason = negativeReports[0].report.reason;
+            }
+        }
 
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
@@ -370,6 +393,18 @@ export default class DalComponent {
 
         if (_get(user, 'address')) {
             if (project.author.address !== user.address) {
+                if (project.status !== ProjectStatusEnum.MODERATION && !project.isDelisted && user.role === UserRole.REGISTERED) {
+                    project.canReport = true;
+                }
+
+                if (project.status === ProjectStatusEnum.MODERATION) {
+                    const reportAuthors = lastReports.map(item => item.author);
+
+                    if (!reportAuthors.includes(_get(user, 'address'))) {
+                        project.canReportVoting = true;
+                    }
+                }
+
                 if (user.role !== UserRole.WHALE) {
                     if (project.isVotingAvailable && !project.isImVoted) {
                         project.canVote = true;
@@ -380,7 +415,7 @@ export default class DalComponent {
                 } else if (project.status === ProjectStatusEnum.WAITING_GRANT) {
                     project.canWhale = true;
                 }
-            } else {
+            } else if (project.status !== ProjectStatusEnum.MODERATION) {
                 project.canEdit = true;
             }
 
@@ -663,11 +698,11 @@ export default class DalComponent {
                             reviewNumber: 1,
                         };
                         switch (match[3]) {
-                            case 'votereview':
-                                item.type = FeedTypeEnum.VOTE;
-                                item.vote = await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`);
-                                item.amount = this.getVotePayment();
-                                break;
+                            // case 'votereview':
+                            //     item.type = FeedTypeEnum.VOTE;
+                            //     item.vote = await this.transport.nodeFetchKey(`reveal_${uid}_${match[2]}`);
+                            //     item.amount = this.getVotePayment();
+                            //     break;
 
                             case 'text_id':
                                 const mode = await this.transport.nodeFetchKey(`review_${uid}_${match[2]}_mode_id:${match[5]}`);
@@ -887,6 +922,81 @@ export default class DalComponent {
 
             // Wait and broadcast second
             this.voteReveralMonitor.add(uid, txReveal, address);
+        } catch (e) {
+            this.error(e);
+        }
+
+        this.transport.resetCache();
+
+        return result;
+    }
+
+    async getUserReports(address) {
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /^report_([0-9a-z-]+)_([0-9a-z-]+)/i.exec(key);
+                    if (match && match[2] === address) {
+                        return {
+                            report: data[key],
+                            project: await this.getProject(match[1]),
+                            user: await this.getUser(match[2]),
+                        };
+                    }
+                    return null;
+                })
+        );
+        return result.filter(Boolean);
+    }
+
+    async getProjectReports(uid) {
+        const data = await this.transport.nodeAllData();
+        const result = await Promise.all(
+            Object.keys(data)
+                .map(async key => {
+                    const match = /^report_([0-9a-z-]+)_([0-9a-z-]+)/i.exec(key);
+                    if (match && match[1] === uid) {
+
+                        const address = match[2];
+                        return {
+                            report: data[key],
+                            author: address,
+                        };
+                    }
+                    return null;
+                })
+        );
+        return result.filter(Boolean);
+    }
+
+    async getProjectLastReports(uid) {
+        const reports = await this.getProjectReports(uid);
+
+        if (!reports || reports.length === 0) {
+            return [];
+        }
+
+        const lastReportsId = _max(reports.map(item => item.report.id));
+        const lastReports = reports.filter(item => item.report.id === lastReportsId);
+
+        return lastReports;
+    }
+
+    /**
+     *
+     * @param {string} uid
+     * @param {object} data
+     * @returns {Promise}
+     */
+    async reportProject(uid, data = {}) {
+
+        data.createTime = DalHelper.dateNow();
+        const payment = this.contract.REPORT;
+
+        let result = null;
+        try {
+            result = await this.transport.nodePublish('reportProject', [uid, data], payment);
         } catch (e) {
             this.error(e);
         }

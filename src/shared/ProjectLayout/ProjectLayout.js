@@ -13,6 +13,8 @@ import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
 import routes from 'routes';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import ProjectReportReasonsEnum from 'enums/ProjectReportReasonsEnum';
 
 import './ProjectLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
@@ -20,6 +22,7 @@ import ProjectSchema from 'types/ProjectSchema';
 import VotingForm from 'shared/VotingForm';
 import DonateForm from 'shared/DonateForm';
 import GrantForm from 'shared/GrantForm';
+import ReportVotingForm from 'shared/ReportVotingForm';
 
 import ActionButtonBlock from '../ActionButtonBlock';
 
@@ -138,7 +141,11 @@ export default class ProjectLayout extends React.PureComponent {
                                     <GrantForm project={this.state.project}/>
                                 )}
                             </div>
-                            {!this.state.project.canVote && !this.state.project.canDonate && !this.state.project.canWhale && (
+                            {!this.state.project.canReportVoting &&
+                            !this.state.project.canVote &&
+                            !this.state.project.canDonate &&
+                            !this.state.project.canWhale &&
+                            this.state.project.status !== ProjectStatusEnum.MODERATION && (
                                 <Link
                                     toRoute={ROUTE_PROJECTS_REDIRECT}
                                     noStyles
@@ -149,6 +156,29 @@ export default class ProjectLayout extends React.PureComponent {
                                         iconClass={'Icon__explore-ideas'}
                                     />
                                 </Link>
+                            )}
+
+                            {this.state.project.canReportVoting && (
+                                <ReportVotingForm
+                                    project={this.state.project}
+                                />
+                            )}
+
+                            {this.state.project.status === ProjectStatusEnum.MODERATION &&
+                            _get(this.state.project, 'author.address') === this.props.user.address && (
+                                <div className={bem.element('moderation-text')}>
+                                    <p>
+                                        {__('It was reported that your project {reason}. Please, wait while users are voting.', {
+                                            reason: ProjectReportReasonsEnum.getContext(this.state.project.lastReports[0].report.reason)
+                                        })}
+                                    </p>
+                                    <p>
+                                        {__('If community delist your project, it will not be seen on Projects page anymore. But all of its donations will be still available.')}
+                                    </p>
+                                    <p>
+                                        {__('If community do not delist your project, the project will look as usual.')}
+                                    </p>
+                                </div>
                             )}
                             <div className={bem.element('content')}>
                                 {ContentComponent && (

@@ -1,5 +1,6 @@
 import Enum from './Enum';
 import moment from 'moment';
+import ProjectReportEnum from './ProjectReportEnum';
 
 export default class ProjectStatusEnum extends Enum {
 
@@ -15,6 +16,7 @@ export default class ProjectStatusEnum extends Enum {
     static WAITING_GRANT = 'waiting_grant';
     static GRANT = 'grant';
     static REJECTED = 'rejected';
+    static MODERATION = 'moderation';
 
     static getLabels() {
         return {
@@ -23,6 +25,7 @@ export default class ProjectStatusEnum extends Enum {
             [this.WAITING_GRANT]: __('Waiting grant'),
             [this.GRANT]: __('Grant'),
             [this.REJECTED]: __('Rejected'),
+            [this.MODERATION]: __('Moderation'),
         };
     }
 
@@ -41,7 +44,20 @@ export default class ProjectStatusEnum extends Enum {
      * @param {number} height
      * @returns {string}
      */
-    static getStatus(contractStatus, blocks, height) {
+    static getStatus(contractStatus, blocks, height, lastReports) {
+
+        // Has reports
+        if (lastReports && lastReports.length > 0) {
+
+            const positive = lastReports.filter(item => item.report.direction === ProjectReportEnum.POSITIVE);
+            const negative = lastReports.filter(item => item.report.direction === ProjectReportEnum.NEGATIVE);
+
+            if ((negative && negative.length === 1) && (positive && positive.length <= 1)) {
+                return this.MODERATION;
+            }
+        }
+
+
         // Voting
         if (['new', 'voting_commit', 'voting_reveal'].includes(contractStatus)) {
             return height < blocks.votingEnd ? this.VOTING : this.REJECTED;
