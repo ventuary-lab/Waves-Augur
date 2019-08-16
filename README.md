@@ -9,7 +9,17 @@ https://beta.ventuary.space/projects/feed
 https://medium.com/@alexpupyshev/ventuary-dao-the-first-dao-on-waves-platform-f5fc1cb35b32
 
 
+## Discussions :
 
+https://t.me/ventuary_dao
+
+https://twitter.com/VentuaryDAO
+
+https://t.me/waves_ride_dapps_dev
+
+## RIDE Smart Contract :
+
+https://wavesexplorer.com/address/3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R
 
 ## Run docker
 
