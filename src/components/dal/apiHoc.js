@@ -1,74 +1,54 @@
 import React from 'react';
 import _isEqual from 'lodash-es/isEqual';
-import _isArray from 'lodash-es/isArray';
 
-import {http} from 'components';
+import {apiAddConfigs, apiRemoveConfigs, getConfigId} from '../../actions/api';
+import {connect} from 'react-redux';
 
-export default (methodsFunc) => {
-    return WrappedComponent => class ApiHOC extends React.Component {
+const stateMap = state => ({
+    apiData: state.api && state.api.data || null,
+});
 
-        static WrappedComponent = WrappedComponent;
+export default configsFunc => WrappedComponent => @connect(stateMap)
+class ApiHOC extends React.Component {
 
-        constructor() {
-            super(...arguments);
+    static WrappedComponent = WrappedComponent;
 
-            this.state = {
-                isLoading: false,
-            };
+    componentDidMount() {
+        this.props.dispatch(apiAddConfigs(configsFunc(this.props)));
+    }
 
-            this._isRendered = false;
-            this._fetch = this._fetch.bind(this);
-        }
+    componentWillUnmount() {
+        this.props.dispatch(apiRemoveConfigs(configsFunc(this.props)));
+    }
 
-        componentDidMount() {
-            this._isRendered = true;
-            this._fetch(methodsFunc(this.props));
-        }
-
-        componentWillUnmount() {
-            this._isRendered = false;
-        }
-
-        componentWillReceiveProps(nextProps) {
-            const prevConfigs = methodsFunc(this.props);
-            const nextConfigs = methodsFunc(nextProps);
-            if (!_isEqual(prevConfigs, nextConfigs)) {
-                this._fetch(nextConfigs);
+    componentWillReceiveProps(nextProps) {
+        const prevConfigs = [].concat(configsFunc(this.props));
+        const nextConfigs = [].concat(configsFunc(nextProps));
+        for (let i = 0; i < Math.max(prevConfigs.length, nextConfigs.length); i++) {
+            if (!_isEqual(prevConfigs[i], nextConfigs[i])) {
+                this.props.dispatch([
+                    apiRemoveConfigs(prevConfigs[i]),
+                    apiAddConfigs(nextConfigs[i]),
+                ]);
             }
         }
+    }
 
-        render() {
-            return (
-                <WrappedComponent
-                    {...this.props}
-                    {...this.state}
-                    fetch={this._fetch}
-                />
-            );
-        }
-
-        _fetch(configs) {
-            this.setState({isLoading: true});
-
-            if (!_isArray(configs)) {
-                configs = [configs];
-            }
-            configs.forEach(config => {
-                if (!config.key || !config.url) {
-                    throw new Error('key and url is required');
-                }
-
-                http.send(config.method || 'get',  config.url, config.params || {})
-                    .then(result => {
-                        if (this._isRendered) {
-                            this.setState({
-                                isLoading: false,
-                                [config.key]: result.data,
-                            });
-                        }
-                    });
+    render() {
+        const data = {};
+        if (this.props.apiData) {
+            [].concat(configsFunc(this.props)).forEach(config => {
+                data[config.key] = this.props.apiData[getConfigId(config)];
             });
         }
 
-    };
+        return (
+            <WrappedComponent
+                {...this.props}
+                {...data}
+                fetch={this._fetch}
+            />
+        );
+    }
+
 };

@@ -4,20 +4,17 @@ import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
-import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
 import {html} from 'components';
 import UserRole from 'enums/UserRole';
-import MessageModal from 'modals/MessageModal';
-import ProfileWizardModal from 'modals/ProfileWizardModal';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 
-import {ROUTE_PROFILE, ROUTE_COMMUNITY, ROUTE_PROFILE_INBOX} from 'routes';
+import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
 

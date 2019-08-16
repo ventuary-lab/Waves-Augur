@@ -4,7 +4,7 @@ module.exports = class TransactionListener {
 
     constructor(params = {}) {
         this.app = null;
-        this.intervalSec = params.intervalSec || 2;
+        this.intervalSec = params.intervalSec || 1;
         this.transactionsHandler = params.transactionsHandler || null;
         this.storage = null;
 
@@ -25,8 +25,8 @@ module.exports = class TransactionListener {
 
         // Get last transaction
         if (!lastTransactionId) {
-            const transactions = await this._fetch(lastTransactionId, '', 1);
-            if (transactions.length) {
+            const transactions = await this._fetch();
+            if (transactions.length > 0) {
                 this._lastTransactionId = transactions[0].id;
                 await this.storage.set(this.STORAGE_LAST_TRANSACTION_ID_KEY, this._lastTransactionId);
             }
@@ -41,6 +41,8 @@ module.exports = class TransactionListener {
      * @private
      */
     async _next() {
+        // this._lastTransactionId = 'CeqEgCBLJ4T8qFRqbvLKqoqVLmC1JkVzy4ZBpRE8YSVh'; // FOR DEBUG
+
         // Fetch transactions
         const transactions = await this._fetch(this._lastTransactionId);
         if (transactions.length > 0) {
@@ -61,15 +63,16 @@ module.exports = class TransactionListener {
     }
 
     /**
-     * @param {string} lastTransactionId
-     * @param {string} afterId
+     * @param {string|null} lastTransactionId
+     * @param {string|null} afterId
      * @param {number} pageSize
      * @returns {Promise<[]>}
      * @private
      */
-    async _fetch(lastTransactionId, afterId = '', pageSize = 10) {
+    async _fetch(lastTransactionId = null, afterId = null, pageSize = 1) {
         // Remote request
-        const response = await axios.get(`${this.app.nodeUrl}/transactions/address/${this.app.dApp}/limit/${pageSize}?after=${afterId}`);
+        const query = afterId ? '?after=' + afterId : '';
+        const response = await axios.get(`${this.app.nodeUrl}/transactions/address/${this.app.dApp}/limit/${pageSize}${query}`);
 
         // Get only new transactions
         let transactions = [];
@@ -83,10 +86,12 @@ module.exports = class TransactionListener {
             transactions.push(response.data[0][i]);
         }
 
+        //console.log(6264364, isLastFined, lastTransactionId, afterId, response.data[0].map(t => t.id));
+
         // Fetch next page
         if (lastTransactionId && !isLastFined && transactions.length > 0) {
             afterId = transactions[transactions.length - 1].id;
-            transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, pageSize));
+            transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 10));
         }
 
         return transactions;

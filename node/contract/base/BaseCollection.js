@@ -13,6 +13,7 @@ module.exports = class BaseCollection {
     constructor(params = {}) {
         this.app = params.app;
         this.name = params.name;
+        this.updateHandler = params.updateHandler;
 
         this.STORAGE_KEY_PREFIX = 'collections:';
     }
@@ -90,28 +91,19 @@ module.exports = class BaseCollection {
     }
 
     async updateByKeys(updatedKeys) {
-        // Find primary key value, true = all
-        let id = null;
+        const ids = [];
         this.getKeys().forEach(key => {
-            if (!id) {
-                const regexp = new RegExp(key);
-                const match = updatedKeys.find(key => regexp.exec(key));
-                if (match) {
-                    id = match[1] || true;
+            const regexp = new RegExp(key);
+            updatedKeys.forEach(updatedKey => {
+                const match = regexp.exec(updatedKey);
+                const id = match && match[1];
+                if (id && !ids.includes(id)) {
+                    ids.push(id);
                 }
-            }
+            });
         });
-        if (!id) {
-            return;
-        }
-
-        // TODO multiple ids search
-
-        if (id === true) {
-            const ids = await this.app.storage.hkeys(this.STORAGE_KEY_PREFIX + this.name);
+        if (ids.length > 0) {
             await this._updateNext(ids);
-        } else {
-            await this._updateItem(id);
         }
     }
 
@@ -136,7 +128,14 @@ module.exports = class BaseCollection {
 
         const item = await this._prepareItem(id, data);
         if (item) {
-            await this.app.storage.hset(this.STORAGE_KEY_PREFIX + this.name, id, JSON.stringify(item));
+            const nextJson = JSON.stringify(item);
+            if (this.updateHandler) {
+                const prevJson = await this.app.storage.hget(this.STORAGE_KEY_PREFIX + this.name, id);
+                if (!prevJson || prevJson !== nextJson) {
+                    this.updateHandler(id, item, this);
+                }
+            }
+            await this.app.storage.hset(this.STORAGE_KEY_PREFIX + this.name, id, nextJson);
         }
     }
 

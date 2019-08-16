@@ -22,6 +22,7 @@ const bem = html.bem('ProfileContestsPage');
     () => ({
         url: '/api/v1/contests',
         key: 'items',
+        collection: 'contests',
     })
 )
 @connect(

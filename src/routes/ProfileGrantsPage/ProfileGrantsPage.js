@@ -17,6 +17,7 @@ const bem = html.bem('ProfileGrantsPage');
     props => ({
         url: `/api/v1/reviews/whales/user/${props.user.address}`,
         key: 'items',
+        collection: 'reviewWhales',
     })
 )
 @connect()

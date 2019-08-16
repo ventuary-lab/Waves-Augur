@@ -14,6 +14,7 @@ const bem = html.bem('CommunityPage');
     () => ({
         url: '/api/v1/users',
         key: 'items',
+        collection: 'users',
     })
 )
 export default class CommunityPage extends React.PureComponent {

@@ -20,6 +20,7 @@ const bem = html.bem('ContestsPage');
     props => ({
         url: `/api/v1/contests/${props.match.params.state}`,
         key: 'contests',
+        collection: 'contests',
     })
 )
 export default class ContestsPage extends React.PureComponent{
@@ -29,7 +30,7 @@ export default class ContestsPage extends React.PureComponent{
     };
 
     render() {
-        if (this.props.isLoading) {
+        if (!this.props.contests) {
             return (
                 <section className={bem.block()}>
                     <div className={'wrapper'}>
@@ -77,20 +78,12 @@ export default class ContestsPage extends React.PureComponent{
                                         })}
                                     </div>
                                 </div>
-                                {this.props.contests && (
-                                    <>
-                                        {!this.props.isLoading && (
-                                            <List
-                                                listId='ProjectsList'
-                                                itemView={ContestCard}
-                                                emptyText={__('No contests')}
-                                                items={this.props.contests}
-                                            />
-                                        ) || (
-                                            <Preloader/>
-                                        )}
-                                    </>
-                                )}
+                                <List
+                                    listId='ProjectsList'
+                                    itemView={ContestCard}
+                                    emptyText={__('No contests')}
+                                    items={this.props.contests}
+                                />
                             </div>
                         </div>
                     </div>

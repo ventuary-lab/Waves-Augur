@@ -23,6 +23,7 @@ const bem = html.bem('ProfileInboxPage');
     () => ({
         url: '/api/v1/projects/voting',
         key: 'items',
+        collection: 'projects',
         // TODO !item.isImVoted && item.author.address !== props.user.address
     })
 )

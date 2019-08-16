@@ -4,8 +4,8 @@ module.exports = class HeightListener {
 
     constructor(params = {}) {
         this.app = null;
-        this.intervalSec = params.intervalSec || 2;
-        this.updateHandler = params.updateHandler || null;
+        this.intervalSec = params.intervalSec || 1;
+        this.heightsHandler = params.heightsHandler || null;
         this.storage = null;
 
         this._lastHeight = null;
@@ -44,7 +44,7 @@ module.exports = class HeightListener {
             this._lastHeight = height;
             this.storage.set(this.STORAGE_LAST_HEIGHT_KEY, this._lastHeight);
 
-            this.updateHandler && this.updateHandler(height);
+            this.heightsHandler && this.heightsHandler(height);
         }
 
         // Next tick

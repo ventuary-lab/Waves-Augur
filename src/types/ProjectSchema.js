@@ -33,7 +33,7 @@ const ProjectSchema = PropTypes.shape({
         currentStage: PropTypes.string,
     }),
     contest: PropTypes.string,
-    contestWinner: PropTypes.string,
+    contestWinner: PropTypes.bool,
     socials: PropTypes.shape({
         url_twitter: PropTypes.string,
         // url_facebook: PropTypes.string,

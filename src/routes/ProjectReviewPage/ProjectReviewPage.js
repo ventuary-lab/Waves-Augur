@@ -19,22 +19,27 @@ const bem = html.bem('ProjectReviewPage');
         {
             url: `/api/v1/projects/${_get(props, 'match.params.uid')}`,
             key: 'project',
+            collection: 'projects',
         },
         {
-            url: `/api/v1/user/${_get(props, 'match.params.address')}`,
+            url: `/api/v1/users/${_get(props, 'match.params.address')}`,
             key: 'project',
+            collection: 'users',
         },
         _get(props, 'match.params.type') === FeedTypeEnum.DONATE && {
             url: `/api/v1/reviews/donations/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}_${_get(props, 'match.params.number')}`,
             key: 'review',
+            collection: 'reviewDonations',
         },
         _get(props, 'match.params.type') === FeedTypeEnum.VOTE && {
             url: `/api/v1/reviews/votings/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}`,
             key: 'review',
+            collection: 'reviewVotings',
         },
         _get(props, 'match.params.type') === FeedTypeEnum.WHALE && {
             url: `/api/v1/reviews/whales/${_get(props, 'match.params.uid')}_${_get(props, 'match.params.address')}`,
             key: 'review',
+            collection: 'reviewWhales',
         },
     ].filter(Boolean))
 )

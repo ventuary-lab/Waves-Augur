@@ -38,7 +38,7 @@ export default class CardInfo extends React.PureComponent {
         isInvitedPage: PropTypes.bool,
         noHover: PropTypes.bool,
         contest: PropTypes.string,
-        contestWinner: PropTypes.string,
+        contestWinner: PropTypes.bool,
     };
 
     render() {

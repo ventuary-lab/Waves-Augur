@@ -9,7 +9,6 @@ import CardReview from 'shared/Card/views/CardReview';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 
 import {html} from 'components';
-import ProjectSchema from 'types/ProjectSchema';
 import UserSchema from 'types/UserSchema';
 
 const bem = html.bem('ProjectFeedCard');

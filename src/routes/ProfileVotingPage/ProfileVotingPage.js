@@ -16,6 +16,7 @@ const bem = html.bem('ProfileVotingPage');
     props => ({
         url: `/api/v1/reviews/votings/user/${props.user.address}`,
         key: 'items',
+        collection: 'reviewVotings',
     })
 )
 export default class ProfileVotingPage extends React.PureComponent {

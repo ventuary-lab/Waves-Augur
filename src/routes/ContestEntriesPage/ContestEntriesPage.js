@@ -15,6 +15,7 @@ const bem = html.bem('ContestEntriesPage');
     props => ({
         url: `/api/v1/contests/${props.contest.uid}/projects`,
         key: 'items',
+        collection: 'contests',
     })
 )
 export default class ContestEntriesPage extends React.PureComponent {
@@ -25,7 +26,7 @@ export default class ContestEntriesPage extends React.PureComponent {
     };
 
     render() {
-        if (this.props.isLoading) {
+        if (!this.props.items) {
             return null;
         }
 

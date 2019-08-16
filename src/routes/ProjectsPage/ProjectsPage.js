@@ -21,10 +21,12 @@ const bem = html.bem('ProjectsPage');
             ? {
                 url: '/api/v1/reviews/donations',
                 key: 'donations',
+                collection: 'reviewDonations',
             }
             : {
                 url: `/api/v1/projects/${props.match.params.state}`,
                 key: 'projects',
+                collection: 'projects',
             }
     ])
 )
@@ -36,7 +38,7 @@ export default class ProjectsPage extends React.PureComponent{
     };
 
     render() {
-        if (this.props.isLoading) {
+        if (!this.props.donations && !this.props.projects) {
             return (
                 <section className={bem.block()}>
                     <div className={'wrapper'}>
@@ -86,32 +88,20 @@ export default class ProjectsPage extends React.PureComponent{
                                     </div>
                                 </div>
                                 {!isFeed && this.props.projects && (
-                                    <>
-                                        {!this.props.isLoading && (
-                                            <List
-                                                listId='ProjectsList'
-                                                itemView={ProjectCard}
-                                                emptyText={__('No projects')}
-                                                items={this.props.projects}
-                                            />
-                                        ) || (
-                                            <Preloader/>
-                                        )}
-                                    </>
+                                    <List
+                                        listId='ProjectsList'
+                                        itemView={ProjectCard}
+                                        emptyText={__('No projects')}
+                                        items={this.props.projects}
+                                    />
                                 )}
                                 {isFeed && this.props.donations && (
-                                    <>
-                                        {!this.props.isLoading && (
-                                            <List
-                                                listId='FeedList'
-                                                itemView={ProjectFeedCard}
-                                                emptyText={__('No feed')}
-                                                items={this.props.donations}
-                                            />
-                                        ) || (
-                                            <Preloader/>
-                                        )}
-                                    </>
+                                    <List
+                                        listId='FeedList'
+                                        itemView={ProjectFeedCard}
+                                        emptyText={__('No feed')}
+                                        items={this.props.donations}
+                                    />
                                 )}
                             </div>
                         </div>

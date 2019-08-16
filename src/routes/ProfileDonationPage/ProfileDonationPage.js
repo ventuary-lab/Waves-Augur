@@ -16,6 +16,7 @@ const bem = html.bem('ProfileDonationPage');
     props => ({
         url: `/api/v1/reviews/donations/user/${props.user.address}`,
         key: 'items',
+        collection: 'reviewDonations',
     })
 )
 export default class ProfileDonationPage extends React.PureComponent {

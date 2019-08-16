@@ -22,6 +22,7 @@ const bem = html.bem('ProfileInvitedPage');
     props => ({
         url: `/api/v1/users/${props.user.address}/invites`,
         key: 'items',
+        collection: 'users',
     })
 )
 @connect(

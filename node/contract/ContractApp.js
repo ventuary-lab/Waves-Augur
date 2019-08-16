@@ -1,4 +1,5 @@
 const WavesContractCache = require('./lib-waves-contract-cache/WavesContractCache');
+const WebSocketServer = require('./components/WebSocketServer');
 
 const contractConfig = require('./config/contract');
 const {Projects, Users, Contests, ReviewDonations, ReviewVotings, ReviewWhales} = require('./collections');
@@ -16,14 +17,15 @@ module.exports = class ContractApp {
             nodeUrl: this.nodeUrl,
         });
 
-        this._onUpdate = this._onUpdate.bind(this);
+        this._onContractUpdate = this._onContractUpdate.bind(this);
+        this._onCollectionUpdate = this._onCollectionUpdate.bind(this);
 
         // Create contract cache instance
         this.contractCache = new WavesContractCache({
             dApp: this.dApp,
             nodeUrl: this.nodeUrl,
             contractMethods: contractConfig.methods,
-            updateHandler: this._onUpdate,
+            updateHandler: this._onContractUpdate,
             storage: {
                 redis: {
                     host: process.env.REDIS_HOST || '127.0.0.1',
@@ -31,7 +33,7 @@ module.exports = class ContractApp {
                 }
             },
             logger: {
-                level: 'debug',
+                //level: 'debug',
             },
         });
         this.storage = this.contractCache.storage;
@@ -49,24 +51,79 @@ module.exports = class ContractApp {
         Object.keys(this.collections).forEach(name => {
             this.collections[name].name = name;
             this.collections[name].app = this;
+            this.collections[name].updateHandler = this._onCollectionUpdate;
         });
+
+        // Create websocket server
+        this._websocket = new WebSocketServer({
+            httpServer: params.httpServer,
+            logger: this.logger,
+        });
+
+        this._isSkipUpdates = false;
+        this._isNowUpdated = false;
+        this._isNeedUpdateAgain = false;
     }
 
     async start() {
+        this._isSkipUpdates = true;
         await this.contractCache.start();
+        this._isSkipUpdates = false;
 
-        this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
+        await this._updateAll();
 
-        const nodeData = await this.transport.fetchAll();
-        Object.keys(this.collections).forEach(name => {
-            this.collections[name].updateAll(nodeData);
-        });
+        this._websocket.start();
     }
 
-    _onUpdate(keys) {
-        Object.keys(this.collections).forEach(name => {
-            this.collections[name].updateByKeys(keys);
-        });
+    async _updateAll() {
+        if (this._isNowUpdated) {
+            this._isNeedUpdateAgain = true;
+            return;
+        }
+        this._isNowUpdated = true;
+
+        this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
+        const nodeData = await this.transport.fetchAll();
+        await Promise.all(
+            Object.keys(this.collections).map(name => {
+                return this.collections[name].updateAll(nodeData);
+            })
+        );
+
+        this._isNowUpdated = false;
+        if (this._isNeedUpdateAgain) {
+            this._isNeedUpdateAgain = false;
+            this._updateAll();
+        }
+    }
+
+    _onContractUpdate(keys) {
+        if (this._isSkipUpdates) {
+            return;
+        }
+
+        if (keys.includes('height')) {
+            this._updateAll();
+        } else {
+            Object.keys(this.collections).forEach(name => {
+                this.collections[name].updateByKeys(keys);
+            });
+        }
+    }
+
+    _onCollectionUpdate(id, item, collection) {
+        if (this._isSkipUpdates) {
+            return;
+        }
+
+        this._websocket.push(JSON.stringify({
+            stream: 'collections',
+            data: {
+                id,
+                collection: collection.name,
+                item,
+            },
+        }));
     }
 
 };

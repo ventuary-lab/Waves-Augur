@@ -6,7 +6,8 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
-import {html, dal} from 'components';
+import {html, dal, store, ws} from 'components';
+import {apiWsHandler} from 'actions/api';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
 import coverStub from 'static/images/cover-stub.jpg';
@@ -22,13 +23,15 @@ import {getCurrentItemParam} from 'yii-steroids/reducers/navigation';
 const bem = html.bem('Layout');
 
 @layoutHoc(
-    () => dal.auth()
-        .then(user => ({
-            user,
-        }))
-        .catch(() => ({
-            user: null,
-        }))
+    () => {
+        ws.wsUrl = process.env.WS_URL || 'ws://localhost:5000';
+        ws.onMessage = event => store.dispatch(apiWsHandler(event));
+        ws.open();
+
+        return dal.auth()
+            .then(user =>  ({user}))
+            .catch(() => ({user: null}))
+    }
 )
 @connect(
     state => ({

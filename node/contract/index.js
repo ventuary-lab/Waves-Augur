@@ -4,10 +4,11 @@ const ContractApp = require('./ContractApp');
 const ProjectFilter = require('./enums/ProjectFilter');
 const ContestFilter = require('./enums/ContestFilter');
 
-module.exports = async (app) => {
+module.exports = async (app, httpServer) => {
     const contract = new ContractApp({
         nodeUrl: process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnodes.wavesnodes.com',
         dApp: process.env.APP_DAPP_ADDRESS || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF',
+        httpServer,
     });
 
     const routes = {
@@ -41,35 +42,35 @@ module.exports = async (app) => {
         '/api/v1/reviews/donations': async () => {
             return contract.collections.reviewDonations.getDonations();
         },
+        '/api/v1/reviews/donations/user/:address': async (request) => {
+            return contract.collections.reviewDonations.getUserDonations(request.params.address);
+        },
         '/api/v1/reviews/donations/:id': async (request) => {
             const reviews = await contract.collections.reviewVotings.getDonations();
             const review = reviews.find(review => review.id.replace('text_id:', '') === request.params.id);
             return review || null;
         },
-        '/api/v1/reviews/donations/user/:address': async (request) => {
-            return contract.collections.reviewDonations.getUserDonations(request.params.address);
-        },
         '/api/v1/reviews/votings': async () => {
             return contract.collections.reviewVotings.getVotings();
+        },
+        '/api/v1/reviews/votings/user/:address': async (request) => {
+            return contract.collections.reviewVotings.getUserVotings(request.params.address);
         },
         '/api/v1/reviews/votings/:id': async (request) => {
             const reviews = await contract.collections.reviewVotings.getVotings();
             const review = reviews.find(review => review.id === request.params.id);
             return review || null;
         },
-        '/api/v1/reviews/votings/user/:address': async (request) => {
-            return contract.collections.reviewVotings.getUserVotings(request.params.address);
-        },
         '/api/v1/reviews/whales': async () => {
             return contract.collections.reviewWhales.getWhales();
+        },
+        '/api/v1/reviews/whales/user/:address': async (request) => {
+            return contract.collections.reviewWhales.getUserWhales(request.params.address);
         },
         '/api/v1/reviews/whales/:id': async (request) => {
             const reviews = await contract.collections.reviewVotings.getWhales();
             const review = reviews.find(review => review.id === request.params.id);
             return review || null;
-        },
-        '/api/v1/reviews/whales/user/:address': async (request) => {
-            return contract.collections.reviewWhales.getUserWhales(request.params.address);
         },
         '/api/v1/users': async () => {
             return contract.collections.users.getUsers();
@@ -89,17 +90,18 @@ module.exports = async (app) => {
     };
     Object.keys(routes).forEach(url => {
         app.get(url, async (request, response) => {
+            let content = {};
             try {
-                const result = await routes[url](request);
-                response.writeHead(200, {'Content-Type': 'text/html'});
-                response.end(JSON.stringify(result));
+                content = await routes[url](request);
             } catch(e) {
-                contract.logger.error(e);
-                response.writeHead(500, {'Content-Type': 'text/html'});
-                response.end({
+                contract.logger.error(e, e.stack);
+                content = {
                     error: String(e),
-                });
+                };
             }
+
+            response.writeHead(content.error ? 500 : 200, {'Content-Type': 'text/html'});
+            response.end(JSON.stringify(content));
         });
     });
 

@@ -11,6 +11,7 @@ services:
       - APP_WEBHOOK_HOST=ventuary-dao-dev-webhook
       - REDIS_HOST=redis
       - PORT=80
+      - WS_URL=wss://ventuary-dao.dev.kozhindev.com
     volumes:
       - /srv/ventuary-dao-dev/data:/data
     container_name: ventuary-dao-dev-app

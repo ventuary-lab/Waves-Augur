@@ -21,8 +21,9 @@ const bem = html.bem('ProfileProjectsPage');
 
 @dal.hoc2(
     props => ({
-        url: `/api/v1/projects/user/${props.user.address}`,
+        url: `/api/v1/projects/author/${props.user.address}`,
         key: 'items',
+        collection: 'users',
     })
 )
 @connect(

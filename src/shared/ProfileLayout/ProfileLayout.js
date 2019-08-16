@@ -41,8 +41,9 @@ const bem = html.bem('ProfileLayout');
 )
 @dal.hoc2(
     props => ({
-        url: `/api/v1/user/${props.address}`,
+        url: `/api/v1/users/${props.address}`,
         key: 'profileUser',
+        collection: 'users',
     })
 )
 export default class ProfileLayout extends React.PureComponent {
