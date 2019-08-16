@@ -24,7 +24,7 @@ const bem = html.bem('Layout');
 
 @layoutHoc(
     () => {
-        ws.wsUrl = process.env.WS_URL || 'ws://localhost:5000';
+        ws.wsUrl = process.env.APP_WS_URL || 'ws://localhost:5000';
         ws.onMessage = event => store.dispatch(apiWsHandler(event));
         ws.open();
 
