@@ -1,9 +1,6 @@
 const express = require('express');
 const app = express();
 
-const sharp = require('sharp');
-const upload = require('./node/upload');
-
 const port = process.env.PORT || 5000;
 const httpServer = app.listen(port, () => {
     console.log(__dirname); // eslint-disable-line no-console
@@ -35,23 +32,6 @@ app.get('/get-dapp-info', (req, res) => {
 
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
-});
-
-app.put('/upload', upload.middleware.single('avatar'), (request, response) => {
-
-    const fileName = request.file.filename;
-
-    sharp(upload.path.full + '/' + fileName)
-        .resize(300, 300)
-        .toFile(upload.path.full + '/thumbnail.' + fileName)
-        .then(info => {
-            response.send(JSON.stringify({
-                path: upload.path.short + '/thumbnail.' + fileName
-            }));
-        })
-        .catch(err => {
-            // console.log(err);
-        });
 });
 
 app.listen(port, () => {
