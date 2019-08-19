@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 5000;
+
 const httpServer = app.listen(port, () => {
     console.log(__dirname); // eslint-disable-line no-console
     console.log('Listening Port ' + port); // eslint-disable-line no-console
@@ -34,10 +35,4 @@ app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
 });
 
-app.listen(port, () => {
-    console.log(__dirname); // eslint-disable-line no-console
-    console.log('Listening Port ' + port, process.env.DAPP, process.env.NODE_URL); // eslint-disable-line no-console
-});
-
 //require('./node/contract');
-
