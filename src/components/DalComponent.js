@@ -27,21 +27,8 @@ import ContestStatusEnum from '../enums/ContestStatusEnum';
 export default class DalComponent {
 
     constructor() {
-        this.isTestMode;
-        this.dApp;
-
-        (async () => {
-            const response = await axios.get('/get-dapp-info');
-    
-            const { APP_DAPP_NETWORK, DAPP, NODE_URL } = response.data;
-
-            window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
-            window.DAPP = DAPP;
-            window.NODE_URL = NODE_URL;
-
-            this.isTestMode = window.APP_DAPP_NETWORK === 'test';
-            this.dApp = window.DAPP || '777';
-        })();
+        this.isTestMode = window.APP_DAPP_NETWORK === 'test';
+        this.dApp = window.DAPP || '777';
 
         // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
         this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';

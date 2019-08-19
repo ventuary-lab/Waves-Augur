@@ -5,7 +5,8 @@ import _get from 'lodash/get';
 import Modal from 'yii-steroids/ui/modal/Modal';
 
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 import AboutTab from './views/AboutTab';
 import ImageTab from './views/ImageTab';

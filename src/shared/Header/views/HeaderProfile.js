@@ -9,7 +9,8 @@ import enhanceWithClickOutside from 'react-click-outside';
 import { setUser } from 'yii-steroids/actions/auth';
 
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';

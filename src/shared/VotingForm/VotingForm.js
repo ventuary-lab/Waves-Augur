@@ -11,7 +11,8 @@ import {getUser} from 'yii-steroids/reducers/auth';
 
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 
 import userAvatarStub from 'static/images/user-avatar-stub.png';

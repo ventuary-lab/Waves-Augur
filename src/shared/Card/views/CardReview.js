@@ -12,7 +12,8 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserRole from 'enums/UserRole';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 
 import './CardReview.scss';

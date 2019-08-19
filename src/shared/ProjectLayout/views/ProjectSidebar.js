@@ -4,7 +4,8 @@ import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
-import {html, dal} from 'components';
+import {html, dal as Dal} from 'components';
+const dal = Dal();
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';

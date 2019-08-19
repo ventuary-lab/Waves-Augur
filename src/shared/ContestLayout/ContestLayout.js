@@ -7,7 +7,8 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import {addCover, removeCover} from 'actions/layout';
 import _get from 'lodash/get';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 import {ROUTE_CONTEST} from 'routes';
 import ContestSidebar from './views/ContestSidebar';
 import NavItemSchema from 'types/NavItemSchema';

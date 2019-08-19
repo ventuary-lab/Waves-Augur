@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {dal, html} from 'components';
-import ContestSchema from 'types/ContestSchema';
+import {dal as Dal, html} from 'components';
+const dal = Dal();import ContestSchema from 'types/ContestSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import SocialLinks from 'shared/SocialLinks';
 import './ContestDetailsPage.scss';
