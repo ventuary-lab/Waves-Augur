@@ -4,12 +4,15 @@ const uuidv1 = require('uuid/v1');
 const express = require('express');
 const sharp = require('sharp');
 
+const UPLOAD_PATH_FULL = '/data/uploads';
+const UPLOAD_PATH_SHORT = '/uploads';
+
 const uploadPath = {
-    full: '/data/uploads',
-    short: '/uploads',
+    full: UPLOAD_PATH_FULL,
+    short: UPLOAD_PATH_SHORT
 };
 
-/*if (!fs.existsSync(uploadPath.full)) {
+if (!fs.existsSync(uploadPath.full)) {
     (async () => {
         await fs.mkdir(uploadPath.full, { recursive: true }, err => {
             if (err) {
@@ -17,7 +20,8 @@ const uploadPath = {
             }
         });
     })();
-}*/
+};
+
 const getFileFormat = (fileName) => {
     return fileName.match(/\.\w+$/i)[0];
 };
@@ -34,6 +38,7 @@ const storage = multer.diskStorage({
 module.exports = app => {
     app.put('/upload', multer({ storage: storage }).single('avatar'), (request, response) => {
         const fileName = request.file.filename;
+
         if (request.query.crop === 'true') {
             sharp(uploadPath.full + '/' + fileName)
                 .resize(300, 300)

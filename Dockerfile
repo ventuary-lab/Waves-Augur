@@ -5,6 +5,8 @@ RUN apk add python python-dev py-pip vips-dev fftw-dev build-base --update \
 
 RUN apk add --update nodejs yarn tzdata
 ENV TZ Europe/Moscow
+ENV UPLOAD_PATH_FULL data/uploads
+ENV UPLOAD_PATH_SHORT uploads
 
 RUN npm i forever -g
 
