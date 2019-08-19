@@ -11,9 +11,12 @@ import UserCard from 'shared/UserCard';
 
 const bem = html.bem('CommunityPage');
 
-@dal.hoc(
-    () => dal.getUsers()
-        .then(items => ({items}))
+@dal.hoc2(
+    () => ({
+        url: '/api/v1/users',
+        key: 'items',
+        collection: 'users',
+    })
 )
 export default class CommunityPage extends React.PureComponent {
 

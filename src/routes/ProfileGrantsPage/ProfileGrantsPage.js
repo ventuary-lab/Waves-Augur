@@ -14,9 +14,12 @@ import './ProfileGrantsPage.scss';
 
 const bem = html.bem('ProfileGrantsPage');
 
-@dal.hoc(
-    props => dal.getUserGrants(props.user.address)
-        .then(items => ({items}))
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/reviews/whales/user/${props.user.address}`,
+        key: 'items',
+        collection: 'reviewWhales',
+    })
 )
 @connect()
 export default class ProfileGrantsPage extends React.PureComponent {

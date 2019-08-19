@@ -6,11 +6,12 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
-
-import { dal as DalClass, html} from 'components';
+import {html, dal as DalClass, store, ws} from 'components';
 const dal = DalClass();
+import {apiWsHandler} from 'actions/api';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
+import coverStub from 'static/images/cover-stub.jpg';
 
 import './Layout.scss';
 import {openModal} from 'yii-steroids/actions/modal';
@@ -24,21 +25,33 @@ const bem = html.bem('Layout');
 
 // @layoutHoc()
 @layoutHoc(
-    () => dal.initialAuth()
-        .then(user => ({
-            user,
-        }))
-        .catch(() => ({
-            user: null,
-        }))
+    // () => dal.initialAuth()
+    //     .then(user => ({
+    //         user,
+    //     }))
+    //     .catch(() => ({
+    //         user: null,
+    //     }))
+    () => {
+        // TODO ws.wsUrl = process.env.APP_WS_URL || 'ws://localhost:5000';
+        ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace('http', 'ws');
+        ws.onMessage = event => store.dispatch(apiWsHandler(event));
+        ws.open();
+
+        return dal.auth()
+            .then(user =>  ({user}))
+            .catch(() => ({user: null}));
+    }
 )
 @connect(
     state => ({
         isShowImageLine: getCurrentItemParam(state, 'isShowImageLine'),
         user: getUser(state),
+        coverUrl: _get(state, 'layout.cover'),
         maxPhoneWidth: _get(state, 'screen.media.tablet'),
     })
 )
+
 @screenWatcherHoc()
 export default class Layout extends React.PureComponent {
 
@@ -113,7 +126,12 @@ export default class Layout extends React.PureComponent {
                     ) || (
                         <>
                             {this.props.isShowImageLine && (
-                                <div className={bem.element('image-line')}/>
+                                <div
+                                    className={bem.element('image-line')}
+                                    style={{
+                                        backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
+                                    }}
+                                />
                             )}
                             {this.props.status !== STATUS_LOADING && this.props.children}
                         </>

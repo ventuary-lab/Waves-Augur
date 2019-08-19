@@ -7,6 +7,7 @@ import ResourceComponent from 'yii-steroids/components/ResourceComponent';
 import StoreComponent from 'yii-steroids/components/StoreComponent';
 import UiComponent from 'yii-steroids/components/UiComponent';
 import DalComponent from './DalComponent';
+import WebSocketClient from './WebSocketClient';
 
 // Create instances
 const clientStorage = new ClientStorageComponent();
@@ -17,6 +18,7 @@ const resource = new ResourceComponent();
 const store = new StoreComponent();
 const ui = new UiComponent();
 const dal = () => new DalComponent();
+const ws = new WebSocketClient();
 
 // Apply configuration
 const customConfig = store.getState().config || {};
@@ -28,6 +30,7 @@ _merge(resource, customConfig.resource);
 _merge(store, customConfig.store);
 _merge(ui, customConfig.ui);
 _merge(dal, customConfig.dal);
+_merge(ws, customConfig.ws);
 
 export {
     clientStorage,
@@ -38,4 +41,5 @@ export {
     store,
     ui,
     dal,
+    ws,
 };

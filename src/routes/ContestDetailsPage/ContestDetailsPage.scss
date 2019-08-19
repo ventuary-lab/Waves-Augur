@@ -1,0 +1,69 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ContestDetailsPage {
+  &__form-block {
+    margin-bottom: 20px;
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__right-info {
+    margin-top: 55px;
+  }
+
+  &__right-info-item {
+    margin-bottom: 40px;
+  }
+
+  &__leader-block {
+    padding: 20px 0;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 20px;
+  }
+
+  &__description {
+    margin-bottom: 40px;
+    word-break: break-word;
+
+    a {
+      color: $color-gg-4;
+
+      &:visited {
+        color: $color-gg-4;
+      }
+    }
+  }
+
+  &__links {
+    padding: 35px 20px 43px;
+
+    @include tablet {
+
+    }
+  }
+
+  &__info {
+    padding: 0 15px;
+  }
+
+  &__social-links {
+    margin-bottom: 23px;
+  }
+
+  &__share-link {
+    @include share-link;
+  }
+
+  &__inner {
+
+  }
+}

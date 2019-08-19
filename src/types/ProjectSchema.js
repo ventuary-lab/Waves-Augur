@@ -20,6 +20,7 @@ const ProjectSchema = PropTypes.shape({
     canVote: PropTypes.bool,
     canDonate: PropTypes.bool,
     canWhale: PropTypes.bool,
+    canContestWinner: PropTypes.bool,
     contents: PropTypes.shape({
         problem: PropTypes.string,
         solution: PropTypes.string,
@@ -31,6 +32,8 @@ const ProjectSchema = PropTypes.shape({
         impactOnCommunity: PropTypes.string,
         currentStage: PropTypes.string,
     }),
+    contest: PropTypes.string,
+    contestWinner: PropTypes.bool,
     socials: PropTypes.shape({
         url_twitter: PropTypes.string,
         // url_facebook: PropTypes.string,

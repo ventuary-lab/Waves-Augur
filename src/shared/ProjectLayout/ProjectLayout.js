@@ -4,12 +4,13 @@ import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
+import {addCover, removeCover} from 'actions/layout';
 import _get from 'lodash/get';
 
 import { dal as DalClass, html} from 'components';
 const dal = DalClass();
 
-import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT} from 'routes';
+import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT, ROUTE_CONTEST_ENTRIES} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
@@ -52,18 +53,24 @@ export default class ProjectLayout extends React.PureComponent {
         this.getProject = this.getProject.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getProject();
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(removeCover);
     }
 
     getProject() {
         dal.getProject(_get(this.props, 'match.params.uid'))
-            .then(project => this.setState({project}));
+            .then(project => {
+                this.setState({project});
+                this.props.dispatch(addCover(project.coverUrl));
+            });
     }
 
     render() {
         if (!this.state.project) {
-
             return null;
         }
 
@@ -107,6 +114,17 @@ export default class ProjectLayout extends React.PureComponent {
                                         ))
                                     }
                                 </div>
+                                {_get(this.state, 'project.contest') && (
+                                    <Link
+                                        className={bem.element('link-to-contest')}
+                                        toRoute={ROUTE_CONTEST_ENTRIES}
+                                        toRouteParams={{
+                                            uid: this.state.project.contest
+                                        }}
+                                        label={__('View all projects for the contest')}
+                                        noStyles
+                                    />
+                                )}
                             </div>
                             <div className={bem.element('form')}>
                                 {this.state.project.canVote && (

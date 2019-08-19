@@ -20,15 +20,14 @@ const bem = html.bem('ProfileInboxPage');
         user: getUser(state),
     })
 )
-@dal.hoc(
-    (props) => dal.getProjects()
-        .then(items => {
-            return {
-                items: items
-                    .filter(item => item.status === ProjectStatusEnum.VOTING && !item.isImVoted && item.isVotingAvailable && item.author.address !== props.user.address),
-
-            };
-        }))
+@dal.hoc2(
+    () => ({
+        url: '/api/v1/projects/voting',
+        key: 'items',
+        collection: 'projects',
+        // TODO !item.isImVoted && item.author.address !== props.user.address
+    })
+)
 export default class ProfileInboxPage extends React.PureComponent {
 
     static propTypes = {

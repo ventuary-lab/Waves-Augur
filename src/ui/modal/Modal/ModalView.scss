@@ -19,6 +19,7 @@
   }
 
   &__overlay {
+    z-index: $zi-modal;
     position: fixed;
     top: 0;
     left: 0;
