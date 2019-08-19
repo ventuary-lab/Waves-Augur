@@ -12,8 +12,8 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserRole from 'enums/UserRole';
 
-import { dal as DalClass, html} from 'components';
-const dal = DalClass();
+import {dal, html} from 'components';
+
 
 import './CardReview.scss';
 import Link from 'yii-steroids/ui/nav/Link';

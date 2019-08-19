@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
-import { dal as DalClass, html} from 'components';
-const dal = DalClass();
+import {dal, html} from 'components';
+
 
 import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';

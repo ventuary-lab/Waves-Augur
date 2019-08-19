@@ -6,8 +6,8 @@ import {openModal} from 'yii-steroids/actions/modal';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectCard from 'shared/ProjectCard';
 
-import { dal as DalClass, html} from 'components';
-const dal = DalClass();
+import {dal, html} from 'components';
+
 
 import './ProfileProjectsPage.scss';
 import ProjectWizardModal from 'modals/ProjectWizardModal';

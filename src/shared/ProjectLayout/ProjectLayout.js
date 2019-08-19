@@ -7,8 +7,8 @@ import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import {addCover, removeCover} from 'actions/layout';
 import _get from 'lodash/get';
 
-import { dal as DalClass, html} from 'components';
-const dal = DalClass();
+import {dal, html} from 'components';
+
 
 import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT, ROUTE_CONTEST_ENTRIES} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';

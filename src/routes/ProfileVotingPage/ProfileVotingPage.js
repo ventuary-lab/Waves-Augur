@@ -6,8 +6,8 @@ import List from 'yii-steroids/ui/list/List';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 
-import { dal as DalClass, html} from 'components';
-const dal = DalClass();
+import {dal, html} from 'components';
+
 
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 

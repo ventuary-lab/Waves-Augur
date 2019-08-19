@@ -1,3 +1,4 @@
+import axios from 'axios';
 import _get from 'lodash/get';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
@@ -8,7 +9,6 @@ import {setUser} from 'yii-steroids/actions/auth';
 import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
-import axios from 'axios';
 
 import {http, clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
@@ -27,8 +27,22 @@ import ContestStatusEnum from '../enums/ContestStatusEnum';
 export default class DalComponent {
 
     constructor() {
-        this.isTestMode = window.APP_DAPP_NETWORK === 'test';
-        this.dApp = window.DAPP || '777';
+        this.isTestMode;
+        this.dApp;
+
+        (async () => {
+            const response = await axios.get('/get-dapp-info');
+    
+            const { APP_DAPP_NETWORK, DAPP, NODE_URL } = response.data;
+
+            window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
+            window.DAPP = DAPP;
+            window.NODE_URL = NODE_URL;
+
+            this.isTestMode = window.APP_DAPP_NETWORK === 'test';
+            this.dApp = window.DAPP || '777';
+        })();
+
         // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
         this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
         this.specialRoles = {

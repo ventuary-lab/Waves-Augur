@@ -12,16 +12,6 @@ const uploadPath = {
     short: UPLOAD_PATH_SHORT
 };
 
-if (!fs.existsSync(uploadPath.full)) {
-    (async () => {
-        await fs.mkdir(uploadPath.full, { recursive: true }, err => {
-            if (err) {
-                throw err;
-            }
-        });
-    })();
-};
-
 const getFileFormat = (fileName) => {
     return fileName.match(/\.\w+$/i)[0];
 };
@@ -32,6 +22,16 @@ const storage = multer.diskStorage({
     },
     filename: (request, file, cb) => {
         cb(null, uuidv1() + getFileFormat(file.originalname));
+    }
+});
+
+fs.stat(uploadPath.full, async (err) => {
+    if (err) {
+        fs.mkdirSync(uploadPath.full, { recursive: true }, err => {
+            if (err) {
+                throw err;
+            }
+        });
     }
 });
 
