@@ -23,7 +23,7 @@ const bem = html.bem('ProjectReviewPage');
         },
         {
             url: `/api/v1/users/${_get(props, 'match.params.address')}`,
-            key: 'project',
+            key: 'user',
             collection: 'users',
         },
         _get(props, 'match.params.type') === FeedTypeEnum.DONATE && {

@@ -2,7 +2,7 @@ const BaseStorage = require('./storage/BaseStorage');
 const RedisStorage = require('./storage/RedisStorage');
 const TransactionListener = require('./lesteners/TransactionListener');
 const HeightListener = require('./lesteners/HeightListener');
-const _isFunction = require('lodash/isFunction');
+const _get = require('lodash/get');
 const winston = require('winston');
 
 module.exports = class WavesContractCache {
@@ -12,7 +12,6 @@ module.exports = class WavesContractCache {
 
         this.nodeUrl = params.nodeUrl;
         this.dApp = params.dApp;
-        this.contractMethods = params.contractMethods || {};
         this.updateHandler = params.updateHandler || null;
 
         // Create logger
@@ -64,13 +63,8 @@ module.exports = class WavesContractCache {
             const args = transaction.call.args.map(item => item.value);
             const sender = transaction.sender;
 
-            // Get keys
-            const keysMatcher = this.contractMethods[method];
-            if (keysMatcher) {
-                const keys = _isFunction(keysMatcher)
-                    ? keysMatcher.apply(null, [sender].concat(args))
-                    : keysMatcher;
-
+            if (_get(transaction, 'info.stateChanges.data')) {
+                const keys = transaction.info.stateChanges.data.map(item => item.key);
                 if (keys.length > 0) {
                     this.logger.debug('Income transaction: ' + method + '(' + args.join(', ') + '), sender ' + sender + ', keys: ' + JSON.stringify(keys));
 

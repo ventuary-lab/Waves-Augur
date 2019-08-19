@@ -41,7 +41,7 @@ module.exports = class TransactionListener {
      * @private
      */
     async _next() {
-        // this._lastTransactionId = 'CeqEgCBLJ4T8qFRqbvLKqoqVLmC1JkVzy4ZBpRE8YSVh'; // FOR DEBUG
+        //this._lastTransactionId = '3Mgd7TwYEWp9jtygKwuNj1JP4PabpKYFsbpbdoc8hgWp'; // FOR DEBUG
 
         // Fetch transactions
         const transactions = await this._fetch(this._lastTransactionId);
@@ -94,7 +94,13 @@ module.exports = class TransactionListener {
             transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 10));
         }
 
-        return transactions;
+        return Promise.all(
+            transactions.map(async transaction => {
+                const result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
+                transaction.info = result.data;
+                return transaction;
+            })
+        );
     }
 
 };

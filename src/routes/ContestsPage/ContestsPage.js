@@ -26,7 +26,7 @@ const bem = html.bem('ContestsPage');
 export default class ContestsPage extends React.PureComponent{
 
     static propTypes = {
-        items: PropTypes.arrayOf(ContestSchema),
+        contests: PropTypes.arrayOf(ContestSchema),
     };
 
     render() {

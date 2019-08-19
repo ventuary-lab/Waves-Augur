@@ -1,7 +1,6 @@
 const WavesContractCache = require('./lib-waves-contract-cache/WavesContractCache');
 const WebSocketServer = require('./components/WebSocketServer');
 
-const contractConfig = require('./config/contract');
 const {Projects, Users, Contests, ReviewDonations, ReviewVotings, ReviewWhales} = require('./collections');
 const WavesTransport = require('./components/WavesTransport');
 
@@ -24,7 +23,6 @@ module.exports = class ContractApp {
         this.contractCache = new WavesContractCache({
             dApp: this.dApp,
             nodeUrl: this.nodeUrl,
-            contractMethods: contractConfig.methods,
             updateHandler: this._onContractUpdate,
             storage: {
                 redis: {
