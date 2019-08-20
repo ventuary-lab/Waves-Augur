@@ -31,7 +31,7 @@ export default class DalComponent {
         this.isTestMode = window.APP_DAPP_NETWORK === 'test';
         this.dApp = window.DAPP || '777';
         // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
-        this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
+        this.adminAdress = process.env.APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
         this.specialRoles = {
             [this.dApp]: UserRole.GENESIS,
             [this.adminAdress]: UserRole.ADMIN,
