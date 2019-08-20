@@ -8,7 +8,7 @@ const httpServer = app.listen(port, () => {
     console.log('Listening Port ' + port); // eslint-disable-line no-console
 });
 
-if (process.env.APP_DAPP_ADDRESS) {
+if (process.env.DAPP) {
     require('./node/contract_legacy');
 }
 require('./node/contract')(app, httpServer);
