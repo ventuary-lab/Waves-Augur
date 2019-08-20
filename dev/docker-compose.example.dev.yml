@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     environment:
       - APP_DAPP_ADDRESS=3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF
+      - APP_ADMIN_ADDRESS=3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn
       - APP_DAPP_NETWORK=test
       - APP_DAPP_SEED=
       - APP_WEBHOOK_HOST=ventuary-dao-dev-webhook
