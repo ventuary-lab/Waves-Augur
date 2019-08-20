@@ -20,7 +20,8 @@ app.get('/get-dapp-info', (req, res) => {
     res.send({
         DAPP: process.env.DAPP,
         APP_DAPP_NETWORK: process.env.APP_DAPP_NETWORK,
-        NODE_URL: process.env.NODE_URL
+        NODE_URL: process.env.NODE_URL,
+        APP_ADMIN_ADDRESS: process.env.APP_ADMIN_ADDRESS
     });
 });
 

@@ -15,11 +15,12 @@ const AppEntry = () => {
             (async () => {
                 const response = await axios.get('/get-dapp-info');
         
-                const { APP_DAPP_NETWORK, DAPP, NODE_URL } = response.data;
+                const { APP_DAPP_NETWORK, DAPP, NODE_URL, APP_ADMIN_ADDRESS } = response.data;
 
                 window.APP_DAPP_NETWORK = APP_DAPP_NETWORK;
                 window.DAPP = DAPP;
                 window.NODE_URL = NODE_URL;
+                window.APP_ADMIN_ADDRESS = APP_ADMIN_ADDRESS;
 
                 setInitFinished(true);
 
