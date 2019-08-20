@@ -10,7 +10,7 @@ import _get from 'lodash/get';
 import { dal as DalClass, html} from 'components';
 const dal = DalClass();
 
-import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT} from 'routes';
+import {ROUTE_PROJECT, ROUTE_PROJECTS_REDIRECT, ROUTE_CONTEST_ENTRIES} from 'routes';
 import ProjectSidebar from './views/ProjectSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
