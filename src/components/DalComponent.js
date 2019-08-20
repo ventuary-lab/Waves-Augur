@@ -22,7 +22,7 @@ import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import {openModal} from 'yii-steroids/actions/modal';
-// import dalActions, { INITIALIZE_AT_CLIENT } from './actions';
+import ContestStatusEnum from '../enums/ContestStatusEnum';
 
 export default class DalComponent {
 
@@ -30,6 +30,12 @@ export default class DalComponent {
         console.log('window.APP_DAPP_NETWORK', window.APP_DAPP_NETWORK, window.DAPP);
         this.isTestMode = window.APP_DAPP_NETWORK === 'test';
         this.dApp = window.DAPP || '777';
+        // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
+        this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
+        this.specialRoles = {
+            [this.dApp]: UserRole.GENESIS,
+            [this.adminAdress]: UserRole.ADMIN,
+        };
         this.hoc = fetchHoc;
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
@@ -215,8 +221,8 @@ export default class DalComponent {
             balance,
             address: _trim(address),
             activity: await this.getUserActivity(address),
-            role: address === this.dApp
-                ? UserRole.GENESIS
+            role: address === this.dApp || address === this.adminAdress
+                ? this.specialRoles[address]
                 : await this.transport.nodeFetchKey('wl_sts_' + address) || UserRole.ANONYMOUS,
             invitedBy: await this.getUser(await this.transport.nodeFetchKey('wl_ref_' + address)),
             profile: {
@@ -249,7 +255,6 @@ export default class DalComponent {
             Object.keys(data)
                 .filter(key => /^wl_ref_/.test(key) && data[key] === address)
                 .map(key => this.getUser(key.replace(/^wl_ref_/, '')))
-
         );
 
         users = users.filter(user => user.role !== UserRole.SPEND_INVITE);
@@ -376,6 +381,7 @@ export default class DalComponent {
             canVote: false,
             canDonate: false,
             canWhale: false,
+            canContestWinner: false,
             positiveBalance: (positiveBalance / Math.pow(10, 8)) || 0,
             negativeBalance: (negativeBalance / Math.pow(10, 8)) || 0,
             status: ProjectStatusEnum.getStatus(contractStatus, blocks, height),
@@ -387,9 +393,16 @@ export default class DalComponent {
             },
         };
 
+        const contest = project.contest ? await this.getContest(project.contest) : null;
+
         if (project.status === ProjectStatusEnum.VOTING && nCommits < this.contract.VOTERS) {
             project.isVotingAvailable = true;
         }
+
+        if (contest && contest.winner && contest.winner === project.uid) {
+            project.contestWinner = true;
+        }
+
         if (_get(user, 'address')) {
             if (project.author.address !== user.address) {
                 if (user.role !== UserRole.WHALE) {
@@ -405,9 +418,128 @@ export default class DalComponent {
             } else {
                 project.canEdit = true;
             }
+
+            if (user.role === UserRole.ADMIN) {
+                if (contest && !contest.winner && contest.status !== ContestStatusEnum.COMPLETED) {
+                    project.canContestWinner = true;
+                }
+            }
         }
 
         return project;
+    }
+
+    /**
+     * Return projects by current contest
+     * @param {string} contestUid
+     * @returns {Promise}
+     */
+    async getContestEntries(contestUid) {
+        const projects = await this.getProjects();
+
+        return projects.filter(project => project.contest && project.contest === contestUid);
+    }
+
+    /**
+     * Return contest by uid
+     * @param {string} uid
+     * @returns {Promise}
+     */
+    async getContest(uid) {
+
+        const store = require('components').store;
+        const user = getUser(store.getState());
+
+        const data = await this.transport.nodeFetchKey('contest_datajson_' + uid);
+        if (!data) {
+            return null;
+        }
+
+        const contest = {
+            ...data,
+            canEdit: false,
+        };
+
+        if (data.winner) {
+            contest.status = ContestStatusEnum.COMPLETED;
+        } else {
+            contest.status = data.expireImplementation > DalHelper.dateNow()
+                ? ContestStatusEnum.OPEN
+                : ContestStatusEnum.COMPLETED;
+        }
+
+        if (_get(user, 'address') === this.adminAdress) {
+            contest.canEdit = true;
+        }
+
+        return contest;
+    }
+
+
+    /**
+     * Return all contests
+     * @returns {Promise}
+     */
+    async getContests() {
+
+        const data = await this.transport.nodeAllData();
+        let contests = await Promise.all(
+            Object.keys(data)
+                .filter(key => /^contest_datajson_/.test(key))
+                .map(key => this.getContest(key.replace(/^contest_datajson_/, '')))
+        );
+
+        contests = contests.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
+        contests = _orderBy(contests, 'createTime', 'desc');
+        return contests;
+    }
+
+    /**
+     * Return add contestUid to project data
+     * @param {string} contest
+     * @param {string} projectUid
+     * @returns {Promise}
+     */
+    async addContestToProject(contest, projectUid) {
+        const projectData = await this.transport.nodeFetchKey('datajson_' + projectUid);
+
+        const data = {
+            ...projectData,
+            contest: contest.uid,
+            coverUrl: contest.coverUrl,
+            coverSmallUrl: contest.coverSmallUrl,
+        };
+
+        await this.transport.nodePublish(
+            'projupdate',
+            [
+                projectUid,
+                data,
+            ]
+        );
+    }
+
+    /**
+     * Return add contestUid to project data
+     * @param {string} projectUid
+     * @param {string} contestUid
+     * @returns {Promise}
+     */
+    async chooseProjectAsContestWinner(projectUid, contestUid) {
+        const contestData = await this.transport.nodeFetchKey('contest_datajson_' + contestUid);
+
+        const data = {
+            ...contestData,
+            winner: projectUid,
+        };
+
+        await this.transport.nodePublish(
+            'contestAddOrUpdate',
+            [
+                contestUid,
+                data,
+            ]
+        );
     }
 
     /**
@@ -440,6 +572,7 @@ export default class DalComponent {
 
     /**
      * Return user projects (where user is owner)
+     * @param {string} address
      * @returns {Promise}
      */
     async getUserProjects(address) {
@@ -631,9 +764,10 @@ export default class DalComponent {
     /**
      * Create or update project
      * @param {object} data
+     * @param {object} contest
      * @returns {Promise<*>}
      */
-    async saveProject(data) {
+    async saveProject(data, contest) {
         const isNew = !data.uid;
 
         data = {
@@ -671,6 +805,12 @@ export default class DalComponent {
         this.transport.resetCache();
 
         //const isNew = !(await this.transport.nodeFetchKey('author_' + data.uid));
+        if (contest) {
+            data.contest = contest.uid;
+            data.coverUrl = contest.coverUrl;
+            data.coverSmallUrl = contest.coverSmallUrl;
+        }
+
         if (isNew) {
             data.createTime = DalHelper.dateNow();
             await this.transport.nodePublish(
@@ -693,6 +833,66 @@ export default class DalComponent {
                 ]
             );
         }
+
+        return data;
+    }
+
+    /**
+     * Create or update contest
+     * @param {object} data
+     * @param {string} authorUid
+     * @returns {Promise<*>}
+     */
+    async saveContest(data) {
+        const store = require('components').store;
+        const author = getUser(store.getState());
+        const isNew = !data.uid;
+
+        data = {
+            name: '',
+            description: null,
+            logoUrl: null,
+            coverUrl: null,
+            coverSmallUrl: null,
+            expireEntries: '', // YYYY-MM-DD
+            expireImplementation: '', // YYYY-MM-DD
+            rewardWaves: 0,
+            tags: [],
+            contents: {
+                appDescription: '',
+                theme: '',
+                screenDescription: '',
+                platform: '',
+                deliverables: '',
+                links: '',
+                ...data.contents,
+            },
+            socials: {
+                url_twitter: null,
+                url_website: null,
+                ...data.socials,
+            },
+            uid: DalHelper.generateUid(),
+            ...data,
+        };
+
+        data.expireEntries = moment.utc(data.expireEntries).format('YYYY-MM-DD 00:00:00');
+        data.expireImplementation = moment.utc(data.expireImplementation).format('YYYY-MM-DD 00:00:00');
+        data.authorUid = author.uid;
+
+        this.transport.resetCache();
+
+        if (isNew) {
+            data.createTime = DalHelper.dateNow();
+        }
+
+        await this.transport.nodePublish(
+            'contestAddOrUpdate',
+            [
+                data.uid,
+                data,
+            ]
+        );
 
         return data;
     }

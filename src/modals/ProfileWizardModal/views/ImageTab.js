@@ -20,7 +20,7 @@ export default class ImageTab extends React.Component {
                     {__('Add Your Avatar')}
                 </div>
                 <ImageField
-                    uploadApi={'/upload'}
+                    uploadApi={'/upload?crop=true'}
                     attribute='avatar'
                 />
             </div>

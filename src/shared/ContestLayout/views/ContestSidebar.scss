@@ -1,0 +1,150 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.ContestSidebar {
+
+  $root: &;
+
+  position: relative;
+  margin-left: -$grid-offset-mobile;
+  margin-right: -$grid-offset-mobile;
+  background-color: #fff;
+  padding: 90px 20px 15px;
+
+  @include tablet {
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @include desktop {
+    padding: 113px 30px 100px;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__background {
+    min-height: 91px;
+    background-size: cover;
+  }
+
+  &__avatar {
+    box-sizing: content-box;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    transform: translateX(-50%);
+    border: 10px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
+    background-color: #fff;
+
+    @include desktop {
+      width: 160px;
+      height: 160px;
+      top: -90px;
+      border: none;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  &__description {
+    margin-bottom: 23px;
+    text-align: center;
+  }
+
+  &__status,
+  &__reward {
+    margin-bottom: 16px;
+
+    & > span:last-child {
+      font-weight: 500;
+      margin-left: 10px;
+    }
+  }
+
+  &__tags {
+    padding-top: 50px;
+    margin-bottom: 22px;
+  }
+
+  &__country {
+    color: $color-gg-4;
+    margin-bottom: 8px;
+  }
+
+  &__dates {
+    margin-bottom: 22px;
+
+    & > tbody > tr > td {
+      &:first-child {
+        text-align: right;
+      }
+
+      &:last-child {
+        font-weight: 500;
+        padding-left: 10px;
+      }
+    }
+  }
+
+  &__edit {
+    font-family: $ff-roboto;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-gg-4;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+    outline: none;
+
+    .ButtonView__label {
+      display: flex;
+      align-items: center;
+    }
+
+    &-icon {
+      display: block;
+      margin-right: 9px;
+      fill: #abb3ac;
+    }
+
+    &:active {
+      color: $color-brand-green;
+
+      #{$root}__edit-icon {
+        fill: $color-brand-green;
+      }
+    }
+
+    &:visited {
+      color: $color-gg-4;
+
+      #{$root}__edit-icon {
+        fill: $color-gg-4;
+      }
+    }
+
+    @include desktop {
+      &:hover, &:focus {
+        color: $color-brand-green;
+
+        #{$root}__edit-icon {
+          fill: $color-brand-green;
+        }
+      }
+    }
+  }
+}

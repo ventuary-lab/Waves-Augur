@@ -11,9 +11,45 @@
     }
   }
 
+  &__link-to-contest {
+    flex-shrink: 0;
+
+    box-shadow: 0 5px 10px rgba(12, 112, 23, 0.2);
+    border-radius: 3px;
+    background-color: $color-brand-green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    height: 100px;
+    margin: 40px $grid-offset-mobile 0;
+
+    @include card-hover;
+
+    @include tablet {
+      margin: 0 0 0 10px;
+      font-weight: 300;
+      font-size: 16px;
+      box-shadow: none;
+      background-color: transparent;
+      display: inline;
+      height: auto;
+      @include link;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+  }
+
   &__nav-container {
     display: flex;
     justify-content: center;
+    padding: 40px 0 10px;
+    flex-direction: column;
 
     background-color: #fff;
 
@@ -21,6 +57,8 @@
     margin-right: -$grid-offset-mobile;
 
     @include tablet {
+      padding: 40px 0;
+      flex-direction: row;
       justify-content: flex-start;
 
       margin-left: auto;
@@ -31,10 +69,10 @@
   &__nav {
     width: 100%;
     max-width: 400px;
-    padding: 40px 0;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    margin: 0 auto;
 
     @include tablet {
       justify-content: flex-start;

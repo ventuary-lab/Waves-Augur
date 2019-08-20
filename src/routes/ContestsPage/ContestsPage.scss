@@ -1,0 +1,84 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ContestsPage {
+  margin-top: 30px;
+
+  &__inner {
+    @include sitewidth {
+      padding: 0 110px;
+    }
+  }
+
+  &__nav-container {
+    display: flex;
+    justify-content: center;
+
+    background-color: #fff;
+
+    margin-left: -$grid-offset-mobile;
+    margin-right: -$grid-offset-mobile;
+
+    @include tablet {
+      justify-content: flex-start;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__nav {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    @include tablet {
+      justify-content: flex-start;
+      max-width: 100%;
+    }
+  }
+
+  &__nav-icon {
+    margin-bottom: 5px;
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__nav-item {
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 14px;
+    color: $color-gg-4;
+
+    @include tablet {
+      color: #000;
+      font-size: 16px;
+    }
+    &_is-active {
+      color: $color-brand-green;
+
+      @include tablet {
+        color: #000;
+        font-weight: 500;
+      }
+    }
+
+    @include tablet {
+      &:not(:last-child) {
+        margin-right: 40px;
+      }
+    }
+
+    & > a {
+      &:visited {
+        color: inherit;
+      }
+    }
+  }
+}

@@ -25,21 +25,32 @@ const checker = async () => {
             projects[matches[2]][matches[1]] = data[key];
         }
     });
-    console.log(projects);
 
+    const requests = [];
     Object.keys(projects).map(uid => {
-        projects[uid].reveal.forEach(address => {
-            if (projects[uid].final.indexOf(address) !== -1) {
-                return;
-            }
-
-            console.log(uid, projects[uid].status, address); // eslint-disable-line no-console
-            transport.nodePublishBySeed('finalizevoting', [uid, address], null, seed).catch(console.error);
-            transport.nodePublishBySeed('closeexpiredvoting', [uid, address], null, seed).catch(console.error);
-            transport.nodePublishBySeed('claimwinnings', [uid, address], null, seed).catch(console.error);
+        projects[uid].reveal.map(address => {
+            requests.push([uid, address]);
         });
     });
 
-    setTimeout(checker, 60 * 1000); // 1 m
+    next(requests, 0, () => setTimeout(checker, 60 * 1000));
 };
 checker();
+
+const next = async (requests, index, callback) => {
+    if (!requests[index]) {
+        callback();
+        return;
+    }
+
+    console.log('REQUEST:', requests[index]); // eslint-disable-line no-console
+    try {
+        await transport.nodePublishBySeed('finalizevoting', requests[index], null, seed);
+        await transport.nodePublishBySeed('closeexpiredvoting', requests[index], null, seed);
+        await transport.nodePublishBySeed('claimwinnings', requests[index], null, seed);
+    } catch (e) {
+        console.error(e); // eslint-disable-line no-console
+    }
+
+    next(requests, index + 1, callback);
+};

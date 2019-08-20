@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _isFunction from 'lodash-es/isFunction';
 
 import {html} from 'components';
 import Form from 'yii-steroids/ui/form/Form';
@@ -16,6 +17,7 @@ export default class FormWizard extends React.PureComponent {
         formId: PropTypes.string.isRequired,
         onSubmit: PropTypes.func,
         onComplete: PropTypes.func,
+        onFirstBack: PropTypes.func,
         items: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string,
             component: PropTypes.func,
@@ -77,6 +79,16 @@ export default class FormWizard extends React.PureComponent {
                 </div>
                 <div className={bem.element('controls')}>
                     <div className={bem.element('control-back')}>
+                        {this.props.onFirstBack && _isFunction(this.props.onFirstBack) && this.getActiveIndex() === 0 && (
+                            <Button
+                                layout={'default'}
+                                color='primary'
+                                onClick={this.props.onFirstBack}
+                                link
+                            >
+                                {__('Back')}
+                            </Button>
+                        )}
                         {this.getActiveIndex() > 0 && (
                             <Button
                                 layout={'default'}
