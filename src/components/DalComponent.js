@@ -474,8 +474,6 @@ export default class DalComponent {
         const data = {
             ...projectData,
             contest: contest.uid,
-            coverUrl: contest.coverUrl,
-            coverSmallUrl: contest.coverSmallUrl,
         };
 
         await this.transport.nodePublish(

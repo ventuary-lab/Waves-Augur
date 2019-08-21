@@ -138,8 +138,14 @@ module.exports = class Projects extends BaseCollection {
         const contest = item.contest
             ? await this.app.collections.contests.getItem(item.contest)
             : null;
-        if (contest && contest.winner && contest.winner === item.uid) {
-            item.contestWinner = true;
+
+        if (contest) {
+            item.coverUrl = contest.coverUrl;
+            item.coverSmallUrl = contest.coverSmallUrl;
+
+            if (contest.winner && contest.winner === item.uid) {
+                item.contestWinner = true;
+            }
         }
 
         return item;
