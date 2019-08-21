@@ -3,8 +3,10 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 import {isPhone} from 'yii-steroids/reducers/screen';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 import {html, dal} from 'components';
+import DalHelper from 'components/dal/DalHelper';
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
@@ -21,8 +23,9 @@ import UserSchema from 'types/UserSchema';
 const bem = html.bem('ProjectSidebar');
 
 @connect(
-    state => ({
+    (state, props) => ({
         isPhone: isPhone(state),
+        scope: DalHelper.getScope(props.project, getUser(state))
     })
 )
 export default class ProjectSidebar extends React.PureComponent {
@@ -100,7 +103,7 @@ export default class ProjectSidebar extends React.PureComponent {
                             </tr>
                         </tbody>
                     </table>
-                    {(this.props.project.canContestWinner) && (
+                    {(this.props.scope.canContestWinner) && (
                         <div className={bem.element('action')}>
                             <Button
                                 label={__('Choose as a Winner')}
@@ -120,7 +123,7 @@ export default class ProjectSidebar extends React.PureComponent {
                         </div>
                     )}
 
-                    {(this.props.project.canVote || this.props.project.canDonate) && (
+                    {(this.props.scope.canVote || this.props.scope.canDonate) && (
                         <div className={bem.element('action')}>
                             <Button
                                 label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
@@ -142,7 +145,7 @@ export default class ProjectSidebar extends React.PureComponent {
                         </div>
                     )}
 
-                    {this.props.project.canEdit && (
+                    {this.props.scope.canEdit && (
                         <Link
                             className={bem.element('edit')}
                             onClick={() => {

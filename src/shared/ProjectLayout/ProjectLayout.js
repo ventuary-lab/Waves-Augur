@@ -19,9 +19,9 @@ import routes from 'routes';
 import './ProjectLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import ProjectSchema from 'types/ProjectSchema';
-import VotingForm from 'shared/VotingForm';
 import DonateForm from 'shared/DonateForm';
 import GrantForm from 'shared/GrantForm';
+import DalHelper from 'components/dal/DalHelper';
 
 import ActionButtonBlock from '../ActionButtonBlock';
 
@@ -35,10 +35,11 @@ const bem = html.bem('ProjectLayout');
     })
 )
 @connect(
-    (state) => ({
+    (state, props) => ({
         user: getUser(state),
         routeId: _get(getCurrentRoute(state), 'id'),
         profileNavItems: getNavItems(state, ROUTE_PROJECT),
+        scope: DalHelper.getScope(props.project, getUser(state))
     })
 )
 export default class ProjectLayout extends React.PureComponent {
@@ -124,20 +125,17 @@ export default class ProjectLayout extends React.PureComponent {
                                 )}
                             </div>
                             <div className={bem.element('form')}>
-                                {this.props.project.canVote && (
-                                    <VotingForm project={this.props.project}/>
-                                )}
-                                {this.props.project.canDonate && (
+                                {this.props.scope.canDonate && (
                                     <DonateForm
                                         project={this.props.project}
                                         onComplete={this.getProject}
                                     />
                                 )}
-                                {this.props.project.canWhale && (
+                                {this.props.scope.canWhale && (
                                     <GrantForm project={this.props.project}/>
                                 )}
                             </div>
-                            {!this.props.project.canVote && !this.props.project.canDonate && !this.props.project.canWhale && (
+                            {!this.props.scope.canDonate && !this.props.scope.canWhale && (
                                 <Link
                                     toRoute={ROUTE_PROJECTS_REDIRECT}
                                     noStyles

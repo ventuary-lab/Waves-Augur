@@ -130,11 +130,6 @@ module.exports = class Projects extends BaseCollection {
     async _postProcessItem(uid, item) {
         item = {
             ...item,
-            //canEdit: false,
-            //canVote: false,
-            //canDonate: false,
-            //canWhale: false,
-            //canContestWinner: false,
             author: item.author.address
                 ? await this.app.collections.users.getItem(item.author.address)
                 : null,
@@ -146,29 +141,6 @@ module.exports = class Projects extends BaseCollection {
         if (contest && contest.winner && contest.winner === item.uid) {
             item.contestWinner = true;
         }
-
-        /*if (user) {
-            if (item.author.address !== user.address) {
-                if (user.role !== UserRole.WHALE) {
-                    if (item.isVotingAvailable && !item.isImVoted) {
-                        item.canVote = true;
-                    }
-                    if (item.status === ProjectStatus.CROWDFUND) {
-                        item.canDonate = true;
-                    }
-                } else if (item.status === ProjectStatus.WAITING_GRANT) {
-                    item.canWhale = true;
-                }
-            } else {
-                item.canEdit = true;
-            }
-
-            if (user.role === UserRole.ADMIN) {
-                if (contest && !contest.winner && contest.status !== ContestStatus.COMPLETED) {
-                    item.canContestWinner = true;
-                }
-            }
-        }*/
 
         return item;
     }
