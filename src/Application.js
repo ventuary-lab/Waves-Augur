@@ -11,6 +11,7 @@ ui.addViews({
     'form.FormView': require('yii-steroids/ui/form/Form/FormView').default,
     'form.InputFieldView': require('yii-steroids/ui/form/InputField/InputFieldView').default,
     'form.CheckboxFieldView': require('yii-steroids/ui/form/CheckboxField/CheckboxFieldView').default,
+    'form.RadioListFieldView': require('yii-steroids/ui/form/RadioListField/RadioListFieldView').default,
     'form.TextFieldView': require('yii-steroids/ui/form/TextField/TextFieldView').default,
     'form.ButtonView': require('yii-steroids/ui/form/Button/ButtonView').default,
     'form.DateFieldView': require('yii-steroids/ui/form/DateField/DateFieldView').default,

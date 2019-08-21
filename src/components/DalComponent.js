@@ -983,6 +983,29 @@ export default class DalComponent {
         return result;
     }
 
+    /**
+     *
+     * @param {string} uid
+     * @param {object} data
+     * @returns {Promise}
+     */
+    async reportProject(uid, data = {}) {
+
+        data.createTime = DalHelper.dateNow();
+        // const payment = this.contract.REPORT;
+
+        let result = null;
+        try {
+            result = await this.transport.nodePublish('reportProject', [uid, data], null);
+        } catch (e) {
+            this.error(e);
+        }
+
+        this.transport.resetCache();
+
+        return result;
+    }
+
     log() {
         if (this.isTestMode || process.env.NODE_ENV !== 'production') {
             console.log.apply(console, arguments); // eslint-disable-line no-console
