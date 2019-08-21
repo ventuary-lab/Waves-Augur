@@ -12,7 +12,8 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserRole from 'enums/UserRole';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 import './CardReview.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import {ROUTE_PROJECT_REVIEW, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
