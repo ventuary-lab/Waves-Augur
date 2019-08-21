@@ -6,8 +6,8 @@ const BaseCollection = require('../base/BaseCollection');
 const contractConfig = require('../config/contract');
 const ProjectStatus = require('../enums/ProjectStatus');
 const ProjectVote = require('../enums/ProjectVote');
-const UserRole = require('../enums/UserRole');
-const ContestStatus = require('../enums/ContestStatus');
+// const UserRole = require('../enums/UserRole');
+// const ContestStatus = require('../enums/ContestStatus');
 const ProjectFilter = require('../enums/ProjectFilter');
 
 module.exports = class Projects extends BaseCollection {
@@ -93,7 +93,7 @@ module.exports = class Projects extends BaseCollection {
             _set(data, 'socials.url_website', data.presentationUrl);
         }
 
-        const height = item.height;
+        const height = item.height || this.app.contractCache.heightListener.getHeight();
         const contractStatus = item['status_' + uid];
         const positiveBalance = item['positive_fund_' + uid];
         const negativeBalance = item['negative_fund_' + uid];
