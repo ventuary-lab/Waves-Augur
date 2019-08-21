@@ -1,48 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _isEqual from 'lodash-es/isEqual';
+import _get from 'lodash/get';
 
 import {dal, html} from 'components';
 
 import './ProjectFeedPage.scss';
 import ProjectSchema from 'types/ProjectSchema';
-import FeedSchema from 'types/FeedSchema';
 import List from 'yii-steroids/ui/list/List';
 import FeedCard from 'shared/FeedCard';
 
 const bem = html.bem('ProjectFeedPage');
 
+
+@dal.hoc2(
+    props => ([
+        {
+            url: `/api/v1/reviews/donations/project/${_get(props, 'project.uid')}`,
+            key: 'reviewDonations',
+            collection: 'reviewDonations',
+        },
+        {
+            url: `/api/v1/reviews/whales/project/${_get(props, 'project.uid')}`,
+            key: 'reviewWhales',
+            collection: 'reviewWhales',
+        },
+    ].filter(Boolean))
+)
 export default class ProjectFeedPage extends React.PureComponent {
 
     static propTypes = {
         project: ProjectSchema,
-        items: PropTypes.arrayOf(FeedSchema),
+        reviewDonations: PropTypes.arrayOf(PropTypes.object), //todo: need shema
+        reviewWhales: PropTypes.arrayOf(PropTypes.object), //todo: need shema
+
     };
 
-    constructor() {
-        super(...arguments);
-
-        this.state = {
-            items: null,
-        };
-    }
-
-    componentDidMount() {
-        this.getProjectFeed();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.project && nextProps.project && !_isEqual(this.props.project, nextProps.project)) {
-            this.getProjectFeed();
-        }
-    }
-
-    getProjectFeed() {
-        dal.getProjectFeed(this.props.project.uid)
-            .then(items => this.setState({items}));
-    }
-
     render() {
+        if (!this.props.reviewDonations && !this.props.reviewWhales) {
+            return null;
+        }
+
+        const items = [].concat(this.props.reviewDonations || []).concat(this.props.reviewWhales || []);
+
         return (
             <div className={bem.block()}>
                 <div className={bem.element('card-list')}>
@@ -53,7 +52,7 @@ export default class ProjectFeedPage extends React.PureComponent {
                             uid: this.props.project.uid,
                         }}
                         emptyText={__('No items')}
-                        items={this.state.items}
+                        items={items}
                     />
                 </div>
             </div>

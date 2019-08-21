@@ -25,6 +25,13 @@ import ActionButtonBlock from '../ActionButtonBlock';
 
 const bem = html.bem('ProjectLayout');
 
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/projects/${_get(props, 'match.params.uid')}`,
+        key: 'project',
+        collection: 'projects',
+    })
+)
 @connect(
     (state) => ({
         user: getUser(state),
@@ -43,32 +50,18 @@ export default class ProjectLayout extends React.PureComponent {
 
     constructor() {
         super(...arguments);
-
-        this.state = {
-            project: null,
-        };
-
-        this.getProject = this.getProject.bind(this);
     }
 
     componentWillMount() {
-        this.getProject();
+        this.props.dispatch(addCover(this.props.coverUrl));
     }
 
     componentWillUnmount() {
         this.props.dispatch(removeCover);
     }
 
-    getProject() {
-        dal.getProject(_get(this.props, 'match.params.uid'))
-            .then(project => {
-                this.setState({project});
-                this.props.dispatch(addCover(project.coverUrl));
-            });
-    }
-
     render() {
-        if (!this.state.project) {
+        if (!this.props.project) {
             return null;
         }
 
@@ -81,7 +74,7 @@ export default class ProjectLayout extends React.PureComponent {
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
                                 <ProjectSidebar
-                                    project={this.state.project}
+                                    project={this.props.project}
                                     user={this.props.user}
                                 />
                             </div>
@@ -117,7 +110,7 @@ export default class ProjectLayout extends React.PureComponent {
                                         className={bem.element('link-to-contest')}
                                         toRoute={ROUTE_CONTEST_ENTRIES}
                                         toRouteParams={{
-                                            uid: this.state.project.contest
+                                            uid: this.props.project.contest
                                         }}
                                         label={__('View all projects for the contest')}
                                         noStyles
@@ -125,20 +118,20 @@ export default class ProjectLayout extends React.PureComponent {
                                 )}
                             </div>
                             <div className={bem.element('form')}>
-                                {this.state.project.canVote && (
-                                    <VotingForm project={this.state.project}/>
+                                {this.props.project.canVote && (
+                                    <VotingForm project={this.props.project}/>
                                 )}
-                                {this.state.project.canDonate && (
+                                {this.props.project.canDonate && (
                                     <DonateForm
-                                        project={this.state.project}
+                                        project={this.props.project}
                                         onComplete={this.getProject}
                                     />
                                 )}
-                                {this.state.project.canWhale && (
-                                    <GrantForm project={this.state.project}/>
+                                {this.props.project.canWhale && (
+                                    <GrantForm project={this.props.project}/>
                                 )}
                             </div>
-                            {!this.state.project.canVote && !this.state.project.canDonate && !this.state.project.canWhale && (
+                            {!this.props.project.canVote && !this.props.project.canDonate && !this.props.project.canWhale && (
                                 <Link
                                     toRoute={ROUTE_PROJECTS_REDIRECT}
                                     noStyles
@@ -153,7 +146,7 @@ export default class ProjectLayout extends React.PureComponent {
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent
-                                        project={this.state.project}
+                                        project={this.props.project}
                                     />
                                 )}
                             </div>

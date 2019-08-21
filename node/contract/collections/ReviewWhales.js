@@ -1,4 +1,5 @@
 const _orderBy = require('lodash/orderBy');
+const _get = require('lodash/get');
 
 const BaseCollection = require('../base/BaseCollection');
 const ReviewType = require('../enums/ReviewType');
@@ -23,7 +24,14 @@ module.exports = class ReviewWhales extends BaseCollection {
 
     async getUserWhales(address) {
         let reviews = await this.getItemsAll();
-        reviews = reviews.filter(review => review.user.address === address);
+        reviews = reviews.filter(review => _get(review, 'user.address') === address);
+        reviews = _orderBy(reviews, 'review.createTime', 'desc');
+        return reviews;
+    }
+
+    async getProjectWhales(uid) {
+        let reviews = await this.getItemsAll();
+        reviews = reviews.filter(review => _get(review, 'project.uid') === uid);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }

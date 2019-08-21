@@ -23,7 +23,26 @@ module.exports = class Users extends BaseCollection {
      * @returns {Promise}
      */
     async getUser(address) {
-        return await this.getItem(address);
+        const user = await this.getItem(address);
+
+        if (user) {
+            return user;
+        }
+
+        //todo fix
+        //anon
+        if (!user) {
+            return {
+                address: address,
+                activity: null,
+                role: UserRole.ANONYMOUS,
+                invitedBy: null,
+                profile: {
+                    name: null,
+                },
+                id: address
+            };
+        }
     }
 
     /**
@@ -53,7 +72,7 @@ module.exports = class Users extends BaseCollection {
         const role = item['wl_sts_' + address];
         const specialRoles = {
             [this.app.dApp]: UserRole.GENESIS,
-            [contractConfig.adminAdress]: UserRole.ADMIN,
+            [contractConfig.adminAddress]: UserRole.ADMIN,
         };
 
         // Get user activity

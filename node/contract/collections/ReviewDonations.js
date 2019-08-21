@@ -1,4 +1,5 @@
 const _orderBy = require('lodash/orderBy');
+const _get = require('lodash/get');
 
 const BaseCollection = require('../base/BaseCollection');
 const ReviewType = require('../enums/ReviewType');
@@ -25,7 +26,19 @@ module.exports = class ReviewDonations extends BaseCollection {
      */
     async getUserDonations(address) {
         let reviews = await this.getItemsAll();
-        reviews = reviews.filter(review => review.user.address === address);
+        reviews = reviews.filter(review => _get(review, 'user.address') === address);
+        reviews = _orderBy(reviews, 'review.createTime', 'desc');
+        return reviews;
+    }
+
+    /**
+     *
+     * @param {string} uid
+     * @returns {Promise<*|[]|any[]>}
+     */
+    async getProjectDonations(uid) {
+        let reviews = await this.getItemsAll();
+        reviews = reviews.filter(review => _get(review, 'project.uid') === uid);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
@@ -65,7 +78,7 @@ module.exports = class ReviewDonations extends BaseCollection {
         return {
             ...item,
             project: await this.app.collections.projects.getItem(uid),
-            user: await this.app.collections.users.getItem(address),
+            user: await this.app.collections.users.getUser(address),
         };
     }
 

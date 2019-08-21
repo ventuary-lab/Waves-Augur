@@ -31,6 +31,13 @@ module.exports = async (app, httpServer) => {
         '/api/v1/projects/:uid': async (request) => {
             return contract.collections.projects.getProject(request.params.uid);
         },
+        // '/api/v1/projects/:uid/feed': async (request) => {
+        //     let items = []
+        //         .concat(await contract.collections.reviewDonations.getProjectDonations(request.params.uid))
+        //         .concat(await contract.collections.reviewWhales.getProjectWhales(request.params.uid));
+        //     items = _orderBy(items, 'review.createTime', 'desc');
+        //     return items;
+        // },
         '/api/v1/reviews': async () => {
             let items = []
                 .concat(await contract.collections.reviewDonations.getDonations())
@@ -44,6 +51,9 @@ module.exports = async (app, httpServer) => {
         },
         '/api/v1/reviews/donations/user/:address': async (request) => {
             return contract.collections.reviewDonations.getUserDonations(request.params.address);
+        },
+        '/api/v1/reviews/donations/project/:uid': async (request) => {
+            return contract.collections.reviewDonations.getProjectDonations(request.params.uid);
         },
         '/api/v1/reviews/donations/:id': async (request) => {
             const reviews = await contract.collections.reviewVotings.getDonations();
@@ -66,6 +76,9 @@ module.exports = async (app, httpServer) => {
         },
         '/api/v1/reviews/whales/user/:address': async (request) => {
             return contract.collections.reviewWhales.getUserWhales(request.params.address);
+        },
+        '/api/v1/reviews/whales/project/:uid': async (request) => {
+            return contract.collections.reviewWhales.getProjectWhales(request.params.uid);
         },
         '/api/v1/reviews/whales/:id': async (request) => {
             const reviews = await contract.collections.reviewVotings.getWhales();
