@@ -6,7 +6,8 @@ import {isPhone} from 'yii-steroids/reducers/screen';
 import {getUser} from 'yii-steroids/reducers/auth';
 import _get from 'lodash-es/get';
 
-import {html, dal} from 'components';
+import {html, dal as Dal} from 'components';
+const dal = Dal();
 import DalHelper from 'components/dal/DalHelper';
 import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';

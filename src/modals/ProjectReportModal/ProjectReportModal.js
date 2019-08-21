@@ -7,7 +7,8 @@ import Button from 'yii-steroids/ui/form/Button';
 
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectReportReasonsEnum from 'enums/ProjectReportReasonsEnum';
-import {html, dal} from 'components';
+import {html, dal as Dal} from 'components';
+const dal = Dal();
 
 import './ProjectReportModal.scss';
 
