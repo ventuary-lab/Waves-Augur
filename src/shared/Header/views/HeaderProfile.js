@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import _get from 'lodash-es/get';
 import Link from 'yii-steroids/ui/nav/Link';
 import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
@@ -34,6 +35,13 @@ const bem = html.bem('HeaderProfile');
         user: getUser(state),
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
         isPhone: isPhone(state),
+    })
+)
+@dal.hoc2(
+    (props) => ({
+        url: `/api/v1/users/${_get(props, 'user.address')}`,
+        key: 'user',
+        collection: 'users',
     })
 )
 @enhanceWithClickOutside

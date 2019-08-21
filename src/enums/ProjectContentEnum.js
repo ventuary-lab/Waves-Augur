@@ -19,7 +19,7 @@ export default class ProjectContentEnum extends Enum {
             [this.WHY_SMART_CONTRACTS]: __('Why smart contracts and DLT?'),
             [this.NEW_FEATURES_OR_MVP]: __('New features or MVP description '),
             [this.MARKET_STRATEGY]: __('Go to market strategy'),
-            [this.IMPACT_ON_COMMUNITY]: __('Impact on community'),
+            [this.IMPACT_ON_COMMUNITY]: __('Rewards for project supporters'),
             [this.CURRENT_STAGE]: __('Current stage of the project'),
         };
     }
