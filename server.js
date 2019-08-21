@@ -13,7 +13,6 @@ if (process.env.DAPP) {
     require('./node/contract_legacy');
 }
 require('./node/contract')(app, httpServer);
-require('./node/upload')(app);
 
 app.use(function(req, res, next) {
     if (req.header('x-forwarded-proto') == 'http') {
