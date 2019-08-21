@@ -22,8 +22,6 @@ export default class DalHelper {
             canContestWinner: false,
         };
 
-        console.log('item', item);
-
         if (user && item) {
             if ((_get(item, 'author.address') || item.authorAdress) !== user.address) {
                 if (user.role !== UserRole.WHALE) {

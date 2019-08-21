@@ -4,6 +4,7 @@ import moment from 'moment';
 import Button from 'yii-steroids/ui/form/Button';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import {getUser} from 'yii-steroids/reducers/auth';
+import _get from 'lodash-es/get';
 
 import {html, dal} from 'components';
 import DalHelper from 'components/dal/DalHelper';
@@ -11,6 +12,7 @@ import Tags from 'shared/Tags';
 import ProjectProgress from 'shared/ProjectProgress';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
+import ProjectReportModal from 'modals/ProjectReportModal';
 
 import ProjectSchema from 'types/ProjectSchema';
 import './ProjectSidebar.scss';
@@ -170,6 +172,23 @@ export default class ProjectSidebar extends React.PureComponent {
                             {__('Edit project')}
                         </Link>
                     )}
+
+                    {_get(this.props, 'user.address') && (
+                        <span
+                            className={bem.element('report')}
+                            onClick={() => this.props.dispatch(openModal(ProjectReportModal, {
+                                project: this.props.project,
+                            }))}
+                        >
+                            <div className={bem.element('report-icon')}>
+                                <span className={'MaterialIcon'}>
+                                    block
+                                </span>
+                            </div>
+                            {__('Report')}
+                        </span>
+                    )}
+
                 </div>
             </div>
         );
