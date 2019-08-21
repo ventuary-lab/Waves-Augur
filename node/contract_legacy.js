@@ -43,7 +43,7 @@ const next = async (requests, index, callback) => {
 
     console.log('REQUEST:', requests[index]); // eslint-disable-line no-console
     try {
-        await transport.nodePublishBySeed('finalizevoting', requests[index], null, seed);
+        // await transport.nodePublishBySeed('finalizevoting', requests[index], null, seed);
         await transport.nodePublishBySeed('closeexpiredvoting', requests[index], null, seed);
         await transport.nodePublishBySeed('claimwinnings', requests[index], null, seed);
     } catch (e) {
