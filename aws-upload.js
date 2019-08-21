@@ -28,7 +28,7 @@ module.exports = (app) => {
 
             const params = {
                 Bucket: myBucket,
-                Key: `${S3_UPLOAD_ROOT}/${fileName}`,
+                Key: `${S3_UPLOAD_ROOT}/${shouldCropped ? 'cropped_' : ''}${fileName}`,
                 Body: img
             };
 
