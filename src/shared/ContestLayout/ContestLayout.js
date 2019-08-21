@@ -23,10 +23,16 @@ import ContestSchema from 'types/ContestSchema';
 import ActionButtonBlock from '../ActionButtonBlock';
 import {openModal} from 'yii-steroids/actions/modal';
 import ParticipationContestModal from 'modals/ParticipationContestModal';
-import ProjectCard from '../ProjectCard';
 
 const bem = html.bem('ContestLayout');
 
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/contests/${_get(props, 'match.params.uid')}`,
+        key: 'contest',
+        collection: 'contests',
+    })
+)
 @connect(
     (state) => ({
         user: getUser(state),
@@ -45,33 +51,20 @@ export default class ContestLayout extends React.PureComponent {
 
     constructor() {
         super(...arguments);
-
-        this.state = {
-            contest: null,
-        };
-
-        this.getContest = this.getContest.bind(this);
     }
 
-    componentWillMount() {
-        this.getContest();
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.contest && nextProps.contest) {
+            this.props.dispatch(addCover(nextProps.contest.coverUrl));
+        }
     }
 
     componentWillUnmount() {
         this.props.dispatch(removeCover);
     }
 
-    getContest() {
-        dal.getContest(_get(this.props, 'match.params.uid'))
-            .then(contest => {
-                this.props.dispatch(addCover(contest.coverUrl));
-                this.setState({contest});
-            });
-    }
-
     render() {
-        if (!this.state.contest) {
-
+        if (!this.props.contest) {
             return null;
         }
 
@@ -84,7 +77,7 @@ export default class ContestLayout extends React.PureComponent {
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
                                 <ContestSidebar
-                                    contest={this.state.contest}
+                                    contest={this.props.contest}
                                     user={this.props.user}
                                 />
                             </div>
@@ -116,13 +109,13 @@ export default class ContestLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.state.contest.status !== ContestStatusEnum.COMPLETED && (
+                            {this.props.contest.status !== ContestStatusEnum.COMPLETED && (
                                 <div className={bem.element('card-to-action')}>
                                     <ActionButtonBlock
                                         title={__('Participate')}
                                         iconClass={'Icon__new-project'}
                                         onClick={() => this.props.dispatch(openModal(ParticipationContestModal, {
-                                            contest: this.state.contest,
+                                            contest: this.props.contest,
                                         }))}
                                     />
                                 </div>
@@ -131,7 +124,7 @@ export default class ContestLayout extends React.PureComponent {
                             <div className={bem.element('content')}>
                                 {ContentComponent && (
                                     <ContentComponent
-                                        contest={this.state.contest}
+                                        contest={this.props.contest}
                                     />
                                 )}
                             </div>

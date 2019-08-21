@@ -66,11 +66,6 @@ export default class ProfileLayout extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.address !== nextProps.address) {
-            this.props.fetch();
-        }
-
-
         //redirect from /donation to /grants
         if (_get(this.props, 'currentItem.id') === ROUTE_USER_DONATION && _get(this.props, 'profileUser.role') === UserRole.WHALE) {
             this.props.dispatch(replace(_get(this.props, 'match.url') + '/grants'));

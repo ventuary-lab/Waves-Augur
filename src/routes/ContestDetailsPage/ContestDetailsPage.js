@@ -10,10 +10,18 @@ import './ContestDetailsPage.scss';
 import ContestContentEnum from 'enums/ContestContentEnum';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
 import ProjectCard from 'shared/ProjectCard';
-import ProjectSchema from '../../types/ProjectSchema';
+import ProjectSchema from 'types/ProjectSchema';
 
 const bem = html.bem('ContestDetailsPage');
 
+
+@dal.hoc2(
+    props => ({
+        url: `/api/v1/projects/${props.contest.winner}`,
+        key: 'winner',
+        collection: 'projects',
+    })
+)
 export default class ContestDetailsPage extends React.PureComponent {
 
     static propTypes = {
@@ -56,8 +64,8 @@ export default class ContestDetailsPage extends React.PureComponent {
                         <div className={bem.element('title')}>
                             {__('Winner')}
                         </div>
-                        {this.state.winner && (
-                            <ProjectCard item={this.state.winner}/>
+                        {this.props.winner && (
+                            <ProjectCard item={this.props.winner}/>
                         ) || (
                             <span>
                                 Loading...
