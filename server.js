@@ -2,6 +2,8 @@
 // See https://alpha-ventuary-dao.herokuapp.com
 const express = require('express');
 const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
 
 app.use(function(req, res, next) {
     if (req.header('x-forwarded-proto') == 'http') {
