@@ -9,7 +9,7 @@ export default class FeedTypeEnum extends Enum {
     static getLabels() {
         return {
             [this.VOTE]: __('Voting'),
-            [this.DONATE]: __('Crowdfund'),
+            [this.DONATE]: __('Crowdfunding'),
             [this.WHALE]: __('Grant'),
         };
     }
