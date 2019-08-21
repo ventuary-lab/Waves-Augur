@@ -22,6 +22,17 @@ app.use(function(req, res, next) {
 });
 app.use(express.static(__dirname + '/dist'));
 
+require('./aws-upload')(app);
+
+app.get('/get-dapp-info', (req, res) => {
+    res.send({
+        DAPP: process.env.DAPP,
+        APP_DAPP_NETWORK: process.env.APP_DAPP_NETWORK,
+        NODE_URL: process.env.NODE_URL,
+        APP_ADMIN_ADDRESS: process.env.APP_ADMIN_ADDRESS
+    });
+});
+
 app.get('/*', (req, res) => {
     res.sendFile('index.html', { root : __dirname + '/dist'});
 });

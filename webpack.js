@@ -14,6 +14,18 @@ require('yii-steroids/webpack')
                 {
                     context: ['/upload', '/api'],
                     target: 'http://localhost:5000',
+                },
+                {
+                    '/api': {
+                        target: 'https://alpha.ventuary.space',
+                        pathRewrite: {'^/api' : ''},
+                        changeOrigin: true
+                    }
+                },
+                {
+                    context: ['/get-dapp-info'],
+                    target: 'https://alpha.ventuary.space',
+                    changeOrigin: true
                 }
             ]
         },
