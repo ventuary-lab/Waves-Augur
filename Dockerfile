@@ -18,5 +18,6 @@ COPY webpack.js /app
 RUN node webpack production
 
 COPY server.js /app
+COPY aws-upload.js /app
 
 ENTRYPOINT ["forever", "/app/server.js"]
