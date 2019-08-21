@@ -16,6 +16,7 @@ COPY node /app/node
 COPY src /app/src
 COPY webpack.js /app
 COPY server.js /app
+COPY aws-upload.js /app
 
 RUN npm run heroku-postbuild
 ENTRYPOINT ["forever", "/app/server.js"]
