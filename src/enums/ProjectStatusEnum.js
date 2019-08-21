@@ -15,6 +15,7 @@ export default class ProjectStatusEnum extends Enum {
     static WAITING_GRANT = 'waiting_grant';
     static GRANT = 'grant';
     static REJECTED = 'rejected';
+    static CASHOUT = 'Cashout';
 
     static getLabels() {
         return {
@@ -23,6 +24,7 @@ export default class ProjectStatusEnum extends Enum {
             [this.WAITING_GRANT]: __('Waiting grant'),
             [this.GRANT]: __('Grant'),
             [this.REJECTED]: __('Rejected'),
+            [this.CASHOUT]: __('Cashout'),
         };
     }
 
@@ -53,6 +55,10 @@ export default class ProjectStatusEnum extends Enum {
         }
         if (contractStatus === 'featured') {
             return height < blocks.crowdfundEnd ? this.CROWDFUND : this.WAITING_GRANT;
+        }
+
+        if (contractStatus === 'cashout') {
+            return this.CASHOUT;
         }
 
         // Granted
