@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
-import {addCover, removeCover} from 'actions/layout';
+import {addCover} from 'actions/layout';
 import _get from 'lodash/get';
 
 import {dal as Dal, html} from 'components';
@@ -53,14 +53,17 @@ export default class ContestLayout extends React.PureComponent {
         super(...arguments);
     }
 
+    componentWillMount() {
+        if (this.props.contest) {
+            this.props.dispatch(addCover(this.props.contest.coverUrl));
+        }
+    }
+
+
     componentWillReceiveProps(nextProps) {
         if (!this.props.contest && nextProps.contest) {
             this.props.dispatch(addCover(nextProps.contest.coverUrl));
         }
-    }
-
-    componentWillUnmount() {
-        this.props.dispatch(removeCover);
     }
 
     render() {

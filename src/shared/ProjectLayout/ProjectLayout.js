@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
-import {addCover, removeCover} from 'actions/layout';
+import {addCover} from 'actions/layout';
 import _get from 'lodash/get';
 
 import { dal as DalClass, html} from 'components';
@@ -55,11 +55,15 @@ export default class ProjectLayout extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.props.dispatch(addCover(this.props.coverUrl));
+        if (this.props.project) {
+            this.props.dispatch(addCover(this.props.project.coverUrl));
+        }
     }
 
-    componentWillUnmount() {
-        this.props.dispatch(removeCover);
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.project && nextProps.project) {
+            this.props.dispatch(addCover(nextProps.project.coverUrl));
+        }
     }
 
     render() {
