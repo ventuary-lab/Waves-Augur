@@ -26,7 +26,7 @@ module.exports = class ReviewDonations extends BaseCollection {
      */
     async getUserDonations(address) {
         let reviews = await this.getItemsAll();
-        reviews = reviews.filter(review => _get(review, 'user.address') === address);
+        reviews = reviews.filter(review => !!review.review && _get(review, 'user.address') === address);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
