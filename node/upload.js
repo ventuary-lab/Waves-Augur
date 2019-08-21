@@ -15,7 +15,8 @@ if (!fs.existsSync(uploadPath.full)) {
             }
         });
     })();
-}
+};
+
 const getFileFormat = (fileName) => {
     return fileName.match(/\.\w+$/i)[0];
 };
@@ -30,7 +31,6 @@ const storage = multer.diskStorage({
 });
 
 const middleware = multer({ storage: storage });
-
 
 module.exports.path = uploadPath;
 module.exports.middleware = middleware;
