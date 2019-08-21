@@ -182,7 +182,7 @@ export default class ProjectWizard extends React.PureComponent {
                             <DateField
                                 layout={'default'}
                                 attribute='expireCrowd'
-                                topLabel={__('Crowdfunding')}
+                                topLabel={__('Crowdfunding ends')}
                                 disabled={!!this.props.project}
                             />
                             <DateField

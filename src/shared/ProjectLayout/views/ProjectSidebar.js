@@ -89,13 +89,13 @@ export default class ProjectSidebar extends React.PureComponent {
                     <table className={bem.element('crowdfunding')}>
                         <tbody>
                             <tr>
-                                <td>{__('Crowdfunding')}</td>
+                                <td>{__('Crowdfunding ends')}</td>
                                 <td>
                                     {moment(this.props.project.expireVoting).format('DD.MM.YYYY')}
                                 </td>
                             </tr>
                             <tr>
-                                <td>{__('Finish')}</td>
+                                <td>{__('Demo day')}</td>
                                 <td>{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}</td>
                             </tr>
                         </tbody>

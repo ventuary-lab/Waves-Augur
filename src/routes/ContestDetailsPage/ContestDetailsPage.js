@@ -5,6 +5,7 @@ const dal = Dal();
 import ContestSchema from 'types/ContestSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import SocialLinks from 'shared/SocialLinks';
+import SocialEnum from 'enums/SocialEnum';
 import './ContestDetailsPage.scss';
 import ContestContentEnum from 'enums/ContestContentEnum';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
@@ -26,8 +27,19 @@ export default class ContestDetailsPage extends React.PureComponent {
         this.state = {
             winner: null,
         };
+
+        this.mappedSocials = this.mapSocials(
+            this.props.contest.socials
+        );
     }
 
+    mapSocials(socials) {
+        return {
+            ...socials,
+            url_facebook: SocialEnum.formatLink(socials.url_facebook, SocialEnum.FACEBOOK),
+            url_telegram: SocialEnum.formatLink(socials.url_telegram, SocialEnum.TELEGRAM)
+        };
+    }
 
     componentDidMount() {
         if (this.props.contest.status === ContestStatusEnum.COMPLETED) {
@@ -59,7 +71,7 @@ export default class ContestDetailsPage extends React.PureComponent {
                             <div className={bem.element('links')}>
                                 <div className={bem.element('social-links')}>
                                     <SocialLinks
-                                        urls={this.props.contest.socials}
+                                        urls={this.mappedSocials}
                                     />
                                 </div>
                                 <CopyToClipboard copyText={document.location.toString()}>
