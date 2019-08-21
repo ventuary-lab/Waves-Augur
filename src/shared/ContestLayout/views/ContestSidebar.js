@@ -7,6 +7,7 @@ import {html} from 'components';
 import Tags from 'shared/Tags';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
+import DalHelper from 'components/dal/DalHelper';
 
 import ContestSchema from 'types/ContestSchema';
 import './ContestSidebar.scss';
@@ -15,12 +16,14 @@ import {openModal} from 'yii-steroids/actions/modal';
 import ContestWizardModal from 'modals/ContestWizardModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
+import {getUser} from 'yii-steroids/reducers/auth';
 
 const bem = html.bem('ContestSidebar');
 
 @connect(
-    state => ({
+    (state, props) => ({
         isPhone: isPhone(state),
+        scope: DalHelper.getScope(props.contest, getUser(state))
     })
 )
 export default class ContestSidebar extends React.PureComponent {
@@ -82,7 +85,7 @@ export default class ContestSidebar extends React.PureComponent {
                         </span>
                     </div>
 
-                    {this.props.contest.canEdit && (
+                    {this.props.scope.canEdit && (
                         <Link
                             className={bem.element('edit')}
                             onClick={() => {

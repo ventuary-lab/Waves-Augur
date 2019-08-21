@@ -817,6 +817,7 @@ export default class DalComponent {
             expireImplementation: '', // YYYY-MM-DD
             rewardWaves: 0,
             tags: [],
+            winner: null,
             contents: {
                 appDescription: '',
                 theme: '',
@@ -837,7 +838,7 @@ export default class DalComponent {
 
         data.expireEntries = moment.utc(data.expireEntries).format('YYYY-MM-DD 00:00:00');
         data.expireImplementation = moment.utc(data.expireImplementation).format('YYYY-MM-DD 00:00:00');
-        data.authorUid = author.uid;
+        data.authorAdress = author.address;
 
         this.transport.resetCache();
 
