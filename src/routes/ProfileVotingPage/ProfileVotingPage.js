@@ -6,13 +6,6 @@ import List from 'yii-steroids/ui/list/List';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 import {dal as Dal, html} from 'components';
-const dal = Dal();nents';
-const dal = Dal();nents';
-const dal = Dal();nents';
-const dal = Dal();nents';
-const dal = Dal();nents';
-const dal = Dal();nents';
-const dal = Dal();nents';
 const dal = Dal();
 import {ROUTE_PROJECTS_REDIRECT} from 'routes';
 
