@@ -38,7 +38,7 @@ module.exports = class ReviewDonations extends BaseCollection {
      */
     async getProjectDonations(uid) {
         let reviews = await this.getItemsAll();
-        reviews = reviews.filter(review => _get(review, 'project.uid') === uid);
+        reviews = reviews.filter(review => !!review.review && _get(review, 'project.uid') === uid);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
@@ -48,6 +48,7 @@ module.exports = class ReviewDonations extends BaseCollection {
      */
     async getDonations() {
         let reviews = await this.getItemsAll();
+        reviews = reviews.filter(review => !!review.review);
         reviews = _orderBy(reviews, 'review.createTime', 'desc');
         return reviews;
     }
