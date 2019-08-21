@@ -1,5 +1,5 @@
 module.exports = {
-    adminAddress: '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn',
+    adminAddress: process.env.APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn',
     variables: {
         VOTERS: 3,
         QUORUM: 2,
