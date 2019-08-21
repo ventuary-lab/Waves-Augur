@@ -2,6 +2,7 @@ import React from 'react';
 import {replace} from 'react-router-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {removeCover} from 'actions/layout';
 import {getNavItems, getCurrentItem} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
@@ -16,7 +17,8 @@ import routes from 'routes';
 
 import './ProfileLayout.scss';
 import Link from 'yii-steroids/ui/nav/Link';
-import UserRole from '../../enums/UserRole';
+import UserRole from 'enums/UserRole';
+
 
 const bem = html.bem('ProfileLayout');
 
@@ -56,6 +58,8 @@ export default class ProfileLayout extends React.PureComponent {
     };
 
     componentWillMount() {
+        this.props.dispatch(removeCover);
+
         if (this.props.isRedirectToProfile) {
             this.props.dispatch(replace('/profile/projects'));
         }
