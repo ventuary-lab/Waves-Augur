@@ -16,7 +16,7 @@ const bem = html.bem('ContestEntriesPage');
     props => ({
         url: `/api/v1/contests/${props.contest.uid}/projects`,
         key: 'items',
-        collection: 'contests',
+        collection: 'projects',
     })
 )
 export default class ContestEntriesPage extends React.PureComponent {

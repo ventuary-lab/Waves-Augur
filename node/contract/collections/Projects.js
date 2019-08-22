@@ -52,7 +52,7 @@ module.exports = class Projects extends BaseCollection {
 
             case ProjectFilter.NEW:
                 projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND);
-                projects = _orderBy(projects, 'createTime', 'asc');
+                projects = _orderBy(projects, 'createTime', 'desc');
                 break;
 
             case ProjectFilter.FINISHED:
@@ -66,7 +66,7 @@ module.exports = class Projects extends BaseCollection {
                 break;
 
             default:
-                projects = _orderBy(projects, 'createTime', 'desc');
+                projects = _orderBy(projects, 'createTime', 'asc');
                 break;
         }
         return projects;

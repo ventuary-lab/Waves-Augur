@@ -22,7 +22,7 @@ module.exports = async (app, httpServer) => {
             return contract.collections.contests.getContest(request.params.uid);
         },
         '/api/v1/contests/:uid/projects': async (request) => {
-            const projects = await contract.collections.projects.getProjects(request.params.filter);
+            const projects = await contract.collections.projects.getProjects();
             return projects.filter(project => project.contest && project.contest === request.params.uid);
         },
         [`/api/v1/projects/:filter(${ProjectFilter.getKeys().join('|')})?`]: async (request) => {
@@ -59,7 +59,7 @@ module.exports = async (app, httpServer) => {
             return contract.collections.reviewDonations.getProjectDonations(request.params.uid);
         },
         '/api/v1/reviews/donations/:id': async (request) => {
-            const reviews = await contract.collections.reviewVotings.getDonations();
+            const reviews = await contract.collections.reviewDonations.getDonations();
             const review = reviews.find(review => review.id.replace('text_id:', '') === request.params.id);
             return review || null;
         },

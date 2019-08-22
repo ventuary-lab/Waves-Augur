@@ -98,12 +98,12 @@ export default class ProjectSidebar extends React.PureComponent {
                             <tr>
                                 <td>{__('Crowdfunding ends')}</td>
                                 <td>
-                                    {moment(this.props.project.expireVoting).format('DD.MM.YYYY')}
+                                    {moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}
                                 </td>
                             </tr>
                             <tr>
                                 <td>{__('Demo day')}</td>
-                                <td>{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}</td>
+                                <td>{moment(this.props.project.demoDay).format('DD.MM.YYYY')}</td>
                             </tr>
                         </tbody>
                     </table>

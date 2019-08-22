@@ -26,14 +26,14 @@ const bem = html.bem('HeaderProfile');
     state => ({
         isInitialized: isInitialized(state),
         isAuthorized: isAuthorized(state),
-        user: getUser(state),
+        contextUser: getUser(state),
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
         isPhone: isPhone(state),
     })
 )
 @dal.hoc2(
     (props) => ({
-        url: `/api/v1/users/${_get(props, 'user.address')}`,
+        url: `/api/v1/users/${_get(props, 'contextUser.address')}`,
         key: 'user',
         collection: 'users',
     })
@@ -61,7 +61,12 @@ export default class HeaderProfile extends React.PureComponent {
             return null;
         }
 
-        const items = this.props.user && this.props.profileNavItems.filter(item => item.roles.includes(this.props.user.role)) || [];
+        const user = {
+            ...this.props.contextUser,
+            ...this.props.user,
+        };
+
+        const items = user && this.props.profileNavItems.filter(item => item.roles.includes(user.role)) || [];
         if (!this.props.isAuthorized || items.length === 0) {
             return (
                 <>
@@ -106,24 +111,26 @@ export default class HeaderProfile extends React.PureComponent {
             );
         }
 
-        const avatarStub = this.props.user.profile.isWhale
+        const avatarStub = user.isWhale
             ? whaleAvatarStub
-            : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
+            : user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
+
+        // console.log(1, this.props.user)
 
         return (
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || avatarStub}
-                    alt={this.props.user.profile.name}
+                    src={user.profile.avatar || avatarStub}
+                    alt={user.profile.name}
                 />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('balance')}>
-                        {this.props.user.balance}
+                        {user.balance}
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('name')}>
-                            {this.props.user.profile.name}
+                            {user.profile.name}
                         </div>
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}

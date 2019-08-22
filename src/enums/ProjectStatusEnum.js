@@ -19,7 +19,7 @@ export default class ProjectStatusEnum extends Enum {
     static getLabels() {
         return {
             [this.VOTING]: __('Voting'),
-            [this.CROWDFUND]: __('Crowdfund'),
+            [this.CROWDFUND]: __('Crowdfunding'),
             [this.WAITING_GRANT]: __('Waiting grant'),
             [this.GRANT]: __('Grant'),
             [this.REJECTED]: __('Rejected'),
