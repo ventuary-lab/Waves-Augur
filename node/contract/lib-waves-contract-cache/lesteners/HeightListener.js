@@ -37,7 +37,13 @@ module.exports = class HeightListener {
      * @private
      */
     async _next() {
-        const response = await axios.get(`${this.app.nodeUrl}/blocks/height`);
+        let response = null;
+        try {
+            response = await axios.get(`${this.app.nodeUrl}/blocks/height`);
+        } catch (e) {
+            console.error(`HeightListener Error on fetch height: ${String(e)}`);
+            throw e;
+        }
         const height = response.data.height;
 
         if (!this._lastHeight || this._lastHeight !== height) {

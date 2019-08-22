@@ -12,6 +12,7 @@ module.exports = class BaseCollection {
 
     constructor(params = {}) {
         this.app = params.app;
+        this.transport = params.transport;
         this.name = params.name;
         this.updateHandler = params.updateHandler;
 
@@ -141,13 +142,7 @@ module.exports = class BaseCollection {
 
     async _fetch(keys) {
         // Fetch data
-        const regexp = new RegExp('^(' + keys.join('|') + ')$');
-        const matches = encodeURIComponent(_trim(String(regexp), '/'));
-        const response = await axios.get(`${this.app.nodeUrl}/addresses/data/${this.app.dApp}?matches=${matches}`);
-        const data = {};
-        response.data.forEach(item => {
-            data[item.key] = convertValueToJs(item.value);
-        });
+        const data = await this.transport.fetchKeys(keys);
 
         // Append height, if need
         if (keys.includes('height')) {

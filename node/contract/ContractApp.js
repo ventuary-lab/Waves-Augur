@@ -49,6 +49,7 @@ module.exports = class ContractApp {
         Object.keys(this.collections).forEach(name => {
             this.collections[name].name = name;
             this.collections[name].app = this;
+            this.collections[name].transport = this.transport;
             this.collections[name].updateHandler = this._onCollectionUpdate;
         });
 

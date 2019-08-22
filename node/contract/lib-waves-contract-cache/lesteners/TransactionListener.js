@@ -72,7 +72,13 @@ module.exports = class TransactionListener {
     async _fetch(lastTransactionId = null, afterId = null, pageSize = 1) {
         // Remote request
         const query = afterId ? '?after=' + afterId : '';
-        const response = await axios.get(`${this.app.nodeUrl}/transactions/address/${this.app.dApp}/limit/${pageSize}${query}`);
+        let response = null;
+        try {
+            response = await axios.get(`${this.app.nodeUrl}/transactions/address/${this.app.dApp}/limit/${pageSize}${query}`);
+        } catch (e) {
+            console.error(`TransactionListener Error on fetch transactions: ${String(e)}`);
+            throw e;
+        }
 
         // Get only new transactions
         let transactions = [];
@@ -96,7 +102,14 @@ module.exports = class TransactionListener {
 
         return Promise.all(
             transactions.map(async transaction => {
-                const result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
+                let result = null;
+                try {
+                    result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
+                } catch (e) {
+                    console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
+                    throw e;
+                }
+
                 transaction.info = result.data;
                 return transaction;
             })
