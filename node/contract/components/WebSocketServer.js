@@ -34,6 +34,11 @@ module.exports = class WebSocketServer {
      * @private
      */
     push(message) {
+        // Skip pushes when ws server is not started
+        if (!this._wsServer) {
+            return;
+        }
+
         this.logger.info('Send message to WebSocket connections... ' + message);
 
         this._wsServer.connections.forEach(connection => {

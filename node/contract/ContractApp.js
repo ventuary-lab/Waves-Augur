@@ -31,7 +31,7 @@ module.exports = class ContractApp {
                 }
             },
             logger: {
-                level: 'debug',
+                //level: 'debug',
             },
         });
         this.storage = this.contractCache.storage;
@@ -66,9 +66,8 @@ module.exports = class ContractApp {
     async start() {
         this._isSkipUpdates = true;
         await this.contractCache.start();
-        this._isSkipUpdates = false;
-
         await this._updateAll();
+        this._isSkipUpdates = false;
 
         this._websocket.start();
     }

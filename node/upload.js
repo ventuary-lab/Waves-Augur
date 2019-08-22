@@ -3,7 +3,7 @@ const multer = require('multer');
 const uuidv1 = require('uuid/v1');
 
 const uploadPath = {
-    full: '/data/uploads',
+    full: process.env.APP_UPLOAD_DIR || '/data/uploads',
     short: '/uploads',
 };
 
