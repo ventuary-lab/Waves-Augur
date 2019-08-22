@@ -30,18 +30,12 @@ module.exports = class Users extends BaseCollection {
         }
 
         //todo fix
-        //anon
+        //anon mb?
         if (!user) {
-            return {
+            return  await this._prepareItem(address, {
                 address: address,
-                activity: null,
-                role: UserRole.ANONYMOUS,
-                invitedBy: null,
-                profile: {
-                    name: null,
-                },
                 id: address
-            };
+            });
         }
     }
 
@@ -68,7 +62,7 @@ module.exports = class Users extends BaseCollection {
 
     async _prepareItem(address, item) {
         const invitedByAddress = item['wl_ref_' + address];
-        const profile = item['wl_bio_' + address];
+        const profile = item['wl_bio_' + address] || {};
         const role = item['wl_sts_' + address];
         const specialRoles = {
             [this.app.dApp]: UserRole.GENESIS,
