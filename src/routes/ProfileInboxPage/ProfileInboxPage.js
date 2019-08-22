@@ -7,7 +7,8 @@ import InboxTypeEnum from 'enums/InboxTypeEnum';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import ProjectSchema from 'types/ProjectSchema';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 import './ProfileInboxPage.scss';
 import {getUser} from 'yii-steroids/reducers/auth';
 

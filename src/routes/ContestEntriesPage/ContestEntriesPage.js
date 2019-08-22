@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 import './ContestEntriesPage.scss';
 import ContestSchema from 'types/ContestSchema';

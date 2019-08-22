@@ -7,7 +7,8 @@ import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import {dal, html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';

@@ -17,7 +17,7 @@ const locale = new LocaleComponent();
 const resource = new ResourceComponent();
 const store = new StoreComponent();
 const ui = new UiComponent();
-const dal = new DalComponent();
+const dal = () => new DalComponent();
 const ws = new WebSocketClient();
 
 // Apply configuration

@@ -1,10 +1,10 @@
 // This is backend for contract
 const WavesTransport = require('./WavesTransport');
 const transport = new WavesTransport({
-    dApp: process.env.APP_DAPP_ADDRESS,
+    dApp: process.env.DAPP,
 });
 // const seed = 'estate arrange bitter coast fruit sure ticket giggle concert hurry net wrestle';
-const seed = process.env.APP_DAPP_SEED;
+const seed = process.env.ORACLE_SEED;
 
 const checker = async () => {
     const regexp = /(status|reveal|final)_(.{36})(_(.+))?/;
@@ -43,8 +43,8 @@ const next = async (requests, index, callback) => {
 
     console.log('REQUEST:', requests[index]); // eslint-disable-line no-console
     try {
-        await transport.nodePublishBySeed('finalizevoting', requests[index], null, seed);
-        await transport.nodePublishBySeed('closeexpiredvoting', requests[index], null, seed);
+        // await transport.nodePublishBySeed('finalizevoting', requests[index], null, seed);
+        // await transport.nodePublishBySeed('closeexpiredvoting', requests[index], null, seed);
         await transport.nodePublishBySeed('claimwinnings', requests[index], null, seed);
     } catch (e) {
         console.error(e); // eslint-disable-line no-console

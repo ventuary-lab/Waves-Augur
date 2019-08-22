@@ -6,7 +6,8 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
-import {html, dal, store, ws} from 'components';
+import {html, dal as Dal, store, ws} from 'components';
+const dal = Dal();
 import {apiWsHandler} from 'actions/api';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
@@ -25,7 +26,7 @@ const bem = html.bem('Layout');
 @layoutHoc(
     () => {
         // TODO ws.wsUrl = process.env.APP_WS_URL || 'ws://localhost:5000';
-        ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace('http', 'ws');
+        ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace(/(http\:\/|https\:\/)/, 'ws:/');
         ws.onMessage = event => store.dispatch(apiWsHandler(event));
         ws.open();
 

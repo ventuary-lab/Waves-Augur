@@ -27,7 +27,7 @@ export default class DalComponent {
 
     constructor() {
         this.isTestMode = process.env.APP_DAPP_NETWORK === 'test';
-        this.dApp = process.env.APP_DAPP_ADDRESS || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // testnet
+        this.dApp = process.env.DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // testnet
         // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
         this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
         this.specialRoles = {
