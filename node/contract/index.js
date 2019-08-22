@@ -56,7 +56,7 @@ module.exports = async (app, httpServer) => {
             return contract.collections.reviewDonations.getProjectDonations(request.params.uid);
         },
         '/api/v1/reviews/donations/:id': async (request) => {
-            const reviews = await contract.collections.reviewVotings.getDonations();
+            const reviews = await contract.collections.reviewDonations.getDonations();
             const review = reviews.find(review => review.id.replace('text_id:', '') === request.params.id);
             return review || null;
         },
