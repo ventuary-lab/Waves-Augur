@@ -26,7 +26,7 @@ const bem = html.bem('Layout');
 @layoutHoc(
     () => {
         // TODO ws.wsUrl = process.env.APP_WS_URL || 'ws://localhost:5000';
-        ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace('http', 'ws');
+        ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace(/(http\:\/|https\:\/)/, 'ws:/');
         ws.onMessage = event => store.dispatch(apiWsHandler(event));
         ws.open();
 
