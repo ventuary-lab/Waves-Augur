@@ -11,6 +11,7 @@ const ProjectSchema = PropTypes.shape({
     expireVoting: PropTypes.string,
     expireCrowd: PropTypes.string,
     expireWhale: PropTypes.string,
+    demoDay: PropTypes.string,
     targetWaves: PropTypes.number,
     tags: PropTypes.arrayOf(PropTypes.string),
     country: PropTypes.string,
