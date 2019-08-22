@@ -33,7 +33,9 @@ module.exports = class TransactionListener {
         }
 
         // Start transactionListener
-        return this._next();
+        this._next();
+
+        return true;
     }
 
     /**

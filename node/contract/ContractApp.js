@@ -81,13 +81,15 @@ module.exports = class ContractApp {
         this._isNowUpdated = true;
 
         this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
+        
         const nodeData = await this.transport.fetchAll();
+        
         await Promise.all(
             Object.keys(this.collections).map(name => {
-                return this.collections[name].updateAll(nodeData);
+                this.collections[name].updateAll(nodeData);
             })
         );
-
+            
         this._isNowUpdated = false;
         if (this._isNeedUpdateAgain) {
             this._isNeedUpdateAgain = false;
@@ -110,7 +112,7 @@ module.exports = class ContractApp {
     }
 
     _onCollectionUpdate(id, item, collection) {
-        if (this._isSkipUpdates) {
+        if (this._isSkipUpdates || !this._websocket) {
             return;
         }
 

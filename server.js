@@ -9,9 +9,15 @@ const httpServer = app.listen(port, () => {
     console.log('Listening Port ' + port); // eslint-disable-line no-console
 });
 
+<<<<<<< Updated upstream
 // if (process.env.DAPP) {
 //     require('./node/contract_legacy');
 // }
+=======
+if (process.env.DAPP) {
+    // require('./node/contract_legacy');
+}
+>>>>>>> Stashed changes
 require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
