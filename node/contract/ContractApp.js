@@ -31,7 +31,7 @@ module.exports = class ContractApp {
                 }
             },
             logger: {
-                //level: 'debug',
+                level: 'debug',
             },
         });
         this.storage = this.contractCache.storage;
