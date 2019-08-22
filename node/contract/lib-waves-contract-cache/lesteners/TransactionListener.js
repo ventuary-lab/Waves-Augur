@@ -97,7 +97,7 @@ module.exports = class TransactionListener {
         // Fetch next page
         if (lastTransactionId && !isLastFined && transactions.length > 0) {
             afterId = transactions[transactions.length - 1].id;
-            transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 10));
+            transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 2));
         }
 
         return Promise.all(
