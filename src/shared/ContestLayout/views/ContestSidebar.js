@@ -17,8 +17,7 @@ import ContestWizardModal from 'modals/ContestWizardModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
 import {getUser} from 'yii-steroids/reducers/auth';
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 
 const bem = html.bem('ContestSidebar');
 

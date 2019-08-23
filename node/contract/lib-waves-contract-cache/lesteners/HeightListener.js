@@ -6,26 +6,16 @@ module.exports = class HeightListener {
         this.app = null;
         this.intervalSec = params.intervalSec || 1;
         this.heightsHandler = params.heightsHandler || null;
-        this.storage = null;
 
         this._lastHeight = null;
         this._next = this._next.bind(this);
-
-        this.STORAGE_LAST_HEIGHT_KEY = '__lastHeight';
     }
 
     /**
      * @returns {Promise<void>}
      */
     async start() {
-        const height = await this.storage.get(this.STORAGE_LAST_HEIGHT_KEY);
-        if (height) {
-            this._lastHeight = parseInt(height);
-        }
-
-        this.app.logger.info('HeightListener: Last height: ' + (height || 'none'));
-
-        this._next();
+        return this._next();
     }
 
     getHeight() {
@@ -48,7 +38,6 @@ module.exports = class HeightListener {
 
         if (!this._lastHeight || this._lastHeight !== height) {
             this._lastHeight = height;
-            this.storage.set(this.STORAGE_LAST_HEIGHT_KEY, this._lastHeight);
 
             this.heightsHandler && this.heightsHandler(height);
         }

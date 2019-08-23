@@ -8,8 +8,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import _get from 'lodash/get';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import {ROUTE_PROFILE, ROUTE_USER, ROUTE_USER_DONATION} from 'routes';
 import ProfileSidebar from './views/ProfileSidebar';
 import NavItemSchema from 'types/NavItemSchema';

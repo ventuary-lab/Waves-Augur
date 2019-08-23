@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import LinesEllipsis from 'react-lines-ellipsis';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import coverStub from 'static/images/cover-stub.jpg';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import Hint from 'shared/Hint';

@@ -18,7 +18,6 @@ export default class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
-        this.nodeUrl = process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnodes.wavesnodes.com';
         this.fee = 0.009;
         this.isKeeperAvailable = null;
         this.start = Date.now();
@@ -30,6 +29,10 @@ export default class WavesTransport {
         this._height = null;
         this._heightTimeout = null;
         this._heightCallbacks = null;
+    }
+
+    getNodeUrl() {
+        return this.dal.dAppNetwork === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnodes.wavesnodes.com';
     }
 
     static convertValueToJs(value) {
@@ -73,7 +76,7 @@ export default class WavesTransport {
         this._heightCallbacks = [];
 
         // Fetch data
-        this._height = await nodeInteraction.currentHeight(this.nodeUrl);
+        this._height = await nodeInteraction.currentHeight(this.getNodeUrl());
 
         // Invalidate cache after 30 sec
         if (this._heightTimeout) {
@@ -103,7 +106,7 @@ export default class WavesTransport {
 
         // Fetch data
         this._cacheData = {};
-        const data = await nodeInteraction.accountData(this.dal.dApp, this.nodeUrl);
+        const data = await nodeInteraction.accountData(this.dal.dApp, this.getNodeUrl());
         Object.keys(data).forEach(key => {
             this._cacheData[key] = WavesTransport.convertValueToJs(data[key].value);
         });
@@ -135,7 +138,7 @@ export default class WavesTransport {
             };
         } else {
             try {
-                result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.nodeUrl);
+                result = await nodeInteraction.accountDataByKey(key, this.dal.dApp, this.getNodeUrl());
             } catch (e) {
                 console.warn(e); // eslint-disable-line no-console
                 return null;
@@ -198,7 +201,7 @@ export default class WavesTransport {
             this.dal.log(`Transaction ${tx.id} is published via keeper`);
 
             return waitForTx(tx.id, {
-                apiBase: this.nodeUrl,
+                apiBase: this.getNodeUrl(),
                 timeout: 10000,
             }).then(() => result);
         }
@@ -244,7 +247,7 @@ export default class WavesTransport {
 
         let result = null;
         try {
-            result = await broadcast(tx, this.nodeUrl);
+            result = await broadcast(tx, this.getNodeUrl());
         } catch (e) {
             this.dal.error(e);
         }
@@ -289,7 +292,7 @@ export default class WavesTransport {
 
     async _accountDataPattern(matches) {
         return await axios.get(`addresses/data/${this.dal.dApp}?matches=${matches}`, {
-            baseURL: this.nodeUrl,
+            baseURL: this.getNodeUrl(),
             validateStatus
         })
             .then(process400)

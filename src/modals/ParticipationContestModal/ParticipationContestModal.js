@@ -3,8 +3,7 @@ import {connect} from 'react-redux';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import Button from 'yii-steroids/ui/form/Button';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import ProjectWizard from 'modals/ProjectWizardModal/views/ProjectWizard';
 import {isPhone} from 'yii-steroids/reducers/screen';
 

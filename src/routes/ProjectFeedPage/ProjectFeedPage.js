@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 
 import './ProjectFeedPage.scss';
 import ProjectSchema from 'types/ProjectSchema';

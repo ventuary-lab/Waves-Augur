@@ -7,8 +7,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import _get from 'lodash-es/get';
 
 import Hint from 'shared/Hint';
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 
 import DalHelper from 'components/dal/DalHelper';
 import Tags from 'shared/Tags';

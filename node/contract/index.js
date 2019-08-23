@@ -15,6 +15,17 @@ module.exports = async (app, httpServer) => {
     });
 
     const routes = {
+        '/api/v1/init': async () => {
+            return {
+                config: {
+                    dal: {
+                        dAppNetwork: process.env.APP_DAPP_NETWORK || 'test',
+                        dApp: process.env.DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF', // testnet
+                        adminAdress: process.env.APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn',
+                    }
+                },
+            };
+        },
         [`/api/v1/contests/:filter(${ContestFilter.getKeys().join('|')})?`]: async (request) => {
             return contract.collections.contests.getContests(request.params.filter);
         },

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {openModal} from 'yii-steroids/actions/modal';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ContestCard from 'shared/ContestCard';
 

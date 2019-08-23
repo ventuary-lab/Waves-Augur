@@ -14,6 +14,8 @@ module.exports = class WebSocketServer {
     }
 
     start() {
+        this.logger.info(`${this.constructor.name} started...`);
+
         // Create WS server
         this._wsServer = new webSocketServer({
             httpServer: this.httpServer,

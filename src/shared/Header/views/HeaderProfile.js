@@ -8,8 +8,7 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';

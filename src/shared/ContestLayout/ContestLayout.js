@@ -8,8 +8,7 @@ import {addCover} from 'actions/layout';
 import UserRole from 'enums/UserRole';
 import _get from 'lodash/get';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import {ROUTE_CONTEST} from 'routes';
 import ContestSidebar from './views/ContestSidebar';
 import NavItemSchema from 'types/NavItemSchema';

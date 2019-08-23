@@ -6,8 +6,7 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, {STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR} from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 
-import {html, dal as Dal, store, ws} from 'components';
-const dal = Dal();
+import {html, dal, store, ws} from 'components';
 import {apiWsHandler} from 'actions/api';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
@@ -20,19 +19,23 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import MessageModal from 'modals/MessageModal';
 import UserRole from 'enums/UserRole';
 import {getCurrentItemParam} from 'yii-steroids/reducers/navigation';
+import axios from 'axios';
 
 const bem = html.bem('Layout');
 
 @layoutHoc(
-    () => {
+    async () => {
         // TODO ws.wsUrl = process.env.APP_WS_URL || 'ws://localhost:5000';
         ws.wsUrl = location.port ? 'ws://localhost:5000' : location.origin.replace('http', 'ws');
         ws.onMessage = event => store.dispatch(apiWsHandler(event));
         ws.open();
 
-        return dal.auth()
-            .then(user =>  ({user}))
-            .catch(() => ({user: null}))
+        const data = await axios.get('/api/v1/init');
+        const user = dal.auth();
+        return {
+            ...data,
+            user,
+        };
     }
 )
 @connect(

@@ -9,7 +9,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
 
-import {http, clientStorage, store} from 'components';
+import {http, clientStorage} from 'components';
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
@@ -25,20 +25,13 @@ import ContestStatusEnum from '../enums/ContestStatusEnum';
 
 export default class DalComponent {
     constructor() {
-        const { global_vars } = store.store.getState();
-        console.log({ global_vars });
+        this.dAppNetwork = null;
+        this.dApp = null;
+        this.adminAddress = null;
 
-        const { DAPP, APP_DAPP_NETWORK, APP_ADMIN_ADDRESS } = global_vars;
-        this.isTestMode = APP_DAPP_NETWORK === 'test';
-        this.dApp = DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // testnet
-        // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
-        this.adminAdress = APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
-        this.specialRoles = {
-            [this.dApp]: UserRole.GENESIS,
-            [this.adminAdress]: UserRole.ADMIN,
-        };
         this.hoc = fetchHoc;
         this.hoc2 = require('./dal/apiHoc').default;
+
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
         this.contract = {
@@ -53,9 +46,13 @@ export default class DalComponent {
         this._authInterval = null;
         this._authChecker = this._authChecker.bind(this);
 
-        if (this.isTestMode || process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV !== 'production') {
             window.dal = this;
         }
+    }
+
+    isTestMode() {
+        return this.dAppNetwork === 'test';
     }
 
     getVotePayment() {
@@ -64,7 +61,7 @@ export default class DalComponent {
 
     dateToHeight(date) {
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
-        if (this.isTestMode) {
+        if (this.isTestMode()) {
             // In test mode one block = 1 day
             return days;
         } else {
@@ -97,22 +94,27 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async auth() {
-        const account = await this.getAccount();
-        let user = await this.getUser(account.address);
-        user = {
-            ...user,
-            profile: {
-                name: account.name,
-                ...user.profile,
-            },
-        };
+        try {
+            const account = await this.getAccount();
+            let user = await this.getUser(account.address);
+            user = {
+                ...user,
+                profile: {
+                    name: account.name,
+                    ...user.profile,
+                },
+            };
 
-        if (this._authInterval) {
-            clearInterval(this._authInterval);
+            if (this._authInterval) {
+                clearInterval(this._authInterval);
+            }
+            this._authInterval = setInterval(this._authChecker, 1000);
+
+            return user;
+        } catch (e) {
+            console.error(e); // eslint-disable-line no-console
+            return null;
         }
-        this._authInterval = setInterval(this._authChecker, 1000);
-
-        return user;
     }
 
     async resolveInvitation() {
@@ -192,7 +194,7 @@ export default class DalComponent {
             address: _trim(address),
             ...user,
             /*activity: await this.getUserActivity(address),
-            role: address === this.dApp || address === this.adminAdress
+            role: address === this.dApp || address === this.adminAddress
                 ? this.specialRoles[address]
                 : await this.transport.nodeFetchKey('wl_sts_' + address) || UserRole.ANONYMOUS,
             invitedBy: await this.getUser(await this.transport.nodeFetchKey('wl_ref_' + address)),
@@ -439,7 +441,7 @@ export default class DalComponent {
                 : ContestStatusEnum.COMPLETED;
         }
 
-        if (_get(user, 'address') === this.adminAdress) {
+        if (_get(user, 'address') === this.adminAddress) {
             contest.canEdit = true;
         }
 
@@ -516,7 +518,6 @@ export default class DalComponent {
      * @returns {Promise}
      */
     async getProjects() {
-        console.time('getProjects time');
         const data = await this.transport.nodeAllData();
         let projects = await Promise.all(
             Object.keys(data)
@@ -526,7 +527,6 @@ export default class DalComponent {
 
         projects = projects.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
         projects = _orderBy(projects, 'createTime', 'desc');
-        console.timeEnd('getProjects time');
         return projects;
     }
 
@@ -778,7 +778,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.isTestMode ? 8 : 60, //60 blocks = 2 hours,
+                    this.isTestMode() ? 8 : 60, //60 blocks = 2 hours,
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,
@@ -862,6 +862,7 @@ export default class DalComponent {
     /**
      * Vote to project
      * @param {string} uid
+     * @param {string} address
      * @param {string} vote Featured (yes) OR delisted (no)
      * @param {object} data
      * @returns {Promise<any>}
@@ -969,7 +970,7 @@ export default class DalComponent {
     }
 
     log() {
-        if (this.isTestMode || process.env.NODE_ENV !== 'production') {
+        if (this.isTestMode() || process.env.NODE_ENV !== 'production') {
             console.log.apply(console, arguments); // eslint-disable-line no-console
         }
     }

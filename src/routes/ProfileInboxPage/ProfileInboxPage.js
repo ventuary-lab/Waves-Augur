@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 
 import ProjectInboxCard from 'shared/ProjectInboxCard';
 import InboxTypeEnum from 'enums/InboxTypeEnum';
-import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import ProjectSchema from 'types/ProjectSchema';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import './ProfileInboxPage.scss';
 import {getUser} from 'yii-steroids/reducers/auth';
 

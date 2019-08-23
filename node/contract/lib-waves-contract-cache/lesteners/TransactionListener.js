@@ -6,34 +6,23 @@ module.exports = class TransactionListener {
         this.app = null;
         this.intervalSec = params.intervalSec || 1;
         this.transactionsHandler = params.transactionsHandler || null;
-        this.storage = null;
 
         this._lastTransactionId = null;
         this._next = this._next.bind(this);
-
-        this.STORAGE_LAST_TRANSACTION_ID_KEY = '__lastTransactionId';
     }
 
     /**
      * @returns {Promise<void>}
      */
     async start() {
-        let lastTransactionId = await this.storage.get(this.STORAGE_LAST_TRANSACTION_ID_KEY);
-        this._lastTransactionId = lastTransactionId;
-
-        this.app.logger.info('TransactionListener: Last transaction id: ' + (lastTransactionId || 'none (listen from end)'));
-
         // Get last transaction
-        if (!lastTransactionId) {
-            const transactions = await this._fetch();
-            if (transactions.length > 0) {
-                this._lastTransactionId = transactions[0].id;
-                await this.storage.set(this.STORAGE_LAST_TRANSACTION_ID_KEY, this._lastTransactionId);
-            }
+        const transactions = await this._fetch();
+        if (transactions.length > 0) {
+            this._lastTransactionId = transactions[0].id;
         }
 
         // Start transactionListener
-        this._next();
+        return this._next();
     }
 
     /**
@@ -47,7 +36,6 @@ module.exports = class TransactionListener {
         const transactions = await this._fetch(this._lastTransactionId);
         if (transactions.length > 0) {
             this._lastTransactionId = transactions[0].id;
-            this.storage.set(this.STORAGE_LAST_TRANSACTION_ID_KEY, this._lastTransactionId);
         }
 
         // Trigger events with new transactions

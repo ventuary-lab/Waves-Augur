@@ -1,7 +1,6 @@
 import React from 'react';
 
-import {dal as Dal, html} from 'components';
-const dal = Dal();
+import {dal, html} from 'components';
 import ContestSchema from 'types/ContestSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import SocialLinks from 'shared/SocialLinks';
