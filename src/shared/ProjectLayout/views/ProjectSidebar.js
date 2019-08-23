@@ -8,7 +8,6 @@ import _get from 'lodash-es/get';
 
 import Hint from 'shared/Hint';
 import {dal as Dal, html} from 'components';
-const dal = Dal();
 
 import DalHelper from 'components/dal/DalHelper';
 import Tags from 'shared/Tags';
@@ -27,6 +26,7 @@ import UserSchema from 'types/UserSchema';
 import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
+const dal = Dal();
 
 @connect(
     (state, props) => ({
@@ -106,21 +106,22 @@ export default class ProjectSidebar extends React.PureComponent {
                                     ~{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}
                                 </td>
                                 <td>
-                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                    <Hint text={__('This is estimated date based on average block time (~{minutes} min). Actuall time is {value} block', {
                                         value: Math.abs(this.props.project.blocks.crowdfundEnd),
+                                        minutes: dal.minutesInBlock,
                                     })}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>{__('Demo day')}</td>
                                 <td>
-                                    ~{moment(this.props.project.demoDay).format('DD.MM.YYYY')}
+                                    {moment(this.props.project.demoDay).format('DD.MM.YYYY')}
                                 </td>
-                                <td>
+                                {/*<td>
                                     <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
                                         value: Math.abs(dal.dateToHeight(this.props.project.demoDay)),
                                     })}/>
-                                </td>
+                                </td>*/}
                             </tr>
                         </tbody>
                     </table>

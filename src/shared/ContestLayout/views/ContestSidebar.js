@@ -73,20 +73,20 @@ export default class ContestSidebar extends React.PureComponent {
                                 <td>
                                     {moment(this.props.contest.expireEntries).format('DD.MM.YYYY')}
                                 </td>
-                                <td>
+                                {/*<td>
                                     <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
                                         value: Math.abs(dal.dateToHeight(this.props.contest.expireEntries))
                                     })}/>
-                                </td>
+                                </td>*/}
                             </tr>
                             <tr>
                                 <td>{__('Implementation Date')}</td>
                                 <td>{moment(this.props.contest.expireImplementation).format('DD.MM.YYYY')}</td>
-                                <td>
+                                {/*<td>
                                     <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
                                         value: Math.abs(dal.dateToHeight(this.props.contest.expireImplementation))
                                     })}/>
-                                </td>
+                                </td>*/}
                             </tr>
                         </tbody>
                     </table>

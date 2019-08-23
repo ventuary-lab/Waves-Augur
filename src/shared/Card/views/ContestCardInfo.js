@@ -63,11 +63,11 @@ export default class ContestCardInfo extends React.PureComponent {
                                 {__('ends')}:
                                 &nbsp;
                                 <div className={bem.element('days-hint')}>
-                                    <Hint
+                                    {/*<Hint
                                         text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
                                             value: Math.abs(dal.dateToHeight(this.props.expireEntries))
                                         })}
-                                    />
+                                    />*/}
                                 </div>
                             </div>
                             {moment(this.props.expireEntries).format('DD.MM.YYYY')}

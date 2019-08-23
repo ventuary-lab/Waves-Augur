@@ -4,7 +4,7 @@ import moment from 'moment';
 import LinesEllipsis from 'react-lines-ellipsis';
 import _upperFirst from 'lodash-es/upperFirst';
 
-import {html} from 'components';
+import {dal as Dal, html} from 'components';
 import coverStub from 'static/images/cover-stub.jpg';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
@@ -18,6 +18,7 @@ import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes
 import UserRole from 'enums/UserRole';
 import Hint from 'shared/Hint';
 
+const dal = Dal();
 const bem = html.bem('CardInfo');
 
 export default class CardInfo extends React.PureComponent {
@@ -116,8 +117,9 @@ export default class CardInfo extends React.PureComponent {
                                                 &nbsp;
                                                 <div className={bem.element('days-hint')}>
                                                     <Hint
-                                                        text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
-                                                            value: Math.abs(this.props.blocks.crowdfundEnd)
+                                                        text={__('This is estimated date based on average block time (~{minutes} min). Actuall time is {value} block', {
+                                                            value: Math.abs(this.props.blocks.crowdfundEnd),
+                                                            minutes: dal.minutesInBlock
                                                         })}
                                                     />
                                                 </div>
