@@ -111,7 +111,7 @@ export default class ProjectLayout extends React.PureComponent {
                                         ))
                                     }
                                 </div>
-                                {_get(this.state, 'project.contest') && (
+                                {_get(this.props, 'project.contest') && (
                                     <Link
                                         className={bem.element('link-to-contest')}
                                         toRoute={ROUTE_CONTEST_ENTRIES}
