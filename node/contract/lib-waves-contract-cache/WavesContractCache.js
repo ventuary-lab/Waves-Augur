@@ -55,8 +55,6 @@ module.exports = class WavesContractCache {
 
         await this.heightListener.start();
         await this.transactionListener.start();
-
-        return true;
     }
 
     _onTransactions(transactions) {

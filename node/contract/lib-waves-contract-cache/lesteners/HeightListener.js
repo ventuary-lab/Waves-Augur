@@ -26,8 +26,6 @@ module.exports = class HeightListener {
         this.app.logger.info('HeightListener: Last height: ' + (height || 'none'));
 
         this._next();
-
-        return true;
     }
 
     getHeight() {
