@@ -8,10 +8,11 @@ const httpServer = app.listen(port, () => {
     console.log(__dirname); // eslint-disable-line no-console
     console.log('Listening Port ' + port); // eslint-disable-line no-console
 });
+require('./aws-upload')(app);
 
-// if (process.env.DAPP) {
-//     require('./node/contract_legacy');
-// }
+if (process.env.DAPP) {
+    require('./node/contract_legacy');
+}
 require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
@@ -23,7 +24,6 @@ app.use(function(req, res, next) {
 });
 app.use(express.static(__dirname + '/dist'));
 
-require('./aws-upload')(app);
 
 app.get('/get-dapp-info', (req, res) => {
     res.send({

@@ -1,4 +1,5 @@
 import _merge from 'lodash-es/merge';
+import axios from 'axios';
 import ClientStorageComponent from 'yii-steroids/components/ClientStorageComponent';
 import HttpComponent from 'yii-steroids/components/HttpComponent';
 import HtmlComponent from 'yii-steroids/components/HtmlComponent';

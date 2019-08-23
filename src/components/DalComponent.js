@@ -9,7 +9,7 @@ import {getUser} from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
 
-import {http, clientStorage} from 'components';
+import {http, clientStorage, store} from 'components';
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
@@ -24,12 +24,15 @@ import {openModal} from 'yii-steroids/actions/modal';
 import ContestStatusEnum from '../enums/ContestStatusEnum';
 
 export default class DalComponent {
-
     constructor() {
-        this.isTestMode = process.env.APP_DAPP_NETWORK === 'test';
-        this.dApp = process.env.DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // testnet
+        const { global_vars } = store.store.getState();
+        console.log({ global_vars });
+
+        const { DAPP, APP_DAPP_NETWORK, APP_ADMIN_ADDRESS } = global_vars;
+        this.isTestMode = APP_DAPP_NETWORK === 'test';
+        this.dApp = DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF'; // testnet
         // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R'; // mainnet
-        this.adminAdress = '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
+        this.adminAdress = APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn';
         this.specialRoles = {
             [this.dApp]: UserRole.GENESIS,
             [this.adminAdress]: UserRole.ADMIN,
