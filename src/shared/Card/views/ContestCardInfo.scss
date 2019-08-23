@@ -121,4 +121,17 @@
   &__right-info {
     text-align: right;
   }
+
+  &__days-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__days-hint {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
 }

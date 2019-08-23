@@ -9,7 +9,7 @@ export default class ContestStatusEnum extends Enum {
 
     static getLabels() {
         return {
-            [this.OPEN]: __('Open'),
+            [this.OPEN]: __('Active'),
             [this.COMPLETED]: __('Completed'),
         };
     }

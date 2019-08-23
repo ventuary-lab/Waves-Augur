@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
-import {html} from 'components';
 import Tags from 'shared/Tags';
+import Hint from 'shared/Hint';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
 import DalHelper from 'components/dal/DalHelper';
@@ -17,6 +17,8 @@ import ContestWizardModal from 'modals/ContestWizardModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
 import {getUser} from 'yii-steroids/reducers/auth';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 
 const bem = html.bem('ContestSidebar');
 
@@ -71,10 +73,20 @@ export default class ContestSidebar extends React.PureComponent {
                                 <td>
                                     {moment(this.props.contest.expireEntries).format('DD.MM.YYYY')}
                                 </td>
+                                <td>
+                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                        value: Math.abs(dal.dateToHeight(this.props.contest.expireEntries))
+                                    })}/>
+                                </td>
                             </tr>
                             <tr>
                                 <td>{__('Implementation Date')}</td>
                                 <td>{moment(this.props.contest.expireImplementation).format('DD.MM.YYYY')}</td>
+                                <td>
+                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                        value: Math.abs(dal.dateToHeight(this.props.contest.expireImplementation))
+                                    })}/>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

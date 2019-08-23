@@ -500,4 +500,10 @@ $icons-dir: '../static/icons';
     min-height: 186px;
     background-image: url('#{$icons-dir}/keeper-no-account.svg');
   }
+
+  &__question-in-circle {
+    min-width: 14px;
+    min-height: 14px;
+    background-image: url('#{$icons-dir}/question-in-circle.svg');
+  }
 }

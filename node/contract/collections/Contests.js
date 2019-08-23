@@ -58,7 +58,7 @@ module.exports = class Contests extends BaseCollection {
             ...data,
             status: data.winner
                 ? ContestStatus.COMPLETED
-                : (data.expireImplementation > moment.utc().format('YYYY-MM-DD HH:mm:ss')
+                : (data.expireEntries > moment.utc().format('YYYY-MM-DD HH:mm:ss')
                     ? ContestStatus.OPEN
                     : ContestStatus.COMPLETED
                 ),

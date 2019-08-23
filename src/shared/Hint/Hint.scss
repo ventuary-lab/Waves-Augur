@@ -1,0 +1,44 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.Hint {
+  $root: &;
+
+  position: relative;
+
+  &__icon {
+    &:hover {
+      .Icon {
+        opacity: 1;
+      }
+
+      #{$root}__tooltip {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+
+    .Icon {
+      opacity: 0.5;
+      transition: opacity ease-in-out 0.3s;
+    }
+  }
+
+  &__tooltip {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity ease-in-out 0.3s;
+    z-index : $zi-popup;
+    position: absolute;
+    top: 25px;
+    right: -10px;
+
+    @include tablet {
+      padding-left: 15px;
+      transform: translateY(-50%);
+      top: 50%;
+      left: 10px;
+      right: auto;
+    }
+  }
+}
