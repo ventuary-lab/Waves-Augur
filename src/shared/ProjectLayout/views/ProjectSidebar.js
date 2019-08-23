@@ -24,6 +24,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
 
@@ -42,6 +43,9 @@ export default class ProjectSidebar extends React.PureComponent {
 
     render() {
         const status = this.props.project.status;
+        const canReport = _get(this.props, 'user.address') &&
+            _get(this.props, 'user.address') !== _get(this.props, 'project.author.address') &&
+            ![UserRole.INVITED, UserRole.SPEND_INVITE, UserRole.ANONYMOUS].includes(_get(this.props, 'user.role'));
 
         return (
             <div className={bem.block({
@@ -188,7 +192,7 @@ export default class ProjectSidebar extends React.PureComponent {
                         </Link>
                     )}
 
-                    {_get(this.props, 'user.address') && (
+                    {canReport && (
                         <span
                             className={bem.element('report')}
                             onClick={() => this.props.dispatch(openModal(ProjectReportModal, {
