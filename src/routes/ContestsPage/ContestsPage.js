@@ -2,18 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
-import _orderBy from 'lodash/orderBy';
 
 import {dal as Dal, html} from 'components';
 const dal = Dal();
 import Preloader from 'shared/Preloader';
 import ContestSchema from 'types/ContestSchema';
 import ContestStateEnum from 'enums/ContestStateEnum';
-import ContestStatusEnum from 'enums/ContestStatusEnum';
 import ContestCard from 'shared/ContestCard';
 
 import './ContestsPage.scss';
-import ProjectStateEnum from 'enums/ProjectStateEnum';
 
 const bem = html.bem('ContestsPage');
 

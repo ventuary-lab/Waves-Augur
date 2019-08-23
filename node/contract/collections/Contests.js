@@ -30,21 +30,25 @@ module.exports = class Contests extends BaseCollection {
         let contests = await this.getItemsAll();
         switch (filterName) {
             case ContestFilter.FEATURED:
-                //TODO
-                // contests = contests.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
-                // contests = _orderBy(contests, 'positiveBalance', 'desc');
+                contests = contests.filter(item => item.status === ContestStatus.OPEN);
+                contests = _orderBy(contests, 'createTime', 'desc');
                 break;
 
             case ContestFilter.NEW:
                 contests = contests.filter(item => item.status === ContestStatus.OPEN);
+                contests = _orderBy(contests, 'createTime', 'asc');
                 break;
 
             case ContestFilter.FINISHED:
                 contests = contests.filter(item => item.status === ContestStatus.COMPLETED);
+                contests = _orderBy(contests, 'expireEntries', 'desc');
+                break;
+
+            default:
+                contests = _orderBy(contests, 'createTime', 'asc');
                 break;
         }
 
-        contests = _orderBy(contests, 'createTime', 'asc');
         return contests;
     }
 

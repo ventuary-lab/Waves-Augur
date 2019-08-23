@@ -75,6 +75,8 @@ export default class ContestWizardModal extends React.PureComponent {
                             tags: this.props.contest.tags,
                             contents: this.props.contest.contents,
                             socials: this.props.contest.socials,
+                            createTime: this.props.createTime,
+                            winner: this.props.contest.winner,
                         }
                         : undefined
                     }
