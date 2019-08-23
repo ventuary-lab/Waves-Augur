@@ -47,6 +47,8 @@ export default class DalComponent {
             MULTIPLIER: 150,
         };
 
+        this.minutesInBlock = 1;
+
         this._authInterval = null;
         this._authChecker = this._authChecker.bind(this);
 
@@ -65,8 +67,9 @@ export default class DalComponent {
             // In test mode one block = 1 day
             return days;
         } else {
-            // One block = 2 minutes
-            return Math.round((days * 1440) / 2);
+            // One block = 1 minutes
+            console.log(1, days)
+            return Math.round((days * 1440) / this.minutesInBlock);
         }
     }
 
@@ -775,7 +778,7 @@ export default class DalComponent {
                 'additem',
                 [
                     data.uid,
-                    this.isTestMode ? 8 : 60, //60 blocks = 2 hours,
+                    this.isTestMode ? 8 : (60 * 2) / this.minutesInBlock, //120 blocks = 2 hours,
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,
