@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import LinesEllipsis from 'react-lines-ellipsis';
 
-import {html} from 'components';
+import {dal as Dal, html} from 'components';
+const dal = Dal();
 import coverStub from 'static/images/cover-stub.jpg';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
+import Hint from 'shared/Hint';
 
 import './ContestCardInfo.scss';
 import Link from 'yii-steroids/ui/nav/Link';
@@ -57,11 +59,18 @@ export default class ContestCardInfo extends React.PureComponent {
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('left-info')}>
-                            <div>
+                            <div className={bem.element('days-container')}>
                                 {__('ends')}:
-                                <br/>
-                                {moment(this.props.expireEntries).format('DD.MM.YYYY')}
+                                &nbsp;
+                                <div className={bem.element('days-hint')}>
+                                    <Hint
+                                        text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                            value: Math.abs(dal.dateToHeight(this.props.expireEntries))
+                                        })}
+                                    />
+                                </div>
                             </div>
+                            {moment(this.props.expireEntries).format('DD.MM.YYYY')}
                         </div>
                         <div className={bem.element('right-info')}>
                             <span className={bem.element('activity')}>

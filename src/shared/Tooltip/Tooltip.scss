@@ -1,0 +1,44 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.Tooltip {
+  $root: &;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  background-color: $color-gg-4;
+  font-size: 13px;
+  line-height: 14px;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  min-width: 224px;
+  min-height: 70px;
+  border-radius: 3px;
+
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 5px;
+
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid $color-gg-4;
+
+    @include tablet {
+      top: 50%;
+      transform: translateY(-50%);
+      left: -5px;
+      right: auto;
+
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid $color-gg-4;
+      border-left: none;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import _get from 'lodash-es/get';
 import Link from 'yii-steroids/ui/nav/Link';
 import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
 import {getNavItems} from 'yii-steroids/reducers/navigation';
+import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
 import {dal as Dal, html} from 'components';
@@ -15,6 +16,7 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
+import MessageModal from 'modals/MessageModal';
 
 import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
@@ -70,13 +72,30 @@ export default class HeaderProfile extends React.PureComponent {
         if (!this.props.isAuthorized || items.length === 0) {
             return (
                 <>
-                    <a
-                        href='https://forms.gle/uLwL83EM9MWSCBAp6'
-                        target={'_blank'}
-                        className={bem.element('login-link')}
-                    >
-                        {__('Login')}
-                    </a>
+                    {this.props.isPhone && (
+                        <a
+                            href='javascript:void(0)'
+                            className={bem.element('login-link')}
+                            onClick={() => {
+                                this.props.dispatch(openModal(MessageModal, {
+                                    icon: 'Icon__log-in-from-pc',
+                                    title: __('Log in from PC'),
+                                    color: 'success',
+                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                }));
+                            }}
+                        >
+                            {__('Login')}
+                        </a>
+                    ) || (
+                        <a
+                            href='https://forms.gle/uLwL83EM9MWSCBAp6'
+                            target={'_blank'}
+                            className={bem.element('login-link')}
+                        >
+                            {__('Login')}
+                        </a>
+                    )}
                     {/*<Link
                     className={bem.element('login-link')}
                     label={__('Login')}

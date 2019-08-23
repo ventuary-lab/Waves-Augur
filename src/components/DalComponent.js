@@ -758,6 +758,7 @@ export default class DalComponent {
         data.expireVoting = moment.utc().add(2, 'hour').format('YYYY-MM-DD HH:mm:ss');
         data.expireCrowd = moment.utc(data.expireCrowd).format('YYYY-MM-DD 00:00:00');
         data.expireWhale = moment.utc(data.expireCrowd).add(5, 'day').format('YYYY-MM-DD 00:00:00');
+        data.demoDay = moment.utc(data.demoDay).format('YYYY-MM-DD 00:00:00');
 
         this.transport.resetCache();
 

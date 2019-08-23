@@ -5,6 +5,7 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getCurrentRoute} from 'yii-steroids/reducers/routing';
 import {addCover} from 'actions/layout';
+import UserRole from 'enums/UserRole';
 import _get from 'lodash/get';
 
 import {dal as Dal, html} from 'components';
@@ -72,6 +73,8 @@ export default class ContestLayout extends React.PureComponent {
         }
 
         const ContentComponent = _get(routes, ['items', ROUTE_CONTEST, 'items', this.props.routeId, 'component']);
+        const canParticipation = (_get(this.props, 'user.address') && ![UserRole.INVITED, UserRole.SPEND_INVITE, UserRole.ANONYMOUS].includes(_get(this.props, 'user.role')))
+            && this.props.contest.status !== ContestStatusEnum.COMPLETED;
 
         return (
             <section className={bem.block()}>
@@ -112,7 +115,7 @@ export default class ContestLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {this.props.contest.status !== ContestStatusEnum.COMPLETED && (
+                            {canParticipation && (
                                 <div className={bem.element('card-to-action')}>
                                     <ActionButtonBlock
                                         title={__('Participate')}

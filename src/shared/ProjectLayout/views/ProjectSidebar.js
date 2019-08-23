@@ -6,6 +6,7 @@ import {isPhone} from 'yii-steroids/reducers/screen';
 import {getUser} from 'yii-steroids/reducers/auth';
 import _get from 'lodash-es/get';
 
+import Hint from 'shared/Hint';
 import {dal as Dal, html} from 'components';
 const dal = Dal();
 
@@ -23,6 +24,7 @@ import {openModal} from 'yii-steroids/actions/modal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import MessageModal from 'modals/MessageModal';
 import UserSchema from 'types/UserSchema';
+import UserRole from 'enums/UserRole';
 
 const bem = html.bem('ProjectSidebar');
 
@@ -41,6 +43,9 @@ export default class ProjectSidebar extends React.PureComponent {
 
     render() {
         const status = this.props.project.status;
+        const canReport = _get(this.props, 'user.address') &&
+            _get(this.props, 'user.address') !== _get(this.props, 'project.author.address') &&
+            ![UserRole.INVITED, UserRole.SPEND_INVITE, UserRole.ANONYMOUS].includes(_get(this.props, 'user.role'));
 
         return (
             <div className={bem.block({
@@ -98,12 +103,24 @@ export default class ProjectSidebar extends React.PureComponent {
                             <tr>
                                 <td>{__('Crowdfunding ends')}</td>
                                 <td>
-                                    {moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}
+                                    ~{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}
+                                </td>
+                                <td>
+                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                        value: Math.abs(this.props.project.blocks.crowdfundEnd),
+                                    })}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>{__('Demo day')}</td>
-                                <td>{moment(this.props.project.demoDay).format('DD.MM.YYYY')}</td>
+                                <td>
+                                    ~{moment(this.props.project.demoDay).format('DD.MM.YYYY')}
+                                </td>
+                                <td>
+                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                        value: Math.abs(dal.dateToHeight(this.props.project.demoDay)),
+                                    })}/>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -175,7 +192,7 @@ export default class ProjectSidebar extends React.PureComponent {
                         </Link>
                     )}
 
-                    {_get(this.props, 'user.address') && (
+                    {canReport && (
                         <span
                             className={bem.element('report')}
                             onClick={() => this.props.dispatch(openModal(ProjectReportModal, {

@@ -16,6 +16,7 @@ import './CardInfo.scss';
 import Link from 'yii-steroids/ui/nav/Link';
 import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 import UserRole from 'enums/UserRole';
+import Hint from 'shared/Hint';
 
 const bem = html.bem('CardInfo');
 
@@ -39,6 +40,7 @@ export default class CardInfo extends React.PureComponent {
         noHover: PropTypes.bool,
         contest: PropTypes.string,
         contestWinner: PropTypes.bool,
+        blocks: PropTypes.object,
     };
 
     render() {
@@ -109,8 +111,18 @@ export default class CardInfo extends React.PureComponent {
                                 <>
                                     {daysLeft && (
                                         <span className={bem.element('days-left')}>
-                                            <b>{daysLeft}</b>
-                                            <br />{__('{count, plural, one{day} few{days} many{days}} left', {
+                                            <div className={bem.element('days-container')}>
+                                                <b>{daysLeft} </b>
+                                                &nbsp;
+                                                <div className={bem.element('days-hint')}>
+                                                    <Hint
+                                                        text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                                            value: Math.abs(this.props.blocks.crowdfundEnd)
+                                                        })}
+                                                    />
+                                                </div>
+                                            </div>
+                                            {__('{count, plural, one{day} few{days} many{days}} left', {
                                                 count: daysLeft,
                                             })}
                                         </span>

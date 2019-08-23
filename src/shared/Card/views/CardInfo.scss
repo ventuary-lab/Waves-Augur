@@ -189,4 +189,17 @@
     display: block;
     padding-right: 10px;
   }
+
+  &__days-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__days-hint {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
 }
