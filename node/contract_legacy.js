@@ -5,6 +5,7 @@ const transport = new WavesTransport({
 });
 // const seed = 'estate arrange bitter coast fruit sure ticket giggle concert hurry net wrestle';
 const seed = process.env.ORACLE_SEED;
+const CHECKER_TIMEOUT = 60 * 1000 * 60;
 
 const checker = async () => {
     const regexp = /(status|reveal|final)_(.{36})(_(.+))?/;
@@ -31,7 +32,7 @@ const checker = async () => {
         });
     });
 
-    next(requests, 0, () => setTimeout(checker, 60 * 1000));
+    next(requests, 0, () => setTimeout(checker, CHECKER_TIMEOUT));
 };
 checker();
 
