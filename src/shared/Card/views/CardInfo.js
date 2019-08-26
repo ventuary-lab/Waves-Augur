@@ -116,7 +116,7 @@ export default class CardInfo extends React.PureComponent {
                                                 &nbsp;
                                                 <div className={bem.element('days-hint')}>
                                                     <Hint
-                                                        text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                                        text={__('This is estimated date based on average block time (~1 min). Actuall time is {value} block', {
                                                             value: Math.abs(this.props.blocks.crowdfundEnd)
                                                         })}
                                                     />

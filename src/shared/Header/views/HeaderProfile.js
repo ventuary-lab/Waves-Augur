@@ -139,7 +139,7 @@ export default class HeaderProfile extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={user.profile.avatar || avatarStub}
+                    src={_get(user, 'profile.avatar', avatarStub)}
                     alt={user.profile.name}
                 />
                 <div className={bem.element('inner')}>

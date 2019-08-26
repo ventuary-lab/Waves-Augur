@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import _times from 'lodash-es/times';
 import LinesEllipsis from 'react-lines-ellipsis';
 
@@ -62,8 +63,8 @@ export default class CardReview extends React.PureComponent {
                     >
                         <img
                             className={bem.element('avatar')}
-                            src={this.props.user.profile.avatar || avatarStub}
-                            alt={this.props.user.profile.name}
+                            src={_.get(this.props, 'user.profile.avatar', avatarStub)}
+                            alt={_.get(this.props, 'user.profile.name', '')}
                         />
                     </Link>
                     {this.props.isReviewPage && (

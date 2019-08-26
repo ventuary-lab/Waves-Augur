@@ -17,6 +17,7 @@ COPY src /app/src
 COPY webpack.js /app
 RUN node webpack production
 
+COPY .env /app
 COPY server.js /app
 COPY aws-upload.js /app
 

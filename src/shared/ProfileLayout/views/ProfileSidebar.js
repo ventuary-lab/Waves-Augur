@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
@@ -41,8 +42,8 @@ export default class ProfileSidebar extends React.PureComponent {
             <div className={bem.block()}>
                 <img
                     className={bem.element('avatar')}
-                    src={this.props.user.profile.avatar || avatarStub}
-                    alt={this.props.user.profile.name}
+                    src={_.get(this.props, 'user.profile.avatar', avatarStub)}
+                    alt={_.get(this.props, 'user.profile.name', '')}
                 />
                 {this.props.isMe && (
                     <div className={bem.element('you')}>

@@ -105,7 +105,7 @@ export default class ProjectSidebar extends React.PureComponent {
                                     ~{moment(this.props.project.expireCrowd).format('DD.MM.YYYY')}
                                 </td>
                                 <td>
-                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                    <Hint text={__('This is estimated date based on average block time (~1 min). Actuall time is {value} block', {
                                         value: Math.abs(this.props.project.blocks.crowdfundEnd),
                                     })}/>
                                 </td>
@@ -116,7 +116,7 @@ export default class ProjectSidebar extends React.PureComponent {
                                     ~{moment(this.props.project.demoDay).format('DD.MM.YYYY')}
                                 </td>
                                 <td>
-                                    <Hint text={__('This is estimated date based on average block time (~2 min). Actuall time is {value} block', {
+                                    <Hint text={__('This is estimated date based on average block time (~1 min). Actuall time is {value} block', {
                                         value: Math.abs(dal.dateToHeight(this.props.project.demoDay)),
                                     })}/>
                                 </td>

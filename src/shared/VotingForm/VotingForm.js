@@ -41,8 +41,8 @@ export default class VotingForm extends React.PureComponent {
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
-                        src={this.props.user.profile.avatar || userAvatarStub}
-                        alt={this.props.user.profile.name}
+                        src={_get(this.props, 'user.profile.avatar', userAvatarStub)}
+                        alt={_get(this.props, 'user.profile.name', '')}
                     />
                     <span className={bem.element('user-name')}>
                         {this.props.user.profile.name}

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import {getFormValues, change} from 'redux-form';
 import {getUser} from 'yii-steroids/reducers/auth';
 import _isFunction from 'lodash-es/isFunction';
@@ -64,8 +65,8 @@ export default class DonateForm extends React.PureComponent {
                 <div className={bem.element('user-info')}>
                     <img
                         className={bem.element('user-avatar')}
-                        src={this.props.user.profile.avatar || avatarStub}
-                        alt={this.props.user.profile.name}
+                        src={_.get(this.props, 'user.profile.avatar', avatarStub)}
+                        alt={_.get(this.props, 'user.profile.name', '')}
                     />
                     <span className={bem.element('user-name')}>
                         {this.props.user.profile.name}
