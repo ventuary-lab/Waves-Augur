@@ -30,11 +30,12 @@ const bem = html.bem('Layout');
         ws.onMessage = event => store.dispatch(apiWsHandler(event));
         ws.open();
 
-        const data = await axios.get('/api/v1/init');
-        const user = dal.auth();
+        const response = await axios.get('/api/v1/init');
+        const user = await dal.auth();
+
         return {
-            ...data,
-            user,
+            ...response.data,
+            user
         };
     }
 )
