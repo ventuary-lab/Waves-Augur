@@ -33,7 +33,10 @@ module.exports = class Contests extends BaseCollection {
         switch (filterName) {
             case ContestFilter.FEATURED:
                 //TODO
-                // contests = contests.filter(item => item.status === ProjectStatusEnum.CROWDFUND);
+                contests = contests.filter(item => (
+                    moment(item.expireEntries)
+                        .isAfter(moment.utc())
+                ));
                 // contests = _orderBy(contests, 'positiveBalance', 'desc');
                 break;
 
