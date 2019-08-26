@@ -2,7 +2,8 @@ const moment = require('moment');
 const _orderBy = require('lodash/orderBy');
 
 const BaseCollection = require('../base/BaseCollection');
-const contractConfig = require('../config/contract');
+// const contractConfig = require('../config/contract');
+const ProjectStatusEnum = require('../enums/ProjectStatus');
 const ContestStatus = require('../enums/ContestStatus');
 const ContestFilter = require('../enums/ContestFilter');
 
@@ -28,6 +29,7 @@ module.exports = class Contests extends BaseCollection {
      */
     async getContests(filterName = null) {
         let contests = await this.getItemsAll();
+
         switch (filterName) {
             case ContestFilter.FEATURED:
                 //TODO
@@ -36,7 +38,7 @@ module.exports = class Contests extends BaseCollection {
                 break;
 
             case ContestFilter.NEW:
-                contests = contests.filter(item => item.status === ContestStatus.OPEN);
+                // contests = contests.filter(item => item.status === ContestStatus.OPEN);
                 break;
 
             case ContestFilter.FINISHED:
@@ -44,7 +46,10 @@ module.exports = class Contests extends BaseCollection {
                 break;
         }
 
-        const order = filterName === ContestFilter.NEW ? 'desc' : 'asc';
+        const order = [
+            ContestFilter.NEW,
+            ContestFilter.FEATURED
+        ].includes(filterName) ? 'desc' : 'asc';
 
         contests = _orderBy(
             contests,
