@@ -69,7 +69,7 @@ export default class CardReview extends React.PureComponent {
                     </Link>
                     {this.props.isReviewPage && (
                         <>
-                            {this.props.user.profile.name && (
+                            {_.get(this.props, 'user.profile.name', false) && (
                                 <Link
                                     toRoute={this.props.user.role === UserRole.WHALE
                                         ? ROUTE_USER_GRANTS
@@ -81,7 +81,7 @@ export default class CardReview extends React.PureComponent {
                                     className={bem.element('name')}
                                     noStyles
                                 >
-                                    {this.props.user.profile.name}
+                                    {_.get(this.props, 'user.profile.name', '')}
                                 </Link>
                             )}
                             {this.props.user.profile.title && (

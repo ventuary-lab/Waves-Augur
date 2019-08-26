@@ -57,7 +57,7 @@ export default class GrantForm extends React.PureComponent {
                         alt={_.get(this.props, 'user.profile.name', '')}
                     />
                     <span className={bem.element('user-name')}>
-                        {this.props.user.profile.name}
+                        {_.get(this.props, 'user.profile.name', '')}
                     </span>
                     <div className={bem.element('donate-control')}>
                         {this.renderDonateControl()}

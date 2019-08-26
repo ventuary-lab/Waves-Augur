@@ -45,7 +45,7 @@ export default class VotingForm extends React.PureComponent {
                         alt={_get(this.props, 'user.profile.name', '')}
                     />
                     <span className={bem.element('user-name')}>
-                        {this.props.user.profile.name}
+                        {_get(this.props, 'user.profile.name', '')}
                     </span>
                     <span className={bem.element('vote-price')}>
                         {dal.getVotePayment()} 🔹

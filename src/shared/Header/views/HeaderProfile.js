@@ -140,7 +140,7 @@ export default class HeaderProfile extends React.PureComponent {
                 <img
                     className={bem.element('avatar')}
                     src={_get(user, 'profile.avatar', avatarStub)}
-                    alt={user.profile.name}
+                    alt={_get(user, 'profile.name', '')}
                 />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('balance')}>
@@ -148,7 +148,7 @@ export default class HeaderProfile extends React.PureComponent {
                     </div>
                     <div className={bem.element('info')}>
                         <div className={bem.element('name')}>
-                            {user.profile.name}
+                            {_get(user, 'profile.name', '')}
                         </div>
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
