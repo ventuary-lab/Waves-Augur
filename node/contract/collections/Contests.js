@@ -47,12 +47,12 @@ module.exports = class Contests extends BaseCollection {
         const order = filterName === ContestFilter.NEW ? 'desc' : 'asc';
 
         contests = _orderBy(
-            contests.map(
-                contest => ({ ...contest, createTime: moment(contest.createTime).toDate() })
-            ),
+            contests,
             'createTime',
             order
         );
+
+        console.log({ filterName, order, contests: contests.map(ct => ct.createTime) });
 
         return contests;
     }
