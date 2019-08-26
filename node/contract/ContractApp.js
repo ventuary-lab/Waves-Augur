@@ -4,6 +4,7 @@ const WebSocketServer = require('./components/WebSocketServer');
 const {Projects, Users, Contests, ReviewDonations, ReviewVotings, ReviewWhales} = require('./collections');
 const WavesTransport = require('./components/WavesTransport');
 
+const REDIS_NAMESPACE = process.env.REDIS_NAMESPACE || 'alpha-ns_';
 module.exports = class ContractApp {
 
     constructor(params = {}) {
@@ -25,7 +26,7 @@ module.exports = class ContractApp {
             nodeUrl: this.nodeUrl,
             updateHandler: this._onContractUpdate,
             storage: {
-                namespace: 'waves-' + this.dApp,
+                namespace: 'waves-' + REDIS_NAMESPACE + this.dApp,
                 redis: process.env.REDIS_URL ? process.env.REDIS_URL : {
                     host: process.env.REDIS_HOST || '127.0.0.1',
                     port: process.env.REDIS_PORT || 6379,
