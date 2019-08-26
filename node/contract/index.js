@@ -127,7 +127,7 @@ module.exports = async (app, httpServer) => {
                 };
             }
 
-            response.writeHead(content.error ? 500 : 200, {'Content-Type': 'text/html'});
+            response.writeHead(content && content.error ? 500 : 200, {'Content-Type': 'text/html'});
             response.end(JSON.stringify(content));
         });
     });
