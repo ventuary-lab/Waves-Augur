@@ -68,7 +68,7 @@ export default class ContestSidebar extends React.PureComponent {
                     <table className={bem.element('dates')}>
                         <tbody>
                             <tr>
-                                <td>{__('Ends')}</td>
+                                <td>{__('End of registration period')}</td>
                                 <td>
                                     {moment(this.props.contest.expireEntries).format('DD.MM.YYYY')}
                                 </td>
@@ -79,7 +79,7 @@ export default class ContestSidebar extends React.PureComponent {
                                 </td>
                             </tr>
                             <tr>
-                                <td>{__('Implementation Date')}</td>
+                                <td>{__('Implementation Deadline')}</td>
                                 <td>{moment(this.props.contest.expireImplementation).format('DD.MM.YYYY')}</td>
                                 <td>
                                     <Hint text={__('This is estimated date based on average block time (~1 min). Actuall time is {value} block', {

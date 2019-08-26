@@ -103,7 +103,7 @@ export default class ContestDetailsPage extends React.PureComponent {
             <div className={bem.element('right-info')}>
                 <div className={bem.element('right-info-item')}>
                     <div className={bem.element('title')}>
-                        {__('Deliverables')}
+                        {__('Final Deliverable')}
                     </div>
                     <span className={bem.element('description')}>
                         {this.props.contest.contents.deliverables}
@@ -111,7 +111,7 @@ export default class ContestDetailsPage extends React.PureComponent {
                 </div>
                 <div className={bem.element('right-info-item')}>
                     <div className={bem.element('title')}>
-                        {__('Platform')}
+                        {__('Target Platform')}
                     </div>
                     <span className={bem.element('description')}>
                         {this.props.contest.contents.platform}
@@ -119,7 +119,7 @@ export default class ContestDetailsPage extends React.PureComponent {
                 </div>
                 <div className={bem.element('right-info-item')}>
                     <div className={bem.element('title')}>
-                        {__('Links / Files')}
+                        {__('Additional Links / Files')}
                     </div>
                     <span className={bem.element('description')}>
                         {(this.props.contest.contents.links || '').split('\n').map((item, index) => (

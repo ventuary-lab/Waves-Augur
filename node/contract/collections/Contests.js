@@ -52,8 +52,6 @@ module.exports = class Contests extends BaseCollection {
             order
         );
 
-        console.log({ filterName, order, contests: contests.map(ct => ct.createTime) });
-
         return contests;
     }
 

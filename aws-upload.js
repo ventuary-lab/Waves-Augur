@@ -2,8 +2,8 @@
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const s3 = new AWS.S3({
-    accessKeyId: process.env.HDRIVE_S3_ACCESS_KEY || "778",
-    secretAccessKey: process.env.HDRIVE_S3_SECRET_KEY || "8783"
+    accessKeyId: process.env.HDRIVE_S3_ACCESS_KEY || '778',
+    secretAccessKey: process.env.HDRIVE_S3_SECRET_KEY || '8783'
 });
 const upload = require('./node/upload');
 

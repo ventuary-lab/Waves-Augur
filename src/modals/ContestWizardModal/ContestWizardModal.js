@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import moment from 'moment';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
@@ -149,15 +148,15 @@ export default class ContestWizardModal extends React.PureComponent {
                 />
                 <InputField
                     layout={'default'}
-                    topLabel={__('Your Project Name')}
+                    topLabel={__('Contest Title')}
                     attribute={'name'}
-                    placeholder={__('Example: Coupon Bazaar')}
+                    placeholder={__('Ex.: Dev Bounty 2019')}
                 />
                 <TextField
                     layout={'default'}
-                    topLabel={__('Sort Description')}
+                    topLabel={__('Contest Description')}
                     attribute={'description'}
-                    placeholder={__('Example: Web3 coupon marketplace.  Coupon — is a digital asset which represents a special discount from ...')}
+                    placeholder={__('Ex.: The largest grant competition for the best dApp implementation.')}
                 />
             </>
         );
@@ -216,13 +215,13 @@ export default class ContestWizardModal extends React.PureComponent {
                             <DateField
                                 layout={'default'}
                                 attribute='expireEntries'
-                                topLabel={__('End of the Period of Entires')}
+                                topLabel={__('End of registration period')}
                                 disabled={!!this.props.contest}
                             />
                             <DateField
                                 layout={'default'}
                                 attribute='expireImplementation'
-                                topLabel={__('Implementation Date')}
+                                topLabel={__('Implementation Deadline')}
                                 disabled={!!this.props.contest}
                             />
                         </div>
@@ -258,17 +257,20 @@ export default class ContestWizardModal extends React.PureComponent {
                 </div>
                 <div className={'form-row'}>
                     <TextField
-                        topLabel={ContestContentEnum.getLabel(ContestContentEnum.APP_DESCRIPTION)}
+                        topLabel={[
+                            ContestContentEnum.getLabel(ContestContentEnum.APP_DESCRIPTION),
+                            ContestContentEnum.getLabel(ContestContentEnum.APP_DESCRIPTION_ADDITIONAL),
+                        ].join('\n')}
                         attribute={'contents.appDescription'}
-                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.APP_DESCRIPTION)}
+                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.APP_DESCRIPTION_PLACEHOLDER)}
                         layout={'default'}
                     />
                 </div>
                 <div className={'form-row'}>
                     <TextField
-                        topLabel={ContestContentEnum.getLabel(ContestContentEnum.THEME)}
+                        topLabel={ContestContentEnum.getLabel(ContestContentEnum.THEME_DESCRIPTION)}
                         attribute={'contents.theme'}
-                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.THEME)}
+                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.THEME_DESCRIPTION_PLACEHOLDER)}
                         layout={'default'}
                     />
                 </div>
@@ -276,7 +278,7 @@ export default class ContestWizardModal extends React.PureComponent {
                     <TextField
                         topLabel={ContestContentEnum.getLabel(ContestContentEnum.SCREEN_DESCRIPTION)}
                         attribute={'contents.screenDescription'}
-                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.SCREEN_DESCRIPTION)}
+                        placeholder={ContestContentEnum.getPlaceholder(ContestContentEnum.SCREEN_DESCRIPTION_PLACEHOLDER)}
                         layout={'default'}
                     />
                 </div>
@@ -318,7 +320,7 @@ export default class ContestWizardModal extends React.PureComponent {
                     />
                 </div>
                 <TextField
-                    topLabel={__('Links / Files')}
+                    topLabel={__('Additional Links / Files')}
                     attribute={'contents.links'}
                     placeholder={__('Paste URL to your Files, Peferences, etc. Use ‘Enter’ after each link')}
                     layout={'default'}
@@ -335,15 +337,15 @@ export default class ContestWizardModal extends React.PureComponent {
                 </div>
                 <InputField
                     layout={'default'}
-                    topLabel={__('Deliverables')}
+                    topLabel={__('Final Deliverable (The end result format expected from the contest participants)')}
                     attribute={'contents.deliverables'}
-                    placeholder={__('Example: Full development or only UX/UI design, etc.')}
+                    placeholder={__('Ex.: Wireframes, Static UI Design, Interactive UX Design, Prototype, Fully Working Application etc.')}
                 />
                 <InputField
                     layout={'default'}
-                    topLabel={__('Platform')}
+                    topLabel={__('Target Platform')}
                     attribute={'contents.platform'}
-                    placeholder={__('Example: Android, iOS')}
+                    placeholder={__('Ex.: Android, iOS, Web App, Desktop App (Windows, Mac), Backend only')}
                 />
             </>
         );
