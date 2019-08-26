@@ -108,8 +108,8 @@ export default class ContestWizardModal extends React.PureComponent {
                             id: 'content',
                             component: this._stepContent,
                             validators: [
-                                [['contents.appDescription', 'contents.theme', 'contents.screenDescription'], 'required'],
-                                [['contents.appDescription', 'contents.theme', 'contents.screenDescription'], 'string', {min: 20, max: 500}],
+                                [['contents.appDescription'], 'required'],
+                                [['contents.appDescription'], 'string', {min: 20, max: 500}],
                             ],
                         },
                         {

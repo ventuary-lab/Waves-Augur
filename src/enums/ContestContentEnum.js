@@ -15,8 +15,8 @@ export default class ContestContentEnum extends Enum {
         return {
             [this.APP_DESCRIPTION]: __('Application Description'),
             [this.THEME]: __('Application Visual Style'),
-            [this.THEME_DESCRIPTION]: __('Application Visual Style (Stylistic Requirements for the UI)'),
-            [this.SCREEN_DESCRIPTION]: __('List of Main Screens (Screen Title | Screen Description)'),
+            [this.THEME_DESCRIPTION]: __('Application Visual Style (Stylistic Requirements for the UI) - Optional'),
+            [this.SCREEN_DESCRIPTION]: __('Main Screens Description (Screen Title - Screen Description) - Optional'),
         };
     }
 
