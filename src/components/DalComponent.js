@@ -463,7 +463,7 @@ export default class DalComponent {
         );
 
         contests = contests.filter(item => /\w+-\w+-\w+-\w+-\w+/.test(item.uid));
-        contests = _orderBy(contests, 'createTime', 'desc');
+
         return contests;
     }
 
