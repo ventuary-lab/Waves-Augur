@@ -50,34 +50,34 @@ export default class ParticipationContestModal extends React.PureComponent {
                             {__('Participation in the Contest')}
                         </div>
                         <div className={bem.element('sub-title')}>
-                            {__('If your project for the contest already exists on Ventuary-DAO  please paste the link below')}
+                            {__('If your project for the contest already exists on Ventuary-DAO\  please paste the link below')}
                         </div>
                         <span className={bem(
                             bem.element('new-project-icon'),
                             'Icon Icon__new-project_lg')}
                         />
-                        <Button
-                            className={bem.element('action', 'already-have-project')}
-                            color='primary'
-                            onClick={() => this.setState({
-                                isNewProject: false
-                            })}
-                        >
-                            {__('I have a project for this contest already')}
-                        </Button>
 
                         <Button
                             className={bem.element('action', 'create-new-project')}
                             color='primary'
-                            link
                             onClick={() => this.setState({
                                 isNewProject: true
                             })}
                         >
                             {__('Create new project for the contest right now')}
                         </Button>
-                    </>
-                )}
+                        <Button
+                            className={bem.element('action', 'already-have-project')}
+                            color='primary'
+                            link
+                            onClick={() => this.setState({
+                                isNewProject: false
+                            })}
+                        >
+                            {__('I have a project for this contest already')}
+                        </Button>
+                    </>)
+                }
 
                 {this.state.isNewProject === false && (
                     <>
