@@ -69,7 +69,7 @@ export default class ContestDetailsPage extends React.PureComponent {
                                     .map(attribute => (
                                         <div key={attribute}>
                                             <div className={bem.element('title')}>
-                                                {ContestContentEnum.getLabel(attribute)}
+                                                {ContestContentEnum.getFormLabel(attribute)}
                                             </div>
                                             <div className={bem.element('description')}>
                                                 {this.props.contest.contents[attribute].split('\n').map((item, index) => (

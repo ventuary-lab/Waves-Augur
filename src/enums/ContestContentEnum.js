@@ -7,8 +7,11 @@ export default class ContestContentEnum extends Enum {
     static APP_DESCRIPTION_PLACEHOLDER = 'appDescriptionPlaceholder';
     static THEME = 'theme';
     static THEME_DESCRIPTION = 'themeDescription';
+
+    static THEME_DESCRIPTION_NO_PARENTHESES = 'themeDescriptionNoParentheses';
     static THEME_DESCRIPTION_PLACEHOLDER = 'themeDescriptionPlaceholder'
     static SCREEN_DESCRIPTION = 'screenDescription';
+    static SCREEN_DESCRIPTION_NO_PARENTHESES = 'screenDescriptionNoParentheses';
     static SCREEN_DESCRIPTION_PLACEHOLDER = 'screenDescriptionPlaceholder';
 
     static getLabels() {
@@ -16,8 +19,28 @@ export default class ContestContentEnum extends Enum {
             [this.APP_DESCRIPTION]: __('Application Description'),
             [this.THEME]: __('Application Visual Style'),
             [this.THEME_DESCRIPTION]: __('Application Visual Style (Stylistic Requirements for the UI) - Optional'),
+            [this.THEME_DESCRIPTION_NO_PARENTHESES]: __('Application Visual Style'),
             [this.SCREEN_DESCRIPTION]: __('Main Screens Description (Screen Title - Screen Description) - Optional'),
+            [this.SCREEN_DESCRIPTION_NO_PARENTHESES]: __('Main Screens Description'),
         };
+    }
+
+    static getFormLabel(attribute) {
+        let key;
+
+        switch (attribute) {
+            case this.THEME_DESCRIPTION:
+                key = this.THEME_DESCRIPTION_NO_PARENTHESES;
+                break;
+            case this.SCREEN_DESCRIPTION:
+                key = this.SCREEN_DESCRIPTION_NO_PARENTHESES;
+                break;
+            default:
+                key = attribute;
+                break;
+        }
+
+        return this.getLabel(key);
     }
 
     static getPlaceholders() {
