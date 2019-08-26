@@ -79,7 +79,7 @@ export default {
             // },
             label: __('About'),
             roles: UserRole.getKeys(),
-            externalLink: 'https://medium.com/@alexpupyshev/ventuary-dao-the-first-dao-on-waves-platform-f5fc1cb35b32'
+            externalLink: 'https://blog.wavesplatform.com/waves-labs-to-use-dao-as-sandbox-for-grant-programs-d4b58413cb50'
         },
         [ROUTE_COMMUNITY]: {
             exact: true,
