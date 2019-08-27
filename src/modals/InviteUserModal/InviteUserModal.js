@@ -80,12 +80,6 @@ export default class InviteUserModal extends React.PureComponent {
                                     placeholder={__('Nickname')}
                                     disabled={!!this.state.invitationLink}
                                 />
-                                <CheckboxField
-                                    layoutClassName={bem.element('is-wale')}
-                                    attribute='isWhale'
-                                    label={__('It’s a Whale')}
-                                    disabled={!!this.state.invitationLink}
-                                />
                             </div>
                             <div className={bem(
                                 bem.element('icon'), _get(this.props, 'formValues.isWhale') ? 'Icon__invite-whale' : 'Icon__invite-user'
