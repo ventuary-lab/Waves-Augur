@@ -25,9 +25,9 @@ import ContestStatusEnum from '../enums/ContestStatusEnum';
 
 export default class DalComponent {
     constructor() {
-        this.dAppNetwork = null;
-        this.dApp = null;
-        this.adminAddress = null;
+        this.dAppNetwork = 'main';
+        this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
+        this.adminAddress = '3P9NDxt9Y6ePfM9hkQysgSvbHJvihr56Z18';
 
         this.hoc = fetchHoc;
         this.hoc2 = require('./dal/apiHoc').default;
