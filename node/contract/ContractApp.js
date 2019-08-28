@@ -64,7 +64,7 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
         this._isNowUpdated = false;
         this._isNeedUpdateAgain = false;
-        this._regularCallTimeout = 2 * 1000;
+        this._regularCallTimeout = 3 * 1000;
     }
 
     async start() {
@@ -92,16 +92,28 @@ module.exports = class ContractApp {
 
     async initRegularUpdate () {
         try {
-            await this._updateAll();
+            await this.pureUpdateAll();
         } catch (err) {
             console.log('Regular update error occured: ', err);
         }
 
         setTimeout(
             () => {
-                this.initRegularUpdate();
+                this.pureUpdateAll();
             },
             this._regularCallTimeout
+        );
+    }
+
+    async pureUpdateAll () {
+        this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
+
+        const nodeData = await this.transport.fetchAll();
+
+        await Promise.all(
+            Object.keys(this.collections).map(name => {
+                return this.collections[name].updateAll(nodeData);
+            })
         );
     }
 
@@ -112,15 +124,7 @@ module.exports = class ContractApp {
         }
         this._isNowUpdated = true;
 
-        this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
-
-        const nodeData = await this.transport.fetchAll();
-
-        await Promise.all(
-            Object.keys(this.collections).map(name => {
-                return this.collections[name].updateAll(nodeData);
-            })
-        );
+        this.pureUpdateAll();
 
         this._isNowUpdated = false;
         if (this._isNeedUpdateAgain) {
