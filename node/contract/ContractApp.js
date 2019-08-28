@@ -64,15 +64,29 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
         this._isNowUpdated = false;
         this._isNeedUpdateAgain = false;
+        this._regularCallTimeout = 2 * 1000;
     }
 
     async start() {
+        this.initRegularUpdate();
         this._isSkipUpdates = true;
         await this.contractCache.start();
         await this._updateAll();
         this._isSkipUpdates = false;
 
         this._websocket.start();
+    }
+
+    async initRegularUpdate () {
+        console.log('REGULAR UPDATE CALLED');
+        await this._updateAll();
+
+        setTimeout(
+            () => {
+                this.initRegularUpdate();
+            },
+            this._regularCallTimeout
+        );
     }
 
     async _updateAll() {
