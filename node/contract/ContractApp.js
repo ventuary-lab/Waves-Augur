@@ -64,26 +64,26 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
         this._isNowUpdated = false;
         this._isNeedUpdateAgain = false;
-        this._regularCallTimeout = 3 * 1000;
+        this._regularCallTimeout = 4 * 1000;
     }
 
     async start() {
-        this.initRegularUpdate();
         this._isSkipUpdates = true;
 
-        try {
-            await this.contractCache.start();
-            await this._updateAll();
-        } catch (err) {
-            console.log('Error happened on contract start...', err)
-            setTimeout(
-                async () => {
-                    await this.contractCache.start();
-                    await this._updateAll();
-                },
-                3000
-            );
-        }
+        this.initRegularUpdate();
+        // try {
+        //     await this.contractCache.start();
+        //     await this._updateAll();
+        // } catch (err) {
+        //     console.log('Error happened on contract start...', err)
+        //     setTimeout(
+        //         async () => {
+        //             await this.contractCache.start();
+        //             await this._updateAll();
+        //         },
+        //         3000
+        //     );
+        // }
 
         this._isSkipUpdates = false;
 
@@ -99,7 +99,7 @@ module.exports = class ContractApp {
 
         setTimeout(
             () => {
-                this.pureUpdateAll();
+                this.initRegularUpdate();
             },
             this._regularCallTimeout
         );
