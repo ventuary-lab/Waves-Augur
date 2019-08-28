@@ -95,8 +95,6 @@ module.exports = class ContractApp {
             await this._updateAll();
         } catch (err) {
             console.log('Regular update error occured: ', err);
-            this.initRegularUpdate();
-            return;
         }
 
         setTimeout(
