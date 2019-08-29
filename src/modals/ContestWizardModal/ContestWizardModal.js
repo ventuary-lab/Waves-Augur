@@ -140,7 +140,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your contest')}
+                    {__('Please fill in all the required fields to add your contest')}
                 </div>
                 <span className={bem(
                     bem.element('new-project-icon'),
@@ -166,7 +166,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your contest')}
+                    {__('Please fill in all the required fields to add your contest')}
                 </div>
                 <ImageField
                     topLabel={__('Contest’s Logo')}
@@ -202,7 +202,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your contest')}
+                    {__('Please fill in all the required fields to add your contest')}
                 </div>
                 <div className={'form-row'}>
                     <div className={'form-label-col'}>
@@ -253,7 +253,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your contest')}
+                    {__('Please fill in all the required fields to add your contest')}
                 </div>
                 <div className={'form-row'}>
                     <TextField
@@ -290,7 +290,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <div className={bem.element('socials-block')}>
                     {[SocialEnum.FACEBOOK, SocialEnum.TWITTER, SocialEnum.TELEGRAM].map(socialId => (
@@ -333,7 +333,7 @@ export default class ContestWizardModal extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your contest')}
+                    {__('Please fill in all the required fields to add your contest')}
                 </div>
                 <InputField
                     layout={'default'}
