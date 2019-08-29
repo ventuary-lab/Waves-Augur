@@ -6,6 +6,7 @@ import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
 import TagsField from 'ui/form/TagsField';
 import ImageField from 'ui/form/ImageField';
+import ImagePreviewsField from 'ui/form/ImagePreviewsField';
 
 import {dal, html} from 'components';
 
@@ -23,6 +24,7 @@ import ProjectSchema from 'types/ProjectSchema';
 const bem = html.bem('ProjectWizard');
 const FORM_ID = 'ProjectWizard';
 
+const FORM_FIELD_PREVIEW = 'previews';
 @connect(
     state => ({
         isPhone: isPhone(state),
@@ -42,14 +44,116 @@ export default class ProjectWizard extends React.PureComponent {
         this._stepName = this._stepName.bind(this);
         this._stepProject = this._stepProject.bind(this);
         this._stepIdeaThreeContacts= this._stepIdeaThreeContacts.bind(this);
+        this._onNextClick = this._onNextClick.bind(this);
+        this._getItems = this._getItems.bind(this);
+        this._updateFormTitle = this._updateFormTitle.bind(this);
+
+        this.defaultFormTitle = 'New Project';
+
+        this.uniqueTabTitlesMap = new Map([
+            [FORM_FIELD_PREVIEW, 'Upload your projects’s previews']
+        ]);
+
+        this.state = {
+            formTitle: this.defaultFormTitle
+        };
+    }
+
+    _updateFormTitle (index) {
+        const items = this._getItems();
+        const currentTab = items[index];
+
+        if (!currentTab) {
+            this.setState({ formTitle: this.defaultFormTitle });
+            return;
+        };
+
+        const tabTitle = this.uniqueTabTitlesMap.get(currentTab.id);
+
+        if (!tabTitle) {
+            this.setState({ formTitle: this.defaultFormTitle });
+            return;
+        };
+
+        this.setState({ formTitle: tabTitle });
+    }
+
+    _onNextClick (newIndex) {
+        this._updateFormTitle(newIndex);
+    }
+
+    _getItems () {
+        return [
+            {
+                id: 'name',
+                component: this._stepName,
+                validators: [
+                    [['name', 'description'], 'required'],
+                    [['name'], 'string', {min: 3, max: 150}],
+                    [['description'], 'string', {min: 10, max: 250}],
+                ],
+            },
+            {
+                id: 'project',
+                component: this._stepProject,
+                validators: [
+                    [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
+                    [['expireCrowd', 'demoDay'], 'date'],
+                    ['targetWaves', 'integer', {min: 1}],
+                ],
+            },
+            {
+                id: FORM_FIELD_PREVIEW,
+                component: this._stepPreviews,
+                validators: []
+            },
+            {
+                id: 'logo',
+                component: this._stepLogo,
+                validators: [
+                    // ['logoUrl', 'required'],
+                    ['logoUrl', 'string'],
+                ],
+            },
+            {
+                id: 'idea-one',
+                component: this._stepIdeaOne,
+                validators: [
+                    [['contents.problem', 'contents.solution', 'contents.xFactor'], 'required'],
+                    [['contents.problem', 'contents.solution', 'contents.xFactor'], 'string', {min: 20, max: 500}],
+                ],
+            },
+            {
+                id: 'idea-two',
+                component: this._stepIdeaTwo,
+                validators: [
+                    [['contents.whySmartContracts', 'contents.newFeaturesOrMvp', 'contents.marketStrategy'], 'required'],
+                    [['contents.whySmartContracts', 'contents.newFeaturesOrMvp'], 'string', {min: 20, max: 500}],
+                    ['contents.marketStrategy', 'string', {min: 20, max: 250}],
+                ],
+            },
+            {
+                id: 'idea-three-contacts',
+                component: this._stepIdeaThreeContacts,
+                validators: [
+                    [['contents.impactOnCommunity', 'contents.currentStage', 'socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'required'],
+                    [['contents.impactOnCommunity', 'contents.currentStage'], 'string', {min: 20, max: 250}],
+                    ['socials.url_' + SocialEnum.TWITTER, 'social'],
+                    [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
+                ],
+            },
+        ];
     }
 
     render() {
+        const { formTitle } = this.state;
+
         return (
             <div className={bem.block()}>
                 <FormWizard
                     formId={FORM_ID}
-                    title={__('New Project')}
+                    title={__(formTitle)}
+                    onNextClick={this._onNextClick}
                     onSubmit={values => {
                         return dal.saveProject(values, this.props.contest)
                             .then(project => {
@@ -72,66 +176,12 @@ export default class ProjectWizard extends React.PureComponent {
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
                             socials: this.props.project.socials,
+                            previews: this.props.project.previews,
                         }
                         : undefined
                     }
                     layout={'horizontal'}
-                    items={[
-                        {
-                            id: 'name',
-                            component: this._stepName,
-                            validators: [
-                                [['name', 'description'], 'required'],
-                                [['name'], 'string', {min: 3, max: 150}],
-                                [['description'], 'string', {min: 10, max: 250}],
-                            ],
-                        },
-                        {
-                            id: 'project',
-                            component: this._stepProject,
-                            // validators: this.props.project ? [] : [
-                            validators: [
-                                [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
-                                [['expireCrowd', 'demoDay'], 'date'],
-                                ['targetWaves', 'integer', {min: 1}],
-                            ],
-                        },
-                        {
-                            id: 'logo',
-                            component: this._stepLogo,
-                            validators: [
-                                // ['logoUrl', 'required'],
-                                ['logoUrl', 'string'],
-                            ],
-                        },
-                        {
-                            id: 'idea-one',
-                            component: this._stepIdeaOne,
-                            validators: [
-                                [['contents.problem', 'contents.solution', 'contents.xFactor'], 'required'],
-                                [['contents.problem', 'contents.solution', 'contents.xFactor'], 'string', {min: 20, max: 500}],
-                            ],
-                        },
-                        {
-                            id: 'idea-two',
-                            component: this._stepIdeaTwo,
-                            validators: [
-                                [['contents.whySmartContracts', 'contents.newFeaturesOrMvp', 'contents.marketStrategy'], 'required'],
-                                [['contents.whySmartContracts', 'contents.newFeaturesOrMvp'], 'string', {min: 20, max: 500}],
-                                ['contents.marketStrategy', 'string', {min: 20, max: 250}],
-                            ],
-                        },
-                        {
-                            id: 'idea-three-contacts',
-                            component: this._stepIdeaThreeContacts,
-                            validators: [
-                                [['contents.impactOnCommunity', 'contents.currentStage', 'socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'required'],
-                                [['contents.impactOnCommunity', 'contents.currentStage'], 'string', {min: 20, max: 250}],
-                                ['socials.url_' + SocialEnum.TWITTER, 'social'],
-                                [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
-                            ],
-                        },
-                    ]}
+                    items={this._getItems()}
                 />
             </div>
         );
@@ -209,6 +259,21 @@ export default class ProjectWizard extends React.PureComponent {
                     placeholder={__('Enter Tags')}
                     max={5}
                 />
+            </>
+        );
+    }
+
+    _stepPreviews () {
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('10 images max. Recomended size 950x620 px, .jpg, .png, .svg')}
+                </div>
+                {/* <ImagePreviewsField
+                    layout={'default'}
+                    uploadApi={'/upload?crop=false'}
+                    attribute='logoUrl'
+                /> */}
             </>
         );
     }

@@ -18,6 +18,7 @@ export default class FormWizard extends React.PureComponent {
         onSubmit: PropTypes.func,
         onComplete: PropTypes.func,
         onFirstBack: PropTypes.func,
+        onNextClick: PropTypes.oneOf(PropTypes.func, PropTypes.undefined),
         items: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string,
             component: PropTypes.func,
@@ -29,6 +30,7 @@ export default class FormWizard extends React.PureComponent {
         super(...arguments);
 
         this._onSubmit = this._onSubmit.bind(this);
+        this.onNextClick = this.props.onNextClick;
 
         this.state = {
             activeId: this.props.items[0].id,
@@ -127,6 +129,10 @@ export default class FormWizard extends React.PureComponent {
         this.setState({
             activeId: this.props.items[newIndex].id,
         });
+
+        if (this.onNextClick) {
+            this.onNextClick(newIndex);
+        }
     }
 
     _onSubmit(values) {
