@@ -789,10 +789,6 @@ export default class DalComponent {
                 this.contract.LISTINGFEE
             );
         } else {
-            if (!data.createTime) {
-                data.createTime = DalHelper.dateNow();
-            };
-
             await this.transport.nodePublish(
                 'projupdate',
                 [
