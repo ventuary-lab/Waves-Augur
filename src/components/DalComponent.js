@@ -772,8 +772,11 @@ export default class DalComponent {
             data.coverSmallUrl = contest.coverSmallUrl;
         }
 
+
+
         if (isNew) {
             data.createTime = DalHelper.dateNow();
+
             await this.transport.nodePublish(
                 'additem',
                 [
@@ -786,6 +789,10 @@ export default class DalComponent {
                 this.contract.LISTINGFEE
             );
         } else {
+            if (!data.createTime) {
+                data.createTime = DalHelper.dateNow();
+            };
+
             await this.transport.nodePublish(
                 'projupdate',
                 [
