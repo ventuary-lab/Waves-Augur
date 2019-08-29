@@ -55,35 +55,40 @@ export default class ProjectWizard extends React.PureComponent {
         ]);
 
         this.state = {
-            formTitle: this.defaultFormTitle
+            formTitle: this._updateFormTitle(0)
         };
-    }
+    } 
 
     _updateFormTitle (index) {
         const items = this._getItems();
         const currentTab = items[index];
 
         if (!currentTab) {
-            this.setState({ formTitle: this.defaultFormTitle });
-            return;
+            return this.defaultFormTitle;
         };
 
         const tabTitle = this.uniqueTabTitlesMap.get(currentTab.id);
 
         if (!tabTitle) {
-            this.setState({ formTitle: this.defaultFormTitle });
-            return;
+            return this.defaultFormTitle;
         };
 
-        this.setState({ formTitle: tabTitle });
+        return tabTitle;
     }
 
     _onNextClick (newIndex) {
-        this._updateFormTitle(newIndex);
+        const updatedTitle = this._updateFormTitle(newIndex);
+        this.setState({ formTitle: updatedTitle });
     }
 
     _getItems () {
         return [
+
+            {
+                id: FORM_FIELD_PREVIEW,
+                component: this._stepPreviews,
+                validators: []
+            },
             {
                 id: 'name',
                 component: this._stepName,
@@ -102,11 +107,11 @@ export default class ProjectWizard extends React.PureComponent {
                     ['targetWaves', 'integer', {min: 1}],
                 ],
             },
-            {
-                id: FORM_FIELD_PREVIEW,
-                component: this._stepPreviews,
-                validators: []
-            },
+            // {
+            //     id: FORM_FIELD_PREVIEW,
+            //     component: this._stepPreviews,
+            //     validators: []
+            // },
             {
                 id: 'logo',
                 component: this._stepLogo,
@@ -269,11 +274,11 @@ export default class ProjectWizard extends React.PureComponent {
                 <div className={bem.element('sub-title')}>
                     {__('10 images max. Recomended size 950x620 px, .jpg, .png, .svg')}
                 </div>
-                {/* <ImagePreviewsField
+                <ImagePreviewsField
                     layout={'default'}
                     uploadApi={'/upload?crop=false'}
-                    attribute='logoUrl'
-                /> */}
+                    attribute='previews'
+                />
             </>
         );
     }

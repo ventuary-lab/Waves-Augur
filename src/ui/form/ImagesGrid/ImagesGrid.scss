@@ -1,0 +1,33 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+.ImagesGrid {
+    $root: &;
+    $count: 4px;
+    $percent: 100px / $count * 1%;
+
+    &__root-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        & > * {
+            max-width: calc(25% - 16px);
+            position: relative;
+            margin: 8px;
+        }
+    }
+
+    &__cross-icon {
+        position: absolute;
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+        right: 5px;
+        top: 5px;
+    }
+
+    &__main-img {
+        border-radius: 5px;
+    }
+}

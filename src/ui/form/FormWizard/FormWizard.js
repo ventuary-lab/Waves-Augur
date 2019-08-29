@@ -18,7 +18,7 @@ export default class FormWizard extends React.PureComponent {
         onSubmit: PropTypes.func,
         onComplete: PropTypes.func,
         onFirstBack: PropTypes.func,
-        onNextClick: PropTypes.oneOf(PropTypes.func, PropTypes.undefined),
+        onNextClick: PropTypes.oneOf([PropTypes.func, PropTypes.undefined]),
         items: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string,
             component: PropTypes.func,
