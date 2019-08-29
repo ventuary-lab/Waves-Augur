@@ -771,7 +771,6 @@ export default class DalComponent {
             data.coverUrl = contest.coverUrl;
             data.coverSmallUrl = contest.coverSmallUrl;
         }
-
         if (isNew) {
             data.createTime = DalHelper.dateNow();
             await this.transport.nodePublish(
