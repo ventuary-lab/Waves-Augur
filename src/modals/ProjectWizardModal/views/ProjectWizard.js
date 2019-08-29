@@ -53,7 +53,11 @@ export default class ProjectWizard extends React.PureComponent {
                     formId={FORM_ID}
                     title={__('New Project')}
                     onSubmit={values => {
-                        return dal.saveProject({ ...project, values }, this.props.contest)
+                        if (project.createTime) {
+                            values.createTime = project.createTime;
+                        };
+
+                        return dal.saveProject(values, this.props.contest)
                             .then(project => {
                                 this.props.dispatch(goToPage(ROUTE_PROJECT_FEED, {uid: project.uid}));
                             });
