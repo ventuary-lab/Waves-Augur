@@ -150,7 +150,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <span className={bem(
                     bem.element('new-project-icon'),
@@ -164,7 +164,7 @@ export default class ProjectWizard extends React.PureComponent {
                 />
                 <TextField
                     layout={'default'}
-                    topLabel={__('Sort Description')}
+                    topLabel={__('Short Description')}
                     attribute={'description'}
                     placeholder={__('Example: Web3 coupon marketplace.  Coupon — is a digital asset which represents a special discount from ...')}
                 />
@@ -176,7 +176,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <div className={'form-row'}>
                     <div className={'form-label-col'}>
@@ -241,7 +241,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <div className={'form-row'}>
                     <TextField
@@ -275,7 +275,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <div className={'form-row'}>
                     <TextField
@@ -309,7 +309,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('Please fill all necessary fields to add your awesome idea')}
+                    {__('Please fill in all the required fields to add your awesome idea')}
                 </div>
                 <div className={'form-row'}>
                     <TextField
