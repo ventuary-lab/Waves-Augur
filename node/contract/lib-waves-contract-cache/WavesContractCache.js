@@ -51,10 +51,10 @@ module.exports = class WavesContractCache {
     }
 
     async start() {
-        // this.logger.info('Start listen income transactions and height updates... Node ' + this.nodeUrl + ', DApp ' + this.dApp);
+        this.logger.info('Start listen income transactions and height updates... Node ' + this.nodeUrl + ', DApp ' + this.dApp);
 
-        // await this.heightListener.start();
-        // await this.transactionListener.start();
+        await this.heightListener.start();
+        await this.transactionListener.start();
     }
 
     _onTransactions(transactions) {
