@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js add @uppy/react
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js add react-slick
 
 PATH: 
   /usr/local/var/www/Waves-Augur/jdk8u222-b10-jre/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, mkdir '/usr/local/var/www/Waves-Augur/node_modules/@uppy/react'
+  Error: EACCES: permission denied, unlink '/usr/local/var/www/Waves-Augur/node_modules/@uppy/aws-s3-multipart/package.json'
 
 npm manifest: 
   {
@@ -111,6 +111,7 @@ npm manifest:
       "@types/uuid": "^3.4.4",
       "@types/webpack-env": "^1.13.6",
       "@types/yup": "^0.26.7",
+      "@uppy/react": "^1.2.0",
       "@waves/waves-crypto": "^2.1.2",
       "@waves/waves-transactions": "^3.11.0",
       "autoprefixer": "^9.4.2",
@@ -1702,6 +1703,18 @@ Lockfile:
       "@uppy/utils" "1.2.0"
       classnames "^2.2.6"
       preact "8.2.9"
+  
+  "@uppy/react@^1.2.0":
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/@uppy/react/-/react-1.2.0.tgz#0ade3641de1b9f53376a33c030d1f92f1d4c4c93"
+    integrity sha512-XBIX3G/GqT434rLDtCoHjTsMjswoyHm0uBD49NQHkKgvqLDC0UZfQHnYKiTTH4MBl1MaRLJSOmgFv3A2TAdpFQ==
+    dependencies:
+      "@uppy/dashboard" "1.2.0"
+      "@uppy/drag-drop" "1.2.0"
+      "@uppy/progress-bar" "1.2.0"
+      "@uppy/status-bar" "1.2.0"
+      "@uppy/utils" "1.2.0"
+      prop-types "^15.6.1"
   
   "@uppy/redux-dev-tools@1.2.0":
     version "1.2.0"

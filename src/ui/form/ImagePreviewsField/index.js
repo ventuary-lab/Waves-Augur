@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
 import Dropzone from 'react-dropzone';
 import ImagesGrid from 'ui/form/ImagesGrid';
-import { Loader } from 'ui/anims/base-loader';
+// import { Loader } from 'ui/anims/base-loader';
 
 import {html} from 'components';
 
@@ -28,12 +28,13 @@ class ImagePreviewsField extends React.PureComponent {
     constructor() {
         super(...arguments);
 
+        const initialImages = this.props.input.value || this.props.previews || [];
+
         this.state = {
             file: null,
             isUploadFailed: false,
             onDragEnter: false,
-            // uploadedImages: []
-            uploadedImages: Array(7).fill('https://alpha-ventuary-dao.s3.eu-west-2.amazonaws.com/uploads/cropped_9fe2e180-c5a6-11e9-a3e9-89e03abfc47b.jpg')
+            uploadedImages: initialImages
         };
 
         this.dropZoneRef = React.createRef();
@@ -71,38 +72,38 @@ class ImagePreviewsField extends React.PureComponent {
                     images={this.state.uploadedImages}
                     onRemove={this._onImageRemove}
                 />
-                <div className={bem.element('drop-zone-block', {
-                    'd-none': uploadedImages.length < 10,
-                    'on-drag-enter': this.state.onDragEnter,
-                })}>
-                    <Dropzone
-                        ref={this.dropZoneRef}
-                        noClick={true}
-                        onDrop={this._onDrop}
-                        onDragEnter={this._onDragEnter}
-                        onDragLeave={this._onDragLeave}
-                        accept={'image/jpeg, image/png, image/svg+xml'}
-                    >
-                        {({getRootProps, getInputProps}) => (
-                            <div {...getRootProps({className: bem.element('drop-zone')})}>
-                                <input
-                                    {...getInputProps()}
-                                    name={'avatar'}
-                                    onChange={this._onBrowseAccept}
-                                />
-                                <span className={bem.element('drop-zone-title')}>
-                                    {this.props.title || __('Drop Your Image Here')}
-                                </span>
-                            </div>
-                        )}
-                    </Dropzone>
-                </div>
+                {uploadedImages.length < 10 && (
+                    <div className={bem.element('drop-zone-block', {
+                        'on-drag-enter': this.state.onDragEnter,
+                    })}>
+                        <Dropzone
+                            ref={this.dropZoneRef}
+                            noClick={true}
+                            onDrop={this._onDrop}
+                            onDragEnter={this._onDragEnter}
+                            onDragLeave={this._onDragLeave}
+                            accept={'image/jpeg, image/png, image/svg+xml'}
+                        >
+                            {({getRootProps, getInputProps}) => (
+                                <div {...getRootProps({className: bem.element('drop-zone')})}>
+                                    <input
+                                        {...getInputProps()}
+                                        name={'avatar'}
+                                        onChange={this._onBrowseAccept}
+                                    />
+                                    <span className={bem.element('drop-zone-title')}>
+                                        {this.props.title || __('Drop Your Image Here')}
+                                    </span>
+                                </div>
+                            )}
+                        </Dropzone>
+                    </div>
+                )}
                 <div className={bem.element('upload-failed', {
                     'visible': this.state.isUploadFailed,
                 })}>
                     {__('File failed to upload')}
                 </div>
-
                 {uploadedImages.length < 10 && (
                     <span
                         className={bem.element('image-choose')}

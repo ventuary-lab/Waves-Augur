@@ -4,7 +4,41 @@
 .ProjectPreviewDetails {
     $root: &;
 
-    &__root {
-        
+    // &__root {
+
+    // }
+
+    &__top-slider {
+        height: 100%;
+        max-height: 480px;
+    }
+
+    &__bottom-img {
+       padding: 10px;
+
+        & img {
+            border-radius: 2px;
+        }
+    }
+
+    &__bottom-img.current {
+        & img {
+            border: 1px solid #0BC91F;
+        }
+    }
+
+    &__top-img {
+        width: 100%;
+        background-color: #f0f0f0;
+        width: 100%;
+        display: inline-block;
+        margin: 11px 0;
+
+        & img {
+            height: 100%;
+            width: 100%;
+            max-height: 440px;
+            object-fit: contain;
+        }
     }
 } 
