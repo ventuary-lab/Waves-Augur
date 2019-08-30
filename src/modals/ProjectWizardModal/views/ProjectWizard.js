@@ -45,6 +45,8 @@ export default class ProjectWizard extends React.PureComponent {
     }
 
     render() {
+        const { project } = this.props;
+
         return (
             <div className={bem.block()}>
                 <FormWizard
