@@ -61,7 +61,6 @@ export default class ContestWizardModal extends React.PureComponent {
                     }}
                     initialValues={this.props.contest
                         ? {
-                            createTime: this.props.contest.createTime,
                             uid: this.props.contest.uid,
                             name: this.props.contest.name,
                             description: this.props.contest.description,

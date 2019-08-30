@@ -76,9 +76,6 @@ export default class ProjectWizard extends React.PureComponent {
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
                             socials: this.props.project.socials,
-                            contest: this.props.project.contest || '',
-                            coverSmallUrl: this.props.project.coverSmallUrl || '',
-                            coverUrl: this.props.project.coverUrl || '',
                         }
                         : undefined
                     }
