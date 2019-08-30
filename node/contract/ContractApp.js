@@ -71,19 +71,21 @@ module.exports = class ContractApp {
         this._isSkipUpdates = true;
 
         this.initRegularUpdate();
-        // try {
-        //     await this.contractCache.start();
-        //     await this._updateAll();
-        // } catch (err) {
-        //     console.log('Error happened on contract start...', err)
-        //     setTimeout(
-        //         async () => {
-        //             await this.contractCache.start();
-        //             await this._updateAll();
-        //         },
-        //         3000
-        //     );
-        // }
+        
+        try {
+            await this.contractCache.start();
+            await this._updateAll();
+        } catch (err) {
+            console.log('Error happened on contract start...', err);
+
+            setTimeout(
+                async () => {
+                    await this.contractCache.start();
+                    await this._updateAll();
+                },
+                3000
+            );
+        }
 
         this._isSkipUpdates = false;
 
