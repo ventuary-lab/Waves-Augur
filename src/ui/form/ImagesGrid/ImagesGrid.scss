@@ -15,12 +15,12 @@
             max-width: calc(25% - 16px);
             position: relative;
             margin: 8px;
+            cursor: pointer;
         }
     }
 
     &__cross-icon {
         position: absolute;
-        cursor: pointer;
         width: 25px;
         height: 25px;
         right: 5px;

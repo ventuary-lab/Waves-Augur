@@ -60,27 +60,19 @@ class ImagePreviewsField extends React.PureComponent {
     }
 
     render() {
+        const { uploadedImages } = this.state;
+
         return (
             <div className={bem.block({
                 'is-cover': this.props.isCover,
                 'is-cover-small': this.props.isCoverSmall,
             })}>
-                {/* <div className={bem.element('img-grid')}>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                </div> */}
                 <ImagesGrid
                     images={this.state.uploadedImages}
                     onRemove={this._onImageRemove}
                 />
                 <div className={bem.element('drop-zone-block', {
-                    'd-none': !!this.props.input.value,
+                    'd-none': uploadedImages.length < 10,
                     'on-drag-enter': this.state.onDragEnter,
                 })}>
                     <Dropzone
@@ -111,13 +103,15 @@ class ImagePreviewsField extends React.PureComponent {
                     {__('File failed to upload')}
                 </div>
 
-                <span
-                    className={bem.element('image-choose')}
-                    onClick={this._openBrowseDialog}
-                >
-                    <span className={bem.element('image-choose-icon')}/>
-                    {__('Choose Photo')}
-                </span>
+                {uploadedImages.length < 10 && (
+                    <span
+                        className={bem.element('image-choose')}
+                        onClick={this._openBrowseDialog}
+                    >
+                        <span className={bem.element('image-choose-icon')}/>
+                        {__('Choose Photo')}
+                    </span>
+                )}
             </div>
         );
     }

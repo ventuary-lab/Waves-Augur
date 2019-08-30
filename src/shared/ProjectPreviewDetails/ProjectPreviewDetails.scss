@@ -1,0 +1,10 @@
+@import '../../style/helpers/vars';
+@import '../../style/helpers/mixins';
+
+.ProjectPreviewDetails {
+    $root: &;
+
+    &__root {
+        
+    }
+} 
