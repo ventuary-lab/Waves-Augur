@@ -32,7 +32,7 @@ export default class WaitingTab extends React.PureComponent {
                             {__('We were waiting for you!')}
                         </div>
                         <span className={bem.element('invited-by')}>
-                            {__('You was invited by')}&nbsp;
+                            {__('You were invited by')}&nbsp;
                             <Link
                                 layoutClassName={bem.element('link')}
                                 toRoute={this.props.invitedBy.role === UserRole.WHALE ? ROUTE_USER_GRANTS : ROUTE_USER_DONATION}
