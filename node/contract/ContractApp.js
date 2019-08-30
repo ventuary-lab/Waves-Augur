@@ -64,48 +64,26 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
         this._isNowUpdated = false;
         this._isNeedUpdateAgain = false;
-        this._regularCallTimeout = 4 * 1000;
     }
 
     async start() {
         this._isSkipUpdates = true;
 
-        this.initRegularUpdate();
-        // try {
-        //     await this.contractCache.start();
-        //     await this._updateAll();
-        // } catch (err) {
-        //     console.log('Error happened on contract start...', err)
-        //     setTimeout(
-        //         async () => {
-        //             await this.contractCache.start();
-        //             await this._updateAll();
-        //         },
-        //         3000
-        //     );
-        // }
+        try {
+            await this.contractCache.start();
+            await this._updateAll();
+        } catch (err) {
+            console.log('Error happened on contract cache start...', err);
+
+            setTimeout(() => this.start(), 5000);
+        }
 
         this._isSkipUpdates = false;
 
         this._websocket.start();
     }
 
-    async initRegularUpdate () {
-        try {
-            await this.pureUpdateAll();
-        } catch (err) {
-            console.log('Regular update error occured: ', err);
-        }
-
-        setTimeout(
-            () => {
-                this.initRegularUpdate();
-            },
-            this._regularCallTimeout
-        );
-    }
-
-    async pureUpdateAll () {
+    async _pureUpdateAll () {
         this.logger.info('Update all data in collections... ' + Object.keys(this.collections).join(', '));
 
         const nodeData = await this.transport.fetchAll();
@@ -124,7 +102,7 @@ module.exports = class ContractApp {
         }
         this._isNowUpdated = true;
 
-        this.pureUpdateAll();
+        this._pureUpdateAll();
 
         this._isNowUpdated = false;
         if (this._isNeedUpdateAgain) {
