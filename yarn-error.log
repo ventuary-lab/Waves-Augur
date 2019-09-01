@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js add react-slick
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js add svg-inline-loader
 
 PATH: 
-  /usr/local/var/www/Waves-Augur/jdk8u222-b10-jre/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
+  /Users/shamil/jdk8u222-b10-jre/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools
 
 Yarn version: 
   1.15.2
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/usr/local/var/www/Waves-Augur/node_modules/@uppy/aws-s3-multipart/package.json'
+  Error: EACCES: permission denied, unlink '/usr/local/var/www/Waves-Augur/node_modules/.yarn-integrity'
 
 npm manifest: 
   {
@@ -166,6 +166,7 @@ npm manifest:
       "react-redux": "^5.1.1",
       "react-router": "^4.3.1",
       "react-router-dom": "^4.3.1",
+      "react-slick": "^0.25.2",
       "react-transition-group": "=1.2.1",
       "reactstrap": "^6.4.0",
       "recharts": "^1.6.0",
@@ -4737,6 +4738,11 @@ Lockfile:
       memory-fs "^0.4.0"
       tapable "^1.0.0"
   
+  enquire.js@^2.1.6:
+    version "2.1.6"
+    resolved "https://registry.yarnpkg.com/enquire.js/-/enquire.js-2.1.6.tgz#3e8780c9b8b835084c3f60e166dbc3c2a3c89814"
+    integrity sha1-PoeAybi4NQhMP2DhZtvDwqPImBQ=
+  
   entities@^1.1.1:
     version "1.1.2"
     resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
@@ -7186,6 +7192,13 @@ Lockfile:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
     integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
+  
+  json2mq@^0.2.0:
+    version "0.2.0"
+    resolved "https://registry.yarnpkg.com/json2mq/-/json2mq-0.2.0.tgz#b637bd3ba9eabe122c83e9720483aeb10d2c904a"
+    integrity sha1-tje9O6nqvhIsg+lyBIOusQ0skEo=
+    dependencies:
+      string-convert "^0.2.0"
   
   json3@^3.3.2:
     version "3.3.3"
@@ -10094,6 +10107,17 @@ Lockfile:
       exenv "^1.2.2"
       react-prop-toggle "^1.0.2"
   
+  react-slick@^0.25.2:
+    version "0.25.2"
+    resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.25.2.tgz#56331b67d47d8bcfe2dceb6acab1c8fd5bd1f6bc"
+    integrity sha512-8MNH/NFX/R7zF6W/w+FS5VXNyDusF+XDW1OU0SzODEU7wqYB+ZTGAiNJ++zVNAVqCAHdyCybScaUB+FCZOmBBw==
+    dependencies:
+      classnames "^2.2.5"
+      enquire.js "^2.1.6"
+      json2mq "^0.2.0"
+      lodash.debounce "^4.0.8"
+      resize-observer-polyfill "^1.5.0"
+  
   react-smooth@^1.0.0:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/react-smooth/-/react-smooth-1.0.2.tgz#f7a2d932ece8db898646078c3c97f3e9533e0486"
@@ -11529,6 +11553,11 @@ Lockfile:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz#b9c7330c7042862f6b142dc274bbcc5866ce3546"
     integrity sha1-ucczDHBChi9rFC3CdLvMWGbONUY=
+  
+  string-convert@^0.2.0:
+    version "0.2.1"
+    resolved "https://registry.yarnpkg.com/string-convert/-/string-convert-0.2.1.tgz#6982cc3049fbb4cd85f8b24568b9d9bf39eeff97"
+    integrity sha1-aYLMMEn7tM2F+LJFaLnZvznu/5c=
   
   string-width@^1.0.1, string-width@^1.0.2:
     version "1.0.2"
