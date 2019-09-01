@@ -1,14 +1,58 @@
 @import '../../style/helpers/vars';
 @import '../../style/helpers/mixins';
 
-.preview-modal {
+$mobile-breakpoint: 800px;
+
+.ProjectPreviewDetails__preview-mobile-modal {
     position: fixed;
     z-index: 99999;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0, .5);
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+
+    & > :first-child {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin: 24px;
+
+        // Arrow icon
+        // & > :first-child {
+
+        // }
+
+        // page info
+        & > :nth-child(2) {
+            color: #fff;
+            font-weight: 500; 
+            margin-left: 16px;
+        }
+    }
+    & > :nth-child(2) {
+        margin-top: 50%;
+
+        & .mobile-img {
+            width: 100%;
+            & img {
+                max-width: unset;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+.ProjectPreviewDetails__preview-modal {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 
     & > :first-child {
         margin: 50px auto;
@@ -91,6 +135,19 @@
                 height: 100%;
                 object-fit: cover;
             }
+        }
+
+        @media screen and (max-width: $mobile-breakpoint) {
+            #{$root}__bottom-slider {
+                // width: 460px;
+                // transition: left .75s linear;
+                // left: 0;
+
+                // &.last-img {
+                //     left: -130px !important;
+                // }
+            }
+
         }
     }
 
