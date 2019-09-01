@@ -82,11 +82,12 @@ class ProjectPreviewDetails extends React.PureComponent {
         this._totalPreviewsLength = _.get(this.props, 'previews.length', 0);
         this._lastIndex = this._totalPreviewsLength - 1;
         this._shouldRenderBottom = this._totalPreviewsLength >= 3;
-        // this.bottomSlideIndices
+        this.isMobile = document.body.clientWidth < 800;
 
         this.sliderRef = React.createRef();
         this.bottomSliderRef = React.createRef();
 
+        this.bottomIndices = [0, 1, 2];
         this.state = {
             isPreviewMode: false,
             currentIndex: 0
@@ -112,8 +113,10 @@ class ProjectPreviewDetails extends React.PureComponent {
             newIndex = this._lastIndex;
         }
 
-        this.sliderRef.current.slickGoTo(newIndex);
-        // this._slideBottomGrid(newIndex);
+        if (this.sliderRef.current) {
+            this.sliderRef.current.slickGoTo(newIndex);
+        }
+        this._slideBottomGrid(newIndex);
 
         this.setState({ currentIndex: newIndex });
     }
@@ -123,11 +126,15 @@ class ProjectPreviewDetails extends React.PureComponent {
             return;
         }
         const { currentIndex } = this.state;
+        const { bottomIndices } = this;
+
         const isNext = newIndex > currentIndex;
 
-        if (isNext && newIndex % 3 === 0) {
-            this.bottomSliderRef.current.slickGoTo(newIndex);
-        };
+        if (!this.bottomSliderRef.current) {
+            return;
+        }
+
+        this.bottomSliderRef.current.slickGoTo(newIndex);
     }
 
     _mapImageToCell (imgUrl, className = 'bottom-img', isCurrent = false) {
@@ -172,7 +179,7 @@ class ProjectPreviewDetails extends React.PureComponent {
     _computeBottomSliderProps () {
         return {
             ...this._slickSettings,
-            slidesToShow: 3,
+            slidesToShow: this.isMobile ? 2 : 3,
             slidesToScroll: 1,
             className: bem.element('bottom-slider'),
             onSwipe: this._onSwipe
@@ -185,7 +192,7 @@ class ProjectPreviewDetails extends React.PureComponent {
         if (previews.length < 1) {
             return null;
         };
-        const { _onNext, _onPrev, _computeTopSliderProps, _computeBottomSliderProps, _lastIndex, _shouldRenderBottom, _disablePreviewMode } = this;
+        const { _onNext, _onPrev, _computeTopSliderProps, _computeBottomSliderProps, _lastIndex, _shouldRenderBottom, _disablePreviewMode, isMobile } = this;
         const { currentIndex, isPreviewMode } = this.state;
 
         const renderReadyPreviews = previews.map(img => this._mapImageToCell(img, 'top-img'));
@@ -194,7 +201,7 @@ class ProjectPreviewDetails extends React.PureComponent {
 
         return (
             <div className={bem.element('root')}>
-                {isPreviewMode && (
+                {isPreviewMode && !isMobile && (
                     ReactDOM.createPortal(
                         <PreviewModal
                             onNext={_onNext}
@@ -206,21 +213,21 @@ class ProjectPreviewDetails extends React.PureComponent {
                         document.body
                     )
                 )}
-                <div className={bem.element('root-container')}>
+                {!isMobile && <div className={bem.element('root-container')}>
                     <SideArrow onClick={_onPrev}/>
                     <Slider
                         ref={this.sliderRef} {..._computeTopSliderProps()}>
                         {renderReadyPreviews}
                     </Slider>
                     <SideArrow reversed={true} onClick={_onNext}/>
-                </div>
+                </div>}
                 {_shouldRenderBottom && (
                     <div className={bem.element('bottom-container')}>
-                        {currentIndex > 0 && isMoreThanThree && <SideArrow />}
+                        {currentIndex > 0 && isMoreThanThree && !isMobile && <SideArrow onClick={_onPrev}/>}
                         <Slider ref={this.bottomSliderRef} {..._computeBottomSliderProps()}>
                             {bottomPreviews}
                         </Slider>
-                        {currentIndex < _lastIndex && isMoreThanThree && <SideArrow reversed={true} />}
+                        {currentIndex < _lastIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onNext}/>}
                     </div>
                 )}
             </div>
