@@ -83,12 +83,6 @@ export default class ProjectWizard extends React.PureComponent {
 
     _getItems () {
         return [
-
-            {
-                id: FORM_FIELD_PREVIEW,
-                component: this._stepPreviews,
-                validators: []
-            },
             {
                 id: 'name',
                 component: this._stepName,
@@ -107,11 +101,11 @@ export default class ProjectWizard extends React.PureComponent {
                     ['targetWaves', 'integer', {min: 1}],
                 ],
             },
-            // {
-            //     id: FORM_FIELD_PREVIEW,
-            //     component: this._stepPreviews,
-            //     validators: []
-            // },
+            {
+                id: FORM_FIELD_PREVIEW,
+                component: this._stepPreviews,
+                validators: []
+            },
             {
                 id: 'logo',
                 component: this._stepLogo,
