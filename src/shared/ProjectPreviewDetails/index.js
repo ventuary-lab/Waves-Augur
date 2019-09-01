@@ -9,6 +9,7 @@ import './ProjectPreviewDetails.scss';
 
 import leftArrowIcon from 'static/icons/slider-arrow-left.svg';
 import crossIcon from 'static/icons/cross.svg';
+import getBackArrow from 'static/icons/mobile-arrow-left.svg';
 
 const bem = html.bem('ProjectPreviewDetails');
 
@@ -29,7 +30,7 @@ function SideArrow({ reversed = false, ...restProps }) {
 }
 
 function PreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, onPrev }) {
-    const currentClassName = 'preview-modal';
+    const currentClassName = bem.element('preview-modal');
 
     const onClick = (event) => {
         if (event.target.classList.contains(currentClassName)) {
@@ -52,7 +53,36 @@ function PreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, 
             </div>
         </div>
     );
-}
+};
+
+function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, onPrev }) {
+    const sliderProps = {
+        dots: false,
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+    const images = previews.map(image => (
+        <div className='mobile-img'>
+            <img src={image}/>
+        </div>
+    ));
+
+    return (
+        <div className={bem.element('preview-mobile-modal')}>
+            <div>
+                <img src={getBackArrow} onClick={onOutClick}/>
+                <div>{currentIndex + 1} / {previews.length}</div>
+            </div>
+            <div>
+                <Slider {...sliderProps}>
+                    {images}
+                </Slider>
+            </div>
+        </div>
+    );
+};
+
 
 class ProjectPreviewDetails extends React.PureComponent {
     static propTypes = {
@@ -73,6 +103,7 @@ class ProjectPreviewDetails extends React.PureComponent {
         this._enablePreviewMode = this._enablePreviewMode.bind(this);
         this._disablePreviewMode = this._disablePreviewMode.bind(this);
         this._onSwipe = this._onSwipe.bind(this);
+        this._getBottomGrid = this._getBottomGrid.bind(this);
 
         this._slickSettings = {
             dots: false,
@@ -125,10 +156,10 @@ class ProjectPreviewDetails extends React.PureComponent {
         if (this._totalPreviewsLength <= 3) {
             return;
         }
-        const { currentIndex } = this.state;
-        const { bottomIndices } = this;
+        // const { currentIndex } = this.state;
+        // const { bottomIndices } = this;
 
-        const isNext = newIndex > currentIndex;
+        // const isNext = newIndex > currentIndex;
 
         if (!this.bottomSliderRef.current) {
             return;
@@ -142,6 +173,7 @@ class ProjectPreviewDetails extends React.PureComponent {
             bem.element('slide-img', className),
             isCurrent ? 'current' : ''
         ].join(' ');
+
         return (
             <div className={clist} onClick={this._enablePreviewMode}>
                 <img src={imgUrl}/>
@@ -177,14 +209,49 @@ class ProjectPreviewDetails extends React.PureComponent {
     }
 
     _computeBottomSliderProps () {
+        const { _lastIndex } = this;
+        const { currentIndex } = this.state;
+
+        const classList = [
+            bem.element('bottom-slider'), 
+            currentIndex === _lastIndex ? 'last-img' : ''
+        ].join(' ');
+
         return {
             ...this._slickSettings,
             slidesToShow: this.isMobile ? 2 : 3,
             slidesToScroll: 1,
-            className: bem.element('bottom-slider'),
+            className: classList,
             onSwipe: this._onSwipe
         };
     };
+
+    _getBottomGrid (previews) {
+        const { 
+            _shouldRenderBottom,
+            isMobile,
+            _computeBottomSliderProps,
+            _lastIndex,
+            _onNext,
+            _onPrev, 
+        } = this;
+        const { currentIndex } = this.state;
+        const bottomPreviews = previews.map((img, imgIndex) => this._mapImageToCell(img, 'bottom-img', imgIndex === currentIndex));
+
+        const isMoreThanThree = bottomPreviews.length > 3;
+
+        return (
+            _shouldRenderBottom && (
+                <div className={bem.element('bottom-container')}>
+                    {currentIndex > 0 && isMoreThanThree && !isMobile && <SideArrow onClick={_onPrev}/>}
+                    <Slider ref={this.bottomSliderRef} {..._computeBottomSliderProps()}>
+                        {bottomPreviews}
+                    </Slider>
+                    {currentIndex < _lastIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onNext}/>}
+                </div>
+            )
+        )
+    }
 
     render() {
         const { previews } = this.props;
@@ -192,44 +259,43 @@ class ProjectPreviewDetails extends React.PureComponent {
         if (previews.length < 1) {
             return null;
         };
-        const { _onNext, _onPrev, _computeTopSliderProps, _computeBottomSliderProps, _lastIndex, _shouldRenderBottom, _disablePreviewMode, isMobile } = this;
+
+        const { 
+            _onNext, 
+            _onPrev, 
+            _computeTopSliderProps,
+            _lastIndex,
+            _disablePreviewMode,
+            isMobile,
+            _getBottomGrid
+        } = this;
+
         const { currentIndex, isPreviewMode } = this.state;
 
         const renderReadyPreviews = previews.map(img => this._mapImageToCell(img, 'top-img'));
-        const bottomPreviews = previews.map((img, imgIndex) => this._mapImageToCell(img, 'bottom-img', imgIndex === currentIndex));
-        const isMoreThanThree = bottomPreviews.length > 3;
+
+        const mobileModalProps = {
+            isMobile,
+            onNext: _onNext,
+            onPrev: _onPrev,
+            previews,
+            currentIndex,
+            onOutClick: _disablePreviewMode
+        };
+        const previewModal = !isMobile ? <PreviewModal {...mobileModalProps}/> : <MobilePreviewModal {...mobileModalProps}/>;
 
         return (
             <div className={bem.element('root')}>
-                {isPreviewMode && !isMobile && (
-                    ReactDOM.createPortal(
-                        <PreviewModal
-                            onNext={_onNext}
-                            onPrev={_onPrev}
-                            previews={previews}
-                            currentIndex={currentIndex}
-                            onOutClick={_disablePreviewMode}
-                        />,
-                        document.body
-                    )
-                )}
+                {isPreviewMode && ReactDOM.createPortal(previewModal, document.body)}
                 {!isMobile && <div className={bem.element('root-container')}>
-                    <SideArrow onClick={_onPrev}/>
+                    {currentIndex > 0 && <SideArrow onClick={_onPrev}/>}
                     <Slider
                         ref={this.sliderRef} {..._computeTopSliderProps()}>
                         {renderReadyPreviews}
                     </Slider>
-                    <SideArrow reversed={true} onClick={_onNext}/>
+                    {currentIndex < _lastIndex && <SideArrow reversed={true} onClick={_onNext}/>}
                 </div>}
-                {_shouldRenderBottom && (
-                    <div className={bem.element('bottom-container')}>
-                        {currentIndex > 0 && isMoreThanThree && !isMobile && <SideArrow onClick={_onPrev}/>}
-                        <Slider ref={this.bottomSliderRef} {..._computeBottomSliderProps()}>
-                            {bottomPreviews}
-                        </Slider>
-                        {currentIndex < _lastIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onNext}/>}
-                    </div>
-                )}
+                {_getBottomGrid(previews)}
             </div>
         );
     }
