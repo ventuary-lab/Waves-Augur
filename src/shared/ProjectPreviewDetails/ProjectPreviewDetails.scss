@@ -1,6 +1,87 @@
 @import '../../style/helpers/vars';
 @import '../../style/helpers/mixins';
 
+.preview-modal {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .5);
+
+
+//     <div style="
+//     margin: 25px;
+//     display: grid;
+//     grid-template-columns: 100px 50px 50px 1fr;
+//     align-items: stretch;
+// "><span style="
+//     display: block;
+//     font-weight: 500;
+//     opacity: .5;
+// ">1 / 12</span><img src="http://127.0.0.1:8081/images/3d86e8c651e3a98bd01279dba3840239.svg"><img src="http://127.0.0.1:8081/images/3d86e8c651e3a98bd01279dba3840239.svg" style="transform: rotate(180deg);"><img src="http://127.0.0.1:8081/images/57aa8dd217e0becd8e5cedff248fef31.svg" style="
+//     margin-left: auto;
+//     width: 20px;
+//     opacity: .3;
+// "></div>
+
+    & > :first-child {
+        margin: 50px auto;
+        width: 960px;
+        // height: calc(100vh - 100px);
+        max-height: 620px;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        & > :first-child {
+
+            & img {
+                width: 100%;
+                object-fit: cover;
+                max-height: calc(100vh - 170px);
+            }
+        }
+
+        & > :nth-child(2) {
+            margin: 25px;
+            display: grid;
+            grid-template-columns: 100px 50px 50px 1fr;
+            align-items: stretch;
+
+            & > :first-child {
+                display: block;
+                font-weight: 500;
+                opacity: .5;
+            }
+            & > :last-child {
+                margin-left: auto;
+                width: 20px;
+                opacity: .3;
+            }
+            & > :not(:first-child) {
+                cursor: pointer;
+            }
+        }
+    }
+//     <div style="
+//     margin: 50px auto;
+//     width: 960px;
+//     height: calc(100vh - 100px);
+//     max-height: 620px;
+//     background-color: #fff;
+//     display: flex;
+//     flex-direction: column;
+//     flex-wrap: nowrap;
+// "><div><img src="https://alpha-ventuary-dao.s3.amazonaws.com/uploads/f53edae0-cca8-11e9-9cf8-7d1738bde95f.jpg" style="
+//     width: 100%;
+//     object-fit: cover;
+//     max-height: calc(100vh - 170px);
+// "></div><div><span>1 / 12</span><img src="http://127.0.0.1:8081/images/57aa8dd217e0becd8e5cedff248fef31.svg"></div></div>
+}
+
 .ProjectPreviewDetails {
     $root: &;
     $base-green: #0BC91F;
@@ -47,7 +128,7 @@
         width: 80px;
         cursor: pointer;
         height: 100%;
-        opacity: .1;
+        opacity: .2;
         position: absolute;
         top: 11px;
         z-index: 1;
@@ -80,6 +161,7 @@
          &_bottom-img.current {
             & img {
                 border: 1px solid $base-green;
+                border-radius: 2px;
             }
          }
 
