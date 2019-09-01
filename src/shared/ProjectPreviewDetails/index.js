@@ -55,12 +55,13 @@ function PreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, 
     );
 };
 
-function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, onPrev }) {
+function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, onSwipe }) {
     const sliderProps = {
         dots: false,
         arrows: false,
         slidesToShow: 1,
-        slidesToScroll: 1
+        slidesToScroll: 1,
+        onSwipe
     };
     const images = previews.map(image => (
         <div className='mobile-img'>
@@ -250,7 +251,7 @@ class ProjectPreviewDetails extends React.PureComponent {
                     {currentIndex < _lastIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onNext}/>}
                 </div>
             )
-        )
+        );
     }
 
     render() {
@@ -263,6 +264,7 @@ class ProjectPreviewDetails extends React.PureComponent {
         const { 
             _onNext, 
             _onPrev, 
+            _onSwipe,
             _computeTopSliderProps,
             _lastIndex,
             _disablePreviewMode,
@@ -280,6 +282,7 @@ class ProjectPreviewDetails extends React.PureComponent {
             onPrev: _onPrev,
             previews,
             currentIndex,
+            onSwipe: _onSwipe,
             onOutClick: _disablePreviewMode
         };
         const previewModal = !isMobile ? <PreviewModal {...mobileModalProps}/> : <MobilePreviewModal {...mobileModalProps}/>;
