@@ -106,6 +106,7 @@ class ProjectPreviewDetails extends React.PureComponent {
         this._disablePreviewMode = this._disablePreviewMode.bind(this);
         this._onSwipe = this._onSwipe.bind(this);
         this._getBottomGrid = this._getBottomGrid.bind(this);
+        this._onBottomGridSwipe = this._onBottomGridSwipe.bind(this);
         this._computeNextIndex = this._computeNextIndex.bind(this);
 
         this._slickSettings = {
@@ -233,8 +234,10 @@ class ProjectPreviewDetails extends React.PureComponent {
         };
     }
 
+    _onBottomGridSwipe () {}
+
     _computeBottomSliderProps () {
-        const { _lastIndex } = this;
+        const { _lastIndex, isMobile } = this;
         const { currentIndex } = this.state;
 
         const classList = [
@@ -244,10 +247,12 @@ class ProjectPreviewDetails extends React.PureComponent {
 
         return {
             ...this._slickSettings,
-            slidesToShow: this.isMobile ? 2 : this._imagesPerRowCount,
+            slidesToShow: isMobile ? 1 : this._imagesPerRowCount,
             slidesToScroll: 1,
             className: classList,
-            onSwipe: this._onSwipe
+            onSwipe: this._onBottomGridSwipe,
+            variableWidth: isMobile,
+            infinite: !isMobile
         };
     };
 
