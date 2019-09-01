@@ -185,10 +185,12 @@ $mobile-breakpoint: 800px;
 
     &__slide-img {
      
-        &_bottom-img.current {
-            & img {
-                border: 1px solid $base-green;
-                border-radius: 2px;
+        @media screen and (min-width: 768px) {
+            &_bottom-img.current {
+                & img {
+                    border: 1px solid $base-green;
+                    border-radius: 2px;
+                }
             }
         }
 
