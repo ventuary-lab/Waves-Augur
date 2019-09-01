@@ -1,3 +1,4 @@
+const moment = require('moment');
 const _get = require('lodash/get');
 const _set = require('lodash/set');
 const _orderBy = require('lodash/orderBy');
@@ -61,7 +62,11 @@ module.exports = class Projects extends BaseCollection {
                 break;
 
             case ProjectFilter.VOTING:
-                projects = projects.filter(item => item.status === ProjectStatus.VOTING && item.isVotingAvailable);
+                const isVotingExpired = dateString => (
+                    moment(new Date(dateString)).isBefore(new Date())
+                );
+
+                projects = projects.filter(item => item.status === ProjectStatus.VOTING && item.isVotingAvailable && !isVotingExpired(item.expireVoting));
                 projects = _orderBy(projects, 'createTime', 'asc');
                 break;
 
