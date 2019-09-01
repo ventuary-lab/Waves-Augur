@@ -21,9 +21,9 @@ $mobile-breakpoint: 800px;
         margin: 24px;
 
         // Arrow icon
-        // & > :first-child {
-
-        // }
+        & > :first-child {
+            cursor: pointer;
+        }
 
         // page info
         & > :nth-child(2) {
