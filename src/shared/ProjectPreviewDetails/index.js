@@ -151,14 +151,21 @@ class ProjectPreviewDetails extends React.PureComponent {
     }
 
     _slickGoTo (index) {
-        const { currentIndex } = this.state;
+        const { _imagesPerRowCount } = this;
+        const { currentIndex, bottomGridIndex } = this.state;
         const newIndex = this._computeNextIndex(currentIndex, index);
 
         if (this.sliderRef.current) {
             this.sliderRef.current.slickGoTo(newIndex);
         }
 
+        const isInBottomRange = newIndex >= bottomGridIndex && newIndex <= (bottomGridIndex + _imagesPerRowCount - 1);
+
         this.setState({ currentIndex: newIndex });
+
+        if (!isInBottomRange) {
+            index === 1 ? this._onBottomGridNext() : this._onBottomGridPrev();
+        }
     }
 
     _onBottomGridPrev () {
