@@ -137,17 +137,17 @@ $mobile-breakpoint: 800px;
             }
         }
 
-        @media screen and (max-width: $mobile-breakpoint) {
-            #{$root}__bottom-slider {
-                // width: 460px;
-                // transition: left .75s linear;
-                // left: 0;
-
-                // &.last-img {
-                //     left: -130px !important;
-                // }
+        #{$root}__bottom-slider {
+            & .slick-track {
+                & .slick-slide.slick-active {
+                    &.slick-current > :nth-child(1) img {
+                        margin-left: 0;
+                    }
+                    &:not(.slick-current) > :nth-child(1) img {
+                        margin-right: 0;
+                    }
+                }
             }
-
         }
     }
 
