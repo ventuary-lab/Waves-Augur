@@ -33,7 +33,7 @@ $mobile-breakpoint: 800px;
         }
     }
     & > :nth-child(2) {
-        margin-top: 50%;
+        margin-top: calc(15vh - 24px);
 
         & .mobile-img {
             width: 100%;

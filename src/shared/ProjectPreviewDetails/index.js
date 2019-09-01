@@ -84,7 +84,7 @@ function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, on
     );
 };
 
-
+const IMAGES_PER_ROW_COUNT_DESKTOP = 3;
 class ProjectPreviewDetails extends React.PureComponent {
     static propTypes = {
         previews: PropTypes.array
@@ -98,19 +98,22 @@ class ProjectPreviewDetails extends React.PureComponent {
         this._slickGoTo = this._slickGoTo.bind(this);
         this._onNext = this._onNext.bind(this);
         this._onPrev = this._onPrev.bind(this);
+        this._onBottomGridPrev = this._onBottomGridPrev.bind(this);
+        this._onBottomGridNext = this._onBottomGridNext.bind(this);
         this._computeTopSliderProps = this._computeTopSliderProps.bind(this);
         this._computeBottomSliderProps = this._computeBottomSliderProps.bind(this);
-        this._slideBottomGrid = this._slideBottomGrid.bind(this);
         this._enablePreviewMode = this._enablePreviewMode.bind(this);
         this._disablePreviewMode = this._disablePreviewMode.bind(this);
         this._onSwipe = this._onSwipe.bind(this);
         this._getBottomGrid = this._getBottomGrid.bind(this);
+        this._computeNextIndex = this._computeNextIndex.bind(this);
 
         this._slickSettings = {
             dots: false,
             arrows: false
         };
 
+        this._imagesPerRowCount = IMAGES_PER_ROW_COUNT_DESKTOP;
         this._totalPreviewsLength = _.get(this.props, 'previews.length', 0);
         this._lastIndex = this._totalPreviewsLength - 1;
         this._shouldRenderBottom = this._totalPreviewsLength >= 3;
@@ -119,10 +122,10 @@ class ProjectPreviewDetails extends React.PureComponent {
         this.sliderRef = React.createRef();
         this.bottomSliderRef = React.createRef();
 
-        this.bottomIndices = [0, 1, 2];
         this.state = {
             isPreviewMode: false,
-            currentIndex: 0
+            currentIndex: 0,
+            bottomGridIndex: 0
         };
     }
 
@@ -134,8 +137,7 @@ class ProjectPreviewDetails extends React.PureComponent {
         this.setState({ isPreviewMode: false });
     }
 
-    _slickGoTo (index) {
-        const { currentIndex } = this.state;
+    _computeNextIndex (currentIndex, index) {
         let newIndex = currentIndex + index;
 
         if (newIndex > this._lastIndex) {
@@ -143,30 +145,45 @@ class ProjectPreviewDetails extends React.PureComponent {
         }
         if (newIndex < 0) {
             newIndex = this._lastIndex;
-        }
+        };
+
+        return newIndex;
+    }
+
+    _slickGoTo (index) {
+        const { currentIndex } = this.state;
+        const newIndex = this._computeNextIndex(currentIndex, index);
 
         if (this.sliderRef.current) {
             this.sliderRef.current.slickGoTo(newIndex);
         }
-        this._slideBottomGrid(newIndex);
 
         this.setState({ currentIndex: newIndex });
     }
 
-    _slideBottomGrid (newIndex) {
-        if (this._totalPreviewsLength <= 3) {
-            return;
+    _onBottomGridPrev () {
+        const { bottomGridIndex } = this.state;
+        const newIndex = this._computeNextIndex(bottomGridIndex, -1);
+
+        if (newIndex >= 0) {
+            this.bottomSliderRef.current.slickGoTo(newIndex);
+
+            this.setState({ bottomGridIndex: newIndex });
+        };
+    }
+
+    _onBottomGridNext () {
+        const { _lastIndex } = this;
+        const { bottomGridIndex } = this.state;
+        const newIndex = this._computeNextIndex(bottomGridIndex, 1);
+
+        const maxIndex = _lastIndex;
+
+        if (newIndex < maxIndex) {
+            this.bottomSliderRef.current.slickGoTo(newIndex);
+
+            this.setState({ bottomGridIndex: newIndex });
         }
-        // const { currentIndex } = this.state;
-        // const { bottomIndices } = this;
-
-        // const isNext = newIndex > currentIndex;
-
-        if (!this.bottomSliderRef.current) {
-            return;
-        }
-
-        this.bottomSliderRef.current.slickGoTo(newIndex);
     }
 
     _mapImageToCell (imgUrl, className = 'bottom-img', isCurrent = false) {
@@ -220,7 +237,7 @@ class ProjectPreviewDetails extends React.PureComponent {
 
         return {
             ...this._slickSettings,
-            slidesToShow: this.isMobile ? 2 : 3,
+            slidesToShow: this.isMobile ? 2 : this._imagesPerRowCount,
             slidesToScroll: 1,
             className: classList,
             onSwipe: this._onSwipe
@@ -233,22 +250,24 @@ class ProjectPreviewDetails extends React.PureComponent {
             isMobile,
             _computeBottomSliderProps,
             _lastIndex,
-            _onNext,
-            _onPrev, 
+            _onBottomGridNext,
+            _onBottomGridPrev,
+            _imagesPerRowCount
         } = this;
-        const { currentIndex } = this.state;
+        const { currentIndex, bottomGridIndex } = this.state;
         const bottomPreviews = previews.map((img, imgIndex) => this._mapImageToCell(img, 'bottom-img', imgIndex === currentIndex));
 
         const isMoreThanThree = bottomPreviews.length > 3;
+        const maxBottomIndex = _lastIndex - _imagesPerRowCount + 1;
 
         return (
             _shouldRenderBottom && (
                 <div className={bem.element('bottom-container')}>
-                    {currentIndex > 0 && isMoreThanThree && !isMobile && <SideArrow onClick={_onPrev}/>}
+                    {bottomGridIndex > 0 && isMoreThanThree && !isMobile && <SideArrow onClick={_onBottomGridPrev}/>}
                     <Slider ref={this.bottomSliderRef} {..._computeBottomSliderProps()}>
                         {bottomPreviews}
                     </Slider>
-                    {currentIndex < _lastIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onNext}/>}
+                    {bottomGridIndex < maxBottomIndex && isMoreThanThree && !isMobile && <SideArrow reversed={true} onClick={_onBottomGridNext}/>}
                 </div>
             )
         );
