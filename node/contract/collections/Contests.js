@@ -41,7 +41,7 @@ module.exports = class Contests extends BaseCollection {
                 break;
 
             case ContestFilter.NEW:
-                // contests = contests.filter(item => item.status === ContestStatus.OPEN);
+                contests = contests.filter(item => item.status === ContestStatus.OPEN);
                 break;
 
             case ContestFilter.FINISHED:
