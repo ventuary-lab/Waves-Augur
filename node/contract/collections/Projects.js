@@ -45,17 +45,16 @@ module.exports = class Projects extends BaseCollection {
      */
     async getProjects(filterName = null) {
         let projects = await this.getItemsAll();
+        const checkIsCrowdfundActual = expireCrowd => moment(new Date(expireCrowd)).isAfter(new Date());;
+
         switch (filterName) {
             case ProjectFilter.FEATURED:
-                projects = projects.filter(item => {
-                    const isCrowdfundActual = moment(new Date(item.expireCrowd)).isAfter(new Date());
-                    return item.status === ProjectStatus.CROWDFUND && isCrowdfundActual;
-                });
+                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
                 projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
             case ProjectFilter.NEW:
-                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND);
+                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
                 projects = _orderBy(projects, 'createTime', 'desc');
                 break;
 
