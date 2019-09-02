@@ -10,7 +10,6 @@ import './ImageField.scss';
 
 const bem = html.bem('ImageField');
 
-
 export default @fieldHoc({
     componentId: 'form.ImageField',
 })

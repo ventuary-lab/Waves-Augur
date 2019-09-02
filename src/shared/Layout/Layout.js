@@ -63,7 +63,8 @@ export default class Layout extends React.PureComponent {
         //not Phone
         if (window.innerWidth >= this.props.maxPhoneWidth) {
             //not installed keeper
-            if (!await dal.isKeeperInstalled()) {
+            const isKeeperInstalled = await dal.isKeeperInstalled();
+            if (!isKeeperInstalled) {
                 this.props.dispatch(openModal(MessageModal, {
                     icon: 'Icon__waves-keeper',
                     title: __('Install Waves Keeper'),
@@ -72,10 +73,9 @@ export default class Layout extends React.PureComponent {
                     submitLabel: __('Install'),
                     url: 'https://wavesplatform.com/products-keeper',
                 }));
-            }
 
-            //no account
-            else if (!_get(await dal.getAccount(), 'address')) {
+            // no account
+            } else if (!_get(await dal.getAccount(), 'address')) {
                 this.props.dispatch(openModal(MessageModal, {
                     icon: 'Icon__keeper-no-account',
                     title: __('Create your Waves wallet'),

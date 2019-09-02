@@ -6,6 +6,8 @@ import CopyToClipboard from 'shared/CopyToClipboard';
 
 import UserCard from 'shared/UserCard';
 import SocialLinks from 'shared/SocialLinks';
+import ProjectPreviewDetails from 'shared/ProjectPreviewDetails';
+
 import './ProjectDetailsPage.scss';
 import ProjectContentEnum from 'enums/ProjectContentEnum';
 
@@ -20,6 +22,8 @@ export default class ProjectDetailsPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
+                {/* <ProjectPreviewDetails previews={this.props.project.previews || []}/> */}
+                <ProjectPreviewDetails previews={this.props.project.previews || []}/>
                 <div className={bem.element('leader-block')}>
                     <div className={bem.element('title')}>
                         {__('Leader')}
