@@ -84,7 +84,7 @@ export default class DonateForm extends React.PureComponent {
                     <div className={bem.element('text-field')}>
                         <TextField
                             attribute={'review'}
-                            placeholder={__('Leave a comment (optional)')}
+                            placeholder={__('Leave a comment')}
                             disabled={isAnonReview}
                         />
                     </div>
