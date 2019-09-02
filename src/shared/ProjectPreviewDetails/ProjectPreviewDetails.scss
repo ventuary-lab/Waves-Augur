@@ -68,7 +68,8 @@ $mobile-breakpoint: 800px;
             & img {
                 width: 100%;
                 object-fit: cover;
-                max-height: calc(100vh - 170px);
+                max-height: 430px;
+                height: 100%;
             }
         }
 
@@ -100,7 +101,9 @@ $mobile-breakpoint: 800px;
     $base-green: #0BC91F;
 
     &__root {
+        margin-left: -7px;
         margin-top: 68px;
+        margin-bottom: 28px;
     }
 
     &__root-container {
@@ -110,8 +113,14 @@ $mobile-breakpoint: 800px;
     &__bottom-container {
         position: relative;
         height: 150px;
-        margin-top: 60px;
-        // width: calc(100% + 14px);
+
+        @media screen and (max-width: 768px) {
+            margin-top: -40px;
+        };
+        @media screen and (min-width: 768px) {
+            margin-top: 60px;
+        };
+
         width: 100%;
 
         & > :first-child, & > :last-child {
