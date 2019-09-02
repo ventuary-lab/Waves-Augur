@@ -57,7 +57,6 @@ $mobile-breakpoint: 800px;
     & > :first-child {
         margin: 50px auto;
         width: 960px;
-        max-height: 670px;
         background-color: #fff;
         display: flex;
         flex-direction: column;
@@ -68,7 +67,7 @@ $mobile-breakpoint: 800px;
             & img {
                 width: 100%;
                 object-fit: cover;
-                max-height: 430px;
+                max-height: 620px;
                 height: 100%;
             }
         }
