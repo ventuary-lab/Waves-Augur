@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
 import Dropzone from 'react-dropzone';
 import ImagesGrid from 'ui/form/ImagesGrid';
+import { Loader } from 'ui/anims/base-loader';
 
 import {html} from 'components';
 
@@ -35,7 +36,8 @@ class ImagePreviewsField extends React.PureComponent {
             file: null,
             isUploadFailed: false,
             onDragEnter: false,
-            uploadedImages: initialImages
+            uploadedImages: initialImages,
+            isUploadProcessing: false
         };
 
         this.maxUploadCount = IMAGES_MAX_UPLOAD_COUNT;
@@ -163,6 +165,8 @@ class ImagePreviewsField extends React.PureComponent {
             this.maxUploadCount - uploadedImages.length
         );
 
+        this.setState({ isUploadProcessing: true });
+
         for (let i = 0; i < filesToUpload.length; i++) {
             if (this.state.uploadedImages.length === 10) {
                 return;
@@ -170,7 +174,9 @@ class ImagePreviewsField extends React.PureComponent {
 
             const file = filesToUpload[i];
             await this._uploadExactFile(file);
-        }
+        };
+
+        this.setState({ isUploadProcessing: false });
     }
 
     _onBrowseAccept(inputEvent) {

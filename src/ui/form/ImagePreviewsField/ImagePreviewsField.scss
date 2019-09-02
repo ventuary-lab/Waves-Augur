@@ -10,6 +10,11 @@
       height: 70px;
     }
 
+    #{$root}__base-loader {
+      position: absolute;
+      z-index: 99999;
+    }
+
     #{$root}__drop-zone {
       height: 40px;
     }
