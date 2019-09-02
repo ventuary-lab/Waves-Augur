@@ -146,7 +146,7 @@ export default class ProjectSidebar extends React.PureComponent {
                     {(this.props.scope.canVote || this.props.scope.canDonate) && (
                         <div className={bem.element('action')}>
                             <Button
-                                label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Donate')}
+                                label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Contribute')}
                                 onClick={() => {
                                     if (this.props.isPhone) {
                                         this.props.dispatch(openModal(MessageModal, {
