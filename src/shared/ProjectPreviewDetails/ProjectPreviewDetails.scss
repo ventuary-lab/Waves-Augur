@@ -68,7 +68,7 @@ $mobile-breakpoint: 800px;
                 width: 100%;
                 object-fit: cover;
                 max-height: 620px;
-                height: 100%;
+                height: calc(100vh - 182px);
             }
         }
 
