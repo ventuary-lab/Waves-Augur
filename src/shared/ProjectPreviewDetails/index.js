@@ -108,6 +108,8 @@ class ProjectPreviewDetails extends React.PureComponent {
         this._getBottomGrid = this._getBottomGrid.bind(this);
         this._onBottomGridSwipe = this._onBottomGridSwipe.bind(this);
         this._computeNextIndex = this._computeNextIndex.bind(this);
+        this._selectImage = this._selectImage.bind(this);
+        this._selectValidIndex = this._selectValidIndex.bind(this);
 
         this._slickSettings = {
             dots: false,
@@ -152,9 +154,15 @@ class ProjectPreviewDetails extends React.PureComponent {
     }
 
     _slickGoTo (index) {
-        const { _imagesPerRowCount } = this;
-        const { currentIndex, bottomGridIndex } = this.state;
+        const { currentIndex } = this.state;
         const newIndex = this._computeNextIndex(currentIndex, index);
+
+        this._selectValidIndex(newIndex, index);
+    }
+
+    _selectValidIndex (newIndex, step) {
+        const { _imagesPerRowCount } = this;
+        const { bottomGridIndex } = this.state;
 
         if (this.sliderRef.current) {
             this.sliderRef.current.slickGoTo(newIndex);
@@ -165,7 +173,11 @@ class ProjectPreviewDetails extends React.PureComponent {
         this.setState({ currentIndex: newIndex });
 
         if (!isInBottomRange) {
-            index === 1 ? this._onBottomGridNext() : this._onBottomGridPrev();
+            if (step === 1) {
+                this._onBottomGridNext()
+            } else if (step === -1) {
+                this._onBottomGridPrev();
+            }
         }
     }
 
@@ -177,6 +189,7 @@ class ProjectPreviewDetails extends React.PureComponent {
             this.bottomSliderRef.current.slickGoTo(newIndex);
 
             this.setState({ bottomGridIndex: newIndex });
+            this._onPrev();
         };
     }
 
@@ -191,18 +204,23 @@ class ProjectPreviewDetails extends React.PureComponent {
             this.bottomSliderRef.current.slickGoTo(newIndex);
 
             this.setState({ bottomGridIndex: newIndex });
+            this._onNext();
         }
     }
 
-    _mapImageToCell (imgUrl, className = 'bottom-img', isCurrent = false) {
+    _selectImage (imgIndex) {
+        this._selectValidIndex(imgIndex, null);
+    }
+
+    _mapImageToCell (imgUrl, className = 'bottom-img', {  isCurrent = false, onImageClick = () => {} }) {
         const clist = [
             bem.element('slide-img', className),
             isCurrent ? 'current' : ''
         ].join(' ');
 
         return (
-            <div className={clist} onClick={this._enablePreviewMode}>
-                <img src={imgUrl}/>
+            <div className={clist}>
+                <img src={imgUrl} onClick={onImageClick}/>
             </div>
         );
     }
@@ -267,7 +285,19 @@ class ProjectPreviewDetails extends React.PureComponent {
             _imagesPerRowCount
         } = this;
         const { currentIndex, bottomGridIndex } = this.state;
-        const bottomPreviews = previews.map((img, imgIndex) => this._mapImageToCell(img, 'bottom-img', imgIndex === currentIndex));
+
+        const onImageClick = (imgIndex) => {
+            if (isMobile) {
+                this._enablePreviewMode();
+            } else {
+                this._selectImage(imgIndex);
+            }
+        };
+
+        const bottomPreviews = previews.map((img, imgIndex) => this._mapImageToCell(img, 'bottom-img', {
+            isCurrent: imgIndex === currentIndex,
+            onImageClick: () => onImageClick(imgIndex)
+        }));
 
         const isMoreThanThree = bottomPreviews.length > 3;
         const maxBottomIndex = _lastIndex - _imagesPerRowCount + 1;
@@ -300,12 +330,15 @@ class ProjectPreviewDetails extends React.PureComponent {
             _lastIndex,
             _disablePreviewMode,
             isMobile,
-            _getBottomGrid
+            _getBottomGrid,
+            _enablePreviewMode
         } = this;
 
         const { currentIndex, isPreviewMode } = this.state;
 
-        const renderReadyPreviews = previews.map(img => this._mapImageToCell(img, 'top-img'));
+        const renderReadyPreviews = previews.map(img => this._mapImageToCell(img, 'top-img', {
+            onImageClick: _enablePreviewMode
+        }));
 
         const mobileModalProps = {
             isMobile,
