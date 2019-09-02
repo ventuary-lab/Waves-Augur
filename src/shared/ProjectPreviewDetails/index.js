@@ -56,13 +56,14 @@ function PreviewModal ({ previews, currentIndex, onOutClick = () => {}, onNext, 
 };
 
 function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, onSwipe }) {
-    const sliderProps = {
+    const sliderPropsRef = React.useRef({
         dots: false,
         arrows: false,
         slidesToShow: 1,
         slidesToScroll: 1,
-        onSwipe
-    };
+        onSwipe,
+        initialSlide: currentIndex
+    });
     const images = previews.map(image => (
         <div className='mobile-img'>
             <img src={image}/>
@@ -76,7 +77,7 @@ function MobilePreviewModal ({ previews, currentIndex, onOutClick = () => {}, on
                 <div>{currentIndex + 1} / {previews.length}</div>
             </div>
             <div>
-                <Slider {...sliderProps}>
+                <Slider {...sliderPropsRef.current}>
                     {images}
                 </Slider>
             </div>
