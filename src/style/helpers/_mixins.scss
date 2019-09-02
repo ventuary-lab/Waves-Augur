@@ -183,3 +183,9 @@
     }
   }
 }
+
+@mixin no-blue-chrome-focus-border {
+  outline-style:none;
+  box-shadow:none;
+  border-color:transparent;
+}
