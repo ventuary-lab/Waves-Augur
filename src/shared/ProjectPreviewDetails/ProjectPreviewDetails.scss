@@ -166,11 +166,16 @@ $mobile-breakpoint: 800px;
         width: 80px;
         cursor: pointer;
         height: 100%;
-        opacity: .2;
         position: absolute;
         top: 11px;
         z-index: 1;
+
+        opacity: .2;
         background-color: black;
+
+        &:hover {
+            opacity: .3; 
+        }
 
         & img {
             position: absolute;
