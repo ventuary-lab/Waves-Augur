@@ -189,7 +189,6 @@ class ProjectPreviewDetails extends React.PureComponent {
             this.bottomSliderRef.current.slickGoTo(newIndex);
 
             this.setState({ bottomGridIndex: newIndex });
-            this._onPrev();
         };
     }
 
@@ -204,7 +203,6 @@ class ProjectPreviewDetails extends React.PureComponent {
             this.bottomSliderRef.current.slickGoTo(newIndex);
 
             this.setState({ bottomGridIndex: newIndex });
-            this._onNext();
         }
     }
 
@@ -287,10 +285,10 @@ class ProjectPreviewDetails extends React.PureComponent {
         const { currentIndex, bottomGridIndex } = this.state;
 
         const onImageClick = (imgIndex) => {
+            this._selectImage(imgIndex);
+
             if (isMobile) {
                 this._enablePreviewMode();
-            } else {
-                this._selectImage(imgIndex);
             }
         };
 
