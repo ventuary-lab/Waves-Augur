@@ -1,6 +1,7 @@
 const _get = require('lodash/get');
 const _set = require('lodash/set');
 const _orderBy = require('lodash/orderBy');
+const moment = require('moment');
 
 const BaseCollection = require('../base/BaseCollection');
 const contractConfig = require('../config/contract');
@@ -46,7 +47,10 @@ module.exports = class Projects extends BaseCollection {
         let projects = await this.getItemsAll();
         switch (filterName) {
             case ProjectFilter.FEATURED:
-                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND);
+                projects = projects.filter(item => {
+                    const isCrowdfundActual = moment(new Date(item.expireCrowd)).isAfter(new Date());
+                    return item.status === ProjectStatus.CROWDFUND && isCrowdfundActual;
+                });
                 projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
