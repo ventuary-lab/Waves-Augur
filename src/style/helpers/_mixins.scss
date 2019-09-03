@@ -189,3 +189,9 @@
   box-shadow:none;
   border-color:transparent;
 }
+
+@mixin purify-default-btn {
+  text-align: left;
+  border: none;
+  background: transparent;
+}

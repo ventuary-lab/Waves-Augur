@@ -1,4 +1,5 @@
 import React from 'react';
+import Modal from 'yii-steroids/ui/modal/Modal';
 
 import {html} from 'components';
 import ProjectSchema from 'types/ProjectSchema';
