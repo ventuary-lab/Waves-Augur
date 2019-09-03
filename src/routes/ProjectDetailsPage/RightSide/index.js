@@ -1,7 +1,6 @@
 import React from 'react';
 import { html, store } from 'components';
 
-
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 import TextField from 'yii-steroids/ui/form/TextField';
@@ -11,19 +10,26 @@ import SocialLinks from 'shared/SocialLinks';
 import { openModal } from 'yii-steroids/actions/modal';
 
 import rocketIcon from 'static/icons/rocket-icon-flying.svg';
+import {
+    unHashGeneratedKey
+} from 'ui/global/helper';
+import {
+    DONATE_AMOUNT_COLLECTION
+} from 'ui/global/constants';
 
 import './index.scss';
 
-function RewardCell ({ onClick = () => {}, ...restProps }) {
+function RewardCell ({ onClick = () => {}, reward, ...restProps }) {
     const bem = html.bem('ProjectRewardCell');
+    const { amount, title, desc } = reward;
 
     return (
         <div className={bem.element('root')} {...restProps}>
             <div>
-                <span>Our sincerest thank you!</span>
-                <span>Pledge 3 WAVES or more</span>
-                <span>Thank you, even the smallest support counts! We will keep you posted on our next steps</span>
-                <button onClick={onClick}>Join 3 WAVES tier</button>
+                <span>{title}</span>
+                <span>Pledge {amount} WAVES or more</span>
+                <span>{desc}</span>
+                <button onClick={onClick}>Join {amount} WAVES tier</button>
             </div>
         </div>
     );
@@ -63,11 +69,10 @@ function JoinWavesModal (props) {
     )
 }
 
-function RightSide ({ parentName, socials }) {
+function RightSide ({ parentName, socials, project }) {
     const bemRef = React.useRef(html.bem(`${parentName}RightSide`));
     const { current: bem } = bemRef;
- 
-    const rewardsExist = true;
+    const { rewards } = project;
 
     const rewardCellProps = {
         onClick: () => {
@@ -79,6 +84,15 @@ function RightSide ({ parentName, socials }) {
         'col col_desk-reverse col_desk-count-5',
         bem.element('root')
     ].join(' ');
+
+    const mappedRewards = rewards && Object.keys(rewards)
+        .filter(rewardKey => rewards[rewardKey].isChecked)
+        .map(rewardKey => (
+            <RewardCell
+                {...rewardCellProps} 
+                reward={{ ...rewards[rewardKey], amount: DONATE_AMOUNT_COLLECTION[unHashGeneratedKey(rewardKey)] }}
+            />
+        )) || [];
 
     return (
         <div className={rootClassName}>
@@ -97,7 +111,7 @@ function RightSide ({ parentName, socials }) {
                     <img src={rocketIcon}/>
                     <span>Your Reward</span>
                 </div>
-                {Array(10).fill(<RewardCell {...rewardCellProps}/>)}
+                {mappedRewards}
                 <div className={bem.element('additional-info')}>
                     <span>+ Ventuary DAO reward</span>
                     <span>

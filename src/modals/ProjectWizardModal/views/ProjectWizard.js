@@ -19,6 +19,12 @@ import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {ROUTE_PROJECT_FEED} from 'routes';
+import {
+    generateHashKey,
+} from 'ui/global/helper';
+import {
+    DONATE_AMOUNT_COLLECTION
+} from 'ui/global/constants';
 
 import './ProjectWizard.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -54,7 +60,7 @@ export default class ProjectWizard extends React.PureComponent {
         this._updateFormTitle = this._updateFormTitle.bind(this);
         this._getDefaultRewardsData = this._getDefaultRewardsData.bind(this);
 
-        this._donateRanges = [3, 10, 100, 300, 1000];
+        this._donateRanges = DONATE_AMOUNT_COLLECTION;
         this.defaultFormTitle = 'New Project';
 
         this.uniqueTabTitlesMap = new Map([
@@ -67,7 +73,8 @@ export default class ProjectWizard extends React.PureComponent {
     } 
 
     _computeHashKey (index) {
-        return String.fromCharCode(97+index);
+        // return String.fromCharCode(97+index);
+        return generateHashKey(index);
     }
 
     _getDefaultRewardsData () {
@@ -75,9 +82,10 @@ export default class ProjectWizard extends React.PureComponent {
         const res = {};
         const defaultObj = { isChecked: false, title: '', desc: '' };
 
-        // for (const key of _donateRanges) {
+
         for (let i = 0; i < _donateRanges.length; i++) {
             const computedKey = _computeHashKey(i);
+
             res[computedKey] = defaultObj;
         }
 
@@ -306,10 +314,10 @@ export default class ProjectWizard extends React.PureComponent {
     }
 
     _stepRewardsSection () {
-        const { _donateRanges: donateRanges, _computeHashKey } = this;
+        const { _donateRanges: donateRanges, _computeHashKey, _getDefaultRewardsData } = this;
         const computeLabel = amount => `Add Reward for ${amount} WAVES donation or more`;
         const formDataPath = 'formData.rewards';
-        const formData = _.get(this.props, formDataPath, {});
+        const formData = _.get(this.props, formDataPath, _getDefaultRewardsData());
 
         const computeAttr = (index, name) => `rewards.${_computeHashKey(index)}.${name}`;
         const computeAttributes = (amountIndex) => {

@@ -35,6 +35,7 @@ export default class ProjectDetailsPage extends React.PureComponent {
                     <div className={'row'}>
                         <RightSide
                             socials={this.props.project.socials}
+                            project={this.props.project}
                             parentName={COMPONENT_NAME}
                         />
                         <div className={'col col_desk-count-7'}>
