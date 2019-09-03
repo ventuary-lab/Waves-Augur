@@ -116,10 +116,13 @@ class ImagePreviewsField extends React.PureComponent {
             }
 
             const file = filesToUpload[i];
-            const leftImagesCount = filesToUpload.length - 1 - i;
-
+            const leftImagesCount = filesToUpload.length - i;
+    
             this.setState({ uploadingImagesCount: leftImagesCount });
+
             await this._uploadExactFile(file);
+
+            this.setState({ uploadingImagesCount: leftImagesCount - 1 });
         };
     }
 
@@ -187,7 +190,7 @@ class ImagePreviewsField extends React.PureComponent {
                         <div>
                             <SmallLoader />
                             <p>
-                                <span>Loading images</span>
+                                <span>Loading files</span>
                                 <span>Please wait...</span>
                             </p>
                         </div>
