@@ -1,7 +1,9 @@
-import React from 'react';
 import loader from './index.gif';
+import {
+    baseToImgWrapper
+} from 'ui/anims/helper';
 
-const Loader = () => <img src={loader}></img>;
+const Loader = () => baseToImgWrapper(loader);
 
 export {
     Loader
