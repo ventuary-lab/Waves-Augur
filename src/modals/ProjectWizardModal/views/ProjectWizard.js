@@ -48,21 +48,41 @@ export default class ProjectWizard extends React.PureComponent {
         this._stepProject = this._stepProject.bind(this);
         this._stepIdeaThreeContacts= this._stepIdeaThreeContacts.bind(this);
         this._stepRewardsSection= this._stepRewardsSection.bind(this);
+        this._computeHashKey= this._computeHashKey.bind(this);
         this._onNextClick = this._onNextClick.bind(this);
         this._getItems = this._getItems.bind(this);
         this._updateFormTitle = this._updateFormTitle.bind(this);
+        this._getDefaultRewardsData = this._getDefaultRewardsData.bind(this);
 
         this._donateRanges = [3, 10, 100, 300, 1000];
         this.defaultFormTitle = 'New Project';
 
         this.uniqueTabTitlesMap = new Map([
-            [FORM_FIELD_PREVIEW, 'Upload your projects’s previews']
+            [FORM_FIELD_PREVIEW, 'Upload your project’s previews']
         ]);
 
         this.state = {
             formTitle: this._updateFormTitle(0)
         };
     } 
+
+    _computeHashKey (index) {
+        return String.fromCharCode(97+index);
+    }
+
+    _getDefaultRewardsData () {
+        const { _donateRanges, _computeHashKey } = this;
+        const res = {};
+        const defaultObj = { isChecked: false, title: '', desc: '' };
+
+        // for (const key of _donateRanges) {
+        for (let i = 0; i < _donateRanges.length; i++) {
+            const computedKey = _computeHashKey(i);
+            res[computedKey] = defaultObj;
+        }
+
+        return res;
+    }
 
     _updateFormTitle (index) {
         const items = this._getItems();
@@ -198,7 +218,7 @@ export default class ProjectWizard extends React.PureComponent {
                             coverSmallUrl: this.props.project.coverSmallUrl || '',
                             coverUrl: this.props.project.coverUrl || '',
                             previews: this.props.project.previews || [],
-                            rewards: this.props.project.rewards || {},
+                            rewards: this.props.project.rewards || this._getDefaultRewardsData(),
                         }
                         : undefined
                     }
@@ -286,52 +306,53 @@ export default class ProjectWizard extends React.PureComponent {
     }
 
     _stepRewardsSection () {
-        const { _donateRanges: donateRanges } = this;
+        const { _donateRanges: donateRanges, _computeHashKey } = this;
         const computeLabel = amount => `Add Reward for ${amount} WAVES donation or more`;
-        const computeAttr = amount => {
-            const prefix = 'rewards.';
+        const formDataPath = 'formData.rewards';
+        const formData = _.get(this.props, formDataPath, {});
+
+        const computeAttr = (index, name) => `rewards.${_computeHashKey(index)}.${name}`;
+        const computeAttributes = (amountIndex) => {
+            const checkboxAttribute = computeAttr(amountIndex, 'isChecked');
+            const titleAttribute = computeAttr(amountIndex, 'title');
+            const descAttribute = computeAttr(amountIndex, 'desc');
 
             return {
-                checkbox:  `${prefix}checkbox${amount}`,
-                title:  `${prefix}title${amount}`,
-                desc:  `${prefix}desc${amount}`,
+                checkboxAttribute,
+                titleAttribute,
+                descAttribute
             };
         };
-        const getKey = computedAttr => computedAttr.split('.').slice(1).join('.');
 
-        const computedFields = donateRanges.map(amount => {
-            const { checkbox, title, desc } = computeAttr(amount);
-
-            const formData = _.get(this.props, 'formData.rewards', {});
-
-            const checkboxKey = getKey(checkbox);
-            const isChecked = formData[checkboxKey];
+        const computedFields = donateRanges.map((amount, amountIndex) => {
+            const { isChecked } = _.get(formData, `${_computeHashKey(amountIndex)}`, {});
+            const { checkboxAttribute, titleAttribute, descAttribute } = computeAttributes(amountIndex);
 
             return (
                 <div>
                     <CheckboxField
                         label={computeLabel(amount)}
-                        attribute={checkbox}
+                        attribute={checkboxAttribute}
                     />
                     {isChecked && (
                         <div className={bem.element('reward-desc')}>
                             <TextField
                                 topLabel={'Title'}
-                                attribute={title}
+                                attribute={titleAttribute}
                                 placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_TITLE_PLACEHOLDER)}
                                 layout={'default'}
                             />
                             <InputField
                                 topLabel={'Description'}
-                                attribute={desc}
+                                attribute={descAttribute}
                                 layout={'default'}
                                 placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_DESC_PLACEHOLDER)}
                             />
                         </div>
                     )}
                 </div>
-            )
-        })
+            );
+        });
 
         return (
             <>
@@ -347,7 +368,7 @@ export default class ProjectWizard extends React.PureComponent {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('10 images max. Recomended size 950x620 px, .jpg, .png, .svg')}
+                    {__('10 images max. Recommended size 950x620 px, .jpg, .png, .svg')}
                 </div>
                 <ImagePreviewsField
                     layout={'default'}

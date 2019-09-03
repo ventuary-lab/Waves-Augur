@@ -24,7 +24,6 @@ export default class ProjectDetailsPage extends React.PureComponent {
     render() {
         return (
             <div className={bem.block()}>
-                {/* <ProjectPreviewDetails previews={this.props.project.previews || []}/> */}
                 <ProjectPreviewDetails previews={this.props.project.previews || []}/>
                 <div className={bem.element('leader-block')}>
                     <div className={bem.element('title')}>
