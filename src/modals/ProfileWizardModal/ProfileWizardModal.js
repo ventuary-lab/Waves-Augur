@@ -1,10 +1,12 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _get from 'lodash/get';
 import Modal from 'yii-steroids/ui/modal/Modal';
+import { Loader as BaseLoader } from 'ui/anims';
 
-import {dal, html} from 'components';
+import { dal, html } from 'components';
 
 import AboutTab from './views/AboutTab';
 import ImageTab from './views/ImageTab';
@@ -31,16 +33,57 @@ export default class ProfileWizardModal extends React.Component {
         hash2: PropTypes.string,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._onSubmit = this._onSubmit.bind(this);
+
+        this.state = {
+            isLoading: false
+        };
+    }
+
+    async _onSubmit (values) {
+        const { onClose } = this.props;
+
+        this.setState({ isLoading: true });
+
+        await dal.saveUser(values, this.props.hash2);
+
+        this.setState({ isLoading: false });
+
+        if (onClose) {
+            onClose();
+        }
+    }
+
     render() {
+        const { _onSubmit, state } = this;
+        const { isLoading } = state;
+
+        const loader = (
+            ReactDOM.createPortal(
+                <div className={bem.element('loader')}>
+                    <BaseLoader />
+                </div>,
+                document.body
+            )
+        );
+        const modalClassName = bem.element(isLoading ? 'hidden' : '');
+
+        if (isLoading) {
+            return loader;
+        }
+
         return (
             <Modal
                 {...this.props.modalProps}
-                className={bem.block()}
+                className={modalClassName}
             >
                 <FormWizard
                     title={__('')}
                     formId='ProfileWizardModal'
-                    onSubmit={values => dal.saveUser(values, this.props.hash2).then(() => this.props.onClose())}
+                    onSubmit={_onSubmit}
                     onComplete={this.props.onClose}
                     initialValues={_get(this.props, 'user.profile')}
                     items={[

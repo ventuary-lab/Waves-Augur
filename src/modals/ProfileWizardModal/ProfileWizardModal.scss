@@ -1,3 +1,22 @@
-.ProfileWizardModal {
 
+
+.ProfileWizardModal {
+    &__hidden {
+        display: none;
+    };
+
+    &__loader {
+        position: absolute;
+        width: 100%;
+        height: calc(100vh - 61px);
+        bottom: 0;
+        left: 0;
+        background: #fff;
+
+        & > img {
+            height: 100%;
+            margin: auto;
+            display: block;
+        }
+    }
 }

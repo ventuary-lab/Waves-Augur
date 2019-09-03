@@ -98,7 +98,7 @@ export default class Layout extends React.PureComponent {
                 if (invitation) {
                     this.props.dispatch(openModal(ProfileWizardModal, {
                         user: invitation.user,
-                        hash2: invitation.hash2,
+                        hash2: invitation.hash2
                     }));
                 }
             }
