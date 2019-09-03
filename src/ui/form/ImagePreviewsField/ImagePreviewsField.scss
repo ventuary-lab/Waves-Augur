@@ -5,6 +5,36 @@
 
   $root: &;
 
+  &__drop-zone-root {
+    position: relative;
+
+    &_is-loading {
+      & > :first-child {
+        position: absolute;
+        z-index: 2;
+        color: #0BC91F;
+        width: 100%;
+
+        & > img:first-child {
+          width: 32px;
+          height: 32px;
+          margin-left: calc(50% - 16px);
+          margin-top: 57px;
+        }
+        & > p:nth-child(2) {
+          margin-top: 4px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+
+      & > :nth-child(2) {
+        opacity: .1;
+      }
+    }
+  }
+
   &_is-cover {
     #{$root}__drop-zone-block {
       height: 70px;

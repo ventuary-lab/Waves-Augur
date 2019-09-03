@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import fieldHoc from 'yii-steroids/ui/form/fieldHoc';
 import Dropzone from 'react-dropzone';
 import ImagesGrid from 'ui/form/ImagesGrid';
-import { Loader } from 'ui/anims/base-loader';
+import { SmallLoader } from 'ui/anims';
 
-import {html} from 'components';
+import { html } from 'components';
 
 import './ImagePreviewsField.scss';
 
@@ -37,7 +37,7 @@ class ImagePreviewsField extends React.PureComponent {
             isUploadFailed: false,
             onDragEnter: false,
             uploadedImages: initialImages,
-            isUploadProcessing: false
+            uploadingImagesCount: 0
         };
 
         this.maxUploadCount = IMAGES_MAX_UPLOAD_COUNT;
@@ -65,63 +65,6 @@ class ImagePreviewsField extends React.PureComponent {
         };
 
         this.setState({ uploadedImages: updatedImages });
-    }
-
-    render() {
-        const { uploadedImages } = this.state;
-
-        return (
-            <div className={bem.block({
-                'is-cover': this.props.isCover,
-                'is-cover-small': this.props.isCoverSmall,
-            })}>
-                <ImagesGrid
-                    images={this.state.uploadedImages}
-                    onRemove={this._onImageRemove}
-                />
-                {uploadedImages.length < 10 && (
-                    <div className={bem.element('drop-zone-block', {
-                        'on-drag-enter': this.state.onDragEnter,
-                    })}>
-                        <Dropzone
-                            ref={this.dropZoneRef}
-                            noClick={true}
-                            onDrop={this._onDrop}
-                            onDragEnter={this._onDragEnter}
-                            onDragLeave={this._onDragLeave}
-                            accept={'image/jpeg, image/png, image/svg+xml'}
-                        >
-                            {({getRootProps, getInputProps}) => (
-                                <div {...getRootProps({className: bem.element('drop-zone')})}>
-                                    <input
-                                        {...getInputProps()}
-                                        name={'avatar'}
-                                        onChange={this._onBrowseAccept}
-                                    />
-                                    <span className={bem.element('drop-zone-title')}>
-                                        {this.props.title || __('Drop Your Image Here')}
-                                    </span>
-                                </div>
-                            )}
-                        </Dropzone>
-                    </div>
-                )}
-                <div className={bem.element('upload-failed', {
-                    'visible': this.state.isUploadFailed,
-                })}>
-                    {__('File failed to upload')}
-                </div>
-                {uploadedImages.length < 10 && (
-                    <span
-                        className={bem.element('image-choose')}
-                        onClick={this._openBrowseDialog}
-                    >
-                        <span className={bem.element('image-choose-icon')}/>
-                        {__('Choose Photo')}
-                    </span>
-                )}
-            </div>
-        );
     }
 
     async _onDrop(files) {
@@ -157,6 +100,7 @@ class ImagePreviewsField extends React.PureComponent {
         if (!files) {
             return;
         };
+
         let filesToUpload = [...files];
         const { uploadedImages } = this.state;
 
@@ -165,18 +109,21 @@ class ImagePreviewsField extends React.PureComponent {
             this.maxUploadCount - uploadedImages.length
         );
 
-        this.setState({ isUploadProcessing: true });
-
         for (let i = 0; i < filesToUpload.length; i++) {
             if (this.state.uploadedImages.length === 10) {
+                this.setState({ uploadingImagesCount: 0 });
                 return;
             }
 
             const file = filesToUpload[i];
-            await this._uploadExactFile(file);
-        };
+            const leftImagesCount = filesToUpload.length - i;
+    
+            this.setState({ uploadingImagesCount: leftImagesCount });
 
-        this.setState({ isUploadProcessing: false });
+            await this._uploadExactFile(file);
+
+            this.setState({ uploadingImagesCount: leftImagesCount - 1 });
+        };
     }
 
     _onBrowseAccept(inputEvent) {
@@ -222,5 +169,77 @@ class ImagePreviewsField extends React.PureComponent {
             xhr.send(formData);
         });
     }
+
+
+    render() {
+        const { maxUploadCount, state } = this;
+        const { uploadedImages, uploadingImagesCount } = state;
+        const isUploadInProcess = uploadingImagesCount > 0;
+
+        return (
+            <div className={bem.block({
+                'is-cover': this.props.isCover,
+                'is-cover-small': this.props.isCoverSmall,
+            })}>
+                <ImagesGrid
+                    images={uploadedImages}
+                    onRemove={this._onImageRemove}
+                />
+                <div className={bem.element('drop-zone-root', { 'is-loading': isUploadInProcess })}>
+                    {isUploadInProcess && (
+                        <div>
+                            <SmallLoader />
+                            <p>
+                                <span>Loading files</span>
+                                <span>Please wait...</span>
+                            </p>
+                        </div>
+                    )}
+                    {uploadedImages.length < 10 && (
+                        <div className={bem.element('drop-zone-block', {
+                            'on-drag-enter': this.state.onDragEnter,
+                        })}>
+                            <Dropzone
+                                ref={this.dropZoneRef}
+                                noClick={true}
+                                onDrop={this._onDrop}
+                                onDragEnter={this._onDragEnter}
+                                onDragLeave={this._onDragLeave}
+                                accept={'image/jpeg, image/png, image/svg+xml'}
+                            >
+                                {({getRootProps, getInputProps}) => (
+                                    <div {...getRootProps({className: bem.element('drop-zone')})}>
+                                        <input
+                                            {...getInputProps()}
+                                            name={'avatar'}
+                                            onChange={this._onBrowseAccept}
+                                        />
+                                        <span className={bem.element('drop-zone-title')}>
+                                            {this.props.title || __('Drop Your Image Here')}
+                                        </span>
+                                    </div>
+                                )}
+                            </Dropzone>
+                        </div>
+                    )}
+                </div>
+                <div className={bem.element('upload-failed', {
+                    'visible': this.state.isUploadFailed,
+                })}>
+                    {__('File failed to upload')}
+                </div>
+                {uploadedImages.length < maxUploadCount && (
+                    <span
+                        className={bem.element('image-choose')}
+                        onClick={this._openBrowseDialog}
+                    >
+                        <span className={bem.element('image-choose-icon')}/>
+                        {__('Choose Photo')}
+                    </span>
+                )}
+            </div>
+        );
+    }
+
 
 }
