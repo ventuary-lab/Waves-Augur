@@ -48,12 +48,16 @@ export default class ProfileWizardModal extends React.Component {
 
         this.setState({ isLoading: true });
 
-        await dal.saveUser(values, this.props.hash2);
+        try {
+            await dal.saveUser(values, this.props.hash2);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            this.setState({ isLoading: false });
 
-        this.setState({ isLoading: false });
-
-        if (onClose) {
-            onClose();
+            if (onClose) {
+                onClose();
+            }
         }
     }
 
