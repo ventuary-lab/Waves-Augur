@@ -1,6 +1,8 @@
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import CheckboxField from 'yii-steroids/ui/form/CheckboxField';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
@@ -28,6 +30,7 @@ const FORM_FIELD_PREVIEW = 'previews';
 @connect(
     state => ({
         isPhone: isPhone(state),
+        formData: _.get(state, 'form.ProjectWizard.values', {})
     })
 )
 export default class ProjectWizard extends React.PureComponent {
@@ -44,10 +47,12 @@ export default class ProjectWizard extends React.PureComponent {
         this._stepName = this._stepName.bind(this);
         this._stepProject = this._stepProject.bind(this);
         this._stepIdeaThreeContacts= this._stepIdeaThreeContacts.bind(this);
+        this._stepRewardsSection= this._stepRewardsSection.bind(this);
         this._onNextClick = this._onNextClick.bind(this);
         this._getItems = this._getItems.bind(this);
         this._updateFormTitle = this._updateFormTitle.bind(this);
 
+        this._donateRanges = [3, 10, 100, 300, 1000];
         this.defaultFormTitle = 'New Project';
 
         this.uniqueTabTitlesMap = new Map([
@@ -83,6 +88,11 @@ export default class ProjectWizard extends React.PureComponent {
 
     _getItems () {
         return [
+            {
+                id: 'rewards-section',
+                component: this._stepRewardsSection,
+                validators: []
+            },
             {
                 id: 'name',
                 component: this._stepName,
@@ -141,6 +151,11 @@ export default class ProjectWizard extends React.PureComponent {
                     [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                 ],
             },
+            // {
+            //     id: 'rewards-section',
+            //     component: this._stepRewardsSection,
+            //     validators: []
+            // }
         ];
     }
 
@@ -183,6 +198,7 @@ export default class ProjectWizard extends React.PureComponent {
                             coverSmallUrl: this.props.project.coverSmallUrl || '',
                             coverUrl: this.props.project.coverUrl || '',
                             previews: this.props.project.previews || [],
+                            rewards: this.props.project.rewards || {},
                         }
                         : undefined
                     }
@@ -267,6 +283,64 @@ export default class ProjectWizard extends React.PureComponent {
                 />
             </>
         );
+    }
+
+    _stepRewardsSection () {
+        const { _donateRanges: donateRanges } = this;
+        const computeLabel = amount => `Add Reward for ${amount} WAVES donation or more`;
+        const computeAttr = amount => {
+            const prefix = 'rewards.';
+
+            return {
+                checkbox:  `${prefix}checkbox${amount}`,
+                title:  `${prefix}title${amount}`,
+                desc:  `${prefix}desc${amount}`,
+            };
+        };
+        const getKey = computedAttr => computedAttr.split('.').slice(1).join('.');
+
+        const computedFields = donateRanges.map(amount => {
+            const { checkbox, title, desc } = computeAttr(amount);
+
+            const formData = _.get(this.props, 'formData.rewards', {});
+
+            const checkboxKey = getKey(checkbox);
+            const isChecked = formData[checkboxKey];
+
+            return (
+                <div>
+                    <CheckboxField
+                        label={computeLabel(amount)}
+                        attribute={checkbox}
+                    />
+                    {isChecked && (
+                        <div className={bem.element('reward-desc')}>
+                            <TextField
+                                topLabel={'Title'}
+                                attribute={title}
+                                placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_TITLE_PLACEHOLDER)}
+                                layout={'default'}
+                            />
+                            <InputField
+                                topLabel={'Description'}
+                                attribute={desc}
+                                layout={'default'}
+                                placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_DESC_PLACEHOLDER)}
+                            />
+                        </div>
+                    )}
+                </div>
+            )
+        })
+
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('You can reward reviewers for their contributions')}
+                </div>
+                {computedFields}
+            </>
+        )
     }
 
     _stepPreviews () {

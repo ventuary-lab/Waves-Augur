@@ -10,6 +10,8 @@ export default class ProjectContentEnum extends Enum {
     static MARKET_STRATEGY = 'marketStrategy';
     static IMPACT_ON_COMMUNITY = 'impactOnCommunity';
     static CURRENT_STAGE = 'currentStage';
+    static REWARD_TITLE_PLACEHOLDER = 'rewardTitlePlaceholder';
+    static REWARD_DESC_PLACEHOLDER = 'rewardDescPlaceholder';
 
     static getLabels() {
         return {
@@ -34,6 +36,8 @@ export default class ProjectContentEnum extends Enum {
             [this.MARKET_STRATEGY]: __('Example: Marketplaces are creating more use cases for DLT & Smart Contracts as well as more liquidity for crypto in general ... '),
             [this.IMPACT_ON_COMMUNITY]: __('Example: Marketplaces are creating more use cases for DLT & Smart Contracts as well as more liquidity for crypto in general ...'),
             [this.CURRENT_STAGE]: __('Example: 1. Product design and users journey - DONE; 2. Smart Contracts and business logic - DONE; 3. Application UI - IN PROGRESS; 4. Marketing materials - IN PROGRESS...'),
+            [this.REWARD_TITLE_PLACEHOLDER]: __('Ex.: Premium account'),
+            [this.REWARD_DESC_PLACEHOLDER]: __('Ex.: We will give you Premium account for free'),
         };
     }
 
