@@ -27,24 +27,8 @@
     word-break: break-word;
   }
 
-  &__links {
-    padding: 35px 20px 43px;
-
-    @include tablet {
-
-    }
-  }
-
   &__info {
     padding: 0 15px;
-  }
-
-  &__social-links {
-    margin-bottom: 23px;
-  }
-
-  &__share-link {
-    @include share-link;
   }
 
   &__inner {

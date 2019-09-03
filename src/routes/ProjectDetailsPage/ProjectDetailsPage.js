@@ -2,16 +2,17 @@ import React from 'react';
 
 import {html} from 'components';
 import ProjectSchema from 'types/ProjectSchema';
-import CopyToClipboard from 'shared/CopyToClipboard';
+import RightSide from './RightSide';
 
 import UserCard from 'shared/UserCard';
-import SocialLinks from 'shared/SocialLinks';
 import ProjectPreviewDetails from 'shared/ProjectPreviewDetails';
 
 import './ProjectDetailsPage.scss';
 import ProjectContentEnum from 'enums/ProjectContentEnum';
 
-const bem = html.bem('ProjectDetailsPage');
+const COMPONENT_NAME = 'ProjectDetailsPage';
+
+const bem = html.bem(COMPONENT_NAME);
 
 export default class ProjectDetailsPage extends React.PureComponent {
 
@@ -32,18 +33,10 @@ export default class ProjectDetailsPage extends React.PureComponent {
                 </div>
                 <div className={bem.element('content')}>
                     <div className={'row'}>
-                        <div className={'col col_desk-reverse col_desk-count-5'}>
-                            <div className={bem.element('links')}>
-                                <div className={bem.element('social-links')}>
-                                    <SocialLinks
-                                        urls={this.props.project.socials}
-                                    />
-                                </div>
-                                <CopyToClipboard copyText={document.location.toString()}>
-                                    <button className={bem.element('share-link')}>{__('Share Project')}</button>
-                                </CopyToClipboard>
-                            </div>
-                        </div>
+                        <RightSide
+                            socials={this.props.project.socials}
+                            parentName={COMPONENT_NAME}
+                        />
                         <div className={'col col_desk-count-7'}>
                             <div className={bem.element('info')}>
                                 {ProjectContentEnum.getKeys()

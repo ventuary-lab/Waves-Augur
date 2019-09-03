@@ -1,0 +1,21 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.ProjectDetailsPageRightSide {
+  &__social-links {
+    margin-bottom: 23px;
+  }
+
+  &__links {
+    padding: 35px 20px 43px;
+
+    @include tablet {
+
+    }
+  }
+  
+  &__share-link {
+    @include share-link;
+  }
+
+}
