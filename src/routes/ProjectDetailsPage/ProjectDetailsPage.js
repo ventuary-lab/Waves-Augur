@@ -1,7 +1,8 @@
 import React from 'react';
-import Modal from 'yii-steroids/ui/modal/Modal';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
-import {html} from 'components';
+import { html } from 'components';
 import ProjectSchema from 'types/ProjectSchema';
 import RightSide from './RightSide';
 
@@ -15,13 +16,29 @@ const COMPONENT_NAME = 'ProjectDetailsPage';
 
 const bem = html.bem(COMPONENT_NAME);
 
+
+@connect(
+    state => ({
+        currentUserAddress: _.get(state, 'auth.user.address', '')
+    })
+)
 export default class ProjectDetailsPage extends React.PureComponent {
 
     static propTypes = {
         project: ProjectSchema,
     };
 
+    constructor (props) {
+        super(props);
+
+        this.isAuthor = (
+            this.props.currentUserAddress === _.get(this.props, 'project.author.address', null)
+        );
+    }
+
     render() {
+        const { isAuthor } = this;
+
         return (
             <div className={bem.block()}>
                 <ProjectPreviewDetails previews={this.props.project.previews || []}/>
@@ -37,6 +54,7 @@ export default class ProjectDetailsPage extends React.PureComponent {
                             socials={this.props.project.socials}
                             project={this.props.project}
                             parentName={COMPONENT_NAME}
+                            isAuthor={isAuthor}
                         />
                         <div className={'col col_desk-count-7'}>
                             <div className={bem.element('info')}>

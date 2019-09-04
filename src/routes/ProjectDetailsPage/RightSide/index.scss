@@ -4,12 +4,13 @@
 .ProjectRewardCell {
     $base-bg: rgba(11, 201, 31, .1);
     $hovered-bg: rgba(11, 201, 31, .9);
+    $root: &;
 
     &__root {
         cursor: pointer;
         // background: #0BC91F;
         background: $base-bg;
-        padding: 20px 30px;
+        padding: 20px 30px 60px 20px;
         margin-top: 20px;
         $root-child: &;
 
@@ -44,19 +45,22 @@
             };
         }
 
-        &:hover {
-            background-color: $hovered-bg;
+        &_not-author {
+            padding-bottom: 20px;
 
-            & > :first-child {
-                & > :not(:nth-child(4)) {
-                    opacity: .1;
-                };
-
-                & > :nth-child(4) {
-                    color: #fff;
+            &:hover {
+                background-color: $hovered-bg;
+    
+                & > :first-child {
+                    & > :not(:nth-child(4)) {
+                        opacity: .1;
+                    };
+    
+                    & > :nth-child(4) {
+                        color: #fff;
+                    }
                 }
             }
-
         }
     }
 }

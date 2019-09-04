@@ -1,5 +1,5 @@
 import React from 'react';
-import { html, store } from 'components';
+import { html, store, dal } from 'components';
 
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
@@ -19,17 +19,17 @@ import {
 
 import './index.scss';
 
-function RewardCell ({ onClick = () => {}, reward, ...restProps }) {
+function RewardCell ({ onClick = () => {}, isAuthor, reward, ...restProps }) {
     const bem = html.bem('ProjectRewardCell');
     const { amount, title, desc } = reward;
 
     return (
-        <div className={bem.element('root')} {...restProps}>
+        <div className={bem.element('root', !isAuthor ? 'not-author' : '')} {...restProps}>
             <div>
                 <span>{title}</span>
                 <span>Pledge {amount} WAVES or more</span>
                 <span>{desc}</span>
-                <button onClick={onClick}>Join {amount} WAVES tier</button>
+                {!isAuthor && <button onClick={() => onClick(amount)}>Join {amount} WAVES tier</button>}
             </div>
         </div>
     );
@@ -38,13 +38,25 @@ function RewardCell ({ onClick = () => {}, reward, ...restProps }) {
 const FORM_ID = 'JoinWavesModalForm';
 
 function JoinWavesModal (props) {
-    const { onClose } = props;
+    const { onClose, amount, project } = props;
     const bem = html.bem('JoinWavesModal');
-    const formTitle = 'Join 3 WAVES tier';
+    const formTitle = `Join ${amount} WAVES tier`;
 
-    const onSubmit = (vals) => {
-        console.log({ vals });
-    }
+    const onSubmit = async ({ rewardWaves }) => {
+
+        const payload = {
+            comment: rewardWaves
+        };
+
+        try {
+            await dal.donateProject(project.uid, amount, payload);
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            onClose();
+        }
+    };
 
     return (
         <Modal {...props.modalProps}>
@@ -69,16 +81,17 @@ function JoinWavesModal (props) {
     )
 }
 
-function RightSide ({ parentName, socials, project }) {
+function RightSide ({ parentName, socials, project, isAuthor = false }) {
     const bemRef = React.useRef(html.bem(`${parentName}RightSide`));
     const { current: bem } = bemRef;
     const { rewards } = project;
 
     const rewardCellProps = {
-        onClick: () => {
-            store.dispatch(openModal(JoinWavesModal));
-        }
-    }
+        onClick: (amount) => {
+            store.dispatch(openModal(JoinWavesModal, { project, amount }));
+        },
+        isAuthor
+    };
 
     const rootClassName = [
         'col col_desk-reverse col_desk-count-5',
@@ -93,6 +106,16 @@ function RightSide ({ parentName, socials, project }) {
                 reward={{ ...rewards[rewardKey], amount: DONATE_AMOUNT_COLLECTION[unHashGeneratedKey(rewardKey)] }}
             />
         )) || [];
+
+    const additionalInfo = (
+        <div className={bem.element('additional-info')}>
+            <span>+ Ventuary DAO reward</span>
+            <span>
+                In case of a successful grant approval, you
+                will receive your donation times 1.5 as a reward from Ventuary DAO. 
+            </span>
+        </div>
+    )
 
     return (
         <div className={rootClassName}>
@@ -112,13 +135,7 @@ function RightSide ({ parentName, socials, project }) {
                     <span>Your Reward</span>
                 </div>
                 {mappedRewards}
-                <div className={bem.element('additional-info')}>
-                    <span>+ Ventuary DAO reward</span>
-                    <span>
-                        In case of a successful grant approval, you
-                        will receive your donation times 1.5 as a reward from Ventuary DAO. 
-                    </span>
-                </div>
+                {mappedRewards.length > 0 && additionalInfo}
             </div>
         </div>
     )
