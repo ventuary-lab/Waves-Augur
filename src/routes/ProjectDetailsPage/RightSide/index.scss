@@ -1,0 +1,137 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.ProjectRewardCell {
+    $base-bg: rgba(11, 201, 31, .1);
+    $hovered-bg: rgba(11, 201, 31, .9);
+    $root: &;
+
+    &__root {
+        cursor: pointer;
+        // background: #0BC91F;
+        background: $base-bg;
+        padding: 20px 30px 60px 20px;
+        margin-top: 20px;
+        $root-child: &;
+
+        & > :first-child {
+            color: $color-base-black;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            & > :nth-child(2),
+            & > :nth-child(3) {
+                font-size: 13px;
+                line-height: 14px;
+            };
+
+            & > :nth-child(2) {
+                color: #ABB3AC;
+                padding-top: 10px;
+            };
+            & > :nth-child(3) {
+                padding-top: 20px;
+            };
+            & > button:nth-child(4) {
+                @include purify-default-btn;
+
+                cursor: pointer;
+                font-size: 16px;
+                text-align: left;
+                color: $color-brand-green;
+                padding-top: 24px;
+            };
+        }
+
+        &_not-author {
+            padding-bottom: 20px;
+
+            &:hover {
+                background-color: $hovered-bg;
+    
+                & > :first-child {
+                    & > :not(:nth-child(4)) {
+                        opacity: .1;
+                    };
+    
+                    & > :nth-child(4) {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ProjectDetailsPageRightSide {
+    &__additional-info {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 30px;
+        font-size: 13px;
+        margin-bottom: 30px;
+
+        & > :nth-child(1) {
+            font-weight: 500;
+        }
+        & > :nth-child(2) {
+            padding-top: 10px;
+            line-height: 14px;
+        }
+    }
+
+    &__root {
+        & > :nth-child(2) {
+            & > :first-child {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                & > :nth-child(2) {
+                    padding-top: 8px;
+                    display: block;
+                }
+            }
+        }
+    }
+
+    &__social-links {
+        margin-bottom: 23px;
+    }
+
+    &__links {
+        padding: 35px 20px 43px;
+
+        @include tablet {
+
+        }
+    }
+
+    &__share-link {
+        @include share-link;
+    }
+}
+
+.JoinWavesModal {
+    
+    &__root {
+        margin: 0 -85px;
+        
+        & > :first-child {
+            display: block;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        & > :last-child {
+            & .ButtonView {
+                width: 100%;
+            }
+        }
+    }
+}

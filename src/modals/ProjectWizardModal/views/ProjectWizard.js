@@ -1,6 +1,8 @@
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import CheckboxField from 'yii-steroids/ui/form/CheckboxField';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
 import DateField from 'yii-steroids/ui/form/DateField';
@@ -17,6 +19,12 @@ import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
 import {ROUTE_PROJECT_FEED} from 'routes';
+import {
+    generateHashKey,
+} from 'ui/global/helper';
+import {
+    DONATE_AMOUNT_COLLECTION
+} from 'ui/global/constants';
 
 import './ProjectWizard.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -28,6 +36,7 @@ const FORM_FIELD_PREVIEW = 'previews';
 @connect(
     state => ({
         isPhone: isPhone(state),
+        formData: _.get(state, 'form.ProjectWizard.values', {})
     })
 )
 export default class ProjectWizard extends React.PureComponent {
@@ -44,20 +53,44 @@ export default class ProjectWizard extends React.PureComponent {
         this._stepName = this._stepName.bind(this);
         this._stepProject = this._stepProject.bind(this);
         this._stepIdeaThreeContacts= this._stepIdeaThreeContacts.bind(this);
+        this._stepRewardsSection= this._stepRewardsSection.bind(this);
+        this._computeHashKey= this._computeHashKey.bind(this);
         this._onNextClick = this._onNextClick.bind(this);
         this._getItems = this._getItems.bind(this);
         this._updateFormTitle = this._updateFormTitle.bind(this);
+        this._getDefaultRewardsData = this._getDefaultRewardsData.bind(this);
 
+        this._donateRanges = DONATE_AMOUNT_COLLECTION;
         this.defaultFormTitle = 'New Project';
 
         this.uniqueTabTitlesMap = new Map([
-            [FORM_FIELD_PREVIEW, 'Upload your projects’s previews']
+            [FORM_FIELD_PREVIEW, 'Upload your project’s previews']
         ]);
 
         this.state = {
             formTitle: this._updateFormTitle(0)
         };
     } 
+
+    _computeHashKey (index) {
+        // return String.fromCharCode(97+index);
+        return generateHashKey(index);
+    }
+
+    _getDefaultRewardsData () {
+        const { _donateRanges, _computeHashKey } = this;
+        const res = {};
+        const defaultObj = { isChecked: false, title: '', desc: '' };
+
+
+        for (let i = 0; i < _donateRanges.length; i++) {
+            const computedKey = _computeHashKey(i);
+
+            res[computedKey] = defaultObj;
+        }
+
+        return res;
+    }
 
     _updateFormTitle (index) {
         const items = this._getItems();
@@ -141,6 +174,11 @@ export default class ProjectWizard extends React.PureComponent {
                     [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                 ],
             },
+            {
+                id: 'rewards-section',
+                component: this._stepRewardsSection,
+                validators: []
+            }
         ];
     }
 
@@ -183,6 +221,7 @@ export default class ProjectWizard extends React.PureComponent {
                             coverSmallUrl: this.props.project.coverSmallUrl || '',
                             coverUrl: this.props.project.coverUrl || '',
                             previews: this.props.project.previews || [],
+                            rewards: this.props.project.rewards || this._getDefaultRewardsData(),
                         }
                         : undefined
                     }
@@ -269,11 +308,70 @@ export default class ProjectWizard extends React.PureComponent {
         );
     }
 
+    _stepRewardsSection () {
+        const { _donateRanges: donateRanges, _computeHashKey, _getDefaultRewardsData } = this;
+        const computeLabel = amount => `Add Reward for ${amount} WAVES donation or more`;
+        const formDataPath = 'formData.rewards';
+        const formData = _.get(this.props, formDataPath, _getDefaultRewardsData());
+
+        const computeAttr = (index, name) => `rewards.${_computeHashKey(index)}.${name}`;
+        const computeAttributes = (amountIndex) => {
+            const checkboxAttribute = computeAttr(amountIndex, 'isChecked');
+            const titleAttribute = computeAttr(amountIndex, 'title');
+            const descAttribute = computeAttr(amountIndex, 'desc');
+
+            return {
+                checkboxAttribute,
+                titleAttribute,
+                descAttribute
+            };
+        };
+
+        const computedFields = donateRanges.map((amount, amountIndex) => {
+            const { isChecked } = _.get(formData, `${_computeHashKey(amountIndex)}`, {});
+            const { checkboxAttribute, titleAttribute, descAttribute } = computeAttributes(amountIndex);
+
+            return (
+                <div>
+                    <CheckboxField
+                        label={computeLabel(amount)}
+                        attribute={checkboxAttribute}
+                    />
+                    {isChecked && (
+                        <div className={bem.element('reward-desc')}>
+                            <TextField
+                                topLabel={'Title'}
+                                attribute={titleAttribute}
+                                placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_TITLE_PLACEHOLDER)}
+                                layout={'default'}
+                            />
+                            <InputField
+                                topLabel={'Description'}
+                                attribute={descAttribute}
+                                layout={'default'}
+                                placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_DESC_PLACEHOLDER)}
+                            />
+                        </div>
+                    )}
+                </div>
+            );
+        });
+
+        return (
+            <>
+                <div className={bem.element('sub-title')}>
+                    {__('You can reward reviewers for their contributions')}
+                </div>
+                {computedFields}
+            </>
+        )
+    }
+
     _stepPreviews () {
         return (
             <>
                 <div className={bem.element('sub-title')}>
-                    {__('10 images max. Recomended size 950x620 px, .jpg, .png, .svg')}
+                    {__('10 images max. Recommended size 950x620 px, .jpg, .png, .svg')}
                 </div>
                 <ImagePreviewsField
                     layout={'default'}

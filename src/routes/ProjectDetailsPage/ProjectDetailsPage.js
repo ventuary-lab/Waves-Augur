@@ -1,28 +1,46 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
-import {html} from 'components';
+import { html } from 'components';
 import ProjectSchema from 'types/ProjectSchema';
-import CopyToClipboard from 'shared/CopyToClipboard';
+import RightSide from './RightSide';
 
 import UserCard from 'shared/UserCard';
-import SocialLinks from 'shared/SocialLinks';
 import ProjectPreviewDetails from 'shared/ProjectPreviewDetails';
 
 import './ProjectDetailsPage.scss';
 import ProjectContentEnum from 'enums/ProjectContentEnum';
 
-const bem = html.bem('ProjectDetailsPage');
+const COMPONENT_NAME = 'ProjectDetailsPage';
 
+const bem = html.bem(COMPONENT_NAME);
+
+
+@connect(
+    state => ({
+        currentUserAddress: _.get(state, 'auth.user.address', '')
+    })
+)
 export default class ProjectDetailsPage extends React.PureComponent {
 
     static propTypes = {
         project: ProjectSchema,
     };
 
+    constructor (props) {
+        super(props);
+
+        this.isAuthor = (
+            this.props.currentUserAddress === _.get(this.props, 'project.author.address', null)
+        );
+    }
+
     render() {
+        const { isAuthor } = this;
+
         return (
             <div className={bem.block()}>
-                {/* <ProjectPreviewDetails previews={this.props.project.previews || []}/> */}
                 <ProjectPreviewDetails previews={this.props.project.previews || []}/>
                 <div className={bem.element('leader-block')}>
                     <div className={bem.element('title')}>
@@ -32,18 +50,12 @@ export default class ProjectDetailsPage extends React.PureComponent {
                 </div>
                 <div className={bem.element('content')}>
                     <div className={'row'}>
-                        <div className={'col col_desk-reverse col_desk-count-5'}>
-                            <div className={bem.element('links')}>
-                                <div className={bem.element('social-links')}>
-                                    <SocialLinks
-                                        urls={this.props.project.socials}
-                                    />
-                                </div>
-                                <CopyToClipboard copyText={document.location.toString()}>
-                                    <button className={bem.element('share-link')}>{__('Share Project')}</button>
-                                </CopyToClipboard>
-                            </div>
-                        </div>
+                        <RightSide
+                            socials={this.props.project.socials}
+                            project={this.props.project}
+                            parentName={COMPONENT_NAME}
+                            isAuthor={isAuthor}
+                        />
                         <div className={'col col_desk-count-7'}>
                             <div className={bem.element('info')}>
                                 {ProjectContentEnum.getKeys()
