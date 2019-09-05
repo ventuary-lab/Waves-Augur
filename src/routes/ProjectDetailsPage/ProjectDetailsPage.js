@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import { html } from 'components';
 import ProjectSchema from 'types/ProjectSchema';
+import { isPhone } from 'yii-steroids/reducers/screen';
 import RightSide from './RightSide';
 
 import UserCard from 'shared/UserCard';
@@ -19,7 +20,8 @@ const bem = html.bem(COMPONENT_NAME);
 
 @connect(
     state => ({
-        currentUserAddress: _.get(state, 'auth.user.address', '')
+        currentUserAddress: _.get(state, 'auth.user.address', ''),
+        isPhone: isPhone(state)
     })
 )
 
@@ -52,6 +54,7 @@ export default class ProjectDetailsPage extends React.PureComponent {
                             project={this.props.project}
                             parentName={COMPONENT_NAME}
                             isAuthor={isAuthor}
+                            isPhone={this.props.isPhone}
                         />
                         <div className={'col col_desk-count-7'}>
                             <div className={bem.element('info')}>

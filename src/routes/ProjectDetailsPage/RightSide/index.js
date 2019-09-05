@@ -20,7 +20,7 @@ import {
 
 import './index.scss';
 
-function RewardCell ({ onClick = () => {}, isAuthor, reward, project, ...restProps }) {
+function RewardCell ({ onClick = () => {}, isAuthor, reward, project, isPhone,...restProps }) {
     const bem = html.bem('ProjectRewardCell');
     const { amount, title, desc } = reward;
 
@@ -28,6 +28,7 @@ function RewardCell ({ onClick = () => {}, isAuthor, reward, project, ...restPro
         project.status === ProjectStatusEnum.VOTING ||
         project.status === ProjectStatusEnum.CROWDFUND
     );
+
     const _onClick = () => {
         if (donationAllowed) {
             onClick(amount);
@@ -35,12 +36,12 @@ function RewardCell ({ onClick = () => {}, isAuthor, reward, project, ...restPro
     };
 
     return (
-        <div className={bem.element('root', donationAllowed ? 'not-author' : '')} {...restProps} onClick={_onClick}>
+        <div className={bem.element('root', !isPhone && donationAllowed ? 'not-author' : '')} {...restProps} onClick={_onClick}>
             <div>
                 <span>{title}</span>
                 <span>Pledge {amount} WAVES or more</span>
                 <span>{desc}</span>
-                {donationAllowed && <button>Join {amount} WAVES tier</button>}
+                {!isPhone && donationAllowed && <button>Join {amount} WAVES tier</button>}
             </div>
         </div>
     );
@@ -91,17 +92,22 @@ function JoinWavesModal (props) {
     )
 }
 
-function RightSide ({ parentName, socials, project, isAuthor = false }) {
+function RightSide ({ parentName, socials, project, isPhone, isAuthor = false }) {
     const bemRef = React.useRef(html.bem(`${parentName}RightSide`));
     const { current: bem } = bemRef;
     const { rewards } = project;
 
     const rewardCellProps = {
         onClick: (amount) => {
+            if (isPhone) {
+                return;
+            }
+
             store.dispatch(openModal(JoinWavesModal, { project, amount }));
         },
         project,
-        isAuthor
+        isAuthor,
+        isPhone
     };
 
     const rootClassName = [
