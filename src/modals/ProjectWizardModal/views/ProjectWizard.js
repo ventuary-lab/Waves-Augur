@@ -117,11 +117,6 @@ export default class ProjectWizard extends React.PureComponent {
     _getItems () {
         return [
             {
-                id: 'rewards-section',
-                component: this._stepRewardsSection,
-                validators: []
-            },
-            {
                 id: 'name',
                 component: this._stepName,
                 validators: [
@@ -179,11 +174,11 @@ export default class ProjectWizard extends React.PureComponent {
                     [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                 ],
             },
-            // {
-            //     id: 'rewards-section',
-            //     component: this._stepRewardsSection,
-            //     validators: []
-            // }
+            {
+                id: 'rewards-section',
+                component: this._stepRewardsSection,
+                validators: []
+            }
         ];
     }
 
