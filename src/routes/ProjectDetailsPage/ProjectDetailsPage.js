@@ -22,6 +22,7 @@ const bem = html.bem(COMPONENT_NAME);
         currentUserAddress: _.get(state, 'auth.user.address', '')
     })
 )
+
 export default class ProjectDetailsPage extends React.PureComponent {
 
     static propTypes = {
@@ -30,14 +31,10 @@ export default class ProjectDetailsPage extends React.PureComponent {
 
     constructor (props) {
         super(props);
-
-        this.isAuthor = (
-            this.props.currentUserAddress === _.get(this.props, 'project.author.address', null)
-        );
     }
 
     render() {
-        const { isAuthor } = this;
+        const isAuthor = this.props.currentUserAddress === _.get(this.props, 'project.author.address', null);
 
         return (
             <div className={bem.block()}>
