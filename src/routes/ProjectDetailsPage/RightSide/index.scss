@@ -21,6 +21,11 @@
             flex-direction: column;
             flex-wrap: nowrap;
 
+            & > :nth-child(1),
+            & > :nth-child(3) {
+                overflow-wrap: break-word;
+            }
+
             & > :nth-child(2),
             & > :nth-child(3) {
                 font-size: 13px;
