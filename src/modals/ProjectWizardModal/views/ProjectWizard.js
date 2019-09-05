@@ -117,6 +117,11 @@ export default class ProjectWizard extends React.PureComponent {
     _getItems () {
         return [
             {
+                id: 'rewards-section',
+                component: this._stepRewardsSection,
+                validators: []
+            },
+            {
                 id: 'name',
                 component: this._stepName,
                 validators: [
@@ -174,11 +179,11 @@ export default class ProjectWizard extends React.PureComponent {
                     [['socials.url_' + SocialEnum.WEBSITE, 'socials.url_' + SocialEnum.TWITTER], 'string', {max: 250}],
                 ],
             },
-            {
-                id: 'rewards-section',
-                component: this._stepRewardsSection,
-                validators: []
-            }
+            // {
+            //     id: 'rewards-section',
+            //     component: this._stepRewardsSection,
+            //     validators: []
+            // }
         ];
     }
 
@@ -339,13 +344,13 @@ export default class ProjectWizard extends React.PureComponent {
                     />
                     {isChecked && (
                         <div className={bem.element('reward-desc')}>
-                            <TextField
+                            <InputField
                                 topLabel={'Title'}
                                 attribute={titleAttribute}
                                 placeholder={ProjectContentEnum.getPlaceholder(ProjectContentEnum.REWARD_TITLE_PLACEHOLDER)}
                                 layout={'default'}
                             />
-                            <InputField
+                            <TextField
                                 topLabel={'Description'}
                                 attribute={descAttribute}
                                 layout={'default'}

@@ -8,6 +8,7 @@ import Modal from 'yii-steroids/ui/modal/Modal';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import SocialLinks from 'shared/SocialLinks';
 import { openModal } from 'yii-steroids/actions/modal';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 
 import rocketIcon from 'static/icons/rocket-icon-flying.svg';
 import {
@@ -19,17 +20,27 @@ import {
 
 import './index.scss';
 
-function RewardCell ({ onClick = () => {}, isAuthor, reward, ...restProps }) {
+function RewardCell ({ onClick = () => {}, isAuthor, reward, project, ...restProps }) {
     const bem = html.bem('ProjectRewardCell');
     const { amount, title, desc } = reward;
 
+    const donationAllowed = !isAuthor && (
+        project.status === ProjectStatusEnum.VOTING ||
+        project.status === ProjectStatusEnum.CROWDFUND
+    );
+    const _onClick = () => {
+        if (donationAllowed) {
+            onClick(amount);
+        }
+    };
+
     return (
-        <div className={bem.element('root', !isAuthor ? 'not-author' : '')} {...restProps}>
+        <div className={bem.element('root', donationAllowed ? 'not-author' : '')} {...restProps} onClick={_onClick}>
             <div>
                 <span>{title}</span>
                 <span>Pledge {amount} WAVES or more</span>
                 <span>{desc}</span>
-                {!isAuthor && <button onClick={() => onClick(amount)}>Join {amount} WAVES tier</button>}
+                {donationAllowed && <button>Join {amount} WAVES tier</button>}
             </div>
         </div>
     );
@@ -50,7 +61,6 @@ function JoinWavesModal (props) {
 
         try {
             await dal.donateProject(project.uid, amount, payload);
-
         } catch (err) {
             console.error(err);
         } finally {
@@ -59,7 +69,7 @@ function JoinWavesModal (props) {
     };
 
     return (
-        <Modal {...props.modalProps}>
+        <Modal {...props.modalProps} className={bem.element('modal')}>
             <Form
                 className={bem.element('root')}
                 formId={FORM_ID}
@@ -90,6 +100,7 @@ function RightSide ({ parentName, socials, project, isAuthor = false }) {
         onClick: (amount) => {
             store.dispatch(openModal(JoinWavesModal, { project, amount }));
         },
+        project,
         isAuthor
     };
 
@@ -99,7 +110,10 @@ function RightSide ({ parentName, socials, project, isAuthor = false }) {
     ].join(' ');
 
     const mappedRewards = rewards && Object.keys(rewards)
-        .filter(rewardKey => rewards[rewardKey].isChecked)
+        .filter(rewardKey => {
+            const { isChecked, title, desc } = rewards[rewardKey];
+            return isChecked && !!title && !!desc;
+        })
         .map(rewardKey => (
             <RewardCell
                 {...rewardCellProps} 
@@ -107,15 +121,22 @@ function RightSide ({ parentName, socials, project, isAuthor = false }) {
             />
         )) || [];
 
-    const additionalInfo = (
-        <div className={bem.element('additional-info')}>
-            <span>+ Ventuary DAO reward</span>
-            <span>
-                In case of a successful grant approval, you
-                will receive your donation times 1.5 as a reward from Ventuary DAO. 
-            </span>
+    const rewardsBlock = (
+        <div>
+            <div>
+                <img src={rocketIcon}/>
+                <span>Your Reward</span>
+            </div>
+            {mappedRewards}      
+            <div className={bem.element('additional-info')}>
+                <span>+ Ventuary DAO reward</span>
+                <span>
+                    In case of a successful grant approval, you
+                    will receive your donation times 1.5 as a reward from Ventuary DAO. 
+                </span>
+            </div>
         </div>
-    )
+    );
 
     return (
         <div className={rootClassName}>
@@ -129,14 +150,7 @@ function RightSide ({ parentName, socials, project, isAuthor = false }) {
                     <button className={bem.element('share-link')}>{__('Share Project')}</button>
                 </CopyToClipboard>
             </div>
-            <div>
-                <div>
-                    <img src={rocketIcon}/>
-                    <span>Your Reward</span>
-                </div>
-                {mappedRewards}
-                {mappedRewards.length > 0 && additionalInfo}
-            </div>
+            {mappedRewards.length > 0 && rewardsBlock}
         </div>
     )
 }
