@@ -62,11 +62,18 @@
         & .heart-icon {
           height: 16px;
           width: 16px;
+          margin-right: 6px;
         }
 
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+
+        & .waves-sp {
+          font-style: normal;
+          font-family: Roboto;
+          font-weight: 600;
+        }
       }
     }
   }

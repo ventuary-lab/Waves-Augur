@@ -46,9 +46,9 @@ export default class Footer extends React.PureComponent {
         super(props);
 
         this.links = [
+            { url: 'https://www.linkedin.com/company/ventuary', name: 'linkedin', icon: faLinkedinIn },
             { url: 'https://t.me/ventuary_dao', name: 'telegram', icon: faTelegramPlane },
             { url: 'https://twitter.com/ventuarydao', name: 'twitter', icon: faTwitter },
-            { url: 'https://www.linkedin.com/company/ventuary', name: 'linkedin', icon: faLinkedinIn },
         ];
     }
 
@@ -170,8 +170,8 @@ export default class Footer extends React.PureComponent {
                         <div>
                             <div>{socialLinks}</div>
                             <div>
-                                <div>© 2019 Ventuary DAO. Made with {heartIcon}</div>
-                                <div> in Saint Petersburg. Powered by <span>waves</span>🔹</div>
+                                <div>© 2019 Ventuary DAO. Made with {heartIcon} </div>
+                                <div>in Saint Petersburg. Powered by <span className='waves-sp'>waves</span>🔹</div>
                             </div>
                         </div>
                     </div>
