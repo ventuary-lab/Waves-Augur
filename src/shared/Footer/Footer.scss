@@ -31,6 +31,12 @@
     }
   }
 
+  &__author-text {
+    @include phone {
+      order: 2;
+    }
+  }
+
   &__left {
     order: 1;
 
