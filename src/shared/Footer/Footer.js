@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {isPhone} from 'yii-steroids/reducers/screen';
@@ -6,6 +7,7 @@ import {getNavItem, getNavUrl} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import {getUser} from 'yii-steroids/reducers/auth';
 import Link from 'yii-steroids/ui/nav/Link';
+import { faTelegramPlane, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
@@ -13,6 +15,7 @@ import MessageModal from 'modals/MessageModal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import ventuaryLogo from 'static/icons/ventuary-logo-white.svg';
 import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS, ROUTE_ROOT} from 'routes';
+import heartImg from 'static/images/huge_heart.png';
 
 import './Footer.scss';
 
@@ -39,7 +42,28 @@ export default class Footer extends React.PureComponent {
         canAddProject: PropTypes.bool,
     };
 
+    constructor (props) {
+        super(props);
+
+        this.links = [
+            { url: 'https://t.me/ventuary_dao', name: 'telegram', icon: faTelegramPlane },
+            { url: 'https://twitter.com/ventuarydao', name: 'twitter', icon: faTwitter },
+            { url: 'https://www.linkedin.com/company/ventuary', name: 'linkedin', icon: faLinkedinIn },
+        ];
+    }
+
     render() {
+        const { links } = this;
+
+        const heartIcon = (
+            <img src={heartImg} className='heart-icon'/>
+        );
+        const socialLinks = links.map(link => (
+            <a href={link.url}>
+                <FontAwesomeIcon icon={link.icon}/>
+            </a>
+        ));
+
         return (
             <footer className={bem.block()}>
                 <div className={bem.element('inner')}>
@@ -141,6 +165,15 @@ export default class Footer extends React.PureComponent {
                                 </ul>
                             </li>
                         </ul>
+                    </div>
+                    <div className={bem.element('author-text')}>
+                        <div>
+                            <div>{socialLinks}</div>
+                            <div>
+                                <div>© 2019 Ventuary DAO. Made with {heartIcon}</div>
+                                <div> in Saint Petersburg. Powered by <span>waves</span>🔹</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </footer>

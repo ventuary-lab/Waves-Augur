@@ -31,6 +31,46 @@
     }
   }
 
+  &__author-text {
+    @include phone {
+      order: 2;
+    }
+
+    & > :first-child {
+      & > :first-child {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        & > * {
+          margin: 10px;
+          margin-right: 36px;
+          transform: scale(1.8);
+
+          &:hover {
+            & path { fill: rgba(255, 255, 255, 1); }
+          }
+          &:not(:hover) {
+            & path { fill: rgba(255, 255, 255, .8); }
+          }
+        }
+
+        margin-bottom: 10px;
+      }
+
+      & > :nth-child(2) {
+        & .heart-icon {
+          height: 16px;
+          width: 16px;
+        }
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
   &__left {
     order: 1;
 
