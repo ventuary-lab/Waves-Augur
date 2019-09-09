@@ -269,9 +269,9 @@ export default class ProjectWizard extends React.PureComponent {
     }
 
     _stepProject() {
-        const areFieldsDisabled = ![
+        const areFieldsDisabled = this.props.project ? ![
             ProjectStatusEnum.CROWDFUND
-        ].includes(this.props.project.status);
+        ].includes(this.props.project.status) : false;
 
         return (
             <>
