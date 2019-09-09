@@ -66,7 +66,7 @@ export default class DalComponent {
             return days;
         } else {
             // One block = 2 minutes
-            return Math.round((days * 1440) / 2);
+            return Math.round(days * 1440);
         }
     }
 
