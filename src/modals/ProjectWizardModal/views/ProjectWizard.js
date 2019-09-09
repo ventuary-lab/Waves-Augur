@@ -27,7 +27,8 @@ import {
     DONATE_AMOUNT_COLLECTION
 } from 'ui/global/constants';
 import {
-    expireCrowdAndDemoDayValidator
+    expireCrowdAndDemoDayValidator,
+    wavesTargetAmountValidator
 } from 'ui/form/validators';
 import {
     mapDateFieldToInitial
@@ -139,6 +140,7 @@ export default class ProjectWizard extends React.PureComponent {
                     [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
                     [['expireCrowd', 'demoDay'], 'date'],
                     [['expireCrowd', 'demoDay'], expireCrowdAndDemoDayValidator],
+                    [['targetWaves'], (...args) => wavesTargetAmountValidator(...args, this.props.project)],
                     ['targetWaves', 'integer', {min: 1}],
                 ],
             },

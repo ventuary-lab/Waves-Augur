@@ -39,3 +39,22 @@ export function expireCrowdAndDemoDayValidator(data) {
         return __('Demo day must be set at least 10 days later than crowdfunding deadline');
     }
 }
+
+
+/**
+ * 
+ * @param {Object} data - Project object
+ * @param {String} attribute - param name
+ * @param {Object} initialState - Project object
+ * @returns {Object | undefined}
+ */
+export function wavesTargetAmountValidator(data, attribute, initialState) {
+    const { targetWaves: initialTargetWaves } = initialState;
+    const { targetWaves } = data;
+
+    if (targetWaves >= initialTargetWaves) {
+        return;
+    }
+
+    return __('Amount of waves as target cannot be reduced');
+}
