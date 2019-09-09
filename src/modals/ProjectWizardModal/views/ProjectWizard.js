@@ -25,6 +25,9 @@ import {
 import {
     DONATE_AMOUNT_COLLECTION
 } from 'ui/global/constants';
+import {
+    expireCrowdAndDemoDayValidator
+} from 'ui/form/validators';
 
 import './ProjectWizard.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -131,6 +134,7 @@ export default class ProjectWizard extends React.PureComponent {
                 validators: [
                     [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
                     [['expireCrowd', 'demoDay'], 'date'],
+                    [['expireCrowd', 'demoDay'], expireCrowdAndDemoDayValidator],
                     ['targetWaves', 'integer', {min: 1}],
                 ],
             },
@@ -276,7 +280,6 @@ export default class ProjectWizard extends React.PureComponent {
                                 layout={'default'}
                                 attribute='expireCrowd'
                                 topLabel={__('Crowdfunding ends')}
-                                disabled={!!this.props.project}
                             />
                             <DateField
                                 layout={'default'}
@@ -291,7 +294,6 @@ export default class ProjectWizard extends React.PureComponent {
                     topLabel={__('Waves') }
                     attribute='targetWaves'
                     placeholder={7000}
-                    disabled={!!this.props.project}
                 />
                 <TagsField
                     attribute='tags'
