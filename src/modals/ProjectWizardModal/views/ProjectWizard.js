@@ -14,6 +14,7 @@ import {dal, html} from 'components';
 
 import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';
+import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import ProjectContentEnum from 'enums/ProjectContentEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
@@ -25,6 +26,13 @@ import {
 import {
     DONATE_AMOUNT_COLLECTION
 } from 'ui/global/constants';
+import {
+    expireCrowdAndDemoDayValidator,
+    wavesTargetAmountValidator
+} from 'ui/form/validators';
+import {
+    mapDateFieldToInitial
+} from './utils';
 
 import './ProjectWizard.scss';
 import ProjectSchema from 'types/ProjectSchema';
@@ -131,6 +139,8 @@ export default class ProjectWizard extends React.PureComponent {
                 validators: [
                     [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
                     [['expireCrowd', 'demoDay'], 'date'],
+                    [['expireCrowd', 'demoDay'], expireCrowdAndDemoDayValidator],
+                    [['targetWaves'], (...args) => wavesTargetAmountValidator(...args, this.props.project)],
                     ['targetWaves', 'integer', {min: 1}],
                 ],
             },
@@ -211,8 +221,8 @@ export default class ProjectWizard extends React.PureComponent {
                             name: this.props.project.name,
                             description: this.props.project.description,
                             logoUrl: this.props.project.logoUrl,
-                            expireCrowd: this.props.project.expireCrowd,
-                            demoDay: this.props.project.demoDay,
+                            expireCrowd: mapDateFieldToInitial(this.props.project.expireCrowd),
+                            demoDay: mapDateFieldToInitial(this.props.project.demoDay),
                             targetWaves: this.props.project.targetWaves,
                             tags: this.props.project.tags,
                             contents: this.props.project.contents,
@@ -259,6 +269,10 @@ export default class ProjectWizard extends React.PureComponent {
     }
 
     _stepProject() {
+        const areFieldsDisabled = ![
+            ProjectStatusEnum.CROWDFUND
+        ].includes(this.props.project.status);
+
         return (
             <>
                 <div className={bem.element('sub-title')}>
@@ -276,12 +290,13 @@ export default class ProjectWizard extends React.PureComponent {
                                 layout={'default'}
                                 attribute='expireCrowd'
                                 topLabel={__('Crowdfunding ends')}
-                                disabled={!!this.props.project}
+                                disabled={areFieldsDisabled}
                             />
                             <DateField
                                 layout={'default'}
                                 attribute='demoDay'
                                 topLabel={__('Demo day')}
+                                disabled={areFieldsDisabled}
                             />
                         </div>
                     </div>
@@ -291,7 +306,7 @@ export default class ProjectWizard extends React.PureComponent {
                     topLabel={__('Waves') }
                     attribute='targetWaves'
                     placeholder={7000}
-                    disabled={!!this.props.project}
+                    disabled={areFieldsDisabled}
                 />
                 <TagsField
                     attribute='tags'
