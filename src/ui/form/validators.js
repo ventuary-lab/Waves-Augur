@@ -49,6 +49,10 @@ export function expireCrowdAndDemoDayValidator(data) {
  * @returns {Object | undefined}
  */
 export function wavesTargetAmountValidator(data, attribute, initialState) {
+    if (!data || !initialState) {
+        return;
+    }
+
     const { targetWaves: initialTargetWaves } = initialState;
     const { targetWaves } = data;
 
