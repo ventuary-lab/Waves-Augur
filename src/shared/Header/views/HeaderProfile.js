@@ -20,6 +20,11 @@ import MessageModal from 'modals/MessageModal';
 import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
+import AddEntityIcon from 'shared/Header/AddEntityIcon';
+import {
+    getUserNavItems,
+    customRouteProps
+} from '../utils';
 
 const bem = html.bem('HeaderProfile');
 
@@ -67,7 +72,8 @@ export default class HeaderProfile extends React.PureComponent {
             ...this.props.user,
         };
 
-        const items = user && this.props.profileNavItems.filter(item => item.roles.includes(user.role)) || [];
+        const items = user && getUserNavItems(this.props, user) || [];
+
         if (!this.props.isAuthorized || items.length === 0) {
             return (
                 <>
@@ -95,36 +101,6 @@ export default class HeaderProfile extends React.PureComponent {
                             {__('Login')}
                         </a>
                     )}
-                    {/*<Link
-                    className={bem.element('login-link')}
-                    label={__('Login')}
-                    noStyles
-                    onClick={() => {
-
-                        if (this.props.isPhone) {
-                            this.props.dispatch(openModal(MessageModal, {
-                                icon: 'Icon__log-in-from-pc',
-                                title: __('Log in from PC'),
-                                color: 'success',
-                                description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                            }));
-                        } else {
-                            // if (this.props.user && this.props.user.role === UserRole.INVITED) {
-                            //     return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
-                            // }
-                            //
-                            // this.props.dispatch(openModal(MessageModal, {
-                            //     icon: 'Icon__get-an-invitation',
-                            //     title: __('You Need An Invitation'),
-                            //     color: 'success',
-                            //     description: __('You must be invited by registered user'),
-                            //     submitLabel: __('Check out Community'),
-                            //     toRoute: ROUTE_COMMUNITY,
-                            // }));
-                        }
-
-                    }}
-                />*/}
                 </>
             );
         }
@@ -132,8 +108,6 @@ export default class HeaderProfile extends React.PureComponent {
         const avatarStub = user.isWhale
             ? whaleAvatarStub
             : user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
-
-        // console.log(1, this.props.user)
 
         return (
             <div className={bem.block()}>
@@ -159,22 +133,27 @@ export default class HeaderProfile extends React.PureComponent {
                         <ul className={bem.element('menu', {
                             hidden: !this.state.isMenuOpen
                         })}>
-                            {items.map(item => (
-                                <li
-                                    className={bem.element('menu-item')}
-                                    key={item.id}
-                                >
-                                    <Link
-                                        className={bem.element('menu-link', {
-                                            active: item.isActive,
-                                        })}
-                                        to={item.url}
-                                        label={item.label}
-                                        onClick={() => this.setState({isMenuOpen: false})}
-                                        noStyles
-                                    />
-                                </li>
-                            ))}
+                            {items.map(item => {
+                                const isAdditional = customRouteProps[item.id];
+
+                                return (
+                                    <li
+                                        className={bem.element('menu-item', { 'is-additional': !!isAdditional })}
+                                        key={item.id}
+                                    >
+                                        <Link
+                                            className={bem.element('menu-link', {
+                                                active: item.isActive,
+                                            })}
+                                            to={item.url}
+                                            label={item.label}
+                                            onClick={() => this.setState({isMenuOpen: false})}
+                                            noStyles
+                                        />
+                                        {isAdditional && <AddEntityIcon item={item} isActive={item.isActive}/>}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 </div>
