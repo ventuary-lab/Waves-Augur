@@ -14,7 +14,7 @@ import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import './CardInfo.scss';
 import Link from 'yii-steroids/ui/nav/Link';
-import {ROUTE_PROJECT_FEED, ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
+import { ROUTE_PROJECT_DETAILS, ROUTE_USER_DONATION, ROUTE_USER_GRANTS } from 'routes';
 import UserRole from 'enums/UserRole';
 import Hint from 'shared/Hint';
 
@@ -86,7 +86,7 @@ export default class CardInfo extends React.PureComponent {
                                 }
 
                                 return isProject
-                                    ? ROUTE_PROJECT_FEED
+                                    ? ROUTE_PROJECT_DETAILS
                                     : (this.props.userRole === UserRole.WHALE
                                         ? ROUTE_USER_GRANTS
                                         : ROUTE_USER_DONATION
@@ -175,7 +175,7 @@ export default class CardInfo extends React.PureComponent {
                                     }
 
                                     return isProject
-                                        ? ROUTE_PROJECT_FEED
+                                        ? ROUTE_PROJECT_DETAILS
                                         : (this.props.userRole === UserRole.WHALE
                                             ? ROUTE_USER_GRANTS
                                             : ROUTE_USER_DONATION
