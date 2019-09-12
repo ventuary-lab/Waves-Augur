@@ -19,7 +19,7 @@ import ProjectContentEnum from 'enums/ProjectContentEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
 
-import {ROUTE_PROJECT_FEED} from 'routes';
+import {ROUTE_PROJECT_DETAILS} from 'routes';
 import {
     generateHashKey,
 } from 'ui/global/helper';
@@ -208,7 +208,7 @@ export default class ProjectWizard extends React.PureComponent {
 
                         return dal.saveProject(values, this.props.contest)
                             .then(project => {
-                                this.props.dispatch(goToPage(ROUTE_PROJECT_FEED, {uid: project.uid}));
+                                this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, {uid: project.uid}));
                             });
                     }}
                     onFirstBack={this.props.onFirstBack}
