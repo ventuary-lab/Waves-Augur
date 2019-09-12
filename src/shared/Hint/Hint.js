@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Tooltip from 'shared/Tooltip';
-import {html} from 'components';
+import SvgIcon from 'ui/global/SvgIcon';
+import { html } from 'components';
 
 import './Hint.scss';
 
@@ -22,7 +23,7 @@ export default class Hint extends React.PureComponent {
         return (
             <div className={bem.block({adaptive: this.props.adaptive})}>
                 <div className={bem.element('icon')}>
-                    {icon ? <img src={icon}/> : <span className={'Icon Icon__question-in-circle'}/>}
+                    {icon ? <SvgIcon icon={icon}/> : <span className={'Icon Icon__question-in-circle'}/>}
                     {this.props.text && (
                         <div className={bem.element('tooltip')}>
                             <Tooltip

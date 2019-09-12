@@ -1,12 +1,25 @@
 import React from 'react';
 
+import { html } from 'components';
 
-function SvgIcon ({ icon, children, ...restProps }) {
+const bem = html.bem('SvgIcon');
+import './index.scss';
+
+function SvgIcon ({ icon, children, style = {}, svgStyle = {}, ...restProps }) {
+    const computedStyle = {
+        width: 50,
+        height: 50,
+        fill: 'grey',
+        display: 'block',
+        ...style
+    };
 
     return (
         <span
-            dangerouslySetInnerHTML={{ __html: icon }}
-            {...restProps}>
+            {...restProps}
+            style={computedStyle}
+            className={bem.element('root')}
+            dangerouslySetInnerHTML={{ __html: icon }}>
             {children}
         </span>
     )

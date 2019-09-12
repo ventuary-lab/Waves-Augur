@@ -1,0 +1,14 @@
+@import '../../../style/helpers/vars';
+@import '../../../style/helpers/mixins';
+
+
+.SvgIcon {
+    &__root {
+        & svg {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}

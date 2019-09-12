@@ -1,6 +1,7 @@
 import React from 'react';
 import { html } from 'components';
-import dottedAddIcon from 'static/icons/dotted-add-icon.svg';
+// import dottedAddIcon from 'static/icons/dotted-add-icon.svg';
+const dottedAddIcon = require('!svg-inline-loader?classPrefix!static/icons/dotted-add-icon.svg');
 import Hint from 'shared/Hint';
 import './AddEntityIcon.scss';
 
