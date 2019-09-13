@@ -57,9 +57,16 @@ export default class HeaderProfile extends React.PureComponent {
     constructor() {
         super(...arguments);
 
+        this._onIconLinkHover = this._onIconLinkHover.bind(this);
+
         this.state = {
             isMenuOpen: false,
+            hoveredItemIndex: null
         };
+    }
+
+    _onIconLinkHover (index) {
+        this.setState({ hoveredItemIndex: index });
     }
 
     render() {
@@ -109,6 +116,8 @@ export default class HeaderProfile extends React.PureComponent {
             ? whaleAvatarStub
             : user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
+        const { hoveredItemIndex } = this.state;
+
         return (
             <div className={bem.block()}>
                 <img
@@ -133,24 +142,24 @@ export default class HeaderProfile extends React.PureComponent {
                         <ul className={bem.element('menu', {
                             hidden: !this.state.isMenuOpen
                         })}>
-                            {items.map(item => {
+                            {items.map((item, itemIndex) => {
                                 const isAdditional = customRouteProps[item.id];
 
                                 return (
                                     <li
-                                        className={bem.element('menu-item', { 'is-additional': !!isAdditional })}
+                                        className={bem.element('menu-item', { 'is-additional': !!isAdditional, hovered: hoveredItemIndex === itemIndex })}
                                         key={item.id}
                                     >
                                         <Link
                                             className={bem.element('menu-link', {
-                                                active: item.isActive,
+                                                active: item.isActive
                                             })}
                                             to={item.url}
                                             label={item.label}
                                             onClick={() => this.setState({isMenuOpen: false})}
                                             noStyles
                                         />
-                                        {isAdditional && <AddEntityIcon item={item} isActive={item.isActive}/>}
+                                        {isAdditional && <AddEntityIcon item={item} itemIndex={itemIndex} isActive={item.isActive} onHover={this._onIconLinkHover}/>}
                                     </li>
                                 );
                             })}

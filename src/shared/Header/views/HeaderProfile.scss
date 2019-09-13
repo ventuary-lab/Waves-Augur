@@ -127,6 +127,13 @@
     }
   }
 
+  &__menu-item_hovered {
+    & > :first-child {
+      color: #0BC91F;
+      font-weight: 500;
+    }
+  }
+
   &__menu-link {
     display: block;
     padding: 10px 0;
