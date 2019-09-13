@@ -8,7 +8,7 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import {dal, html} from 'components';
+import { dal, html } from 'components';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
@@ -160,13 +160,7 @@ export default class HeaderProfile extends React.PureComponent {
                     alt={_get(user, 'profile.name', '')}
                 />
                 <div className={bem.element('inner')}>
-                    {/* <div className={bem.element('balance')}>
-                        {user.balance}
-                    </div> */}
                     <div className={bem.element('info')}>
-                        {/* <div className={bem.element('name')}>
-                            {_get(user, 'profile.name', '')}
-                        </div> */}
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
                             onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
@@ -197,7 +191,15 @@ export default class HeaderProfile extends React.PureComponent {
                                             onClick={() => this.setState({isMenuOpen: false})}
                                             noStyles
                                         />
-                                        {isAdditional && <AddEntityIcon item={item} itemIndex={itemIndex} isActive={item.isActive} onHover={this._onIconLinkHover}/>}
+                                        {isAdditional && (
+                                            <AddEntityIcon
+                                                item={item}
+                                                itemIndex={itemIndex}
+                                                isActive={item.isActive} 
+                                                onHover={this._onIconLinkHover}
+                                                onClick={() => this.setState({isMenuOpen: false})}
+                                            />
+                                        )}
                                     </li>
                                 );
                             })}

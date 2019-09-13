@@ -31,9 +31,14 @@ class AddEntityIcon extends React.PureComponent {
     }
 
     render() {
-        const { item, adaptive, isActive } = this.props;
+        const { item, adaptive, isActive, onClick: rootOnClick } = this.props;
         const { isHovered } = this.state;
-        const { placeholder } = item;
+        const { placeholder, onClick: _onClick = () => {} } = item;
+
+        const onClick = () => {
+            _onClick();
+            rootOnClick();
+        };
 
         return (
             <div 
@@ -41,6 +46,7 @@ class AddEntityIcon extends React.PureComponent {
                 onMouseLeave={this._onMouseLeave}
                 onMouseEnter={this._onMouseEnter}>
                 <CustomHint
+                    onClick={onClick}
                     isHovered={isHovered}
                     adaptive={adaptive}
                     text={placeholder}
