@@ -97,7 +97,7 @@
   &__menu {
     position: absolute;
     top: 37px;
-    left: -60px;
+    left: -95px;
     z-index: $zi-popup;
     margin: 0;
     padding: 20px 40px;
@@ -125,12 +125,18 @@
       margin: auto;
       margin-right: unset;
     }
+
+    & > :first-child {
+      &:hover {
+        font-weight: 500;
+      }
+    }
   }
 
   &__menu-item_hovered {
     & > :first-child {
-      color: #0BC91F;
-      font-weight: 500;
+      color: $color-brand-green;
+
     }
   }
 
@@ -183,6 +189,15 @@
 
   &__login-link {
     @include link;
+  }
+
+  &__separator {
+    height: 1px;
+    background: black;
+    margin: 10px 0;
+    opacity: .2;
+    width: 140%;
+    margin-left: -20%;
   }
 }
 

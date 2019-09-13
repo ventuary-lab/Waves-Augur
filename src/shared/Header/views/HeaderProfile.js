@@ -21,12 +21,15 @@ import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import AddEntityIcon from 'shared/Header/AddEntityIcon';
+import UserHeaderInfo from 'shared/Header/UserHeaderInfo';
 import {
     getUserNavItems,
     customRouteProps
 } from '../utils';
 
 const bem = html.bem('HeaderProfile');
+
+const Separator = () => <div className={bem.element('separator')}></div>;
 
 @connect(
     state => ({
@@ -58,6 +61,13 @@ export default class HeaderProfile extends React.PureComponent {
         super(...arguments);
 
         this._onIconLinkHover = this._onIconLinkHover.bind(this);
+        this._getAdditionalLinks = this._getAdditionalLinks.bind(this);
+
+        this.additionalLinks = [
+            { label: 'Settings' },
+            { label: 'Help' },
+            { label: 'Log out' },
+        ];
 
         this.state = {
             isMenuOpen: false,
@@ -67,6 +77,29 @@ export default class HeaderProfile extends React.PureComponent {
 
     _onIconLinkHover (index) {
         this.setState({ hoveredItemIndex: index });
+    }
+
+    _getAdditionalLinks () {
+        const links = this.additionalLinks.map(
+            (item) => (
+                <li className={bem.element('menu-item')} key={item.label}>
+                    <Link
+                        className={bem.element('menu-link')}
+                        to={'#'}
+                        label={item.label}
+                        onClick={() => this.setState({isMenuOpen: false})}
+                        noStyles
+                    />
+                </li>
+            )
+        );
+
+        return (
+            <>
+                <Separator />
+                {links}
+            </>
+        )
     }
 
     render() {
@@ -117,6 +150,7 @@ export default class HeaderProfile extends React.PureComponent {
             : user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
         const { hoveredItemIndex } = this.state;
+        const { _getAdditionalLinks } = this;
 
         return (
             <div className={bem.block()}>
@@ -126,13 +160,13 @@ export default class HeaderProfile extends React.PureComponent {
                     alt={_get(user, 'profile.name', '')}
                 />
                 <div className={bem.element('inner')}>
-                    <div className={bem.element('balance')}>
+                    {/* <div className={bem.element('balance')}>
                         {user.balance}
-                    </div>
+                    </div> */}
                     <div className={bem.element('info')}>
-                        <div className={bem.element('name')}>
+                        {/* <div className={bem.element('name')}>
                             {_get(user, 'profile.name', '')}
-                        </div>
+                        </div> */}
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
                             onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
@@ -142,6 +176,10 @@ export default class HeaderProfile extends React.PureComponent {
                         <ul className={bem.element('menu', {
                             hidden: !this.state.isMenuOpen
                         })}>
+                            <li>
+                                <UserHeaderInfo user={user}/>
+                            </li>
+                            <Separator />
                             {items.map((item, itemIndex) => {
                                 const isAdditional = customRouteProps[item.id];
 
@@ -163,6 +201,7 @@ export default class HeaderProfile extends React.PureComponent {
                                     </li>
                                 );
                             })}
+                            {_getAdditionalLinks()}
                         </ul>
                     </div>
                 </div>
