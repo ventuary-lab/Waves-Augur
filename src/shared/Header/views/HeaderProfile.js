@@ -128,7 +128,7 @@ export default class HeaderProfile extends React.PureComponent {
 
         const items = user && getUserNavItems(this.props, user) || [];
 
-        if (!this.props.isAuthorized || !this.props.isInternallyAuthorized  || items.length === 0) {
+        if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
             return (
                 <>
                     {this.props.isPhone && (
@@ -177,20 +177,16 @@ export default class HeaderProfile extends React.PureComponent {
                     className={bem.element('avatar')}
                     src={_get(user, 'profile.avatar', avatarStub)}
                     alt={_get(user, 'profile.name', '')}
+                    onMouseEnter={() => this.setState({ isMenuOpen: true })}
+                    onClick={() => this.setState(prevState => ({ ...prevState, isMenuOpen: !prevState.isMenuOpen }))}
                 />
                 <div className={bem.element('inner')}>
                     <div className={bem.element('info')}>
-                        <button
-                            className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
-                            onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
-                        >
-                            {this.state.isMenuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}
-                        </button>
                         <ul className={bem.element('menu', {
                             hidden: !this.state.isMenuOpen
                         })}>
                             <li>
-                                <UserHeaderInfo user={user}/>
+                                <UserHeaderInfo user={user} altImg={anonymousAvatarStub}/>
                             </li>
                             <Separator />
                             {items.map((item, itemIndex) => {
