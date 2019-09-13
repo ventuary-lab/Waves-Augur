@@ -8,16 +8,16 @@ const bem = html.bem('UserHeaderInfo');
 import './UserHeaderInfo.scss';
 
 function UserHeaderInfo (props) {
-    const { user } = props;
+    const { user, altImg } = props;
 
-    const avatar = _.get(user, 'profile.avatar');
-    const name = _.get(user, 'profile.name');
+    const avatar = _.get(user, 'profile.avatar', altImg);
+    const name = _.get(user, 'profile.name', 'Anonymous');
     const waves = user.balance;
 
     return (
         <div className={bem.element('root')}>
             <div>
-                <img src={avatar}/>
+                <img src={avatar} />
             </div>
             <div>
                 <div>{name}</div>
