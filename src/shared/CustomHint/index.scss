@@ -1,0 +1,74 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+
+.CustomHint {
+    &__root {
+
+    }
+
+    &__tooltip {
+        position: relative;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        display: flex;
+        font-size: 13px;
+        line-height: 14px;
+        color: #fff;
+        top: -4px;
+
+        & > :first-child {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            transform: rotate(45deg);
+            background: #ABB3AC;
+        }
+
+        & > :nth-child(2) {
+            position: absolute;
+            min-width: 120px;
+            width: 100%;
+            padding: 6px;
+            margin-top: 4px;
+            text-align: center;
+            background: #ABB3AC;
+            border-radius: 3px;
+        }
+        
+        transition: opacity .5s linear;
+        opacity: 0;
+
+        &_is-hovered {
+            opacity: 1;
+        }
+    }
+}
+
+// <div style="
+//     position: relative;
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: nowrap;
+//     justify-content: center;
+//     font-size: 13px;
+//     line-height: 14px;
+//     color: #fff;
+//     top: -12px;
+// "><div style="
+//     position: absolute;
+//     width: 7px;
+//     height: 7px;
+//     transform: rotate(45deg);
+//     background: #ABB3AC;
+// "></div><span style="
+//     position: absolute;
+//     min-width: 120px;
+//     width: 100%;
+//     padding: 6px;
+//     margin-top: 4px;
+//     text-align: center;
+//     background: #ABB3AC;
+//     border-radius: 3px;
+// ">Add new project</span></div>

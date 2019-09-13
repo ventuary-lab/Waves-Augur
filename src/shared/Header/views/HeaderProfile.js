@@ -8,7 +8,8 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import {dal, html} from 'components';
+import { dal, html, store } from 'components';
+import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
@@ -16,17 +17,27 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 import MessageModal from 'modals/MessageModal';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
 
 import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
+import AddEntityIcon from 'shared/Header/AddEntityIcon';
+import UserHeaderInfo from 'shared/Header/UserHeaderInfo';
+import {
+    getUserNavItems,
+    customRouteProps
+} from '../utils';
 
 const bem = html.bem('HeaderProfile');
+
+const Separator = () => <div className={bem.element('separator')}></div>;
 
 @connect(
     state => ({
         isInitialized: isInitialized(state),
         isAuthorized: isAuthorized(state),
+        isInternallyAuthorized: state.global.isLoggedIn,
         contextUser: getUser(state),
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
         isPhone: isPhone(state),
@@ -52,13 +63,61 @@ export default class HeaderProfile extends React.PureComponent {
     constructor() {
         super(...arguments);
 
+        this._onIconLinkHover = this._onIconLinkHover.bind(this);
+        this._getAdditionalLinks = this._getAdditionalLinks.bind(this);
+
+        this.additionalLinks = [
+            {
+                label: 'Settings',
+                onClick: () => {
+                    this.setState({ isMenuOpen: false });
+                    store.dispatch(openModal(ProfileWizardModal));
+                }
+            },
+            { label: 'Help' },
+            { 
+                label: 'Log out', onClick: () => {
+                    store.dispatch({ type: LOG_OUT_USER });
+                    this.setState({ isMenuOpen: false });
+                }
+            },
+        ];
+
         this.state = {
             isMenuOpen: false,
+            hoveredItemIndex: null
         };
     }
 
+    _onIconLinkHover (index) {
+        this.setState({ hoveredItemIndex: index });
+    }
+
+    _getAdditionalLinks () {
+        const links = this.additionalLinks.map(
+            (item) => (
+                <li className={bem.element('menu-item')} key={item.label}>
+                    <Link
+                        className={bem.element('menu-link')}
+                        to={'#'}
+                        label={item.label}
+                        onClick={item.onClick}
+                        noStyles
+                    />
+                </li>
+            )
+        );
+
+        return (
+            <>
+                <Separator />
+                {links}
+            </>
+        );
+    }
+
     render() {
-        if (!this.props.isInitialized || !this.props.user || !this.props.contextUser) {
+        if (!this.props.isInitialized) {
             return null;
         }
 
@@ -67,8 +126,9 @@ export default class HeaderProfile extends React.PureComponent {
             ...this.props.user,
         };
 
-        const items = user && this.props.profileNavItems.filter(item => item.roles.includes(user.role)) || [];
-        if (!this.props.isAuthorized || items.length === 0) {
+        const items = user && getUserNavItems(this.props, user) || [];
+
+        if (!this.props.isAuthorized || !this.props.isInternallyAuthorized  || items.length === 0) {
             return (
                 <>
                     {this.props.isPhone && (
@@ -86,45 +146,20 @@ export default class HeaderProfile extends React.PureComponent {
                         >
                             {__('Login')}
                         </a>
+                    ) || !this.props.isInternallyAuthorized && (
+                        <div
+                            onClick={() => store.dispatch({ type: LOG_IN_USER })}
+                            className={bem.element('login-link')}>
+                            {__('Login')}
+                        </div>
                     ) || (
                         <a
-                            href='https://forms.gle/uLwL83EM9MWSCBAp6'
+                            href={'https://forms.gle/uLwL83EM9MWSCBAp6'}
                             target={'_blank'}
-                            className={bem.element('login-link')}
-                        >
+                            className={bem.element('login-link')}>
                             {__('Login')}
                         </a>
                     )}
-                    {/*<Link
-                    className={bem.element('login-link')}
-                    label={__('Login')}
-                    noStyles
-                    onClick={() => {
-
-                        if (this.props.isPhone) {
-                            this.props.dispatch(openModal(MessageModal, {
-                                icon: 'Icon__log-in-from-pc',
-                                title: __('Log in from PC'),
-                                color: 'success',
-                                description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                            }));
-                        } else {
-                            // if (this.props.user && this.props.user.role === UserRole.INVITED) {
-                            //     return this.props.dispatch(openModal(ProfileWizardModal, {isCreate: true}));
-                            // }
-                            //
-                            // this.props.dispatch(openModal(MessageModal, {
-                            //     icon: 'Icon__get-an-invitation',
-                            //     title: __('You Need An Invitation'),
-                            //     color: 'success',
-                            //     description: __('You must be invited by registered user'),
-                            //     submitLabel: __('Check out Community'),
-                            //     toRoute: ROUTE_COMMUNITY,
-                            // }));
-                        }
-
-                    }}
-                />*/}
                 </>
             );
         }
@@ -133,7 +168,8 @@ export default class HeaderProfile extends React.PureComponent {
             ? whaleAvatarStub
             : user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
-        // console.log(1, this.props.user)
+        const { hoveredItemIndex } = this.state;
+        const { _getAdditionalLinks } = this;
 
         return (
             <div className={bem.block()}>
@@ -143,13 +179,7 @@ export default class HeaderProfile extends React.PureComponent {
                     alt={_get(user, 'profile.name', '')}
                 />
                 <div className={bem.element('inner')}>
-                    <div className={bem.element('balance')}>
-                        {user.balance}
-                    </div>
                     <div className={bem.element('info')}>
-                        <div className={bem.element('name')}>
-                            {_get(user, 'profile.name', '')}
-                        </div>
                         <button
                             className={bem(bem.element('menu-toggle'), 'MaterialIcon')}
                             onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
@@ -159,22 +189,40 @@ export default class HeaderProfile extends React.PureComponent {
                         <ul className={bem.element('menu', {
                             hidden: !this.state.isMenuOpen
                         })}>
-                            {items.map(item => (
-                                <li
-                                    className={bem.element('menu-item')}
-                                    key={item.id}
-                                >
-                                    <Link
-                                        className={bem.element('menu-link', {
-                                            active: item.isActive,
-                                        })}
-                                        to={item.url}
-                                        label={item.label}
-                                        onClick={() => this.setState({isMenuOpen: false})}
-                                        noStyles
-                                    />
-                                </li>
-                            ))}
+                            <li>
+                                <UserHeaderInfo user={user}/>
+                            </li>
+                            <Separator />
+                            {items.map((item, itemIndex) => {
+                                const isAdditional = customRouteProps[item.id];
+
+                                return (
+                                    <li
+                                        className={bem.element('menu-item', { 'is-additional': !!isAdditional, hovered: hoveredItemIndex === itemIndex })}
+                                        key={item.id}
+                                    >
+                                        <Link
+                                            className={bem.element('menu-link', {
+                                                active: item.isActive
+                                            })}
+                                            to={item.url}
+                                            label={item.label}
+                                            onClick={() => this.setState({isMenuOpen: false})}
+                                            noStyles
+                                        />
+                                        {isAdditional && (
+                                            <AddEntityIcon
+                                                item={item}
+                                                itemIndex={itemIndex}
+                                                isActive={item.isActive} 
+                                                onHover={this._onIconLinkHover}
+                                                onClick={() => this.setState({isMenuOpen: false})}
+                                            />
+                                        )}
+                                    </li>
+                                );
+                            })}
+                            {_getAdditionalLinks()}
                         </ul>
                     </div>
                 </div>
