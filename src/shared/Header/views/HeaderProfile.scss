@@ -188,6 +188,7 @@
   }
 
   &__login-link {
+    cursor: pointer;
     @include link;
   }
 

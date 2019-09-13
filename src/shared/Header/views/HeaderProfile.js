@@ -8,7 +8,8 @@ import {getNavItems} from 'yii-steroids/reducers/navigation';
 import {openModal} from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import { dal, html } from 'components';
+import { dal, html, store } from 'components';
+import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
@@ -16,6 +17,7 @@ import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 import MessageModal from 'modals/MessageModal';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
 
 import {ROUTE_PROFILE, ROUTE_PROFILE_INBOX} from 'routes';
 import './HeaderProfile.scss';
@@ -35,6 +37,7 @@ const Separator = () => <div className={bem.element('separator')}></div>;
     state => ({
         isInitialized: isInitialized(state),
         isAuthorized: isAuthorized(state),
+        isInternallyAuthorized: state.global.isLoggedIn,
         contextUser: getUser(state),
         profileNavItems: getNavItems(state, ROUTE_PROFILE),
         isPhone: isPhone(state),
@@ -64,9 +67,20 @@ export default class HeaderProfile extends React.PureComponent {
         this._getAdditionalLinks = this._getAdditionalLinks.bind(this);
 
         this.additionalLinks = [
-            { label: 'Settings' },
+            {
+                label: 'Settings',
+                onClick: () => {
+                    this.setState({ isMenuOpen: false });
+                    store.dispatch(openModal(ProfileWizardModal));
+                }
+            },
             { label: 'Help' },
-            { label: 'Log out' },
+            { 
+                label: 'Log out', onClick: () => {
+                    store.dispatch({ type: LOG_OUT_USER });
+                    this.setState({ isMenuOpen: false });
+                }
+            },
         ];
 
         this.state = {
@@ -87,7 +101,7 @@ export default class HeaderProfile extends React.PureComponent {
                         className={bem.element('menu-link')}
                         to={'#'}
                         label={item.label}
-                        onClick={() => this.setState({isMenuOpen: false})}
+                        onClick={item.onClick}
                         noStyles
                     />
                 </li>
@@ -99,7 +113,7 @@ export default class HeaderProfile extends React.PureComponent {
                 <Separator />
                 {links}
             </>
-        )
+        );
     }
 
     render() {
@@ -114,7 +128,7 @@ export default class HeaderProfile extends React.PureComponent {
 
         const items = user && getUserNavItems(this.props, user) || [];
 
-        if (!this.props.isAuthorized || items.length === 0) {
+        if (!this.props.isAuthorized || !this.props.isInternallyAuthorized  || items.length === 0) {
             return (
                 <>
                     {this.props.isPhone && (
@@ -132,12 +146,17 @@ export default class HeaderProfile extends React.PureComponent {
                         >
                             {__('Login')}
                         </a>
+                    ) || !this.props.isInternallyAuthorized && (
+                        <div
+                            onClick={() => store.dispatch({ type: LOG_IN_USER })}
+                            className={bem.element('login-link')}>
+                            {__('Login')}
+                        </div>
                     ) || (
                         <a
-                            href='https://forms.gle/uLwL83EM9MWSCBAp6'
+                            href={'https://forms.gle/uLwL83EM9MWSCBAp6'}
                             target={'_blank'}
-                            className={bem.element('login-link')}
-                        >
+                            className={bem.element('login-link')}>
                             {__('Login')}
                         </a>
                     )}
