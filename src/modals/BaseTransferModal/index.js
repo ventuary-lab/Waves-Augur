@@ -3,6 +3,7 @@ import { html } from 'components';
 import InputField from 'yii-steroids/ui/form/InputField';
 import Button from 'yii-steroids/ui/form/Button';
 import crossIcon from 'static/icons/cross-icon-artwork.svg';
+import SelectDropdown from 'ui/form/SelectDropdown';
 import anonymousImg from 'static/images/anonymous-avatar-stub.jpeg';
 
 const bem = html.bem('BaseTransferModal');
@@ -63,11 +64,7 @@ class BaseTransferModal extends React.PureComponent {
                                         topLabel={__('Amount')}
                                         attribute={'name'}
                                     />
-                                    <InputField
-                                        layout={'default'}
-                                        topLabel={__('Token')}
-                                        attribute={'token'}
-                                    />
+                                    <SelectDropdown options={['asd', 'foo', 'bar']}/>
                                 </div>
                             </div>
                         </div>

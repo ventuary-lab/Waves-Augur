@@ -18,7 +18,6 @@
             left: calc(50% - 290px);
             position: absolute;
             width: 580px;
-            min-height: 400px;
 
             & > :first-child {
                 display: flex;
@@ -45,6 +44,9 @@
 
     &__body {
         padding: 30px;
+        height: calc(90vh - 100px);
+        max-height: 490px;
+        overflow: auto;
 
         & > :last-child {
             display: flex;
@@ -105,8 +107,7 @@
                 }
 
                 & > :nth-child(2) {
-                    padding: 0 90px 1px;
-                    margin-bottom: 30px;
+                    margin: 30px 90px 1px;
                 }
             }
         }

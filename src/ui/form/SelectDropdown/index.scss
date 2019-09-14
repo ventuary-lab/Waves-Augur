@@ -1,0 +1,61 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+$blurred-color: rgba(11, 201, 31, 0.5);
+$focused-color: #0BC91F;
+
+// <div style="
+//     position: absolute;
+//     width: 100%;
+//     background: white;
+//     z-index: 1;
+//     border-radius: 3px;
+//     border: 1px solid #C4C4C4;
+// "><div style="
+//     font-size: 14px;
+//     line-height: 16px;
+//     padding: 18px 20px;
+//     border-bottom: 1px solid #c4c4c4;
+// ">asd</div><div>foo</div><div>bar</div></div>
+
+.SelectDropdown-root {
+    $root: &;
+    position: relative;
+
+    & > :first-child {
+        padding: 14px 20px;
+        border: 1px solid #0BC91F;
+        border-radius: 3px;
+
+        & > :first-child {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 24px;
+            cursor: pointer;
+        }
+    }
+
+    & > :nth-child(2) {
+        position: absolute;
+        width: 100%;
+        background: white;
+        z-index: 1;
+        border-radius: 3px;
+        border: 1px solid #C4C4C4;
+
+        & > * {
+            font-size: 14px;
+            line-height: 16px;
+            padding: 18px 20px;
+            border-bottom: 1px solid #c4c4c4;
+        }
+    }
+
+    &.hidden {
+        & > :nth-child(2) {
+            display: none;
+        }
+    }
+}
