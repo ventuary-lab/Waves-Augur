@@ -16,22 +16,112 @@ import {
 class BaseTransferModal extends React.PureComponent {
     constructor(props) {
         super(props);
+
+        this._getViews = this._getViews.bind(this);
+        this._getBaseView = this._getBaseView(this);
+        this._getTransactionSuccessfulView = this._getTransactionSuccessfulView(this);
+        this._getTransactionFailureView = this._getTransactionFailureView(this);
+
+        this.state = {
+            viewIndex: 1
+        };
     }
 
-    componentWillMount () {
-        // triggerDocumentScroll('block');
+    _getBaseView () {
+        return (
+            <>
+                <div className={bem.element('transfer-body')}>
+                    <div>
+                        <span>Transfer recipient:</span>
+                        <div>
+                            <div>
+                                <img src={anonymousImg}/>
+                            </div>
+                            <div>
+                                <span>Aleksei Pupyshev</span>
+                                <span>Founder & CEO @Ventuary</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Transfer amount:</span>
+                        <div>
+                            <InputField
+                                layout={'default'}
+                                topLabel={__('Amount')}
+                                attribute={'name'}
+                            />
+                            <SelectDropdown options={['WAVES', 'WRT (Waves Reward Token)']} initialIndex={1}/>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Terms of Transfer'
+                        link
+                    />
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Transfer'
+                    />
+                </div>
+            </>
+        );
     }
 
-    componentWillUnmount () {
-        // triggerDocumentScroll('unblock');
+    _getTransactionSuccessfulView () {
+        return (
+            <>
+                <div className={bem.element('transaction-success-body')}>
+                </div>
+                <div>
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Ok'
+                    />
+                </div>
+            </>
+        );
     }
+    
+    _getTransactionFailureView () {
+        return (
+            <>
+                <div className={bem.element('transaction-failure-body')}>
+                </div>
+                <div>
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Ok, I understand'
+                    />
+                </div>
+            </>
+        );
+    }
+
+    _getViews () {
+        return [
+            this._getBaseView(),
+            this._getTransactionSuccessfulView(),
+            this._getTransactionFailureView()
+        ];
+    }
+
 
     render() {
         const { onClose, className } = this.props;
+        const { viewIndex } = this.state;
         const computedClassList = [
             bem.element('root'),
             className
         ].join(' ');
+
+        const currentView = this.views[viewIndex];
 
         return (
             <section className={computedClassList}>
@@ -43,44 +133,7 @@ class BaseTransferModal extends React.PureComponent {
                         </div>
                     </div>
                     <div className={bem.element('body')}>
-                        <div className={bem.element('transfer-body')}>
-                            <div>
-                                <span>Transfer recipient:</span>
-                                <div>
-                                    <div>
-                                        <img src={anonymousImg}/>
-                                    </div>
-                                    <div>
-                                        <span>Aleksei Pupyshev</span>
-                                        <span>Founder & CEO @Ventuary</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <span>Transfer amount:</span>
-                                <div>
-                                    <InputField
-                                        layout={'default'}
-                                        topLabel={__('Amount')}
-                                        attribute={'name'}
-                                    />
-                                    <SelectDropdown options={['asd', 'foo', 'bar']}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <Button
-                                type='submit'
-                                color='primary'
-                                label='Terms of Transfer'
-                                link
-                            />
-                            <Button
-                                type='submit'
-                                color='primary'
-                                label='Transfer'
-                            />
-                        </div>
+                        {currentView}
                     </div>
                 </div>
             </section>

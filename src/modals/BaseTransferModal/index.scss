@@ -44,8 +44,8 @@
 
     &__body {
         padding: 30px;
-        height: calc(90vh - 100px);
-        max-height: 490px;
+        height: calc(90vh - 80px);
+        max-height: 560px;
         overflow: auto;
 
         & > :last-child {
@@ -101,15 +101,25 @@
             & > :nth-child(2) {
                 background: #F1F6F2;
                 margin-top: 10px;
+                margin-bottom: 30px;
 
                 & > :first-child {
                     padding: 35px 90px 0;
                 }
 
                 & > :nth-child(2) {
-                    margin: 30px 90px 1px;
+                    margin: 30px 90px 0;
+                    padding-bottom: 25px;
                 }
             }
+        }
+    }
+
+    .SelectDropdown-root {
+        position: unset;
+
+        & .dropdown-options {
+            width: calc(100% - 180px);
         }
     }
 }
