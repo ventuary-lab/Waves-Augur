@@ -1,0 +1,114 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.BaseTransferModal {
+    &__root {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        width: 100%;
+        height: 100%;
+        transition: opacity 1s linear;
+        opacity: 1;
+
+        & > :first-child {
+            top: 50px;
+            background: #fff;
+            left: calc(50% - 290px);
+            position: absolute;
+            width: 580px;
+            min-height: 400px;
+
+            & > :first-child {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                background: #F1F6F2;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 24px;
+                padding: 30px;
+                justify-content: space-between;
+
+                & > :nth-child(2) {
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+        &.hidden {
+            opacity: 0;
+        }
+    }
+
+    &__body {
+        padding: 30px;
+
+        & > :last-child {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+        }
+    }
+
+
+    &__transfer-body {
+        // Transfer recipient:
+        $base-border-col: rgba(0, 0, 0, 0.4);
+
+        & > :first-child {
+            & > :nth-child(2) {
+                display: flex;
+                height: 100px;
+                border: 1px solid $base-border-col;
+                box-sizing: border-box;
+                border-radius: 2px;
+                margin: 10px 0 30px;
+                justify-content: center;
+
+                // Img container
+                & > :first-child {
+                    margin: auto 20px;
+
+                    & > img {
+                        max-height: 65px;
+                        max-width: 65px;
+                        border-radius: 65px;
+                    }
+                }
+                & > :nth-child(2) {
+                    font-size: 16px;
+                    line-height: 24px;
+                    display: flex;
+                    flex-direction: column;
+                    margin: auto 0;
+                    color: $base-border-col;
+
+                    & > :first-child {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        // Transfer amount:
+        & > :nth-child(2) {
+            & > :nth-child(2) {
+                background: #F1F6F2;
+                margin-top: 10px;
+
+                & > :first-child {
+                    padding: 35px 90px 0;
+                }
+
+                & > :nth-child(2) {
+                    padding: 0 90px 1px;
+                    margin-bottom: 30px;
+                }
+            }
+        }
+    }
+}
