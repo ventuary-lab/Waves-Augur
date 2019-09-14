@@ -2,25 +2,28 @@ import React from 'react';
 import { html } from 'components';
 import InputField from 'yii-steroids/ui/form/InputField';
 import Button from 'yii-steroids/ui/form/Button';
-import crossIcon from 'static/icons/cross-icon-artwork.svg';
 import SelectDropdown from 'ui/form/SelectDropdown';
+import crossIcon from 'static/icons/cross-icon-artwork.svg';
 import anonymousImg from 'static/images/anonymous-avatar-stub.jpeg';
+
+import KeeperApproveView from './views/KeeperApprove';
+import TransactionSuccessView from './views/TransactionSuccess';
 
 const bem = html.bem('BaseTransferModal');
 
 import './index.scss';
-import {
-    triggerDocumentScroll
-} from 'ui/global/helper';
+// import {
+//     triggerDocumentScroll
+// } from 'ui/global/helper';
 
 class BaseTransferModal extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this._getViews = this._getViews.bind(this);
-        this._getBaseView = this._getBaseView(this);
-        this._getTransactionSuccessfulView = this._getTransactionSuccessfulView(this);
-        this._getTransactionFailureView = this._getTransactionFailureView(this);
+        this._getBaseView = this._getBaseView.bind(this);
+        this._getTransactionSuccessfulView = this._getTransactionSuccessfulView.bind(this);
+        this._getTransactionFailureView = this._getTransactionFailureView.bind(this);
 
         this.state = {
             viewIndex: 1
@@ -66,6 +69,7 @@ class BaseTransferModal extends React.PureComponent {
                         type='submit'
                         color='primary'
                         label='Transfer'
+                        onClick={() => this.setState({ viewIndex: 1 })}
                     />
                 </div>
             </>
@@ -74,33 +78,17 @@ class BaseTransferModal extends React.PureComponent {
 
     _getTransactionSuccessfulView () {
         return (
-            <>
-                <div className={bem.element('transaction-success-body')}>
-                </div>
-                <div>
-                    <Button
-                        type='submit'
-                        color='primary'
-                        label='Ok'
-                    />
-                </div>
-            </>
+            <TransactionSuccessView
+                onOk={() => this.setState({ viewIndex: 2 })}
+            />
         );
     }
     
     _getTransactionFailureView () {
         return (
-            <>
-                <div className={bem.element('transaction-failure-body')}>
-                </div>
-                <div>
-                    <Button
-                        type='submit'
-                        color='primary'
-                        label='Ok, I understand'
-                    />
-                </div>
-            </>
+            <KeeperApproveView
+                onOk={() => this.setState({ viewIndex: 0 })}
+            />
         );
     }
 
@@ -121,7 +109,7 @@ class BaseTransferModal extends React.PureComponent {
             className
         ].join(' ');
 
-        const currentView = this.views[viewIndex];
+        const currentView = this._getViews()[viewIndex];
 
         return (
             <section className={computedClassList}>
