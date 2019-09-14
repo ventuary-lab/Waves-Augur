@@ -71,17 +71,17 @@ class SelectDropdown extends React.Component {
         const options = _options.map(this._mapOption);
 
         return (
-            <div className={_getClassName()}>
-                <div onClick={() => _triggerDropdown(!isOpened)} className='option-with-icon'>
-                    <span>{_options[currentIndex]}</span>
-                    <img src={dropdownArrow}/>
-                </div>
-                <OutsideAlerter onOutsideClick={() => _triggerDropdown(false)}>
+            <OutsideAlerter onOutsideClick={() => _triggerDropdown(false)}>
+                <div className={_getClassName()}>
+                    <div onClick={() => _triggerDropdown(!isOpened)} className='option-with-icon'>
+                        <span>{_options[currentIndex]}</span>
+                        <img src={dropdownArrow}/>
+                    </div>
                     <div className='dropdown-options'>
                         {options}
                     </div>
-                </OutsideAlerter>
-            </div>
+                </div>
+            </OutsideAlerter>
         );
     }
 }

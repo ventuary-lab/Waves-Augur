@@ -68,6 +68,7 @@ export default class ProfileSidebar extends React.PureComponent {
             <div className={bem.block()}>
                 {isOpened && ReactDOM.createPortal(
                     <BaseTransferModal
+                        user={this.props.user}
                         onClose={() => this._triggerSendFundsModal(false)} 
                         isOpened={isOpened}
                     />,

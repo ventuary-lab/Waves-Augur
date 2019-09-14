@@ -76,9 +76,10 @@
                     margin: auto 20px;
 
                     & > img {
-                        max-height: 65px;
-                        max-width: 65px;
+                        height: 65px;
+                        width: 65px;
                         border-radius: 65px;
+                        object-fit: cover;
                     }
                 }
                 & > :nth-child(2) {
@@ -112,6 +113,12 @@
                     padding-bottom: 25px;
                 }
             }
+        }
+    }
+
+    &__buttons {
+        & > :first-child {
+            margin-left: auto;
         }
     }
 

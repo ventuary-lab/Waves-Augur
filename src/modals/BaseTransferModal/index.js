@@ -1,10 +1,11 @@
 import React from 'react';
 import { html } from 'components';
+import PropTypes from 'prop-types';
 import InputField from 'yii-steroids/ui/form/InputField';
 import Button from 'yii-steroids/ui/form/Button';
 import SelectDropdown from 'ui/form/SelectDropdown';
+import UserSchema from 'types/UserSchema';
 import crossIcon from 'static/icons/cross-icon-artwork.svg';
-import anonymousImg from 'static/images/anonymous-avatar-stub.jpeg';
 
 import KeeperApproveView from './views/KeeperApprove';
 import TransactionSuccessView from './views/TransactionSuccess';
@@ -14,6 +15,12 @@ const bem = html.bem('BaseTransferModal');
 import './index.scss';
 
 class BaseTransferModal extends React.PureComponent {
+
+    static propTypes = {
+        isMe: PropTypes.bool,
+        user: UserSchema,
+    };
+
     constructor(props) {
         super(props);
 
@@ -21,13 +28,23 @@ class BaseTransferModal extends React.PureComponent {
         this._getBaseView = this._getBaseView.bind(this);
         this._getTransactionSuccessfulView = this._getTransactionSuccessfulView.bind(this);
         this._getTransactionFailureView = this._getTransactionFailureView.bind(this);
+        this._onAmountChange = this._onAmountChange.bind(this);
 
         this.state = {
-            viewIndex: 1
+            viewIndex: 0,
+            transferAmount: 0
         };
     }
 
+    _onAmountChange (event) {
+        console.log(event);
+    }
+
     _getBaseView () {
+        const { _onAmountChange } = this;
+        const { user } = this.props;
+        const { profile } = user;
+
         return (
             <>
                 <div className={bem.element('transfer-body')}>
@@ -35,11 +52,11 @@ class BaseTransferModal extends React.PureComponent {
                         <span>Transfer recipient:</span>
                         <div>
                             <div>
-                                <img src={anonymousImg}/>
+                                <img src={profile.avatar}/>
                             </div>
                             <div>
-                                <span>Aleksei Pupyshev</span>
-                                <span>Founder & CEO @Ventuary</span>
+                                <span>{profile.name}</span>
+                                <span>{profile.title}</span>
                             </div>
                         </div>
                     </div>
@@ -51,17 +68,17 @@ class BaseTransferModal extends React.PureComponent {
                                 topLabel={__('Amount')}
                                 attribute={'name'}
                             />
-                            <SelectDropdown options={['WAVES', 'WRT (Waves Reward Token)']} initialIndex={1}/>
+                            <SelectDropdown options={['WAVES']} initialIndex={1}/>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <Button
+                <div className={bem.element('buttons')}>
+                    {/* <Button
                         type='submit'
                         color='primary'
                         label='Terms of Transfer'
                         link
-                    />
+                    /> */}
                     <Button
                         type='submit'
                         color='primary'
@@ -74,9 +91,13 @@ class BaseTransferModal extends React.PureComponent {
     }
 
     _getTransactionSuccessfulView () {
+        const { transferAmount: amount } = this.state;
+
         return (
             <TransactionSuccessView
+                amount={amount}
                 onOk={() => this.setState({ viewIndex: 2 })}
+                user={this.props.user}
             />
         );
     }

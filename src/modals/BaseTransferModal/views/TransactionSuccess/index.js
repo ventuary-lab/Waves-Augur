@@ -9,7 +9,8 @@ const bem = html.bem('TransactionSuccessView');
 import './index.scss';
 
 function TransactionSuccess (props) {
-    const { onOk } = props;
+    const { onOk, user, amount } = props;
+    const { profile } = user;
 
     return (
         <>
@@ -23,17 +24,17 @@ function TransactionSuccess (props) {
                         <div className={bem.element('recipient')}>
                             <span>Transfer recipient:</span>
                             <div>
-                                <img src={anonymousImg}/>
+                                <img src={profile.avatar}/>
                                 <div>
-                                    <span>Aleksei Pupyshev</span>
-                                    <span>Founder & CEO @Ventuary</span>
+                                    <span>{profile.name}</span>
+                                    <span>{profile.title}</span>
                                 </div>
                             </div>
                         </div>
                         <div className={bem.element('amount')}>
                             <span>Transfer amount:</span>
                             <div>
-                                <span>10</span>
+                                <span>{amount}</span>
                                 <span>WRT</span>
                             </div>
                         </div>
