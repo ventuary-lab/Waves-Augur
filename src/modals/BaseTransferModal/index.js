@@ -12,9 +12,6 @@ import TransactionSuccessView from './views/TransactionSuccess';
 const bem = html.bem('BaseTransferModal');
 
 import './index.scss';
-// import {
-//     triggerDocumentScroll
-// } from 'ui/global/helper';
 
 class BaseTransferModal extends React.PureComponent {
     constructor(props) {
