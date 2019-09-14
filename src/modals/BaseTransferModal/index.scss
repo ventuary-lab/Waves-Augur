@@ -44,8 +44,8 @@
 
     &__body {
         padding: 30px;
-        height: calc(90vh - 80px);
-        max-height: 560px;
+        height: 100%;
+        max-height: calc(90vh - 80px);
         overflow: auto;
 
         & > :last-child {

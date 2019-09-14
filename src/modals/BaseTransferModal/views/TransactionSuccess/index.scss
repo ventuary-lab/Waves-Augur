@@ -3,4 +3,9 @@
 
 .TransactionSuccessView {
 
+    &__btn {
+        & button {
+            margin-left: auto;
+        }
+    }
 }

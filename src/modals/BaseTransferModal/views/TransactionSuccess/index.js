@@ -4,18 +4,22 @@ import { html } from 'components';
 
 const bem = html.bem('TransactionSuccessView');
 
-function TransactionSuccess () {
+import './index.scss';
+
+function TransactionSuccess (props) {
+    const { onOk } = props;
+
     return (
         <>
             <div className={bem.element('root')}>
 
             </div>
-            <div>
+            <div className={bem.element('btn')}>
                 <Button
                     type='submit'
                     color='primary'
                     label='Ok'
-                    onClick={() => this.setState({ viewIndex: 2 })}
+                    onClick={onOk}
                 />
             </div>
         </>
