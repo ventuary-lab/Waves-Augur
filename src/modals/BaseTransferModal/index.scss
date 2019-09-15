@@ -43,7 +43,9 @@
         }
     }
 
-    &__amount-input {}
+    &__amount-input {
+
+    }
 
     &__body {
         padding: 30px;
@@ -95,6 +97,13 @@
 
                     & > :first-child {
                         font-weight: 500;
+                    }
+                    & > :nth-child(2) {
+                        display: block;
+                        max-width: 300px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
             }

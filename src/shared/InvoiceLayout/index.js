@@ -46,8 +46,10 @@ class InvoiceLayout extends React.PureComponent {
                             <span>Transfer recipient</span>
                             <div>
                                 <img src={user.profile.avatar}/>
-                                <span>{user.profile.name}</span>
-                                <span>{user.profile.title}</span>
+                                <div>
+                                    <span>{user.profile.name}</span>
+                                    <span>{user.profile.title}</span>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -58,17 +60,21 @@ class InvoiceLayout extends React.PureComponent {
                             </div>
                         </div>
                     </div>
+                    <div className={bem.element('transfer-btn')}>
+                        <Button
+                            color='primary'
+                            label='Transfer'
+                        />
+                    </div>
+                </div>
+                <div className={bem.element('new-ideas-btn')}>
                     <Button
+                        outline
                         color='primary'
-                        label='Transfer'
+                        label='Explore new ideas'
+                        onClick={() => {}}
                     />
                 </div>
-                <Button
-                    outline
-                    color='primary'
-                    label='Explore new ideas'
-                    onClick={() => {}}
-                />
             </div>
         )
     }
