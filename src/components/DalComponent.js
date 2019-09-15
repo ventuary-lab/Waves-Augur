@@ -1022,4 +1022,7 @@ export default class DalComponent {
         }
     }
 
+    async transferFunds(address, amount) {
+        await this.transport.nodePublish('transfer', [address], amount);
+    }
 }

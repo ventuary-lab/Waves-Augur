@@ -46,6 +46,13 @@ export default class ProfileSidebar extends React.PureComponent {
                 isOpened: false
             }
         };
+
+        this.invoiceProps = {
+            heading: 'Creating Invoice'
+        };
+        this.transferProps = {
+            heading: 'Transferring funds to a user'
+        };
     }
 
     _triggerSendFundsModal (isOpened) {
@@ -63,6 +70,8 @@ export default class ProfileSidebar extends React.PureComponent {
             ? whaleAvatarStub
             : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
         const { isOpened } = this.state.sendFundsModal;
+        const { invoiceProps, transferProps } = this;
+        const { isPhone } = this.props;
 
         return (
             <div className={bem.block()}>
@@ -71,6 +80,7 @@ export default class ProfileSidebar extends React.PureComponent {
                         user={this.props.user}
                         onClose={() => this._triggerSendFundsModal(false)} 
                         isOpened={isOpened}
+                        modalProps={this.props.isMe ? invoiceProps : transferProps}
                     />,
                     document.body
                 )}
@@ -94,12 +104,12 @@ export default class ProfileSidebar extends React.PureComponent {
                             : this.props.user.profile.title
                         }
                     </span>
-                    {!this.props.isMe && (
+                    {!isPhone && (
                         <div className={bem.element('send-funds')}>
                             <Button
                                 outline
                                 color='primary'
-                                label='Send funds'
+                                label={!this.props.isMe ? 'Send funds' : 'Create an invoice'}
                                 onClick={() => this._triggerSendFundsModal(true)}
                             />
                         </div>

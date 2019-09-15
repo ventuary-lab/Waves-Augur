@@ -37,6 +37,8 @@
 
             & > img:first-child {
                 width: 60px;
+                object-fit: cover;
+                height: 60px;
                 border-radius: 60px;
                 margin-right: 20px;
             }

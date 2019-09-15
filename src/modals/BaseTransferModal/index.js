@@ -1,5 +1,6 @@
 import React from 'react';
-import { html } from 'components';
+import { dal, html } from 'components';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import InputField from 'yii-steroids/ui/form/InputField';
 import Button from 'yii-steroids/ui/form/Button';
@@ -29,6 +30,9 @@ class BaseTransferModal extends React.PureComponent {
         this._getTransactionSuccessfulView = this._getTransactionSuccessfulView.bind(this);
         this._getTransactionFailureView = this._getTransactionFailureView.bind(this);
         this._onAmountChange = this._onAmountChange.bind(this);
+        this._transferFunds = this._transferFunds.bind(this);
+
+        this.onlyFloatNumRegex = /^[+-]?\d+(\.)?(\.\d+)?$/;
 
         this.state = {
             viewIndex: 0,
@@ -36,14 +40,31 @@ class BaseTransferModal extends React.PureComponent {
         };
     }
 
-    _onAmountChange (event) {
-        console.log(event);
+    async _transferFunds (address) {
+        const { transferAmount } = this.state;
+
+        try {
+            await dal.transferFunds(address, transferAmount);
+            this.setState({ transferAmount, viewIndex: 1 });
+        } catch (err) {
+            this.setState({ viewIndex: 2 });
+        }
+    }
+
+    _onAmountChange (val) {
+        if (val === '' || this.onlyFloatNumRegex.test(val)) {
+            this.setState({ transferAmount: val });
+        }
     }
 
     _getBaseView () {
         const { _onAmountChange } = this;
         const { user } = this.props;
         const { profile } = user;
+        const _transferFunds = async () => {
+            await this._transferFunds(_.get(this.props, 'user.address'));
+        };
+        const InputFieldView = InputField.WrappedComponent;
 
         return (
             <>
@@ -63,11 +84,17 @@ class BaseTransferModal extends React.PureComponent {
                     <div>
                         <span>Transfer amount:</span>
                         <div>
-                            <InputField
-                                layout={'default'}
-                                topLabel={__('Amount')}
-                                attribute={'name'}
-                            />
+                            <div className={bem.element('amount-input')}>
+                                <span>Amount</span>
+                                <InputFieldView
+                                    layout={'default'}
+                                    topLabel={__('Amount')}
+                                    input={{
+                                        value: this.state.transferAmount,
+                                        onChange: _onAmountChange
+                                    }}
+                                />
+                            </div>
                             <SelectDropdown options={['WAVES']} initialIndex={1}/>
                         </div>
                     </div>
@@ -83,7 +110,7 @@ class BaseTransferModal extends React.PureComponent {
                         type='submit'
                         color='primary'
                         label='Transfer'
-                        onClick={() => this.setState({ viewIndex: 1 })}
+                        onClick={_transferFunds}
                     />
                 </div>
             </>
@@ -96,7 +123,7 @@ class BaseTransferModal extends React.PureComponent {
         return (
             <TransactionSuccessView
                 amount={amount}
-                onOk={() => this.setState({ viewIndex: 2 })}
+                onOk={() => this.props.onClose()}
                 user={this.props.user}
             />
         );
@@ -126,6 +153,7 @@ class BaseTransferModal extends React.PureComponent {
             bem.element('root'),
             className
         ].join(' ');
+        const { modalProps } = this.props;
 
         const currentView = this._getViews()[viewIndex];
 
@@ -133,7 +161,7 @@ class BaseTransferModal extends React.PureComponent {
             <section className={computedClassList}>
                 <div>
                     <div>
-                        <span>Transferring funds to a user</span>
+                        <span>{modalProps.heading}</span>
                         <div>
                             <img src={crossIcon} onClick={onClose}/>
                         </div>

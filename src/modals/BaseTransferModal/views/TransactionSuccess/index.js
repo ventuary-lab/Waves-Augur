@@ -35,7 +35,7 @@ function TransactionSuccess (props) {
                             <span>Transfer amount:</span>
                             <div>
                                 <span>{amount}</span>
-                                <span>WRT</span>
+                                <span>WAVES</span>
                             </div>
                         </div>
                     </div>
