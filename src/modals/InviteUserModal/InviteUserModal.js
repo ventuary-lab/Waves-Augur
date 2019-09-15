@@ -14,7 +14,7 @@ import Button from 'yii-steroids/ui/form/Button';
 import validate from 'shared/validate';
 
 import './InviteUserModal.scss';
-import CopyToClipboard from '../../shared/CopyToClipboard';
+import CopyToClipboard from 'shared/CopyToClipboard';
 
 const bem = html.bem('InviteUserModal');
 const FORM_ID = 'invite_user';

@@ -6,6 +6,7 @@ import InputField from 'yii-steroids/ui/form/InputField';
 import Button from 'yii-steroids/ui/form/Button';
 import SelectDropdown from 'ui/form/SelectDropdown';
 import UserSchema from 'types/UserSchema';
+import CopyToClipboard from 'shared/CopyToClipboard';
 import crossIcon from 'static/icons/cross-icon-artwork.svg';
 
 import KeeperApproveView from './views/KeeperApprove';
@@ -31,6 +32,8 @@ class BaseTransferModal extends React.PureComponent {
         this._getTransactionFailureView = this._getTransactionFailureView.bind(this);
         this._onAmountChange = this._onAmountChange.bind(this);
         this._transferFunds = this._transferFunds.bind(this);
+        this._generateInvoice = this._generateInvoice.bind(this);
+        this._getBaseNextButton = this._getBaseNextButton.bind(this);
 
         this.onlyFloatNumRegex = /^[+-]?\d+(\.)?(\.\d+)?$/;
 
@@ -38,6 +41,22 @@ class BaseTransferModal extends React.PureComponent {
             viewIndex: 0,
             transferAmount: 0
         };
+    }
+
+    _generateInvoice () {
+        // const url = new URL(window.location.origin + '/invoice');
+        // url.searchParams.set('currency', 'waves');
+        // url.searchParams.set('amount', this.state.transferAmount);
+        // url.searchParams.set('address', this.props.user.address);
+
+        // return String(url.href);
+        return [
+            window.location.origin,
+            'invoice',
+            'WAVES',
+            this.props.user.address,
+            this.state.transferAmount
+        ].join('/');
     }
 
     async _transferFunds (address) {
@@ -57,13 +76,37 @@ class BaseTransferModal extends React.PureComponent {
         }
     }
 
+    _getBaseNextButton () {
+        if (this.props.isInvoice) {
+            return (
+                <CopyToClipboard copyText={this._generateInvoice()}>
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label={this.props.modalProps.approveButton.label}
+                    />
+                </CopyToClipboard>
+            );
+        }
+
+        const _transferFunds = async () => {
+            await this._transferFunds(_.get(this.props, 'user.address'));
+        };
+
+        return (
+            <Button
+                type='submit'
+                color='primary'
+                label={this.props.modalProps.approveButton.label}
+                onClick={_transferFunds}
+            />
+        )
+    }
+
     _getBaseView () {
         const { _onAmountChange } = this;
         const { user } = this.props;
         const { profile } = user;
-        const _transferFunds = async () => {
-            await this._transferFunds(_.get(this.props, 'user.address'));
-        };
         const InputFieldView = InputField.WrappedComponent;
 
         return (
@@ -100,18 +143,7 @@ class BaseTransferModal extends React.PureComponent {
                     </div>
                 </div>
                 <div className={bem.element('buttons')}>
-                    {/* <Button
-                        type='submit'
-                        color='primary'
-                        label='Terms of Transfer'
-                        link
-                    /> */}
-                    <Button
-                        type='submit'
-                        color='primary'
-                        label='Transfer'
-                        onClick={_transferFunds}
-                    />
+                    {this._getBaseNextButton()}
                 </div>
             </>
         );

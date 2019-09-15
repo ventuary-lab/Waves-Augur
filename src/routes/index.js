@@ -17,6 +17,7 @@ import ProfileGrantsPage from './ProfileGrantsPage';
 import ProfileLayout from 'shared/ProfileLayout';
 import ProjectLayout from 'shared/ProjectLayout';
 import ContestLayout from 'shared/ContestLayout';
+import InvoiceLayout from 'shared/InvoiceLayout';
 import ContestDetailsPage from './ContestDetailsPage';
 import ContestEntriesPage from './ContestEntriesPage';
 import ProjectFeedPage from './ProjectFeedPage';
@@ -59,6 +60,7 @@ export const ROUTE_CONTEST = 'contest';
 export const ROUTE_CONTEST_REDIRECT = 'contest_redirect';
 export const ROUTE_CONTEST_DETAILS = 'contest_details';
 export const ROUTE_CONTEST_ENTRIES = 'contest_entries';
+export const ROUTE_INVOICE = 'invoice';
 
 const baseUser = '/users/:address(\\w{35})';
 
@@ -448,5 +450,14 @@ export default {
                 },
             },
         },
+        [ROUTE_INVOICE]: {
+            path: '/invoice/:currency/:address/:amount',
+            component: InvoiceLayout,
+            label: __('Invoice'),
+            isNavVisible: false,
+            roles: UserRole.getKeys(),
+            isShowImageLine: false,
+            items: {}
+        }
     },
 };

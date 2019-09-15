@@ -48,10 +48,16 @@ export default class ProfileSidebar extends React.PureComponent {
         };
 
         this.invoiceProps = {
-            heading: 'Creating Invoice'
+            heading: 'Creating Invoice',
+            approveButton: {
+                label: 'Create'
+            }
         };
         this.transferProps = {
-            heading: 'Transferring funds to a user'
+            heading: 'Transferring funds to a user',
+            approveButton: {
+                label: 'Transfer'
+            }
         };
     }
 
@@ -80,6 +86,7 @@ export default class ProfileSidebar extends React.PureComponent {
                         user={this.props.user}
                         onClose={() => this._triggerSendFundsModal(false)} 
                         isOpened={isOpened}
+                        isInvoice={this.props.isMe}
                         modalProps={this.props.isMe ? invoiceProps : transferProps}
                     />,
                     document.body

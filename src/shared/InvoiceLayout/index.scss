@@ -1,0 +1,44 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.InvoiceLayout {
+    &__root {
+        padding: 25px 165px;
+    }
+
+    &__box {
+        background: #F1F6F2;
+    }
+
+    &__info {
+        font-size: 18px;
+        line-height: 24px;
+        color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+    }
+
+    &__flex-box {
+        display: flex;
+        flex-direction: row;
+
+
+        & > :nth-child(1) {
+
+                
+            & > :nth-child(2) {
+                & > img {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    margin-right: 20px;
+                }
+            }
+        }
+
+        & > :nth-child(2) {
+
+        }
+    }
+}
