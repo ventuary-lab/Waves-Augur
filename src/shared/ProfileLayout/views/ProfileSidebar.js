@@ -49,12 +49,14 @@ export default class ProfileSidebar extends React.PureComponent {
 
         this.invoiceProps = {
             heading: 'Creating Invoice',
+            initialView: 0,
             approveButton: {
                 label: 'Create'
             }
         };
         this.transferProps = {
             heading: 'Transferring funds to a user',
+            initialView: 0,
             approveButton: {
                 label: 'Transfer'
             }

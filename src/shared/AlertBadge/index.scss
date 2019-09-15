@@ -1,0 +1,18 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.AlertBadge {
+    &__root {
+        background: #B6EFBC;
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 15px;
+        margin-bottom: 40px;
+
+        & > :first-child {
+            margin-right: 10px;
+        }
+    }
+}
