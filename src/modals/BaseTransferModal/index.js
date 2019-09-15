@@ -44,12 +44,6 @@ class BaseTransferModal extends React.PureComponent {
     }
 
     _generateInvoice () {
-        // const url = new URL(window.location.origin + '/invoice');
-        // url.searchParams.set('currency', 'waves');
-        // url.searchParams.set('amount', this.state.transferAmount);
-        // url.searchParams.set('address', this.props.user.address);
-
-        // return String(url.href);
         return [
             window.location.origin,
             'invoice',
@@ -61,6 +55,10 @@ class BaseTransferModal extends React.PureComponent {
 
     async _transferFunds (address) {
         const { transferAmount } = this.state;
+
+        if (!transferAmount) {
+            return;
+        };
 
         try {
             await dal.transferFunds(address, transferAmount);

@@ -7,7 +7,21 @@
     }
 
     &__box {
+        max-width: 580px;
         background: #F1F6F2;
+    }
+
+    &__new-ideas-btn {
+        margin-top: 10px;
+    }
+
+    &__transfer-btn {
+        padding: 30px;
+        padding-top: 0;
+
+        & > :first-child {
+            margin-left: auto;
+        }
     }
 
     &__info {
@@ -22,23 +36,82 @@
     &__flex-box {
         display: flex;
         flex-direction: row;
-
+        padding: 20px 30px;
 
         & > :nth-child(1) {
-
-                
             & > :nth-child(2) {
+                margin-top: 10px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
                 & > img {
                     width: 60px;
                     height: 60px;
                     object-fit: cover;
                     margin-right: 20px;
+                    border-radius: 30px;
+                }
+                & > :nth-child(2) {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 16px;
+                    line-height: 20px;
+                    opacity: .4;
+                    margin-top: 6px;
+
+                    & > :first-child {
+                        font-weight: 500;
+                    }
                 }
             }
         }
 
         & > :nth-child(2) {
+            margin-left: auto;
+            margin-right: 60px;
 
+            & > :first-child {
+                margin-top: 10px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
+
+            & > :nth-child(2) {
+                margin-top: 10px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                & > :first-child {
+                    font-size: 60px;
+                    line-height: 60px;
+                }
+                & > :nth-child(2) {
+                    display: block;
+                    margin: auto;
+                    margin-bottom: 6px;
+                    margin-left: 10px;
+                }
+            }
+        //     <div style="
+        //     margin-left: auto;
+        //     margin-right: 60px;
+        // "><span>Transfer amount:</span><div style="
+        //     margin-top: 10px;
+        //     display: flex;
+        //     flex-direction: row;
+        //     flex-wrap: nowrap;
+        // "><span style="
+        //     font-size: 60px;
+        //     line-height: 60px;
+        // ">123</span><span style="
+        //     display: block;
+        //     margin: auto;
+        //     margin-bottom: 6px;
+        //     margin-left: 10px;
+        // ">waves</span></div></div>
         }
     }
 }
