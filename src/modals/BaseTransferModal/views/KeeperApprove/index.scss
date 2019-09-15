@@ -1,0 +1,60 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+
+
+.KeeperApproveView {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    &__root {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-bottom: 20px;
+
+        & > :first-child {
+            margin-right: 40px;
+            width: 320px;
+
+            & > :first-child {
+                background: #F1F6F2;
+                padding: 16px;
+                display: flex;
+                margin-bottom: 20px;
+
+                & > img:first-child {
+                    margin-top: -20px;
+                }
+                & > :nth-child(2) {
+                    display: block;
+                    font-weight: 500;
+                    font-size: 16px;
+                    margin-left: 10px;
+                    line-height: 24px;
+                }
+            }
+            & > :nth-child(2) {
+                font-weight: 300;
+                font-size: 13px;
+                line-height: 13px;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        & > :nth-child(2) {
+            & > img:first-child {
+                height: 100%;
+                width: 200px;
+            }
+        }
+    }
+
+    &__btn {
+        & button {
+            margin-left: auto;
+        }
+    }
+}

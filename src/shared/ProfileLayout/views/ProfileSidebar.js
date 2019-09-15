@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,6 +10,7 @@ import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import Tags from 'shared/Tags';
 import {isPhone} from 'yii-steroids/reducers/screen';
+import Button from 'yii-steroids/ui/form/Button';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
@@ -16,6 +18,7 @@ import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 import UserRole from 'enums/UserRole';
+import BaseTransferModal from 'modals/BaseTransferModal';
 
 import {ROUTE_USER_DONATION, ROUTE_USER_GRANTS} from 'routes';
 import './ProfileSidebar.scss';
@@ -33,13 +36,61 @@ export default class ProfileSidebar extends React.PureComponent {
         user: UserSchema,
     };
 
+    constructor(props) {
+        super(props);
+
+        this._triggerSendFundsModal = this._triggerSendFundsModal.bind(this);
+
+        this.state = {
+            sendFundsModal: {
+                isOpened: false
+            }
+        };
+
+        this.invoiceProps = {
+            heading: 'Creating Invoice',
+            approveButton: {
+                label: 'Create'
+            }
+        };
+        this.transferProps = {
+            heading: 'Transferring funds to a user',
+            approveButton: {
+                label: 'Transfer'
+            }
+        };
+    }
+
+    _triggerSendFundsModal (isOpened) {
+        this.setState(prevState => ({
+            ...prevState,
+            sendFundsModal: {
+                ...prevState.sendFundsModal,
+                isOpened
+            }
+        }));
+    }
+
     render() {
         const avatarStub = this.props.user.profile.isWhale
             ? whaleAvatarStub
             : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
+        const { isOpened } = this.state.sendFundsModal;
+        const { invoiceProps, transferProps } = this;
+        const { isPhone } = this.props;
 
         return (
             <div className={bem.block()}>
+                {isOpened && ReactDOM.createPortal(
+                    <BaseTransferModal
+                        user={this.props.user}
+                        onClose={() => this._triggerSendFundsModal(false)} 
+                        isOpened={isOpened}
+                        isInvoice={this.props.isMe}
+                        modalProps={this.props.isMe ? invoiceProps : transferProps}
+                    />,
+                    document.body
+                )}
                 <img
                     className={bem.element('avatar')}
                     src={_.get(this.props, 'user.profile.avatar', avatarStub)}
@@ -60,6 +111,16 @@ export default class ProfileSidebar extends React.PureComponent {
                             : this.props.user.profile.title
                         }
                     </span>
+                    {!isPhone && (
+                        <div className={bem.element('send-funds')}>
+                            <Button
+                                outline
+                                color='primary'
+                                label={!this.props.isMe ? 'Send funds' : 'Create an invoice'}
+                                onClick={() => this._triggerSendFundsModal(true)}
+                            />
+                        </div>
+                    )}
                     {this.props.user.profile.socials && (
                         <div className={bem.element('social-links')}>
                             <SocialLinks urls={this.props.user.profile.socials}/>
