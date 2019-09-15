@@ -38,7 +38,7 @@ class BaseTransferModal extends React.PureComponent {
         this.onlyFloatNumRegex = /^[+-]?\d+(\.)?(\.\d+)?$/;
 
         this.state = {
-            viewIndex: 0,
+            viewIndex: this.props.modalProps.initialViewIndex || 0,
             transferAmount: 0
         };
     }
@@ -98,7 +98,7 @@ class BaseTransferModal extends React.PureComponent {
                 label={this.props.modalProps.approveButton.label}
                 onClick={_transferFunds}
             />
-        )
+        );
     }
 
     _getBaseView () {
@@ -162,7 +162,7 @@ class BaseTransferModal extends React.PureComponent {
     _getTransactionFailureView () {
         return (
             <KeeperApproveView
-                onOk={() => this.setState({ viewIndex: 0 })}
+                onOk={() => this.props.onClose()}
             />
         );
     }

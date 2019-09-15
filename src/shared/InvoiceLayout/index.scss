@@ -11,6 +11,15 @@
         background: #F1F6F2;
     }
 
+    &__box_approved {
+        padding: 20px;
+        padding-bottom: 0;
+
+        & > :first-child {
+            margin-bottom: 10px;
+        }
+    }
+
     &__new-ideas-btn {
         margin-top: 10px;
     }

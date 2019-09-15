@@ -1,7 +1,11 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import Button from 'yii-steroids/ui/form/Button';
-import { html, dal } from 'components';
+import { html, dal, store } from 'components';
+import { push } from 'react-router-redux';
+import AlertBadge from 'shared/AlertBadge';
+import BaseTransferModal from 'modals/BaseTransferModal';
 
 const bem = html.bem('InvoiceLayout');
 
@@ -11,8 +15,31 @@ class InvoiceLayout extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this._handleTransfer = this._handleTransfer.bind(this);
+
+        this.modalProps = {
+            heading: 'Transferring funds to a user',
+            initialViewIndex: 2,
+            approveButton: {
+                label: 'Transfer'
+            }
+        };
+
         this.state = {
-            user: null
+            user: null,
+            transactionApproved: false,
+            isModalOpened: false
+        };
+    }
+
+    async _handleTransfer () {
+        const { address, amount } = _.get(this.props, 'match.params');
+
+        try {
+            await dal.transferFunds(address, amount);
+            this.setState({ transactionApproved: true, isModalOpened: false });
+        } catch (err) {
+            this.setState({ isModalOpened: true });
         };
     }
 
@@ -28,7 +55,7 @@ class InvoiceLayout extends React.PureComponent {
     }
 
     render () {
-        const { user } = this.state;
+        const { user, transactionApproved, isModalOpened } = this.state;
         const { params } = this.props.match;
         if (!user || !params) {
             return <div></div>;
@@ -36,11 +63,22 @@ class InvoiceLayout extends React.PureComponent {
 
         return (
             <div className={bem.element('root')}>
+                {isModalOpened && ReactDOM.createPortal(
+                    <BaseTransferModal
+                        user={user}
+                        onClose={() => this.setState({ isModalOpened: false })} 
+                        isOpened={isModalOpened}
+                        isInvoice={this.props.isMe}
+                        modalProps={this.modalProps}
+                    />,
+                    document.body
+                )}
                 <div className={bem.element('info')}>
                     <span>Please transfer funds</span>
                     <span>to the following user via Waves Keeper</span>
                 </div>
-                <div className={bem.element('box')}>
+                <div className={bem.element('box', { approved: transactionApproved })}>
+                    {transactionApproved && <AlertBadge text='Transferring was successful'/>}
                     <div className={bem.element('flex-box')}>
                         <div>
                             <span>Transfer recipient</span>
@@ -60,19 +98,22 @@ class InvoiceLayout extends React.PureComponent {
                             </div>
                         </div>
                     </div>
-                    <div className={bem.element('transfer-btn')}>
-                        <Button
-                            color='primary'
-                            label='Transfer'
-                        />
-                    </div>
+                    {!transactionApproved && (
+                        <div className={bem.element('transfer-btn')}>
+                            <Button
+                                color='primary'
+                                label='Transfer'
+                                onClick={this._handleTransfer}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className={bem.element('new-ideas-btn')}>
                     <Button
                         outline
                         color='primary'
                         label='Explore new ideas'
-                        onClick={() => {}}
+                        onClick={() => store.dispatch(push('/projects/featured'))}
                     />
                 </div>
             </div>

@@ -2,23 +2,6 @@
 @import 'style/helpers/mixins';
 
 .TransactionSuccessView {
-    // &__root {
-
-    // }
-
-    &__badge {
-        background: #B6EFBC;
-        font-weight: 500;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        padding: 15px;
-        margin-bottom: 40px;
-
-        & > :first-child {
-            margin-right: 10px;
-        }
-    }
 
     &__box {
         display: flex;
