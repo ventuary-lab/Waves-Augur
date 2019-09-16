@@ -117,7 +117,7 @@ export default class HeaderProfile extends React.PureComponent {
     }
 
     render() {
-        if (!this.props.isInitialized) {
+        if (!this.props.isInitialized || !this.props.user || !this.props.contextUser) {
             return null;
         }
 
