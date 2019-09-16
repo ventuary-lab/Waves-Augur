@@ -4,12 +4,12 @@ import _orderBy from 'lodash/orderBy';
 import _trim from 'lodash/trim';
 import _sum from 'lodash/sum';
 import _set from 'lodash/set';
-import {setUser} from 'yii-steroids/actions/auth';
-import {getUser} from 'yii-steroids/reducers/auth';
+import { setUser } from 'yii-steroids/actions/auth';
+import { getUser } from 'yii-steroids/reducers/auth';
 import * as wavesCrypto from '@waves/waves-crypto';
 import queryString from 'query-string';
 
-import {http, clientStorage} from 'components';
+import { http, clientStorage, store } from 'components';
 import UserRole from 'enums/UserRole';
 import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
@@ -20,8 +20,8 @@ import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
 import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
-import {openModal} from 'yii-steroids/actions/modal';
-import ContestStatusEnum from '../enums/ContestStatusEnum';
+import { openModal } from 'yii-steroids/actions/modal';
+import ContestStatusEnum from 'enums/ContestStatusEnum';
 
 export default class DalComponent {
     constructor() {
@@ -280,7 +280,6 @@ export default class DalComponent {
         }
 
         // Update in redux store
-        const store = require('components').store;
         store.dispatch(setUser({
             ...user,
             profile: {

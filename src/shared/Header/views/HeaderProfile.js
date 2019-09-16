@@ -3,10 +3,11 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import _get from 'lodash-es/get';
 import Link from 'yii-steroids/ui/nav/Link';
-import {getUser, isAuthorized, isInitialized} from 'yii-steroids/reducers/auth';
-import {getNavItems} from 'yii-steroids/reducers/navigation';
-import {openModal} from 'yii-steroids/actions/modal';
+import { getUser, isAuthorized, isInitialized } from 'yii-steroids/reducers/auth';
+import { getNavItems } from 'yii-steroids/reducers/navigation';
+import { openModal } from 'yii-steroids/actions/modal';
 import enhanceWithClickOutside from 'react-click-outside';
+import { setUser } from 'yii-steroids/actions/auth';
 
 import { dal, html, store } from 'components';
 import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
@@ -77,6 +78,8 @@ export default class HeaderProfile extends React.PureComponent {
             { label: 'Help' },
             { 
                 label: 'Log out', onClick: () => {
+
+                    store.dispatch(setUser(null));
                     store.dispatch({ type: LOG_OUT_USER });
                     this.setState({ isMenuOpen: false });
                 }
@@ -148,7 +151,11 @@ export default class HeaderProfile extends React.PureComponent {
                         </a>
                     ) || !this.props.isInternallyAuthorized && (
                         <div
-                            onClick={() => store.dispatch({ type: LOG_IN_USER })}
+                            onClick={async () => {
+                                const user = await dal.auth();
+                                store.dispatch(setUser(user));
+                                store.dispatch({ type: LOG_IN_USER });
+                            }}
                             className={bem.element('login-link')}>
                             {__('Login')}
                         </div>
