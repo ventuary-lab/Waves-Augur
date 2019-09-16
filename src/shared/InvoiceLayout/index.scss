@@ -3,7 +3,7 @@
 
 .InvoiceLayout {
     &__root {
-        padding: 25px 165px;
+        padding: 25px 10vw;
     }
 
     &__box {
@@ -44,8 +44,10 @@
 
     &__flex-box {
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         padding: 20px 30px;
+        justify-content: center;
 
         & > :nth-child(1) {
             & > :nth-child(2) {
