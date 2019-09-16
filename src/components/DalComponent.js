@@ -37,7 +37,7 @@ export default class DalComponent {
         this.contract = {
             VOTERS: 3,
             QUORUM: 2,
-            LISTINGFEE: 3, // LISTINGFEE = 300000000/100000000
+            LISTINGFEE: 1, // LISTINGFEE = 300000000/100000000
             VOTEBET: 1, // VOTEBET = 10000000/100000000
             TIERS: [3, 10, 100, 300, 1000],
             MULTIPLIER: 150,
