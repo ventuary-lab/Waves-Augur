@@ -4,14 +4,23 @@ import moment from 'moment';
  * 
  * @param {Object} data - Project object
  * @param {String} attribute - param name
+ * @param {Object} initialState - Project object
  * @returns {Object | undefined}
  */
-export function expireCrowdAndDemoDayValidator(data) {
+export function expireCrowdAndDemoDayValidator(data, attribute, initialState) {
     let { expireCrowd, demoDay } = data;
 
     if (!expireCrowd || !demoDay) {
         return;
     };
+
+    if (initialState) {
+        const { expireCrowd: initialExpireCrowd, demoDay: initialDemoDay } = initialState;
+
+        if (initialExpireCrowd && initialDemoDay) {
+            return;
+        }
+    }
 
     const currentDate = moment();
     

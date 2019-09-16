@@ -63,7 +63,8 @@ export default class DalComponent {
         let days = -1 * Math.floor(moment().diff(date, 'days', true));
         if (this.isTestMode()) {
             // In test mode one block = 1 day
-            return days;
+            // return days;
+            return Math.round(days * 1440);
         } else {
             // One block = 2 minutes
             return Math.round(days * 1440);
