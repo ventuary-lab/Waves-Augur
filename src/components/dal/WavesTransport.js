@@ -32,7 +32,7 @@ export default class WavesTransport {
     }
 
     getNodeUrl() {
-        return this.dal.dAppNetwork === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnodes.wavesnodes.com';
+        return this.dal.dAppNetwork === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode2.wavesnodes.com';
     }
 
     static convertValueToJs(value) {

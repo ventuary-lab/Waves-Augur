@@ -6,7 +6,7 @@ const ContestFilter = require('./enums/ContestFilter');
 
 module.exports = async (app, httpServer) => {
     const contract = new ContractApp({
-        nodeUrl: process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnodes.wavesnodes.com',
+        nodeUrl: process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode2.wavesnodes.com',
         dApp: process.env.DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF',
         httpServer,
         logger: {

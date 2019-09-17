@@ -89,18 +89,20 @@ module.exports = class TransactionListener {
         }
 
         return Promise.all(
-            transactions.map(async transaction => {
-                let result = null;
-                try {
-                    result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
-                } catch (e) {
-                    console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
-                    throw e;
-                }
+            transactions
+                .filter(transaction => transaction.id !== 'y7FjzDvbSXDYMHSFpmfAvne3YEFN33csfLBWk7megd7')
+                .map(async transaction => {
+                    let result = null;
+                    try {
+                        result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
+                    } catch (e) {
+                        console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
+                        throw e;
+                    }
 
-                transaction.info = result.data;
-                return transaction;
-            })
+                    transaction.info = result.data;
+                    return transaction;
+                })
         );
     }
 
