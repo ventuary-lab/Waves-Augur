@@ -17,7 +17,7 @@ require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
     if (req.url === '/') {
-        res.redirect('https://ventuary-dao-landing.herokuapp.com/');
+        res.sendFile('index.html', { root : __dirname + '/landing'});
         return;
     }
 
@@ -28,6 +28,7 @@ app.use(function(req, res, next) {
     }
     next();
 });
+app.use(express.static(__dirname + '/landing'));
 app.use(express.static(__dirname + '/dist'));
 
 app.get('/*', (req, res) => {
