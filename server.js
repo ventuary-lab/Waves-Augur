@@ -17,7 +17,7 @@ require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
     if (req.url === '/') {
-        res.redirect('https://ventuary-cvaze.herokuapp.com');
+        res.redirect('https://ventuary-dao-landing.herokuapp.com/');
         return;
     }
 
