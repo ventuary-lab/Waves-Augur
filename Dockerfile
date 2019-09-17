@@ -13,6 +13,7 @@ WORKDIR /app
 RUN yarn
 
 COPY node /app/node
+COPY landing /app/landing
 COPY src /app/src
 COPY webpack.js /app
 RUN node webpack production
