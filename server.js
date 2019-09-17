@@ -16,7 +16,13 @@ if (process.env.DAPP) {
 require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
+    if (req.url === '/') {
+        res.redirect('https://ventuary-dao-landing.herokuapp.com/');
+        return;
+    }
+
     if (req.header('x-forwarded-proto') == 'http') {
+
         res.redirect(301, 'https://' + req.headers.host + req.url);
         return;
     }
