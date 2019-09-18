@@ -139,7 +139,7 @@ export default class ProjectWizard extends React.PureComponent {
                 validators: [
                     [['expireCrowd', 'demoDay', 'targetWaves', 'tags'], 'required'],
                     [['expireCrowd', 'demoDay'], 'date'],
-                    [['expireCrowd', 'demoDay'], expireCrowdAndDemoDayValidator],
+                    [['expireCrowd', 'demoDay'], (...args) => expireCrowdAndDemoDayValidator(...args, this.props.project)],
                     [['targetWaves'], (...args) => wavesTargetAmountValidator(...args, this.props.project)],
                     ['targetWaves', 'integer', {min: 1}],
                 ],
