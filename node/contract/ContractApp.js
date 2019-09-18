@@ -64,6 +64,8 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
         this._isNowUpdated = false;
         this._isNeedUpdateAgain = false;
+
+        this._updateTimeoutMs = 4 * 1000;
     }
 
     async start() {
@@ -71,7 +73,7 @@ module.exports = class ContractApp {
 
         try {
             await this.contractCache.start();
-            await this._updateAll();
+            await this._updateAllRecursive();
         } catch (err) {
             console.log('Error happened on contract cache start...', err);
 
@@ -81,6 +83,15 @@ module.exports = class ContractApp {
         this._isSkipUpdates = false;
 
         this._websocket.start();
+    }
+
+    async _updateAllRecursive () {
+        this._pureUpdateAll();
+
+        setTimeout(
+            () => this._updateAllRecursive(),
+            this._updateTimeoutMs
+        );
     }
 
     async _pureUpdateAll () {
