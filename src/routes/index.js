@@ -19,6 +19,7 @@ import ProjectLayout from 'shared/ProjectLayout';
 import ContestLayout from 'shared/ContestLayout';
 import InvoiceLayout from 'shared/InvoiceLayout';
 import ContestDetailsPage from './ContestDetailsPage';
+import ContestProposalsPage from './ContestProposalsPage';
 import ContestEntriesPage from './ContestEntriesPage';
 import ProjectFeedPage from './ProjectFeedPage';
 import ProjectDetailsPage from './ProjectDetailsPage';
@@ -60,6 +61,7 @@ export const ROUTE_CONTEST = 'contest';
 export const ROUTE_CONTEST_REDIRECT = 'contest_redirect';
 export const ROUTE_CONTEST_DETAILS = 'contest_details';
 export const ROUTE_CONTEST_ENTRIES = 'contest_entries';
+export const ROUTE_CONTEST_PROPOSALS = 'contest_proposals';
 export const ROUTE_INVOICE = 'invoice';
 
 const baseUser = '/users/:address(\\w{35})';
@@ -436,6 +438,15 @@ export default {
                     component: ContestDetailsPage,
                     label: __('Details'),
                     icon: 'Icon__details',
+                    roles: UserRole.getKeys(),
+                    isShowImageLine: true,
+                },
+                [ROUTE_CONTEST_PROPOSALS]: {
+                    exact: true,
+                    path: '/contests/:uid(\\w+-\\w+-\\w+-\\w+-\\w+)/proposals',
+                    component: ContestProposalsPage,
+                    label: __('Proposals'),
+                    icon: 'Icon__proposals',
                     roles: UserRole.getKeys(),
                     isShowImageLine: true,
                 },

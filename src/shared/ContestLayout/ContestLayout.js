@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {getNavItems} from 'yii-steroids/reducers/navigation';
-import {getUser} from 'yii-steroids/reducers/auth';
-import {getCurrentRoute} from 'yii-steroids/reducers/routing';
-import {addCover} from 'actions/layout';
+import { connect } from 'react-redux';
+import { getNavItems } from 'yii-steroids/reducers/navigation';
+import { getUser } from 'yii-steroids/reducers/auth';
+import { getCurrentRoute } from 'yii-steroids/reducers/routing';
+import { addCover } from 'actions/layout';
 import UserRole from 'enums/UserRole';
 import _get from 'lodash/get';
 
-import {dal, html} from 'components';
-import {ROUTE_CONTEST} from 'routes';
+import { dal, html } from 'components';
+import { ROUTE_CONTEST, ROUTE_CONTEST_PROPOSALS } from 'routes';
 import ContestSidebar from './views/ContestSidebar';
 import NavItemSchema from 'types/NavItemSchema';
 import UserSchema from 'types/UserSchema';
@@ -21,7 +21,7 @@ import Link from 'yii-steroids/ui/nav/Link';
 import ContestSchema from 'types/ContestSchema';
 
 import ActionButtonBlock from '../ActionButtonBlock';
-import {openModal} from 'yii-steroids/actions/modal';
+import { openModal } from 'yii-steroids/actions/modal';
 import ParticipationContestModal from 'modals/ParticipationContestModal';
 
 const bem = html.bem('ContestLayout');
@@ -49,8 +49,10 @@ export default class ContestLayout extends React.PureComponent {
         contest: ContestSchema,
     };
 
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+        super(props);
+
+        this._getActionBlockButton = this._getActionBlockButton.bind(this);
     }
 
     componentWillMount() {
@@ -66,14 +68,38 @@ export default class ContestLayout extends React.PureComponent {
         }
     }
 
+    _getActionBlockButton () {
+        const canParticipation = (_get(this.props, 'user.address') && ![UserRole.INVITED, UserRole.SPEND_INVITE, UserRole.ANONYMOUS].includes(_get(this.props, 'user.role')))
+            && this.props.contest.status !== ContestStatusEnum.COMPLETED;
+
+        const { match } = this.props;
+        if (match.roundId === ROUTE_CONTEST_PROPOSALS) {
+            // return
+        }
+
+        return (
+            canParticipation && (
+                <div className={bem.element('card-to-action')}>
+                    <ActionButtonBlock
+                        title={__('Participate')}
+                        iconClass={'Icon__new-project'}
+                        onClick={() => this.props.dispatch(openModal(ParticipationContestModal, {
+                            contest: this.props.contest,
+                        }))}
+                    />
+                </div>
+            )
+        );
+    }
+
     render() {
         if (!this.props.contest) {
             return null;
         }
+        const { _getActionBlockButton } = this;
+        console.log(this.props);
 
         const ContentComponent = _get(routes, ['items', ROUTE_CONTEST, 'items', this.props.routeId, 'component']);
-        const canParticipation = (_get(this.props, 'user.address') && ![UserRole.INVITED, UserRole.SPEND_INVITE, UserRole.ANONYMOUS].includes(_get(this.props, 'user.role')))
-            && this.props.contest.status !== ContestStatusEnum.COMPLETED;
 
         return (
             <section className={bem.block()}>
@@ -114,17 +140,7 @@ export default class ContestLayout extends React.PureComponent {
                                     }
                                 </div>
                             </div>
-                            {canParticipation && (
-                                <div className={bem.element('card-to-action')}>
-                                    <ActionButtonBlock
-                                        title={__('Participate')}
-                                        iconClass={'Icon__new-project'}
-                                        onClick={() => this.props.dispatch(openModal(ParticipationContestModal, {
-                                            contest: this.props.contest,
-                                        }))}
-                                    />
-                                </div>
-                            )}
+                            {_getActionBlockButton()}
 
                             <div className={bem.element('content')}>
                                 {ContentComponent && (

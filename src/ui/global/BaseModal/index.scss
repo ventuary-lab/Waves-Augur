@@ -1,0 +1,9 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.BaseModal {
+    &-root {
+        position: absolute;
+        
+    }
+}
