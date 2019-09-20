@@ -20,7 +20,7 @@ export default class ProjectStatusEnum extends Enum {
         return {
             [this.VOTING]: __('Voting'),
             [this.CROWDFUND]: __('Crowdfunding'),
-            [this.WAITING_GRANT]: __('Awaiting grant'),
+            [this.WAITING_GRANT]: __('Awaiting grant decision'),
             [this.GRANT]: __('Grant'),
             [this.REJECTED]: __('Rejected'),
         };
