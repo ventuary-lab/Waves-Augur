@@ -149,24 +149,21 @@ export default class HeaderProfile extends React.PureComponent {
                         >
                             {__('Login')}
                         </a>
-                    ) || (
+                    ) || !this.props.isInternallyAuthorized &&(
                         <div
                             onClick={async () => {
                                 const user = await dal.auth();
                                 store.dispatch({ type: LOG_IN_USER });
-                                store.dispatch(setUser(user));
+
+                                if (user === null) {
+                                    openLanding();
+                                } else {
+                                    store.dispatch(setUser(user));
+                                }
                             }}
                             className={bem.element('login-link')}>
                             {__('Login')}
                         </div>
-                    ) || (
-                        <a
-                            href={'#'}
-                            onClick={openLanding}
-                            target={'_blank'}
-                            className={bem.element('login-link')}>
-                            {__('Login')}
-                        </a>
                     )}
                 </>
             );
@@ -178,6 +175,7 @@ export default class HeaderProfile extends React.PureComponent {
 
         const { hoveredItemIndex } = this.state;
         const { _getAdditionalLinks } = this;
+        const closeMenu = () => this.setState({ isMenuOpen: false });
 
         return (
             <div className={bem.block()}>
@@ -194,7 +192,11 @@ export default class HeaderProfile extends React.PureComponent {
                             hidden: !this.state.isMenuOpen
                         })}>
                             <li>
-                                <UserHeaderInfo user={user} altImg={anonymousAvatarStub}/>
+                                <UserHeaderInfo 
+                                    user={user} 
+                                    altImg={anonymousAvatarStub}
+                                    onAvatarClick={user && user.role !== 'anonymous' && closeMenu}
+                                />
                             </li>
                             <Separator />
                             {items.map((item, itemIndex) => {
@@ -211,7 +213,7 @@ export default class HeaderProfile extends React.PureComponent {
                                             })}
                                             to={item.url}
                                             label={item.label}
-                                            onClick={() => this.setState({isMenuOpen: false})}
+                                            onClick={closeMenu}
                                             noStyles
                                         />
                                         {isAdditional && (
@@ -220,7 +222,7 @@ export default class HeaderProfile extends React.PureComponent {
                                                 itemIndex={itemIndex}
                                                 isActive={item.isActive} 
                                                 onHover={this._onIconLinkHover}
-                                                onClick={() => this.setState({isMenuOpen: false})}
+                                                onClick={closeMenu}
                                             />
                                         )}
                                     </li>

@@ -11,11 +11,19 @@
         & > :first-child {
             width: 70px;
 
-            & > img {
-                width: 40px;
-                height: 40px;
-                object-fit: contain;
-                border-radius: 20px;
+            & > a {
+                cursor: pointer;
+
+                &.no-drop {
+                    cursor: no-drop;
+                }
+
+                & img {
+                    width: 40px;
+                    height: 40px;
+                    object-fit: contain;
+                    border-radius: 20px;
+                }
             }
         }
 

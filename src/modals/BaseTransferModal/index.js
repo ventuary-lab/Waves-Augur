@@ -8,6 +8,7 @@ import SelectDropdown from 'ui/form/SelectDropdown';
 import UserSchema from 'types/UserSchema';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import crossIcon from 'static/icons/cross-icon-artwork.svg';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 
 import KeeperApproveView from './views/KeeperApprove';
 import TransactionSuccessView from './views/TransactionSuccess';
@@ -114,7 +115,7 @@ class BaseTransferModal extends React.PureComponent {
                         <span>Transfer recipient:</span>
                         <div>
                             <div>
-                                <img src={profile.avatar}/>
+                                <img src={profile.avatar || anonymousAvatarStub}/>
                             </div>
                             <div>
                                 <span>{profile.name}</span>
