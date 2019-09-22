@@ -16,12 +16,12 @@ if (process.env.DAPP) {
 require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
-    if (req.url === '/') {
-        if (req.query.invitation) {
-            res.redirect('/projects/feed?invitation=' + req.query.invitation);
-            return;
-        }
+    if (/^\/\?invitation=/.test(req.url)) {
+        res.redirect('/projects/feed?invitation=' + req.query.invitation);
+        return;
+    }
 
+    if (req.url === '/') {
         res.sendFile('index.html', { root : __dirname + '/landing'});
         return;
     }
