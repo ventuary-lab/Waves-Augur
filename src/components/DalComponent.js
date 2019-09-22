@@ -108,6 +108,7 @@ export default class DalComponent {
             if (this._authInterval) {
                 clearInterval(this._authInterval);
             }
+
             this._authInterval = setInterval(this._authChecker, 1000);
 
             return user;
@@ -1009,7 +1010,12 @@ export default class DalComponent {
     async _authChecker() {
         // Get prev address
         const store = require('components').store;
+        const state = store.getState();
         const prevAddress = _get(getUser(store.getState()), 'address');
+
+        if (!state.global.authCheckerEnabled) {
+            return;
+        }
 
         // Get next address
         const account = await this.getAccount();

@@ -161,7 +161,7 @@ export default class HeaderProfile extends React.PureComponent {
                         </div>
                     ) || (
                         <a
-                            href={'https://forms.gle/uLwL83EM9MWSCBAp6'}
+                            href={'/'}
                             target={'_blank'}
                             className={bem.element('login-link')}>
                             {__('Login')}

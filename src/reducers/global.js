@@ -4,7 +4,8 @@ import {
 } from 'actions/global';
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: true,
+    authCheckerEnabled: true
 };
 
 export default (state = initialState, action) => {
@@ -12,11 +13,13 @@ export default (state = initialState, action) => {
         case LOG_IN_USER:
             return {
                 ...state,
+                authCheckerEnabled: true,
                 isLoggedIn: true
             };
         case LOG_OUT_USER:
             return {
                 ...state,
+                authCheckerEnabled: false,
                 isLoggedIn: false
             };
     }
