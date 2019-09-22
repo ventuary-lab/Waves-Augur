@@ -132,6 +132,11 @@ export default class HeaderProfile extends React.PureComponent {
         const items = user && getUserNavItems(this.props, user) || [];
 
         if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
+            const openLanding = (event) => {
+                event.preventDefault();
+                window.location.href = window.location.origin + '/openGuide=1';
+            };
+
             return (
                 <>
                     {this.props.isPhone && (
@@ -161,7 +166,8 @@ export default class HeaderProfile extends React.PureComponent {
                         </div>
                     ) || (
                         <a
-                            href={'/'}
+                            href={'#'}
+                            onClick={openLanding}
                             target={'_blank'}
                             className={bem.element('login-link')}>
                             {__('Login')}
