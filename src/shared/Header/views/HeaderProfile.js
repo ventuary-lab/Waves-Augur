@@ -35,18 +35,14 @@ const bem = html.bem('HeaderProfile');
 const Separator = () => <div className={bem.element('separator')}></div>;
 
 @connect(
-    state => {
-        console.log(state.global);
-
-        return {
-            isInitialized: isInitialized(state),
-            isAuthorized: isAuthorized(state),
-            isInternallyAuthorized: state.global.isLoggedIn,
-            contextUser: getUser(state),
-            profileNavItems: getNavItems(state, ROUTE_PROFILE),
-            isPhone: isPhone(state),
-        }
-    }
+    state => ({
+        isInitialized: isInitialized(state),
+        isAuthorized: isAuthorized(state),
+        isInternallyAuthorized: state.global.isLoggedIn,
+        contextUser: getUser(state),
+        profileNavItems: getNavItems(state, ROUTE_PROFILE),
+        isPhone: isPhone(state),
+    })
 )
 @dal.hoc2(
     (props) => ({
