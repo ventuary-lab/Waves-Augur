@@ -4,7 +4,7 @@ import {
 } from 'actions/global';
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: true
 };
 
 export default (state = initialState, action) => {
