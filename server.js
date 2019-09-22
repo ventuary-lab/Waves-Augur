@@ -17,6 +17,11 @@ require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
     if (req.url === '/') {
+        if (req.query.invitation) {
+            res.redirect('/projects/feed?invitation=' + req.query.invitation);
+            return;
+        }
+
         res.sendFile('index.html', { root : __dirname + '/landing'});
         return;
     }
