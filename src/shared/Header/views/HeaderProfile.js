@@ -35,14 +35,18 @@ const bem = html.bem('HeaderProfile');
 const Separator = () => <div className={bem.element('separator')}></div>;
 
 @connect(
-    state => ({
-        isInitialized: isInitialized(state),
-        isAuthorized: isAuthorized(state),
-        isInternallyAuthorized: state.global.isLoggedIn,
-        contextUser: getUser(state),
-        profileNavItems: getNavItems(state, ROUTE_PROFILE),
-        isPhone: isPhone(state),
-    })
+    state => {
+        console.log(state.global);
+
+        return {
+            isInitialized: isInitialized(state),
+            isAuthorized: isAuthorized(state),
+            isInternallyAuthorized: state.global.isLoggedIn,
+            contextUser: getUser(state),
+            profileNavItems: getNavItems(state, ROUTE_PROFILE),
+            isPhone: isPhone(state),
+        }
+    }
 )
 @dal.hoc2(
     (props) => ({
@@ -76,11 +80,10 @@ export default class HeaderProfile extends React.PureComponent {
                 }
             },
             { label: 'Help' },
-            { 
+            {
                 label: 'Log out', onClick: () => {
-
-                    store.dispatch(setUser(null));
                     store.dispatch({ type: LOG_OUT_USER });
+                    store.dispatch(setUser(null));
                     this.setState({ isMenuOpen: false });
                 }
             },
@@ -120,10 +123,6 @@ export default class HeaderProfile extends React.PureComponent {
     }
 
     render() {
-        if (!this.props.isInitialized) {
-            return null;
-        }
-
         const user = {
             ...this.props.contextUser,
             ...this.props.user,
@@ -154,12 +153,12 @@ export default class HeaderProfile extends React.PureComponent {
                         >
                             {__('Login')}
                         </a>
-                    ) || !this.props.isInternallyAuthorized && (
+                    ) || (
                         <div
                             onClick={async () => {
                                 const user = await dal.auth();
-                                store.dispatch(setUser(user));
                                 store.dispatch({ type: LOG_IN_USER });
+                                store.dispatch(setUser(user));
                             }}
                             className={bem.element('login-link')}>
                             {__('Login')}
