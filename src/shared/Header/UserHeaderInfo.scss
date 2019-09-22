@@ -1,26 +1,6 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
 
-// <div style="
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: nowrap;
-//     justify-content: space-between;
-// "><div style="
-// "><img src="https://alpha-ventuary-dao.s3.eu-west-2.amazonaws.com/uploads/cropped_9fe2e180-c5a6-11e9-a3e9-89e03abfc47b.jpg" style="
-//     width: 40px;
-//     height: 40px;
-//     object-fit: contain;
-//     border-radius: 20px;
-// "></div><div><div style="
-//     font-size: 16px;
-//     line-height: 17px;
-//     display: inline-block;
-// ">ADMIN</div><div style="
-//     font-size: 13px;
-//     line-height: 14px;
-// ">18 WAVES 🔹</div></div></div>
-
 .UserHeaderInfo {
     &__root {
         display: flex;
@@ -40,6 +20,8 @@
         }
 
         & > :nth-child(2) {
+            margin-right: -15px;
+
             & > :first-child {
                 font-size: 16px;
                 line-height: 17px;

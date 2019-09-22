@@ -54,17 +54,16 @@ export default class Header extends React.PureComponent {
                                 isActive={this.state.isMenuOpen}
                             />
                         </div>
-                        <Link
+                        <a  
+                            href={this.props.indexPageUrl}
                             className={bem.element('logo')}
-                            to={this.props.indexPageUrl}
-                            noStyles
-                        >
+                            noStyles>
                             <img
                                 className={bem.element('logo-image')}
                                 src={logoSvg}
                                 alt='Ventuary DAO'
                             />
-                        </Link>
+                        </a>
                         <div className={bem.element('nav')}>
                             <HeaderNav/>
                         </div>

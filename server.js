@@ -16,12 +16,19 @@ if (process.env.DAPP) {
 require('./node/contract')(app, httpServer);
 
 app.use(function(req, res, next) {
+    if (req.url === '/') {
+        res.sendFile('index.html', { root : __dirname + '/landing'});
+        return;
+    }
+
     if (req.header('x-forwarded-proto') == 'http') {
+
         res.redirect(301, 'https://' + req.headers.host + req.url);
         return;
     }
     next();
 });
+app.use(express.static(__dirname + '/landing'));
 app.use(express.static(__dirname + '/dist'));
 
 app.get('/*', (req, res) => {
