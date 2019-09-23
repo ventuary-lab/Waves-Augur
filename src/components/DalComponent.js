@@ -1033,4 +1033,15 @@ export default class DalComponent {
     async transferFunds(address, amount) {
         await this.transport.nodePublish('transfer', [address], amount);
     }
+
+    async getIntenalDaoBalance (address) {
+        const [balance] = await this.transport.nodeFetchKeys([
+            'balance_' + address
+        ]);
+        return balance;
+    }
+
+    async withdrawInternalBalance (address) {
+        await this.transport.nodePublish('withdraw', [address]);
+    }
 }

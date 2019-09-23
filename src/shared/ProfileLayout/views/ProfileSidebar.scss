@@ -110,10 +110,20 @@
     }
   }
 
+  &__withdraw-btn {
+    margin-bottom: 33px;
+  }
+
   &__balance {
     margin-bottom: 22px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 
-    & > span:first-child {
+    & > :last-child {
+      margin: auto;
+      margin-left: 10px;
     }
 
     & > span:last-child {
