@@ -6,6 +6,8 @@ const BaseCollection = require('../base/BaseCollection');
 const ProjectStatusEnum = require('../enums/ProjectStatus');
 const ContestStatus = require('../enums/ContestStatus');
 const ContestFilter = require('../enums/ContestFilter');
+const helpers = require('./helper.js');
+const { filterByDemoName } = helpers;
 
 module.exports = class Contests extends BaseCollection {
 
@@ -29,6 +31,7 @@ module.exports = class Contests extends BaseCollection {
      */
     async getContests(filterName = null) {
         let contests = await this.getItemsAll();
+        contests = contests.filter(filterByDemoName);
 
         switch (filterName) {
             case ContestFilter.FEATURED:
