@@ -204,7 +204,7 @@ export default class ProfileSidebar extends React.PureComponent {
                     {this.props.isMe && (
                         <>
                             <div className={bem.element('balance')}>
-                                <span>{__('dApp balance')}: </span>
+                                <span>{__('DAO Balance')}: </span>
                                 <span>
                                     {internalBalance} 🔹
                                 </span>
