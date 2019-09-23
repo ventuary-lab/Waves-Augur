@@ -10,6 +10,8 @@ const ProjectVote = require('../enums/ProjectVote');
 // const UserRole = require('../enums/UserRole');
 // const ContestStatus = require('../enums/ContestStatus');
 const ProjectFilter = require('../enums/ProjectFilter');
+const helpers = require('./helper.js');
+const { filterByDemoName } = helpers;
 
 module.exports = class Projects extends BaseCollection {
 
@@ -44,13 +46,15 @@ module.exports = class Projects extends BaseCollection {
      * @returns {Promise}
      */
     async getProjects(filterName = null) {
-        let projects = await this.getItemsAll();
-        const checkIsCrowdfundActual = expireCrowd => moment(new Date(expireCrowd)).isAfter(new Date());;
+        let projects = await this.getItemsAll() || [];
+        projects = projects.filter(item => item.name && filterByDemoName(item));
+
+        const checkIsCrowdfundActual = expireCrowd => moment(new Date(expireCrowd)).isAfter(new Date());
 
         switch (filterName) {
             case ProjectFilter.FEATURED:
-                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
-                projects = _orderBy(projects, 'positiveBalance', 'desc');
+                // projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
+                // projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
             case ProjectFilter.NEW:

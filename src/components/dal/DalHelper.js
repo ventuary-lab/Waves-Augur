@@ -36,6 +36,8 @@ export default class DalHelper {
             }
 
             if (user.role === UserRole.ADMIN) {
+                scope.canEdit = true;
+
                 if (item.contest && !item.contestWinner) {
                     scope.canContestWinner = true;
                 }
