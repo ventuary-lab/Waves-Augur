@@ -30,13 +30,13 @@ module.exports = class Contests extends BaseCollection {
     async getContests(filterName = null) {
         let contests = await this.getItemsAll();
 
+        contests = contests.filter(item => (
+            item.name.indexOf('[demo]') === -1
+        ));
+
         switch (filterName) {
             case ContestFilter.FEATURED:
                 //TODO
-                contests = contests.filter(item => (
-                    moment(item.expireEntries)
-                        .isAfter(moment.utc())
-                ));
                 // contests = _orderBy(contests, 'positiveBalance', 'desc');
                 break;
 
