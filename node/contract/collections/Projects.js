@@ -118,6 +118,7 @@ module.exports = class Projects extends BaseCollection {
             crowdfundEnd: item['expiration_one_' + uid],
             whaleEnd: item['expiration_two_' + uid],
         };
+
         const status = ProjectStatus.getStatus(contractStatus, blocks, height);
 
         return {
