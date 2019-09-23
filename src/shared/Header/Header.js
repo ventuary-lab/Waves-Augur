@@ -14,7 +14,7 @@ import HeaderNav from './views/HeaderNav';
 import HeaderProfile from './views/HeaderProfile';
 import HeaderHamburger from './views/HeaderHamburger';
 import HeaderMobileMenu from './views/HeaderMobileMenu';
-import logoSvg from 'static/icons/logo.svg';
+import logoSvg from 'static/icons/dao-logo-white.svg';
 
 import './Header.scss';
 

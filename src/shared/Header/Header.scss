@@ -115,10 +115,10 @@
   }
 
   &__logo-image {
-    width: 135px;
+    width: 80px;
 
     @include phone-horizontal {
-      width: 165px;
+      width: 65px;
     }
   }
 
