@@ -80,12 +80,11 @@ export default class ProfileSidebar extends React.PureComponent {
 
     async _updateBalance () {
         const internalBalance = await this._getBalance();
-        console.log({ internalBalance });
         this.setState({ internalBalance });
     }
 
     async componentDidMount () {
-        this._updateBalance();
+        await this._updateBalance();
     }
 
     _triggerSendFundsModal (isOpened) {
@@ -103,6 +102,7 @@ export default class ProfileSidebar extends React.PureComponent {
 
         try {
             await dal.withdrawInternalBalance(address);
+            await this._updateBalance();
         } catch (err) {
             console.log(err);
         }
@@ -204,7 +204,7 @@ export default class ProfileSidebar extends React.PureComponent {
                     {this.props.isMe && (
                         <>
                             <div className={bem.element('balance')}>
-                                <span>{__('Deposit')}:</span>
+                                <span>{__('DAO Balance')}: </span>
                                 <span>
                                     {internalBalance} 🔹
                                 </span>
