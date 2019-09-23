@@ -8667,10 +8667,6 @@ body {
   white-space: nowrap;
 }
 
-.navbar-brand > img {
-  margin-left: -40px;
-}
-
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
