@@ -66,6 +66,7 @@ export default class HeaderProfile extends React.PureComponent {
 
         this._onIconLinkHover = this._onIconLinkHover.bind(this);
         this._getAdditionalLinks = this._getAdditionalLinks.bind(this);
+        this._mapNavItem = this._mapNavItem.bind(this);
 
         this.additionalLinks = [
             {
@@ -89,6 +90,16 @@ export default class HeaderProfile extends React.PureComponent {
             isMenuOpen: false,
             hoveredItemIndex: null
         };
+    }
+
+    _mapNavItem (item) {
+        const _item = item;
+
+        if (_item.label === 'My Favorites') {
+            _item.label = 'My Profile';
+        }
+
+        return _item;
     }
 
     _onIconLinkHover (index) {
@@ -124,7 +135,8 @@ export default class HeaderProfile extends React.PureComponent {
             ...this.props.user,
         };
 
-        const items = user && getUserNavItems(this.props, user) || [];
+        const _items = user && getUserNavItems(this.props, user) || [];
+        const items = _items.map(this._mapNavItem);
 
         if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
             const openLanding = (event) => {
