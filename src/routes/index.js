@@ -120,7 +120,7 @@ export default {
                     exact: true,
                     path: '/profile/inbox',
                     component: ProfileInboxPage,
-                    label: __('Inbox'),
+                    label: __('My Favorites'),
                     icon: 'Icon__notification',
                     roles: [UserRole.REGISTERED, UserRole.ADMIN],
                     isShowImageLine: true,
