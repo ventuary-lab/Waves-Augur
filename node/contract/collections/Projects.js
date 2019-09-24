@@ -53,8 +53,8 @@ module.exports = class Projects extends BaseCollection {
 
         switch (filterName) {
             case ProjectFilter.FEATURED:
-                // projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
-                // projects = _orderBy(projects, 'positiveBalance', 'desc');
+                projects = projects.filter(item => item.status !== ProjectStatus.REJECTED);
+                projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
             case ProjectFilter.NEW:
