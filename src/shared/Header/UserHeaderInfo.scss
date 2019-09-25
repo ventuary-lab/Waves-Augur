@@ -1,0 +1,45 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.UserHeaderInfo {
+    &__root {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+
+        & > :first-child {
+            width: 70px;
+
+            & > a {
+                cursor: pointer;
+
+                &.no-drop {
+                    cursor: no-drop;
+                }
+
+                & img {
+                    width: 40px;
+                    height: 40px;
+                    object-fit: contain;
+                    border-radius: 20px;
+                }
+            }
+        }
+
+        & > :nth-child(2) {
+            margin-right: -15px;
+
+            & > :first-child {
+                font-size: 16px;
+                line-height: 17px;
+                display: inline-block;
+            }
+
+            & > :nth-child(2) {
+                font-size: 13px;
+                line-height: 14px;
+            }
+        }
+    }
+}

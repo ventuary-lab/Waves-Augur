@@ -48,7 +48,7 @@ export default class ProfileInboxPage extends React.PureComponent {
                 ))}
                 {this.props.items && this.props.items.length === 0 && (
                     <div>
-                        {__('Empty Inbox')}
+                        {__('Empty')}
                     </div>
                 )}
             </div>

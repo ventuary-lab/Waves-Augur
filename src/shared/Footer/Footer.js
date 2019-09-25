@@ -13,7 +13,7 @@ import {html} from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import MessageModal from 'modals/MessageModal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
-import ventuaryLogo from 'static/icons/ventuary-logo-white.svg';
+import ventuaryLogo from 'static/icons/dao-logo-bw.svg';
 import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS, ROUTE_ROOT} from 'routes';
 import heartImg from 'static/images/huge_heart.png';
 

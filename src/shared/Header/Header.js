@@ -14,7 +14,7 @@ import HeaderNav from './views/HeaderNav';
 import HeaderProfile from './views/HeaderProfile';
 import HeaderHamburger from './views/HeaderHamburger';
 import HeaderMobileMenu from './views/HeaderMobileMenu';
-import logoSvg from 'static/icons/logo.svg';
+import logoSvg from 'static/icons/dao-logo-white.svg';
 
 import './Header.scss';
 
@@ -44,48 +44,50 @@ export default class Header extends React.PureComponent {
 
     render() {
         return (
-            <header className={bem.block()}>
-                <div className={bem.element('inner')}>
-                    <div className={bem.element('hamburger')}>
-                        <HeaderHamburger
-                            onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
-                            isActive={this.state.isMenuOpen}
-                        />
-                    </div>
-                    <Link
-                        className={bem.element('logo')}
-                        to={this.props.indexPageUrl}
-                        noStyles
-                    >
-                        <img
-                            className={bem.element('logo-image')}
-                            src={logoSvg}
-                            alt='Ventuary DAO'
-                        />
-                    </Link>
-                    <div className={bem.element('nav')}>
-                        <HeaderNav/>
-                    </div>
-                    <div className={bem.element('form')}>
-                        <Form formId='HeaderSearch'>
-                            <InputField
-                                layoutClassName={bem.element('search')}
-                                attribute='search'
-                                placeholder={__('Search')}
-                                view={InputSearchView}
+            <>
+                <div className={bem.element('placeholder')}></div>
+                <header className={bem.block()}>
+                    <div className={bem.element('inner')}>
+                        <div className={bem.element('hamburger')}>
+                            <HeaderHamburger
+                                onClick={() => this.setState({isMenuOpen: !this.state.isMenuOpen})}
+                                isActive={this.state.isMenuOpen}
                             />
-                        </Form>
+                        </div>
+                        <a  
+                            href={this.props.indexPageUrl}
+                            className={bem.element('logo')}
+                            noStyles>
+                            <img
+                                className={bem.element('logo-image')}
+                                src={logoSvg}
+                                alt='Ventuary DAO'
+                            />
+                        </a>
+                        <div className={bem.element('nav')}>
+                            <HeaderNav/>
+                        </div>
+                        <div className={bem.element('form')}>
+                            <Form formId='HeaderSearch'>
+                                <InputField
+                                    layoutClassName={bem.element('search')}
+                                    attribute='search'
+                                    placeholder={__('Search')}
+                                    view={InputSearchView}
+                                />
+                            </Form>
+                        </div>
+                        <div className={bem.element('profile')}>
+                            <HeaderProfile/>
+                        </div>
                     </div>
-                    <div className={bem.element('profile')}>
-                        <HeaderProfile/>
+                    <div className={bem.element('menu', {active: this.state.isMenuOpen})}>
+                        <HeaderMobileMenu
+                            onClose={this.closeMenu}
+                        />
                     </div>
-                </div>
-                <div className={bem.element('menu', {active: this.state.isMenuOpen})}>
-                    <HeaderMobileMenu
-                        onClose={this.closeMenu}
-                    />
-                </div>
-            </header>
+                </header>
+            </>
         );
     }
 

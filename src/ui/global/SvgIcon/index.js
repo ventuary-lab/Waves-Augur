@@ -1,14 +1,16 @@
 import React from 'react';
+import { StyledSvgIcon } from './styled';
 
-
-function SvgIcon ({ icon, children, ...restProps }) {
+function SvgIcon ({ icon, children, fillColor, strokeColor, ...restProps }) {
 
     return (
-        <span
-            dangerouslySetInnerHTML={{ __html: icon }}
-            {...restProps}>
+        <StyledSvgIcon
+            {...restProps}
+            fillColor={fillColor}
+            strokeColor={strokeColor}
+            dangerouslySetInnerHTML={{ __html: icon }}>
             {children}
-        </span>
+        </StyledSvgIcon>
     )
 }
 

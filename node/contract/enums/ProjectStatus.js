@@ -5,6 +5,7 @@ module.exports = class ProjectStatus {
     static WAITING_GRANT = 'waiting_grant';
     static GRANT = 'grant';
     static REJECTED = 'rejected';
+    static CASHOUT = 'cashout';
 
     /**
      * Contract statuses
@@ -25,6 +26,9 @@ module.exports = class ProjectStatus {
         // Voting
         if (['new', 'voting_commit', 'voting_reveal'].includes(contractStatus)) {
             return height < blocks.votingEnd ? this.VOTING : this.REJECTED;
+        }
+        if (contractStatus === 'cashout') {
+            return this.CASHOUT;
         }
 
         // Crowdfund

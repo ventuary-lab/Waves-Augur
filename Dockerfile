@@ -14,6 +14,7 @@ RUN yarn
 
 COPY node /app/node
 COPY src /app/src
+COPY landing /app/landing
 COPY webpack.js /app
 RUN node webpack production
 

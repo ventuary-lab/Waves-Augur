@@ -17,6 +17,7 @@
     border-radius: 50%;
     background-color: #fff;
     object-fit: cover;
+    cursor: pointer;
 
     @include desktop {
       width: 41px;
@@ -97,14 +98,14 @@
   &__menu {
     position: absolute;
     top: 37px;
-    left: -60px;
+    left: -95px;
     z-index: $zi-popup;
     margin: 0;
     padding: 20px 40px;
     background-color: $color-base;
     box-shadow: 0 0 30px rgba(12, 112, 23, 0.1);
     border-radius: 0 0 2px 2px;
-    min-width: 182px;
+    min-width: 220px;
     list-style: none;
 
     @include phone-horizontal {
@@ -113,6 +114,30 @@
 
     &_hidden {
       display: none;
+    }
+  }
+
+  &__menu-item_is-additional {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    & > :nth-child(2) {
+      margin: auto;
+      margin-right: unset;
+    }
+
+    & > :first-child {
+      &:hover {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__menu-item_hovered {
+    & > :first-child {
+      color: $color-brand-green;
+
     }
   }
 
@@ -164,7 +189,17 @@
   }
 
   &__login-link {
+    cursor: pointer;
     @include link;
+  }
+
+  &__separator {
+    height: 1px;
+    background: black;
+    margin: 10px 0;
+    opacity: .2;
+    width: 140%;
+    margin-left: -20%;
   }
 }
 

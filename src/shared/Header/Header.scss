@@ -9,6 +9,9 @@
   height: 1px;
   background-color: $color-base;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 
   @include phone-horizontal {
     min-height: 60px;
@@ -20,6 +23,11 @@
     }
   }
 
+  &__placeholder {
+    height: 60px;
+    width: 100%;
+    position: relative;
+  }
 
   &__inner {
     position: relative;
@@ -107,10 +115,10 @@
   }
 
   &__logo-image {
-    width: 135px;
+    width: 80px;
 
     @include phone-horizontal {
-      width: 165px;
+      width: 65px;
     }
   }
 

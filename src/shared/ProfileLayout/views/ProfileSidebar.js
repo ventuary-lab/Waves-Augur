@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
 
-import {html} from 'components';
+import { html, dal } from 'components';
+import Hint from 'shared/Hint';
 import SocialLinks from 'shared/SocialLinks';
 import Tags from 'shared/Tags';
 import {isPhone} from 'yii-steroids/reducers/screen';
@@ -40,11 +41,15 @@ export default class ProfileSidebar extends React.PureComponent {
         super(props);
 
         this._triggerSendFundsModal = this._triggerSendFundsModal.bind(this);
+        this._getBalance = this._getBalance.bind(this);
+        this._updateBalance = this._updateBalance.bind(this);
+        this._handleWidthdraw = this._handleWidthdraw.bind(this);
 
         this.state = {
             sendFundsModal: {
                 isOpened: false
-            }
+            },
+            internalBalance: 0
         };
 
         this.invoiceProps = {
@@ -63,6 +68,25 @@ export default class ProfileSidebar extends React.PureComponent {
         };
     }
 
+    async _getBalance () {
+        const { address } = this.props.user;
+        const balance = await dal.getIntenalDaoBalance(address) / 100000000;
+        return balance;
+    }
+
+    async componentWillReceiveProps () {
+        this._updateBalance();
+    }
+
+    async _updateBalance () {
+        const internalBalance = await this._getBalance();
+        this.setState({ internalBalance });
+    }
+
+    async componentDidMount () {
+        await this._updateBalance();
+    }
+
     _triggerSendFundsModal (isOpened) {
         this.setState(prevState => ({
             ...prevState,
@@ -73,11 +97,23 @@ export default class ProfileSidebar extends React.PureComponent {
         }));
     }
 
+    async _handleWidthdraw () {
+        const { address } = this.props.user;
+
+        try {
+            await dal.withdrawInternalBalance(address);
+            await this._updateBalance();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     render() {
         const avatarStub = this.props.user.profile.isWhale
             ? whaleAvatarStub
             : this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
-        const { isOpened } = this.state.sendFundsModal;
+        const { internalBalance, sendFundsModal } = this.state;
+        const { isOpened } = sendFundsModal;
         const { invoiceProps, transferProps } = this;
         const { isPhone } = this.props;
 
@@ -168,10 +204,18 @@ export default class ProfileSidebar extends React.PureComponent {
                     {this.props.isMe && (
                         <>
                             <div className={bem.element('balance')}>
-                                <span>{__('Balance')}:</span>
+                                <span>{__('DAO Balance')}: </span>
                                 <span>
-                                    {this.props.user.balance} 🔹
+                                    {internalBalance} 🔹
                                 </span>
+                                <Hint text='This is your funds on DAO dApp.  You can withdraw it on your  Waves Keeper account at any time.'/>
+                            </div>
+                            <div className={bem.element('withdraw-btn')}>
+                                <Button
+                                    color='primary'
+                                    label='Withdraw'
+                                    onClick={() => this._handleWidthdraw()}
+                                />
                             </div>
                             {![UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role) && (
                                 <Link

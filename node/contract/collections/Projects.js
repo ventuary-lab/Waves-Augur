@@ -10,6 +10,8 @@ const ProjectVote = require('../enums/ProjectVote');
 // const UserRole = require('../enums/UserRole');
 // const ContestStatus = require('../enums/ContestStatus');
 const ProjectFilter = require('../enums/ProjectFilter');
+const helpers = require('./helper.js');
+const { filterByDemoName } = helpers;
 
 module.exports = class Projects extends BaseCollection {
 
@@ -44,12 +46,14 @@ module.exports = class Projects extends BaseCollection {
      * @returns {Promise}
      */
     async getProjects(filterName = null) {
-        let projects = await this.getItemsAll();
-        const checkIsCrowdfundActual = expireCrowd => moment(new Date(expireCrowd)).isAfter(new Date());;
+        let projects = await this.getItemsAll() || [];
+        projects = projects.filter(item => item.name && filterByDemoName(item));
+
+        const checkIsCrowdfundActual = expireCrowd => moment(new Date(expireCrowd)).isAfter(new Date());
 
         switch (filterName) {
             case ProjectFilter.FEATURED:
-                projects = projects.filter(item => item.status === ProjectStatus.CROWDFUND && checkIsCrowdfundActual(item.expireCrowd));
+                projects = projects.filter(item => item.status !== ProjectStatus.REJECTED);
                 projects = _orderBy(projects, 'positiveBalance', 'desc');
                 break;
 
@@ -114,6 +118,7 @@ module.exports = class Projects extends BaseCollection {
             crowdfundEnd: item['expiration_one_' + uid],
             whaleEnd: item['expiration_two_' + uid],
         };
+
         const status = ProjectStatus.getStatus(contractStatus, blocks, height);
 
         return {
