@@ -4,7 +4,7 @@ import moment from 'moment';
  * 
  * @param {Object} data - Project object
  * @param {String} attribute - param name
- * @param {Object} initialState - Project object
+ * @param {Object | undefined} initialState - Project object
  * @returns {Object | undefined}
  */
 export function expireCrowdAndDemoDayValidator(data, attribute, initialState) {
