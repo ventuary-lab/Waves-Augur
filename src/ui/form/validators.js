@@ -62,12 +62,12 @@ export function wavesTargetAmountValidator(data, attribute, initialState) {
         return;
     }
 
-    const { targetWaves: initialTargetWaves } = initialState;
     const { targetWaves } = data;
+    const { positiveBalance } = initialState;
 
-    if (targetWaves >= initialTargetWaves) {
+    if (Number(targetWaves) >= positiveBalance) {
         return;
-    }
+    };
 
-    return __('Amount of waves as target cannot be reduced');
+    return __('Amount of waves as target cannot be less than collected sum');
 }
