@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import InfiniteScroll from 'react-infinite-scroller';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
@@ -15,21 +17,6 @@ import FeedSchema from 'types/FeedSchema';
 
 const bem = html.bem('ProjectsPage');
 
-@dal.hoc2(
-    props => ([
-        props.match.params.state === ProjectStateEnum.FEED
-            ? {
-                url: '/api/v1/reviews/donations',
-                key: 'donations',
-                collection: 'reviewDonations',
-            }
-            : {
-                url: `/api/v1/projects/${props.match.params.state}`,
-                key: 'projects',
-                collection: 'projects',
-            }
-    ])
-)
 export default class ProjectsPage extends React.PureComponent{
 
     static propTypes = {
@@ -37,24 +24,117 @@ export default class ProjectsPage extends React.PureComponent{
         donations: PropTypes.arrayOf(FeedSchema),
     };
 
+    constructor(props) {
+        super(props);
+
+        this._getLayout = this._getLayout.bind(this);
+        this._loadMore = this._loadMore.bind(this);
+        this._loadData = this._loadData.bind(this);
+        this._handleDataToStateConcat = this._handleDataToStateConcat.bind(this);
+
+        this.isFeed = this.props.match.params.state === ProjectStateEnum.FEED;
+
+        this.requestConfig = (
+            this.isFeed ? {
+                url: '/api/v1/reviews/donations',
+                key: 'donations',
+                collection: 'reviewDonations',
+            } : {
+                url: `/api/v1/projects/${props.match.params.state}`,
+                key: 'projects',
+                collection: 'projects',
+            }
+        );
+
+        this.state = {
+            currentPage: 0,
+            isLoading: false,
+            hasMore: false,
+            donations: [],
+            projects: []
+        };
+    }
+
+    async _loadMore () {
+        await this._loadData();
+    }
+
+    _handleDataToStateConcat (prevState, data, key) {
+        return {
+            ...prevState,
+            [key]: [...prevState[key], ...data],
+            hasMore: true,
+        };
+    }
+
+    async _loadData () {
+        const { isFeed } = this;
+        const { isLoading } = this.state;
+
+        if (isLoading) {
+            return;
+        }
+
+        this.setState({ isLoading: true });
+
+        const response = await axios.get(this.requestConfig.url, {
+            params: {
+                page: this.state.currentPage
+            }
+        });
+
+
+        this.setState(prevState => ({ ...prevState, isLoading: false, currentPage: prevState.currentPage + 1 }));
+
+        const { data } = response;
+
+        if (data.length === 0) {
+            this.setState({ hasMore: false });
+            return;
+        }
+
+        this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
+    }
+
+    async componentDidMount () {
+        await this._loadData();
+    }
+
     render() {
-        if (!this.props.donations && !this.props.projects) {
-            return (
-                <section className={bem.block()}>
-                    <div className={'wrapper'}>
-                        <div className={'row'}>
-                            <div className={'col'}>
-                                <div className={bem.element('inner')}>
-                                    <Preloader/>
-                                </div>
+        const { hasMore, currentPage, donations, projects } = this.state;
+
+        const loader = (
+            <section className={bem.block()}>
+                <div className={'wrapper'}>
+                    <div className={'row'}>
+                        <div className={'col'}>
+                            <div className={bem.element('inner')}>
+                                <Preloader/>
                             </div>
                         </div>
                     </div>
-                </section>
-            );
+                </div>
+            </section>
+        )
+
+        if (!donations && !projects) {
+            return loader;
         }
 
-        const isFeed = this.props.match.params.state === ProjectStateEnum.FEED;
+        return (
+            <InfiniteScroll
+                pageStart={currentPage}
+                loadMore={this._loadMore}
+                hasMore={hasMore}
+                loader={loader}>
+                {this._getLayout()}
+            </InfiniteScroll>
+        );
+    }
+
+    _getLayout () {
+        const { isFeed } = this;
+        const { projects, donations } = this.state;
 
         return (
             <section className={bem.block()}>
@@ -87,20 +167,20 @@ export default class ProjectsPage extends React.PureComponent{
                                         })}
                                     </div>
                                 </div>
-                                {!isFeed && this.props.projects && (
+                                {!isFeed && projects && (
                                     <List
                                         listId='ProjectsList'
                                         itemView={ProjectCard}
                                         emptyText={__('No projects')}
-                                        items={this.props.projects}
+                                        items={projects}
                                     />
                                 )}
-                                {isFeed && this.props.donations && (
+                                {isFeed && donations && (
                                     <List
                                         listId='FeedList'
                                         itemView={ProjectFeedCard}
                                         emptyText={__('No feed')}
-                                        items={this.props.donations}
+                                        items={donations}
                                     />
                                 )}
                             </div>
@@ -109,5 +189,6 @@ export default class ProjectsPage extends React.PureComponent{
                 </div>
             </section>
         );
+
     }
 }
