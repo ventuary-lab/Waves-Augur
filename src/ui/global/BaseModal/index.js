@@ -1,16 +1,22 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import './index.scss';
 
 class BaseModal extends React.Component {
+    // static propTypes = {
+        
+    // }
 
     constructor(props) {
         super(props);
+
     }
 
     render () {
-        const { children } = this.props;
+        const { children, renderNode: _renderNode } = this.props;
+        const renderNode = _renderNode || document.body;
 
         return (
             ReactDOM.createPortal(
@@ -19,7 +25,7 @@ class BaseModal extends React.Component {
                         {children}
                     </div>
                 </div>,
-                document.body
+                renderNode
             )
         );
     }
