@@ -198,7 +198,7 @@ export default class ProjectsPage extends React.PureComponent{
     _getLayout () {
         const { projects, donations, isLoading } = this.state;
         const isFeed = this._checkIsFeed();
-        const initialLoad = _.get(donations, 'length', 0) === 0 && _.get(projects, 'length', 0) === 0;
+        const initialLoad = isLoading && _.get(donations, 'length', 0) === 0 && _.get(projects, 'length', 0) === 0;
         const shouldRenderProjects = !initialLoad && !isFeed && projects;
         const shouldRenderDonations = !initialLoad && isFeed && donations;
 

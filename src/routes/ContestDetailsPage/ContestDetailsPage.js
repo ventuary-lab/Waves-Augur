@@ -97,7 +97,6 @@ export default class ContestDetailsPage extends React.PureComponent {
         };
     }
 
-
     renderRightInfo() {
         return (
             <div className={bem.element('right-info')}>
