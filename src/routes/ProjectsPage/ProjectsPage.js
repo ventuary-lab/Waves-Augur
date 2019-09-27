@@ -13,7 +13,7 @@ import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectStateEnum from 'enums/ProjectStateEnum';
 import ProjectCard from 'shared/ProjectCard';
-import { Loader, SmallLoader } from 'ui/anims';
+import { Loader } from 'ui/anims';
 
 import './ProjectsPage.scss';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
@@ -48,7 +48,7 @@ export default class ProjectsPage extends React.PureComponent{
         this.cancelActionEnum = {
             withRetry: 'withRetry'
         };
-        this.loader = this.props.isPhone ? <SmallLoader /> : <Loader />;
+        this.loader = <Loader />;
 
         this.state = {
             ...this._getInitialState()
