@@ -64,12 +64,15 @@ class TelegramBotClient {
         } = project;
 
         return [
+            '\n',
             '🔹A new project has just been listed on the DAO! 🔹',
+            '\n',
             '<b>Title:</b> ' + name,
             '<b>Description:</b> ' + description,
             contest ? '<b>Contest: </b> <a href="' + this.getTemplateLinkPrefix(request) + '/contests/' + contest + '">Link</a> ' : false,
             '<b>Crowdfunding ends:</b> ~' + expireCrowd,
             '<b>Waves Target:</b> ' + targetWaves,
+            '\n',
             'Check out ' + name + ' now, donate, and earn a bonus of up to 150% of your donation if it receives a grant. To increase the chances of winning, write reviews and share!',,
             '<a href="'+ this.getTemplateLinkPrefix(request) + '/projects/' + uid +'/">Link to the project on DAO</a>',
         ].filter(Boolean).join('\n');
