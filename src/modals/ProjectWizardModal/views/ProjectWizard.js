@@ -202,19 +202,19 @@ export default class ProjectWizard extends React.PureComponent {
                     formId={FORM_ID}
                     title={__(formTitle)}
                     onNextClick={this._onNextClick}
-                    onSubmit={async values => {
+                    onSubmit={values => {
                         if (project.createTime) {
                             values.createTime = project.createTime;
                         };
 
-                        let createdProject;
+                        return dal.saveProject(values, this.props.contest)
+                            .then(project => {
+                                this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, { uid: project.uid }));
 
-                        try {
-                            createdProject = await dal.saveProject(values, this.props.contest);
-                            await axios.get(`/api/v1/telegram-bot/projectCreateNotify/${createdProject.uid}`);
-                        } finally {
-                            this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, {uid: createdProject.uid}));
-                        }
+                                try {
+                                    axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${project.uid}`);
+                                } catch (err) {};
+                            });
                     }}
                     onFirstBack={this.props.onFirstBack}
                     onComplete={() => {
