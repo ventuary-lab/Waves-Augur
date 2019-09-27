@@ -1,8 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
 import PropTypes from 'prop-types';
+import { isPhone } from 'yii-steroids/reducers/screen';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
@@ -11,11 +13,11 @@ import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectStateEnum from 'enums/ProjectStateEnum';
 import ProjectCard from 'shared/ProjectCard';
+import { Loader, SmallLoader } from 'ui/anims';
 
 import './ProjectsPage.scss';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 import FeedSchema from 'types/FeedSchema';
-import { isPhone } from 'yii-steroids/reducers/screen';
 
 const bem = html.bem('ProjectsPage');
 
@@ -29,6 +31,7 @@ export default class ProjectsPage extends React.PureComponent{
     static propTypes = {
         projects: PropTypes.arrayOf(ProjectSchema),
         donations: PropTypes.arrayOf(FeedSchema),
+        isPhone: PropTypes.boolean
     };
 
     constructor(props) {
@@ -42,12 +45,13 @@ export default class ProjectsPage extends React.PureComponent{
         this.cancelToken = axios.CancelToken;
         this.tokenSource = this.cancelToken.source();
 
-        this.state = {
-            ...this._getInitialState()
-        };
-
         this.cancelActionEnum = {
             withRetry: 'withRetry'
+        };
+        this.loader = this.props.isPhone ? <SmallLoader /> : <Loader />;
+
+        this.state = {
+            ...this._getInitialState()
         };
     }
 
@@ -82,6 +86,7 @@ export default class ProjectsPage extends React.PureComponent{
     }
 
     _getInitialState () {
+        // Pages are zero based
         return {
             currentPage: 0,
             isLoading: false,
@@ -91,8 +96,8 @@ export default class ProjectsPage extends React.PureComponent{
         };
     }
 
-    async _loadData (requestConfig, isFeed) {
-        const { isLoading, currentPage } = this.state;
+    async _loadData (requestConfig, isFeed, currentPage = this.state.currentPage) {
+        const { isLoading } = this.state;
 
         if (isLoading) {
             return;
@@ -124,6 +129,7 @@ export default class ProjectsPage extends React.PureComponent{
             this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
         } catch (err) {
             const isCancelled = axios.isCancel(err);
+
             if (isCancelled) {
                 console.log('Request canceled', err.message);
             };
@@ -148,9 +154,7 @@ export default class ProjectsPage extends React.PureComponent{
 
             this.setState(newState);
 
-            if (this.state.currentPage === 0) { 
-                this._loadData(this._getRequestConfig(), this._checkIsFeed());
-            }
+            this._loadData(this._getRequestConfig(), this._checkIsFeed(), 0);
         }
     }
 
@@ -159,7 +163,7 @@ export default class ProjectsPage extends React.PureComponent{
     }
 
     render() {
-        const { hasMore, currentPage, donations, projects } = this.state;
+        const { hasMore, currentPage, donations, projects, isLoading } = this.state;
 
         const loader = (
             <section className={bem.block()}>
@@ -175,7 +179,7 @@ export default class ProjectsPage extends React.PureComponent{
             </section>
         );
 
-        if (!donations && !projects) {
+        if (!donations && !projects && isLoading) {
             return loader;
         }
 
@@ -185,15 +189,18 @@ export default class ProjectsPage extends React.PureComponent{
                 loadMore={this._loadMore}
                 hasMore={hasMore}
                 initialLoad={false}
-                loader={loader}>
+                loader={this.loader}>
                 {this._getLayout()}
             </InfiniteScroll>
         );
     }
 
     _getLayout () {
-        const { projects, donations } = this.state;
+        const { projects, donations, isLoading } = this.state;
         const isFeed = this._checkIsFeed();
+        const initialLoad = _.get(donations, 'length', 0) === 0 && _.get(projects, 'length', 0) === 0;
+        const shouldRenderProjects = !initialLoad && !isFeed && projects;
+        const shouldRenderDonations = !initialLoad && isFeed && donations;
 
         return (
             <section className={bem.block()}>
@@ -226,7 +233,7 @@ export default class ProjectsPage extends React.PureComponent{
                                         })}
                                     </div>
                                 </div>
-                                {!isFeed && projects && (
+                                {shouldRenderProjects && (
                                     <List
                                         listId='ProjectsList'
                                         itemView={ProjectCard}
@@ -234,7 +241,7 @@ export default class ProjectsPage extends React.PureComponent{
                                         items={projects}
                                     />
                                 )}
-                                {isFeed && donations && (
+                                {shouldRenderDonations && (
                                     <List
                                         listId='FeedList'
                                         itemView={ProjectFeedCard}
@@ -242,6 +249,7 @@ export default class ProjectsPage extends React.PureComponent{
                                         items={donations}
                                     />
                                 )}
+                                {initialLoad && this.loader}
                             </div>
                         </div>
                     </div>
