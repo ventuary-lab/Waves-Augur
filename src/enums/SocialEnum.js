@@ -40,7 +40,7 @@ export default class SocialEnum extends Enum {
             [this.FACEBOOK]: /(www\.)?facebook\.com\//,
             [this.LINKEDIN]: /(www\.)?linkedin\.com\//,
             // [this.INSTAGRAM]: /(www\.)?instagram\.com\//,
-            [this.TELEGRAM]: /(www\.)?tg\.me\//,
+            [this.TELEGRAM]: /((www\.)?t\.me\/|(www\.)?tg\.me\/)/,
             [this.REDDIT]: /(www\.)?reddit\.com\//,
             [this.WEBSITE]: /[a-z]+\:\/\//,
             //[this.VK]: /(www\.)?vk\.com\//,
@@ -55,7 +55,7 @@ export default class SocialEnum extends Enum {
             [this.FACEBOOK]: 'facebook.com/',
             [this.LINKEDIN]: 'linkedin.com/',
             // [this.INSTAGRAM]: 'instagram.com/',
-            [this.TELEGRAM]: 'tg.me/',
+            [this.TELEGRAM]: 't.me/',
             [this.REDDIT]: 'reddit.com/',
             //[this.VK]: 'www.vk.com/',
             //[this.YOUTUBE]: 'www.youtube.com/',
@@ -63,7 +63,13 @@ export default class SocialEnum extends Enum {
         };
     }
 
-    static formatLink(link, id) {
+    static formatLink(_link, id) {
+        let link = _link;
+
+        if (id === this.TELEGRAM && link[0] === '@') {
+            link = link.slice(1);
+        };
+
         const hostRegExp = this.getRegExps()[id];
         const isHostExist = hostRegExp ? hostRegExp.test(link) : true;
 
