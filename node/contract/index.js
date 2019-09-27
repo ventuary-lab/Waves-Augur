@@ -3,6 +3,7 @@ const _orderBy = require('lodash/orderBy');
 const ContractApp = require('./ContractApp');
 const ProjectFilter = require('./enums/ProjectFilter');
 const ContestFilter = require('./enums/ContestFilter');
+const ResponseController = require('./controllers/ResponseController');
 
 module.exports = async (app, httpServer) => {
     const contract = new ContractApp({
@@ -33,11 +34,13 @@ module.exports = async (app, httpServer) => {
             return contract.collections.contests.getContest(request.params.uid);
         },
         '/api/v1/contests/:uid/projects': async (request) => {
-            const projects = await contract.collections.projects.getProjects();
+            let projects = await contract.collections.projects.getProjects();
             return projects.filter(project => project.contest && project.contest === request.params.uid);
         },
         [`/api/v1/projects/:filter(${ProjectFilter.getKeys().join('|')})?`]: async (request) => {
-            return contract.collections.projects.getProjects(request.params.filter);
+            let projects = await contract.collections.projects.getProjects(request.params.filter);
+
+            return ResponseController.getSlicedEntities(request, projects);
         },
         '/api/v1/projects/author/:address': async (request) => {
             return contract.collections.projects.getAuthorProjects(request.params.address);
@@ -60,8 +63,9 @@ module.exports = async (app, httpServer) => {
             items = _orderBy(items, 'review.createTime', 'desc');
             return items;
         },
-        '/api/v1/reviews/donations': async () => {
-            return contract.collections.reviewDonations.getDonations();
+        '/api/v1/reviews/donations': async (request) => {
+            const donations = await contract.collections.reviewDonations.getDonations();
+            return ResponseController.getSlicedEntities(request, donations);
         },
         '/api/v1/reviews/donations/user/:address': async (request) => {
             return contract.collections.reviewDonations.getUserDonations(request.params.address);

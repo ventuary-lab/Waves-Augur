@@ -49,8 +49,8 @@ export default class ProjectLayout extends React.PureComponent {
         project: ProjectSchema,
     };
 
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+        super(props);
     }
 
     componentWillMount() {
