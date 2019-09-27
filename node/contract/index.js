@@ -4,6 +4,7 @@ const ContractApp = require('./ContractApp');
 const ProjectFilter = require('./enums/ProjectFilter');
 const ContestFilter = require('./enums/ContestFilter');
 const ResponseController = require('./controllers/ResponseController');
+const TelegramBotClient = require('../services/telegram-bot');
 
 module.exports = async (app, httpServer) => {
     const contract = new ContractApp({
@@ -14,6 +15,8 @@ module.exports = async (app, httpServer) => {
             level: 'debug'
         }
     });
+
+    const telegramBot = new TelegramBotClient();
 
     const routes = {
         '/api/v1/init': async () => {
@@ -112,6 +115,7 @@ module.exports = async (app, httpServer) => {
         '/api/v1/users/:address/invites': async (request) => {
             return contract.collections.users.getUserInvites(request.params.address);
         },
+        ...telegramBot.getRoutes(),
         '/api/*': async () => {
             return {
                 version: 'v1',
