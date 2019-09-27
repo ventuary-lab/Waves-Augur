@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import CheckboxField from 'yii-steroids/ui/form/CheckboxField';
@@ -202,19 +201,15 @@ export default class ProjectWizard extends React.PureComponent {
                     formId={FORM_ID}
                     title={__(formTitle)}
                     onNextClick={this._onNextClick}
-                    onSubmit={async values => {
+                    onSubmit={values => {
                         if (project.createTime) {
                             values.createTime = project.createTime;
                         };
 
-                        let createdProject;
-
-                        try {
-                            createdProject = await dal.saveProject(values, this.props.contest);
-                            await axios.get(`/api/v1/telegram-bot/projectCreateNotify/${createdProject.uid}`);
-                        } finally {
-                            this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, {uid: createdProject.uid}));
-                        }
+                        return dal.saveProject(values, this.props.contest)
+                            .then(project => {
+                                this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, { uid: project.uid }));
+                            });
                     }}
                     onFirstBack={this.props.onFirstBack}
                     onComplete={() => {
