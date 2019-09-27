@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import CheckboxField from 'yii-steroids/ui/form/CheckboxField';
@@ -210,10 +209,6 @@ export default class ProjectWizard extends React.PureComponent {
                         return dal.saveProject(values, this.props.contest)
                             .then(project => {
                                 this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, { uid: project.uid }));
-
-                                try {
-                                    axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${project.uid}`);
-                                } catch (err) {};
                             });
                     }}
                     onFirstBack={this.props.onFirstBack}

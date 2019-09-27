@@ -1,3 +1,4 @@
+import axios from 'axios';
 import _get from 'lodash/get';
 import _toInteger from 'lodash/toInteger';
 import _orderBy from 'lodash/orderBy';
@@ -786,6 +787,15 @@ export default class DalComponent {
                     data,
                 ],
                 this.contract.LISTINGFEE
+            );
+
+            setTimeout(
+                () => {
+                    try {
+                        axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${data.uid}`);
+                    } catch (err) {}
+                },
+                6000
             );
         } else {
             await this.transport.nodePublish(

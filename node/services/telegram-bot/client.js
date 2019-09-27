@@ -86,7 +86,6 @@ class TelegramBotClient {
                 photo: logoUrl || DEFAULT_PHOTO_LINK
             }
         };
-        console.log({ caption });
 
         try {
             await axios.get(url, options);
