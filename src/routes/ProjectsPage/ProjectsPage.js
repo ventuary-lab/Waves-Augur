@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
@@ -100,6 +101,19 @@ export default class ProjectsPage extends React.PureComponent{
                     page: currentPage
                 }
             });
+
+            this.setState({ isLoading: false });
+
+            this.setState(prevState => ({ ...prevState, isLoading: false, currentPage: prevState.currentPage + 1 }));
+
+            const { data } = response;
+
+            if (data.length === 0) {
+                this.setState({ hasMore: false });
+                return;
+            }
+
+            this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
         } catch (err) {
             if (axios.isCancel(err)) {
                 console.log('Request canceled', err.message);
@@ -109,33 +123,20 @@ export default class ProjectsPage extends React.PureComponent{
 
             this.setState({ isLoading: false });
             return;
-        }
-
-        this.setState({ isLoading: false });
-
-
-        this.setState(prevState => ({ ...prevState, isLoading: false, currentPage: prevState.currentPage + 1 }));
-
-        const { data } = response;
-
-        if (data.length === 0) {
-            this.setState({ hasMore: false });
-            return;
-        }
-
-        this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
+        };
     }
 
-    componentWillReceiveProps(newProps) {
+    componentDidUpdate(newProps) {
         if (this.props.match.params.state !== newProps.match.params.state) {
-            if (this.state.isLoading) {
-                this.tokenSource.cancel('Operation cancelled!');
-            }
-            console.log({ newProps });
+            this.tokenSource.cancel('Operation cancelled!');
 
-            this.setState({ ...this._getInitialState(newProps) });
+            const newState = this._getInitialState(newProps);
 
-            console.log({ st: this.state });
+            this.setState({ ...newState });
+        }
+
+        if (this.state.currentPage === 0) {
+            // this.tokenSource.cancel('Operation cancelled!');
             this._loadData();
         }
     }
