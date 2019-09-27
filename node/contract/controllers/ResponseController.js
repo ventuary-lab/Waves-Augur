@@ -20,7 +20,14 @@ class ResponseController {
     };
 
     static sliceEntitiesList (items, page, count = this.count) {
-        return items.slice(page, page + count);
+        const [
+            start, end
+        ] = [
+            page * count, 
+            (1 + page) * count
+        ];
+
+        return items.slice(start, end);
     }
 
     static getSlicedEntities (request, entities) {
