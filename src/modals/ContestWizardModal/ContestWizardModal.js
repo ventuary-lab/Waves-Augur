@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Modal from 'yii-steroids/ui/modal/Modal';
 import InputField from 'yii-steroids/ui/form/InputField';
 import TextField from 'yii-steroids/ui/form/TextField';
@@ -12,7 +12,7 @@ import FormWizard from 'ui/form/FormWizard';
 import SocialEnum from 'enums/SocialEnum';
 import ContestContentEnum from 'enums/ContestContentEnum';
 import {goToPage} from 'yii-steroids/actions/navigation';
-import {isPhone} from 'yii-steroids/reducers/screen';
+import { isPhone } from 'yii-steroids/reducers/screen';
 
 import {ROUTE_CONTEST_DETAILS} from 'routes';
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import _ from 'lodash';
+import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
 import PropTypes from 'prop-types';
 import Link from 'yii-steroids/ui/nav/Link';
 import List from 'yii-steroids/ui/list/List';
 
-import {dal, html} from 'components';
+import { html } from 'components';
 import Preloader from 'shared/Preloader';
 import ProjectSchema from 'types/ProjectSchema';
 import ProjectStateEnum from 'enums/ProjectStateEnum';
@@ -15,9 +15,15 @@ import ProjectCard from 'shared/ProjectCard';
 import './ProjectsPage.scss';
 import ProjectFeedCard from 'shared/ProjectFeedCard';
 import FeedSchema from 'types/FeedSchema';
+import { isPhone } from 'yii-steroids/reducers/screen';
 
 const bem = html.bem('ProjectsPage');
 
+@connect(
+    state => ({
+        isPhone: isPhone(state),
+    })
+)
 export default class ProjectsPage extends React.PureComponent{
 
     static propTypes = {
@@ -39,10 +45,14 @@ export default class ProjectsPage extends React.PureComponent{
         this.state = {
             ...this._getInitialState()
         };
+
+        this.cancelActionEnum = {
+            withRetry: 'withRetry'
+        };
     }
 
     async _loadMore () {
-        await this._loadData();
+        await this._loadData(this._getRequestConfig(), this._checkIsFeed());
     }
 
     _handleDataToStateConcat (prevState, data, key) {
@@ -55,7 +65,7 @@ export default class ProjectsPage extends React.PureComponent{
 
     _getRequestConfig (props = this.props) {
         return (
-            this._checkIsFeed() ? {
+            this._checkIsFeed(props) ? {
                 url: '/api/v1/reviews/donations',
                 key: 'donations',
                 collection: 'reviewDonations',
@@ -71,20 +81,18 @@ export default class ProjectsPage extends React.PureComponent{
         return props.match.params.state === ProjectStateEnum.FEED;
     }
 
-    _getInitialState (props = this.props) {
+    _getInitialState () {
         return {
             currentPage: 0,
             isLoading: false,
             hasMore: false,
             donations: [],
-            projects: [],
-            isFeed: this._checkIsFeed(props),
-            requestConfig:  { ...this._getRequestConfig(props) }
+            projects: []
         };
     }
 
-    async _loadData () {
-        const { isLoading, requestConfig, isFeed, currentPage } = this.state;
+    async _loadData (requestConfig, isFeed) {
+        const { isLoading, currentPage } = this.state;
 
         if (isLoading) {
             return;
@@ -115,34 +123,39 @@ export default class ProjectsPage extends React.PureComponent{
 
             this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
         } catch (err) {
-            if (axios.isCancel(err)) {
+            const isCancelled = axios.isCancel(err);
+            if (isCancelled) {
                 console.log('Request canceled', err.message);
             };
 
             this.tokenSource = this.cancelToken.source();
 
             this.setState({ isLoading: false });
-            return;
+
+            if (isCancelled && this.cancelActionEnum.withRetry === err.message) {
+                this._loadMore();
+            }
         };
     }
 
     componentDidUpdate(newProps) {
         if (this.props.match.params.state !== newProps.match.params.state) {
-            this.tokenSource.cancel('Operation cancelled!');
+            if (this.state.isLoading) {
+                this.tokenSource.cancel(this.cancelActionEnum.withRetry);
+            }
 
-            const newState = this._getInitialState(newProps);
+            const newState = this._getInitialState();
 
-            this.setState({ ...newState });
-        }
+            this.setState(newState);
 
-        if (this.state.currentPage === 0) {
-            // this.tokenSource.cancel('Operation cancelled!');
-            this._loadData();
+            if (this.state.currentPage === 0) { 
+                this._loadData(this._getRequestConfig(), this._checkIsFeed());
+            }
         }
     }
 
     async componentDidMount () {
-        await this._loadData();
+        await this._loadData(this._getRequestConfig(), this._checkIsFeed());
     }
 
     render() {
@@ -179,7 +192,8 @@ export default class ProjectsPage extends React.PureComponent{
     }
 
     _getLayout () {
-        const { projects, donations, isFeed } = this.state;
+        const { projects, donations } = this.state;
+        const isFeed = this._checkIsFeed();
 
         return (
             <section className={bem.block()}>
