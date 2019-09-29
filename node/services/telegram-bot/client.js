@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 
 const {
     TELEGRAM_API_URL,
@@ -58,13 +59,15 @@ class TelegramBotClient {
             name,
             description,
             contest,
-            expireCrowd,
+            expireCrowd: _expireCrowd,
             targetWaves,
             uid
         } = project;
         const { getTemplateLinkPrefix } = this;
         const getLinkTag = (name, url) => `<a href="${url}">${name}</a>`;
         const projectLink = `${getTemplateLinkPrefix(request)}/projects/${uid}`;
+        const expireCrowd = moment(_expireCrowd).format('YYYY-MM-DD');
+
         let contestName, contestLink;
         if (contest) {
             contestLink = `${getTemplateLinkPrefix(request)}/api/v1/contests/${contest}`;
