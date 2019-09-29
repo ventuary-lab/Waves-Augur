@@ -48,7 +48,9 @@ export default class ProjectsPage extends React.PureComponent{
         this.cancelActionEnum = {
             withRetry: 'withRetry'
         };
-        this.loader = <Loader />;
+        this.loader = <div className={bem.element('loader')}><Loader /></div>;
+
+        this.resultsPerRequest = 10;
 
         this.state = {
             ...this._getInitialState()
@@ -114,6 +116,7 @@ export default class ProjectsPage extends React.PureComponent{
                     page: currentPage
                 }
             });
+            this.lastDataResponse = response;
 
             this.setState({ isLoading: false });
 
@@ -121,12 +124,10 @@ export default class ProjectsPage extends React.PureComponent{
 
             const { data } = response;
 
-            if (data.length === 0) {
-                this.setState({ hasMore: false });
-                return;
-            }
-
-            this.setState(prevState => this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'));
+            this.setState(prevState => ({
+                ...this._handleDataToStateConcat(prevState, data, isFeed ? 'donations' : 'projects'),
+                hasMore: data.length === this.resultsPerRequest
+            }));
         } catch (err) {
             const isCancelled = axios.isCancel(err);
 

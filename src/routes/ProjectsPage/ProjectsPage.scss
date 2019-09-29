@@ -49,6 +49,13 @@
     }
   }
 
+  &__loader {
+    & > img {
+      display: block;
+      margin: auto;
+    }
+  }
+
   &__nav-item {
     text-decoration: none;
     cursor: pointer;
