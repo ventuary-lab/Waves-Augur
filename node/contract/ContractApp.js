@@ -1,7 +1,7 @@
 const WavesContractCache = require('./lib-waves-contract-cache/WavesContractCache');
 const WebSocketServer = require('./components/WebSocketServer');
 
-const {Projects, Users, Contests, ReviewDonations, ReviewVotings, ReviewWhales} = require('./collections');
+const { Projects, Users, Contests, ReviewDonations, ReviewVotings, ReviewWhales } = require('./collections');
 const WavesTransport = require('./components/WavesTransport');
 
 const REDIS_NAMESPACE = process.env.REDIS_NAMESPACE || 'alpha-ns_';

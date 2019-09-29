@@ -208,7 +208,7 @@ export default class ProjectWizard extends React.PureComponent {
 
                         return dal.saveProject(values, this.props.contest)
                             .then(project => {
-                                this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, {uid: project.uid}));
+                                this.props.dispatch(goToPage(ROUTE_PROJECT_DETAILS, { uid: project.uid }));
                             });
                     }}
                     onFirstBack={this.props.onFirstBack}
