@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 
 const {
     TELEGRAM_API_URL,
@@ -53,33 +54,46 @@ class TelegramBotClient {
         return host.includes('localhost') ? 'http://' + host : 'https://' + host;
     }
 
-    getNewProjectTemplate (request, project) {
+    async getNewProjectTemplate (request, project) {
         const {
             name,
             description,
             contest,
-            expireCrowd,
+            expireCrowd: _expireCrowd,
             targetWaves,
             uid
         } = project;
+        const { getTemplateLinkPrefix } = this;
+        const getLinkTag = (name, url) => `<a href="${url}">${name}</a>`;
+        const projectLink = `${getTemplateLinkPrefix(request)}/projects/${uid}`;
+        const expireCrowd = moment(_expireCrowd).format('YYYY-MM-DD');
+
+        let contestName, contestLink;
+        if (contest) {
+            contestLink = `${getTemplateLinkPrefix(request)}/api/v1/contests/${contest}`;
+            
+            try {
+                const contestData = await axios.get(contestLink);
+                contestName = contestData.data.name;
+            } catch (err) {}
+        };
 
         return [
             '\n',
             '🔹A new project has just been listed on the DAO! 🔹',
             '\n',
-            '<b>Title:</b> ' + name,
-            '<b>Description:</b> ' + description,
-            contest ? '<b>Contest: </b> <a href="' + this.getTemplateLinkPrefix(request) + '/contests/' + contest + '">Link</a> ' : false,
-            '<b>Crowdfunding ends:</b> ~' + expireCrowd,
-            '<b>Waves Target:</b> ' + targetWaves,
+            `<b>Title:</b> ${getLinkTag(name, projectLink)}`,
+            `<b>Description:</b> ${description}`,
+            contest ? `<b>Contest: </b> ${getLinkTag(contestName, contestLink)}` : false,
+            `<b>Crowdfunding ends:</b> ~${expireCrowd}`,
+            `<b>Waves Target:</b> ${targetWaves}`,
             '\n',
-            'Check out ' + name + ' now, donate, and earn a bonus of up to 150% of your donation if it receives a grant. To increase the chances of winning, write reviews and share!',,
-            '<a href="'+ this.getTemplateLinkPrefix(request) + '/projects/' + uid +'/">Link to the project on DAO</a>',
+            `Check out ${getLinkTag(name, projectLink)} now, donate, and earn a bonus of up to 150% of your donation if it receives a grant. To increase the chances of winning, write reviews and share!`,
         ].filter(Boolean).join('\n');
     }
 
     async sendProjectCreateMessage (request, project) {
-        let { caption, logoUrl } = this.getProjectCreateMessage(request, project);
+        let { caption, logoUrl } = await this.getProjectCreateMessage(request, project);
 
         const url = this.apiRoute + '/sendPhoto';
         const options = {
@@ -104,9 +118,9 @@ class TelegramBotClient {
         }
     }
 
-    getProjectCreateMessage (request, project) {
+    async getProjectCreateMessage (request, project) {
         const { logoUrl } = project;
-        const caption = this.getNewProjectTemplate(request, project);
+        const caption = await this.getNewProjectTemplate(request, project);
 
         return {
             caption,
