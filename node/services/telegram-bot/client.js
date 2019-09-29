@@ -120,6 +120,7 @@ class TelegramBotClient {
                 return this.getMe();
             },
             '/api/v1/telegram-bot/projectCreateNotify/:uid/': async (request) => {
+                console.log(request.hostname, request.ip, request.ips);
                 try {
                     if (!request.params.uid) {
                         throw new Error();
