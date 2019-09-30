@@ -462,7 +462,8 @@ export default {
             items: {}
         },
         [ROUTE_ENTITY_PAGE]: {
-            path: 'page/:uid',
+            exact: true,
+            path: '/page/:uid',
             component: EntityPageLayout,
             label: __('EntityPage'),
             isNavVisible: false,

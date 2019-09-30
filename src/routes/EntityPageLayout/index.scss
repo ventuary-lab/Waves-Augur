@@ -1,0 +1,70 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+$dark-theme: true !default;
+$text: #000000;
+$text_tr: rgba(0, 0, 0, 0.75);
+$text_lt: #7D8199;
+$widget_cl: #fff;
+$page_bg: #E8ECF1;
+$accent_cl: #F1F6F8;
+$green_cl: #0BC91F;
+$yellow_cl: #C68200;
+$ultra_blue: #01F5FF;
+$violet: #9975FF;
+$red_cl: #FF7171;
+
+@if $dark-theme {
+    $text: #fff;
+    $text_tr: rgba(255, 255, 255, 0.75);
+    $text_lt: #7D8199;
+    $widget_cl: #1B2535;
+    $page_bg: #141B25;
+    $accent_cl: #000000;
+    $green_cl: #4EFFA1;
+    $yellow_cl: #FBFF4E;
+    $ultra_blue: #01F5FF;
+    $violet: #9975FF;
+    $red_cl: #FF7171;
+}
+
+.EntityPageLayout {
+
+
+    &__base-button {
+        padding: 8px 32px;
+        display: flex;
+        flex-direction: row;
+        width: max-content;
+        border-radius: 20px;
+        border: 1px solid grey;
+
+        & > button {
+            border: none;
+            background: unset;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+        }
+    }
+
+    &__heading {
+        position: relative;
+
+        & > :first-child {
+            position: absolute;
+            background: #fff;
+            border: none;
+            right: 30px;
+            top: 85px;
+        }
+    }
+
+    &__heading-cover {
+        height: 128px;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        background: linear-gradient(180deg, transparent 0%, rgba(255,255,2555,1) 100%);
+    }
+}
