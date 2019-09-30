@@ -26,6 +26,8 @@ module.exports = async (app, httpServer) => {
                         dAppNetwork: process.env.APP_DAPP_NETWORK || 'test',
                         dApp: process.env.DAPP || '3NBB3iv7YDRsD8ZM2Pw2V5eTcsfqh3j2mvF', // testnet
                         adminAdress: process.env.APP_ADMIN_ADDRESS || '3MwMR1ZFfy712trHVLisizYmvRQwsg8z9Bn',
+                        assetId: process.env.BASE_ASSET_ID || 'WAVES',
+                        neutrinoContractAddress: process.env.NEUTRINO_CONTRACT_ADDRESS || '???'
                     }
                 },
             };

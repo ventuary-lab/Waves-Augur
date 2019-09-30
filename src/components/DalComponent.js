@@ -26,12 +26,18 @@ import ContestStatusEnum from 'enums/ContestStatusEnum';
 
 export default class DalComponent {
     constructor() {
-        this.dAppNetwork = 'main';
-        this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
-        this.adminAddress = '3P9NDxt9Y6ePfM9hkQysgSvbHJvihr56Z18';
+        // this.dAppNetwork = 'main';
+        // this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
+        // this.adminAddress = '3P9NDxt9Y6ePfM9hkQysgSvbHJvihr56Z18';
+        this.dAppNetwork = null;
+        this.dApp = null;
+        this.adminAddress = null;
+        this.nodeUrl = this.dAppNetwork === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode1.wavesnodes.com';
 
         this.hoc = fetchHoc;
         this.hoc2 = require('./dal/apiHoc').default;
+
+        this.diffBalanceBy = 100000000;
 
         this.transport = new WavesTransport(this);
         this.voteReveralMonitor = new VoteReveralMonitor(this);
@@ -920,6 +926,30 @@ export default class DalComponent {
 
         data.createTime = DalHelper.dateNow();
 
+        const state = store.store.getState();
+        const { address } = state.auth.user;
+        const { neutrinoContractAddress } = state.auth.data.config.dal;
+        const assetBalance = (await this.getAssetBalance(address))/this.diffBalanceBy;
+        const contraсtPriceResponse = await axios.get(this.nodeUrl + `/addresses/data/${neutrinoContractAddress}/price`);
+        const minSwapResponse = await axios.get(this.nodeUrl + `/addresses/data/${neutrinoContractAddress}/min_swap_amount`);
+        const minSwapAmount = minSwapResponse.data.value / this.diffBalanceBy;
+        const contraсtPrice = contraсtPriceResponse.data.value;
+    
+        const amountToSwap = (amount / (contraсtPrice / 100));
+        console.log(contraсtPrice)
+        if (assetBalance < amount) {
+            await this.transport.nodePublish(
+                'swapWavesToNeutrino', 
+                [], 
+                amountToSwap < minSwapAmount ? minSwapAmount : amountToSwap, 
+                'WAVES',
+                true,
+                neutrinoContractAddress
+            );
+        }
+
+        console.log({ address, assetBalance, amount, contraсtPrice, amountToSwap, assetId: this.assetId });
+
         let result = null;
         try {
             result = await this.transport.nodePublish('donate', [uid, tierNumber, mode, data], tier);
@@ -1053,5 +1083,12 @@ export default class DalComponent {
 
     async withdrawInternalBalance (address) {
         await this.transport.nodePublish('withdraw', [address]);
+    }
+
+    async getAssetBalance (address) {
+        const { assetId } = this;
+        const response =  await axios.get(this.nodeUrl + `/assets/balance/${address}/${assetId}`);
+
+        return response.data.balance;
     }
 }

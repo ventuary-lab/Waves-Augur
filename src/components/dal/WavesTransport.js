@@ -187,11 +187,12 @@ export default class WavesTransport {
      * @param {array} args
      * @param {number} payment
      * @param {boolean} waitTx
+     * @param {string | undefined} dApp
      * @returns {Promise}
      */
-    async nodePublish(method, args, payment, waitTx = true) {
+    async nodePublish(method, args, payment, assetId = this.dal.assetId, waitTx = true, dApp = this.dal.dApp) {
         const keeper = await this.getKeeper();
-        const result = await keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment));
+        const result = await keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment, assetId, dApp));
         if (result) {
             if (!waitTx) {
                 return result;
@@ -257,7 +258,7 @@ export default class WavesTransport {
         this._cacheData = null;
     }
 
-    _buildTransaction(method, args, payment) {
+    _buildTransaction(method, args, payment, assetId = this.dal.assetId, dApp = this.dal.dApp) {
         const transaction = {
             type: 16,
             data: {
@@ -265,7 +266,7 @@ export default class WavesTransport {
                     assetId: 'WAVES',
                     tokens: String(this.fee),
                 },
-                dApp: this.dal.dApp,
+                dApp: dApp,
                 call: {
                     args: args.map(item => ({
                         type: _isInteger(item) ? 'integer' : 'string',
@@ -275,7 +276,7 @@ export default class WavesTransport {
                 },
                 payment: !payment ? [] : [
                     {
-                        assetId: 'WAVES',
+                        assetId: assetId,
                         tokens: String(payment),
                     }
                 ],

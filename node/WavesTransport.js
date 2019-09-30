@@ -18,6 +18,7 @@ class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
+        this.assetId = process.env.BASE_ASSET_ID || 'WAVES';
         this.nodeUrl = process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode1.wavesnodes.com';
         this.fee = 0.009;
 
@@ -201,7 +202,7 @@ class WavesTransport {
             type: 16,
             data: {
                 fee: {
-                    assetId: 'WAVES',
+                    assetId: this.assetId,
                     tokens: String(this.fee),
                 },
                 dApp: this.dal.dApp,
@@ -214,7 +215,7 @@ class WavesTransport {
                 },
                 payment: !payment ? [] : [
                     {
-                        assetId: 'WAVES',
+                        assetId: this.assetId,
                         tokens: String(payment),
                     }
                 ],
