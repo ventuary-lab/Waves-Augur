@@ -58,6 +58,9 @@ $red_cl: #FF7171;
             right: 30px;
             top: 85px;
         }
+        & > img {
+            width: 100vw;
+        }
     }
 
     &__heading-cover {
@@ -66,5 +69,40 @@ $red_cl: #FF7171;
         width: 100%;
         bottom: 0;
         background: linear-gradient(180deg, transparent 0%, rgba(255,255,2555,1) 100%);
+    }
+
+    &__head-info {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        position: relative;
+        top: -50px;
+
+        // Page avatar
+        & > :first-child {
+            & > img {
+                border: 8px solid white;
+                border-radius: 50%;
+            }
+        }
+
+        // Page info
+        & > :nth-child(2) {
+            display: flex;
+            flex-direction: column;
+            margin-left: 48px;
+
+            & > :first-child {
+                font-weight: 500;
+                font-size: 32px;
+                line-height: 48px;
+            }
+
+            & > :nth-child(2) {
+                font-size: 16px;
+                line-height: 24px;
+            }
+        }
     }
 }

@@ -23,8 +23,14 @@ function BaseButton ({ children, icon = '', ...restProps }) {
     );
 }
 
-function EntityBadge () {
-    
+function EntityBadge ({ title, desc, icon }) {
+    return (
+        <div className={bem.element('ent-badge')}>
+            <SvgIcon icon={icon} /> 
+            <div>{title}</div>
+            <div>{desc}</div>
+        </div>
+    )
 }
 
 class EntityPageLayout extends React.Component {
@@ -45,7 +51,7 @@ class EntityPageLayout extends React.Component {
                     <img src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
                 </div>
-                <div className={bem.element('')}>
+                <div className={bem.element('head-info')}>
                     <div>
                         <img src={coverAvatar} />
                     </div>
@@ -56,7 +62,7 @@ class EntityPageLayout extends React.Component {
                             to trade your personal predictions with others
                         </span>
                         <div>
-
+                            <EntityBadge icon={rocketIcon} title='1' desc='Lorem ipsum'/>
                         </div>
                     </div>
                 </div>
