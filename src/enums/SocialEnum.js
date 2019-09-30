@@ -66,7 +66,7 @@ export default class SocialEnum extends Enum {
     static formatLink(_link, id) {
         let link = _link;
 
-        if (id === this.TELEGRAM && link[0] === '@') {
+        if (id === this.TELEGRAM && link && link[0] === '@') {
             link = link.slice(1);
         };
 

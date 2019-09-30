@@ -24,6 +24,7 @@ import ProjectFeedPage from './ProjectFeedPage';
 import ProjectDetailsPage from './ProjectDetailsPage';
 import ProjectNewsPage from './ProjectNewsPage';
 import ProjectReviewPage from './ProjectReviewPage';
+import EntityPageLayout from './EntityPageLayout';
 
 export const ROUTE_ROOT = 'root';
 export const ROUTE_FEED = 'feed';
@@ -61,6 +62,7 @@ export const ROUTE_CONTEST_REDIRECT = 'contest_redirect';
 export const ROUTE_CONTEST_DETAILS = 'contest_details';
 export const ROUTE_CONTEST_ENTRIES = 'contest_entries';
 export const ROUTE_INVOICE = 'invoice';
+export const ROUTE_ENTITY_PAGE = 'page';
 
 const baseUser = '/users/:address(\\w{35})';
 
@@ -454,6 +456,15 @@ export default {
             path: '/invoice/:currency/:address/:amount',
             component: InvoiceLayout,
             label: __('Invoice'),
+            isNavVisible: false,
+            roles: UserRole.getKeys(),
+            isShowImageLine: false,
+            items: {}
+        },
+        [ROUTE_ENTITY_PAGE]: {
+            path: 'page/:uid',
+            component: EntityPageLayout,
+            label: __('EntityPage'),
             isNavVisible: false,
             roles: UserRole.getKeys(),
             isShowImageLine: false,
