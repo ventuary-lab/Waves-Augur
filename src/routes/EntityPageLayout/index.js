@@ -26,9 +26,13 @@ function BaseButton ({ children, icon = '', ...restProps }) {
 function EntityBadge ({ title, desc, icon }) {
     return (
         <div className={bem.element('ent-badge')}>
-            <SvgIcon icon={icon} /> 
-            <div>{title}</div>
-            <div>{desc}</div>
+            <div>
+                <SvgIcon icon={icon} /> 
+            </div>
+            <div>
+                <div>{title}</div>
+                <div>{desc}</div>
+            </div>
         </div>
     )
 }

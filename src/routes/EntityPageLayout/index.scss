@@ -81,6 +81,8 @@ $red_cl: #FF7171;
 
         // Page avatar
         & > :first-child {
+            margin-left: 50px;
+
             & > img {
                 border: 8px solid white;
                 border-radius: 50%;
@@ -102,6 +104,36 @@ $red_cl: #FF7171;
             & > :nth-child(2) {
                 font-size: 16px;
                 line-height: 24px;
+            }
+        }
+    }
+
+    &__ent-badge {
+        display: flex;
+        max-width: fit-content;
+        flex-direction: row;
+
+        & > :first-child {
+            border-radius: 50px;
+            width: 40px;
+            height: 40px;
+            margin: 10px;
+            background: #fff;
+
+            & > :first-child {
+                position: relative;
+                top: 5px;
+                left: 5px;
+                & svg * {
+                    fill: $green_cl;
+                    stroke: $green_cl;
+                }
+            }
+            & > :nth-child(2) {
+                font-weight: 500;
+            }
+            & > :nth-child(3) {
+                font-size: 14px;
             }
         }
     }
