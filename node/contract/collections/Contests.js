@@ -37,6 +37,7 @@ module.exports = class Contests extends BaseCollection {
             case ContestFilter.FEATURED:
                 //TODO
                 // contests = _orderBy(contests, 'positiveBalance', 'desc');
+                contests = contests.filter(item => item.status !== ContestStatus.COMPLETED);
                 break;
 
             case ContestFilter.NEW:
