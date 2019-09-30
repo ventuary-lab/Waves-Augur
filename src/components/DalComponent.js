@@ -792,7 +792,11 @@ export default class DalComponent {
             setTimeout(
                 () => {
                     try {
-                        axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${data.uid}`);
+                        axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${data.uid}`, {
+                            headers: {
+                                hmac_key: process.env.FOR_HMAC_SECRET_KEY
+                            }
+                        });
                     } catch (err) {}
                 },
                 6000

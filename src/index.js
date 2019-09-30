@@ -14,6 +14,7 @@ import './style/index.scss';
     }
 })(() => {
     const Application = require('./Application').default;
+
     ReactDOM.render(
         <Provider store={store.store}>
             <Application/>

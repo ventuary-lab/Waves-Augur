@@ -1,10 +1,11 @@
 const axios = require('axios');
 const moment = require('moment');
+const BasicRequestValidator = require('./../requestValidator');
 
 const {
     TELEGRAM_API_URL,
     TELEGRAM_TOKEN,
-    TELEGRAM_CHAT_ID
+    TELEGRAM_CHAT_ID,
 } = require('./constants');
 
 const DEFAULT_PHOTO_LINK = 'https://alpha-ventuary-dao.s3.amazonaws.com/uploads/cropped_96994c20-e146-11e9-b4b3-6dbd4331389b.jpeg';
@@ -134,6 +135,17 @@ class TelegramBotClient {
                 return this.getMe();
             },
             '/api/v1/telegram-bot/projectCreateNotify/:uid/': async (request) => {
+                const { hmac_key } = request.headers;
+                const validator = new BasicRequestValidator();
+                const isReqValid = validator.isHmacPairEqual(hmac_key);
+
+                if (!isReqValid) {
+                    return {
+                        error: true,
+                        message: 'Invalid request'
+                    };
+                }
+
                 try {
                     if (!request.params.uid) {
                         throw new Error();

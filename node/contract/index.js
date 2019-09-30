@@ -1,4 +1,7 @@
 const _orderBy = require('lodash/orderBy');
+require('dotenv').config({
+    path: './.envwb'
+});
 
 const ContractApp = require('./ContractApp');
 const ProjectFilter = require('./enums/ProjectFilter');

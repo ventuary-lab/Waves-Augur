@@ -16,6 +16,8 @@ COPY node /app/node
 COPY src /app/src
 COPY landing /app/landing
 COPY webpack.js /app
+RUN env_web_generate.sh .envwb
+
 RUN node webpack production
 
 COPY server.js /app
