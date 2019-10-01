@@ -37,7 +37,7 @@ $red_cl: #FF7171;
         flex-direction: row;
         width: max-content;
         border-radius: 20px;
-        border: 1px solid grey;
+        // border: 1px solid grey;
 
         & > button {
             border: none;
@@ -45,6 +45,14 @@ $red_cl: #FF7171;
             font-size: 16px;
             line-height: 24px;
             text-align: center;
+        }
+
+        &.green {
+            background-color: $green_cl;
+
+            & > button {
+                color: #fff;
+            }
         }
     }
 
@@ -56,7 +64,7 @@ $red_cl: #FF7171;
             background: #fff;
             border: none;
             right: 30px;
-            top: 85px;
+            top: 16px;
         }
         & > img {
             width: 100vw;
@@ -64,7 +72,7 @@ $red_cl: #FF7171;
     }
 
     &__heading-cover {
-        height: 128px;
+        height: 300px;
         position: absolute;
         width: 100%;
         bottom: 0;
@@ -74,16 +82,19 @@ $red_cl: #FF7171;
     &__head-info {
         display: flex;
         flex-direction: row;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         justify-content: center;
         position: relative;
-        top: -50px;
+        background: transparent;
+        margin-top: -188px;
 
         // Page avatar
         & > :first-child {
             margin-left: 50px;
 
             & > img {
+                min-width: 160px;
+                min-height: 160px;
                 border: 8px solid white;
                 border-radius: 50%;
             }
@@ -94,6 +105,7 @@ $red_cl: #FF7171;
             display: flex;
             flex-direction: column;
             margin-left: 48px;
+            justify-content: space-evenly;
 
             & > :first-child {
                 font-weight: 500;
@@ -105,6 +117,24 @@ $red_cl: #FF7171;
                 font-size: 16px;
                 line-height: 24px;
             }
+
+            & > :nth-child(3) {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding-top: 16px;
+                margin-left: -16px;
+
+                & > * {
+                    margin-right: 20px;
+                }
+            }
+        }
+
+        // Contribute btn
+        & > :nth-child(3) {
+            margin-top: auto;
+            margin-bottom: 16px;
         }
     }
 
@@ -117,16 +147,16 @@ $red_cl: #FF7171;
             border-radius: 50px;
             width: 40px;
             height: 40px;
-            margin: 10px;
+            margin: 2px 16px 10px;
             background: #fff;
 
             & > :first-child {
                 position: relative;
                 top: 5px;
                 left: 5px;
+
                 & svg * {
                     fill: $green_cl;
-                    stroke: $green_cl;
                 }
             }
             & > :nth-child(2) {
@@ -134,6 +164,22 @@ $red_cl: #FF7171;
             }
             & > :nth-child(3) {
                 font-size: 14px;
+            }
+        }
+
+        & > :nth-child(2) {
+
+            & > :first-child {
+                color: $green_cl;
+                font-weight: 500;
+            }
+
+            & > :nth-child(2) {
+                color: $text_lt;
+                font-size: 14px;
+                display: block;
+                margin-top: -6px;
+                font-weight: 300;
             }
         }
     }
