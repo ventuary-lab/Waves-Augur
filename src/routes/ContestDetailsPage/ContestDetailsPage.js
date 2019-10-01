@@ -92,8 +92,8 @@ export default class ContestDetailsPage extends React.PureComponent {
     mapSocials(socials) {
         return {
             ...socials,
-            url_facebook: SocialEnum.formatLink(socials.url_facebook, SocialEnum.FACEBOOK),
-            url_telegram: SocialEnum.formatLink(socials.url_telegram, SocialEnum.TELEGRAM)
+            url_facebook: socials.url_facebook && SocialEnum.formatLink(socials.url_facebook, SocialEnum.FACEBOOK),
+            url_telegram: socials.url_telegram && SocialEnum.formatLink(socials.url_telegram, SocialEnum.TELEGRAM)
         };
     }
 
