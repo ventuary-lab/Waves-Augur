@@ -789,14 +789,7 @@ export default class DalComponent {
                 this.contract.LISTINGFEE
             );
 
-            setTimeout(
-                () => {
-                    try {
-                        axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${data.uid}`);
-                    } catch (err) {}
-                },
-                6000
-            );
+            await this.notifyOnProjectCreate(data.uid);
         } else {
             await this.transport.nodePublish(
                 'projupdate',
@@ -808,6 +801,32 @@ export default class DalComponent {
         }
 
         return data;
+    }
+
+    async notifyOnProjectCreate (uid) {
+        let ms = 3000, times = 5;
+
+        const checker = async () => {
+            await axios.get(window.location.origin + `/api/v1/telegram-bot/projectCreateNotify/${uid}`);
+        };
+
+        const onPromise = async (resolve) => {
+            if (times < 1) {
+                resolve();
+                return;
+            };
+
+            try {
+                await checker();
+                resolve();
+
+            } catch (err) {
+                times--;
+                setTimeout(() => onPromise(resolve), ms);
+            }
+        };
+
+        return new Promise(onPromise);
     }
 
     /**
