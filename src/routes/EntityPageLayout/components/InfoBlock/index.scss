@@ -1,0 +1,10 @@
+
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.InfoBlock {
+    &__root {
+        padding: 24px;
+        background-color: #fff;
+    }
+}

@@ -15,6 +15,7 @@ const shareIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/
 const bem = html.bem('EntityPageLayout');
 
 import CampaignItem from './components/CampaignItem';
+import InfoBlock from './components/InfoBlock';
 
 import './index.scss';
 
@@ -40,6 +41,39 @@ function EntityBadge ({ title, desc, icon }) {
                 <div>{desc}</div>
             </div>
         </div>
+    );
+}
+
+function SmallTag ({ text, ...restProps }) {
+    return (
+        <div {...restProps} className={bem.element('small-tag')}>
+            {text}
+        </div>
+    );
+}
+
+
+function PageMainInfo (props) {
+    const { foundDate, location } = props;
+
+    return (
+        <>
+            <div>
+                <h4>Location</h4>
+                <span>{location}</span>
+            </div>
+            <div>
+                <h4>Founded</h4>
+                <span>{foundDate}</span>
+            </div>
+            <div>
+                <SmallTag text='stablecoin'/>
+                <SmallTag text='collaterization'/>
+                <SmallTag text='bonds usd'/>
+                <SmallTag text='token'/>
+                <SmallTag text='WAVES'/>
+            </div>
+        </>
     );
 }
 
@@ -130,7 +164,12 @@ class EntityPageLayout extends React.Component {
                             <CampaignItem/>
                         </div>
                         <div className={bem.element('side-body')}>
-
+                            <InfoBlock title='INFO'>
+                                <PageMainInfo
+                                    location='Moscow'
+                                    foundDate='27.04.22'
+                                />
+                            </InfoBlock>
                         </div>
                     </div>
                 </div>
