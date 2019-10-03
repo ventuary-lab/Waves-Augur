@@ -8,8 +8,13 @@ const warningIcon = require('!svg-inline-loader?classPrefix!static/icons/campaig
 const rocketIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/rocket.svg');
 const starIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/star.svg');
 const cupIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/cup.svg');
+// const usdnIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/usdn.svg');
+const bookmarkIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/bookmark.svg');
+const shareIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/share.svg');
 
 const bem = html.bem('EntityPageLayout');
+
+import CampaignItem from './components/CampaignItem';
 
 import './index.scss';
 
@@ -73,7 +78,7 @@ class EntityPageLayout extends React.Component {
             <div key={tabItem.label} onClick={() => this._setTab(tabIndex)} className={isCurrent}>
                 <a>{tabItem.label}</a>
             </div>
-        )
+        );
     }
 
     render () {
@@ -114,12 +119,21 @@ class EntityPageLayout extends React.Component {
                         {pageTabs}
                     </div>
                     <div>
-                        <BaseButton icon={warningIcon} className='grey'>Save</BaseButton>
-                        <BaseButton icon={warningIcon} className='grey'>Share</BaseButton>
+                        <BaseButton icon={bookmarkIcon} className='grey'>Save</BaseButton>
+                        <BaseButton icon={shareIcon} className='grey'>Share</BaseButton>
                     </div>
                 </div>
 
-                <div></div>
+                <div className={bem.element('page-body')}>
+                    <div className={bem.element('body-flex')}>
+                        <div className={bem.element('main-body')}>
+                            <CampaignItem/>
+                        </div>
+                        <div className={bem.element('side-body')}>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
