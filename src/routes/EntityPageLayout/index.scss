@@ -232,6 +232,7 @@ $desktop-bp: 1200px;
         & > div {
             padding: 24px 4px;
             margin: 0 12px;
+            cursor: pointer;
 
             & > a {
                 color: $text;

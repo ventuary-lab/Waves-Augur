@@ -6,6 +6,7 @@ import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 const usdnIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/usdn.svg');
 const bookmarkIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/bookmark.svg');
 const cupIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/cup.svg');
+const questionIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/question.svg');
 
 const bem = html.bem('CampaignItem');
 
@@ -35,6 +36,8 @@ function CampaignItem () {
                 <span>This is a blockchain game based on Waves smart contracts.</span>
                 <div className={bem.element('achievements-cont')}>
                     <AchievementBadge icon={usdnIcon} title='12k+' desc='funded'/>
+                    <AchievementBadge icon={usdnIcon} title='20k+' desc='goal'/>
+                    <AchievementBadge icon={questionIcon} title='32' desc='days left'/>
                 </div>
             </div>
             <div className={bem.element('bookmark')}>

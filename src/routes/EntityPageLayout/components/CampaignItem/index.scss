@@ -45,10 +45,36 @@
 
     &__achievements-cont {
         padding: 16px 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        & > * {
+            margin-right: 25px;
+        }
+
+        & > :last-child {
+            margin-top: auto;
+
+            & > :first-child {
+                margin-bottom: 3px;
+
+                & > :nth-child(2) {
+                    width: 14px;
+                    height: 14px;
+                    margin: -2px 8px;
+                }
+            }
+        }
+    
     }
 
     &__achievement-badge {
         color: rgba(0, 0, 0, 0.75);
+
+        & svg * {
+            fill: rgba(0, 0, 0, 0.75) !important;
+        }
 
         & > :first-child {
             display: flex;
