@@ -3,19 +3,22 @@ import { html } from 'components';
 import SvgIcon from 'ui/global/SvgIcon';
 import coverAvatar from 'static/images/default/campaign_avt.png';
 import coverImg from 'static/images/default/campaign_cover.png';
-// const dottedAddIcon = require('!svg-inline-loader?classPrefix!static/icons/dotted-add-icon.svg');
+
 const warningIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/warning.svg');
 const rocketIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/rocket.svg');
 const starIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/star.svg');
 const cupIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/cup.svg');
-// const usdnIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/usdn.svg');
 const bookmarkIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/bookmark.svg');
 const shareIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/share.svg');
+const facebookIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/facebook.svg');
+const linkedinIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/linkedin.svg');
+const twitterIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/twitter.svg');
 
 const bem = html.bem('EntityPageLayout');
 
 import CampaignItem from './components/CampaignItem';
 import InfoBlock from './components/InfoBlock';
+import PageTeamMember from './components/PageTeamMember';
 
 import './index.scss';
 
@@ -58,15 +61,15 @@ function PageMainInfo (props) {
 
     return (
         <>
-            <div>
+            <div className={bem.element('page-info-li')}>
                 <h4>Location</h4>
                 <span>{location}</span>
             </div>
-            <div>
+            <div className={bem.element('page-info-li')}>
                 <h4>Founded</h4>
                 <span>{foundDate}</span>
             </div>
-            <div>
+            <div className={bem.element('page-info-tags')}>
                 <SmallTag text='stablecoin'/>
                 <SmallTag text='collaterization'/>
                 <SmallTag text='bonds usd'/>
@@ -75,6 +78,43 @@ function PageMainInfo (props) {
             </div>
         </>
     );
+}
+
+const socialsKeyToIconMapping = {
+    facebook: facebookIcon,
+    linkedin: linkedinIcon,
+    twitter: twitterIcon,
+};
+function PageMainSocials (props) {
+    const { links = {} } = props;
+    const mappedIcons = [];
+    const keys = Object.keys(links);
+
+    for (const key of keys) {
+        const val = links[key];
+        const socialIcon = socialsKeyToIconMapping[key];
+
+        if (!val || !socialIcon) {
+            continue;
+        };
+
+        const comp = (
+            <div>
+                <a href={val}>
+                    <SvgIcon icon={socialIcon}/>
+                </a>
+            </div>
+        );
+
+        mappedIcons.push(comp);
+    }
+
+    return (
+        <>
+            <span></span>
+            <div>{mappedIcons}</div>
+        </>
+    )
 }
 
 export const DETAILS_TAB = 0;
@@ -87,6 +127,7 @@ class EntityPageLayout extends React.Component {
 
         this._mapTab = this._mapTab.bind(this);
         this._setTab = this._setTab.bind(this);
+        this._getTeamMembers = this._getTeamMembers.bind(this);
 
         this.tabs = [
             { label: 'Details' },
@@ -115,8 +156,25 @@ class EntityPageLayout extends React.Component {
         );
     }
 
+    _getTeamMembers () {
+        return [
+            { title: 'James May', desc: 'Node Developer' },
+            { title: 'James May', desc: 'Node Developer' },
+            { title: 'James May', desc: 'Node Developer' },
+            { title: 'James May', desc: 'Node Developer' },
+        ].map(item => (
+            <PageTeamMember
+                isAdmin={true}
+                title={item.title}
+                desc={item.desc}
+            />
+        ));
+    }
+
     render () {
         const pageTabs = this.tabs.map(this._mapTab);
+        const teamMembers = this._getTeamMembers();
+        const associatedPages = this._getTeamMembers();
 
         return (
             <div className={bem.element('root')}>
@@ -162,6 +220,8 @@ class EntityPageLayout extends React.Component {
                     <div className={bem.element('body-flex')}>
                         <div className={bem.element('main-body')}>
                             <CampaignItem/>
+                            <CampaignItem/>
+                            <CampaignItem/>
                         </div>
                         <div className={bem.element('side-body')}>
                             <InfoBlock title='INFO'>
@@ -169,6 +229,22 @@ class EntityPageLayout extends React.Component {
                                     location='Moscow'
                                     foundDate='27.04.22'
                                 />
+                            </InfoBlock>
+                            <InfoBlock title='CONTACTS'>
+                                <PageMainSocials
+                                    url='https://ventuary.com/profiles/immla/'
+                                    links={{
+                                        twitter: '#',
+                                        facebook: '#',
+                                        linkedin: '#',
+                                    }}
+                                />
+                            </InfoBlock>
+                            <InfoBlock title='TEAM MEMBERS'>
+                                {teamMembers}
+                            </InfoBlock>
+                            <InfoBlock title='ASSOCIATED PAGES'>
+                                {associatedPages}
                             </InfoBlock>
                         </div>
                     </div>

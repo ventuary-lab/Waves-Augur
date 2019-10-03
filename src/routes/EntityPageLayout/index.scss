@@ -36,17 +36,6 @@ $desktop-bp: 1200px;
         font-family: Roboto;
     }
 
-    &__small-tag {
-        background: $page_bg;
-        border-radius: 12px;
-        font-size: 12px;
-        line-height: 16px;
-
-        & > :first-child {
-            color: $text;
-        }
-    }
-
     &__base-button {
         padding: 8px 32px;
         display: flex;
@@ -259,7 +248,6 @@ $desktop-bp: 1200px;
 
     &__page-body {
         background-color: $page_bg;
-
     }
 
     &__body-flex {
@@ -279,6 +267,10 @@ $desktop-bp: 1200px;
         background-color: $widget_cl;
         border-radius: 10px;
         width: 808px;
+
+        & > :not(:last-child) {
+            border-bottom: 1px solid $page_bg;
+        }
     }
 
     &__side-body {
@@ -288,5 +280,45 @@ $desktop-bp: 1200px;
         margin-left: 24px;
         width: 100%;
         max-width: 392px;
+
+        & > * {
+            background-color: $widget_cl;
+            border-radius: 10px;
+        }
+
+        & > :not(:last-child) {
+            margin-bottom: 24px;
+        }
+    }
+
+    &__page-info-tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding-top: 16px;
+    }
+
+    &__page-info-li {
+        padding-top: 16px;
+
+        & > :first-child {
+            margin: 0;
+        }
+    }
+
+    &__small-tag {
+        background: $page_bg;
+        border-radius: 12px;
+        font-size: 12px;
+        width: max-content;
+        padding: 2px 16px;
+        font-weight: normal;
+        line-height: 16px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+
+        & > :first-child {
+            color: $text;
+        }
     }
 }
