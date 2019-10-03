@@ -35,12 +35,25 @@ function EntityBadge ({ title, desc, icon }) {
                 <div>{desc}</div>
             </div>
         </div>
-    )
+    );
 }
+
+export const DETAILS_TAB = 0;
+export const CAMPAIGN_TAB = 1;
+export const NEWS_TAB = 2;
 
 class EntityPageLayout extends React.Component {
     constructor(props) {
         super(props);
+
+        this._mapTab = this._mapTab.bind(this);
+        this._setTab = this._setTab.bind(this);
+
+        this.tabs = [
+            { label: 'Details' },
+            { label: 'Campaign' },
+            { label: 'News' }
+        ];
 
         this.state = {
             // theme: 'dark',
@@ -49,7 +62,23 @@ class EntityPageLayout extends React.Component {
         };
     }
 
+    _setTab (tabIndex) {
+        this.setState({ tabIndex });
+    }
+
+    _mapTab (tabItem, tabIndex) {
+        const isCurrent = this.state.tabIndex === tabIndex ? 'selected' : '';
+
+        return (
+            <div key={tabItem.label} onClick={() => this._setTab(tabIndex)} className={isCurrent}>
+                <a>{tabItem.label}</a>
+            </div>
+        )
+    }
+
     render () {
+        const pageTabs = this.tabs.map(this._mapTab);
+
         return (
             <div className={bem.element('root')}>
                 <div className={bem.element('heading')}>
@@ -57,26 +86,39 @@ class EntityPageLayout extends React.Component {
                     <img src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
                 </div>
-                <div className={bem.element('head-info')}>
-                    <div>
-                        <img src={coverAvatar} />
-                    </div>
-                    <div>
-                        <span>Ventuary LAB</span>
-                        <span>LIGA is a platform with tokenized sport events, 
-                            enabling you to deal with real-time rates and 
-                            to trade your personal predictions with others
-                        </span>
+                <div className={bem.element('head-cont')}>
+                    <div className={bem.element('head-info')}>
                         <div>
-                            <EntityBadge icon={rocketIcon} title='1' desc='grans won'/>
-                            <EntityBadge icon={cupIcon} title='51' desc='cups won'/>
-                            <EntityBadge icon={starIcon} title='231' desc='reviews'/>
+                            <img src={coverAvatar} />
+                        </div>
+                        <div>
+                            <span>Ventuary LAB</span>
+                            <span>LIGA is a platform with tokenized sport events, 
+                                enabling you to deal with real-time rates and 
+                                to trade your personal predictions with others
+                            </span>
+                            <div>
+                                <EntityBadge icon={rocketIcon} title='1' desc='grans won'/>
+                                <EntityBadge icon={cupIcon} title='51' desc='cups won'/>
+                                <EntityBadge icon={starIcon} title='231' desc='reviews'/>
+                            </div>
                         </div>
                     </div>
                     <div>
                         <BaseButton className='green'>Contribute</BaseButton>
                     </div>
                 </div>
+
+                <div className={bem.element('actions-tab')}>
+                    <div className={bem.element('tabs-flex')}>
+                        {pageTabs}
+                    </div>
+                    <div>
+                        <BaseButton icon={warningIcon} className='grey'>Save</BaseButton>
+                        <BaseButton icon={warningIcon} className='grey'>Share</BaseButton>
+                    </div>
+                </div>
+
                 <div></div>
             </div>
         );

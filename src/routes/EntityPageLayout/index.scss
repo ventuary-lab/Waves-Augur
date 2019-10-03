@@ -1,7 +1,7 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
 
-$dark-theme: true !default;
+$dark-theme: false !default;
 $text: #000000;
 $text_tr: rgba(0, 0, 0, 0.75);
 $text_lt: #7D8199;
@@ -28,6 +28,9 @@ $red_cl: #FF7171;
     $red_cl: #FF7171;
 }
 
+
+$desktop-bp: 1200px;
+
 .EntityPageLayout {
 
 
@@ -38,6 +41,7 @@ $red_cl: #FF7171;
         width: max-content;
         border-radius: 20px;
         // border: 1px solid grey;
+        max-height: 45px;
 
         & > button {
             border: none;
@@ -53,6 +57,13 @@ $red_cl: #FF7171;
             & > button {
                 color: #fff;
             }
+        }
+        &.grey {
+            background-color: $page_bg;
+
+            // & > button {
+            //     color: #fff;
+            // }
         }
     }
 
@@ -79,14 +90,28 @@ $red_cl: #FF7171;
         background: linear-gradient(180deg, transparent 0%, rgba(255,255,2555,1) 100%);
     }
 
+    &__head-cont {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        max-width: 1200px;
+        margin: auto;
+
+        // Contribute btn
+        & > :nth-child(3) {
+            margin-top: auto;
+            margin-bottom: 16px;
+        }
+    }
+
     &__head-info {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: center;
         position: relative;
         background: transparent;
-        margin-top: -188px;
+        margin-top: -182px;
 
         // Page avatar
         & > :first-child {
@@ -129,12 +154,6 @@ $red_cl: #FF7171;
                     margin-right: 20px;
                 }
             }
-        }
-
-        // Contribute btn
-        & > :nth-child(3) {
-            margin-top: auto;
-            margin-bottom: 16px;
         }
     }
 
@@ -180,6 +199,46 @@ $red_cl: #FF7171;
                 display: block;
                 margin-top: -6px;
                 font-weight: 300;
+            }
+        }
+    }
+
+    &__actions-tab {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: auto;
+
+        & > :nth-child(2) {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding: 8px 0;
+
+            & > * {
+                margin-left: 4px;
+            }
+        }
+    }
+
+    &__tabs-flex {
+        display: flex;
+        flex-direction: row;
+        font-size: 16px;
+        line-height: 24px;
+
+        & > div {
+            padding: 24px 4px;
+            margin: 0 12px;
+
+            & > a {
+                color: $text;
+            }
+
+            &.selected {
+                box-shadow: inset $green_cl 0px -2px 0px 0px;
             }
         }
     }
