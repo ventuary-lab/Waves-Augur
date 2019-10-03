@@ -267,6 +267,7 @@ $desktop-bp: 1200px;
         background-color: $widget_cl;
         border-radius: 10px;
         width: 808px;
+        height: max-content;
 
         & > :not(:last-child) {
             border-bottom: 1px solid $page_bg;

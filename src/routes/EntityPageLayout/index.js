@@ -10,15 +10,13 @@ const starIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/s
 const cupIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/cup.svg');
 const bookmarkIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/bookmark.svg');
 const shareIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/share.svg');
-const facebookIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/facebook.svg');
-const linkedinIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/linkedin.svg');
-const twitterIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/twitter.svg');
 
 const bem = html.bem('EntityPageLayout');
 
 import CampaignItem from './components/CampaignItem';
 import InfoBlock from './components/InfoBlock';
 import PageTeamMember from './components/PageTeamMember';
+import PageMainSocials from './components/PageMainSocials';
 
 import './index.scss';
 
@@ -80,42 +78,6 @@ function PageMainInfo (props) {
     );
 }
 
-const socialsKeyToIconMapping = {
-    facebook: facebookIcon,
-    linkedin: linkedinIcon,
-    twitter: twitterIcon,
-};
-function PageMainSocials (props) {
-    const { links = {} } = props;
-    const mappedIcons = [];
-    const keys = Object.keys(links);
-
-    for (const key of keys) {
-        const val = links[key];
-        const socialIcon = socialsKeyToIconMapping[key];
-
-        if (!val || !socialIcon) {
-            continue;
-        };
-
-        const comp = (
-            <div>
-                <a href={val}>
-                    <SvgIcon icon={socialIcon}/>
-                </a>
-            </div>
-        );
-
-        mappedIcons.push(comp);
-    }
-
-    return (
-        <>
-            <span></span>
-            <div>{mappedIcons}</div>
-        </>
-    )
-}
 
 export const DETAILS_TAB = 0;
 export const CAMPAIGN_TAB = 1;
@@ -128,6 +90,10 @@ class EntityPageLayout extends React.Component {
         this._mapTab = this._mapTab.bind(this);
         this._setTab = this._setTab.bind(this);
         this._getTeamMembers = this._getTeamMembers.bind(this);
+        this._getCampaignView = this._getCampaignView.bind(this);
+        this._getDetailsView = this._getDetailsView.bind(this);
+        this._getNewsView = this._getNewsView.bind(this);
+        this._getCurrentView = this._getCurrentView.bind(this);
 
         this.tabs = [
             { label: 'Details' },
@@ -169,12 +135,72 @@ class EntityPageLayout extends React.Component {
                 desc={item.desc}
             />
         ));
+    };
+
+    _getCampaignView () {
+        const teamMembers = this._getTeamMembers();
+        const associatedPages = this._getTeamMembers();
+
+        return (
+            <div className={bem.element('body-flex')}>
+                <div className={bem.element('main-body')}>
+                    <CampaignItem/>
+                    <CampaignItem/>
+                    <CampaignItem/>
+                </div>
+                <div className={bem.element('side-body')}>
+                    <InfoBlock title='INFO'>
+                        <PageMainInfo
+                            location='Moscow'
+                            foundDate='27.04.22'
+                        />
+                    </InfoBlock>
+                    <InfoBlock title='CONTACTS'>
+                        <PageMainSocials
+                            url='https://ventuary.com/profiles/immla/'
+                            links={{
+                                twitter: '#',
+                                facebook: '#',
+                                linkedin: '#',
+                            }}
+                        />
+                    </InfoBlock>
+                    <InfoBlock title='TEAM MEMBERS'>
+                        {teamMembers}
+                    </InfoBlock>
+                    <InfoBlock title='ASSOCIATED PAGES'>
+                        {associatedPages}
+                    </InfoBlock>
+                </div>
+            </div>
+        )
+    }
+
+    _getNewsView () {
+        return null;
+    }
+
+    _getDetailsView () {
+        return null;
+    }
+
+    _getCurrentView () {
+        const { tabIndex } = this.state;
+
+        switch (tabIndex) {
+            case 0:
+                return this._getDetailsView();
+            case 1:
+                return this._getCampaignView();
+            case 2:
+                return this._getNewsView();
+            default:
+                return null;
+        }
     }
 
     render () {
         const pageTabs = this.tabs.map(this._mapTab);
-        const teamMembers = this._getTeamMembers();
-        const associatedPages = this._getTeamMembers();
 
         return (
             <div className={bem.element('root')}>
@@ -217,37 +243,7 @@ class EntityPageLayout extends React.Component {
                 </div>
 
                 <div className={bem.element('page-body')}>
-                    <div className={bem.element('body-flex')}>
-                        <div className={bem.element('main-body')}>
-                            <CampaignItem/>
-                            <CampaignItem/>
-                            <CampaignItem/>
-                        </div>
-                        <div className={bem.element('side-body')}>
-                            <InfoBlock title='INFO'>
-                                <PageMainInfo
-                                    location='Moscow'
-                                    foundDate='27.04.22'
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='CONTACTS'>
-                                <PageMainSocials
-                                    url='https://ventuary.com/profiles/immla/'
-                                    links={{
-                                        twitter: '#',
-                                        facebook: '#',
-                                        linkedin: '#',
-                                    }}
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='TEAM MEMBERS'>
-                                {teamMembers}
-                            </InfoBlock>
-                            <InfoBlock title='ASSOCIATED PAGES'>
-                                {associatedPages}
-                            </InfoBlock>
-                        </div>
-                    </div>
+                    {this._getCurrentView()}
                 </div>
             </div>
         );
