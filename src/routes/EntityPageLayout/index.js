@@ -170,19 +170,21 @@ class EntityPageLayout extends React.Component {
         );
 
         return (
-            <InfoBlock title='ABOUT'>
-                <div className={bem.element('details')}>
-                    {text}
-                    {text}
+            <div className={bem.element('details')}>
+                <InfoBlock title='ABOUT'>
                     <div>
-                        <img src={campaignDetailsImgOne}/>
+                        {text}
+                        {text}
+                        <div>
+                            <img src={campaignDetailsImgOne}/>
+                        </div>
+                        {text}
+                        <div>
+                            <img src={campaignDetailsImgTwo}/>
+                        </div>
                     </div>
-                    {text}
-                    <div>
-                        <img src={campaignDetailsImgTwo}/>
-                    </div>
-                </div>
-            </InfoBlock>
+                </InfoBlock>
+            </div>
         )
     }
 

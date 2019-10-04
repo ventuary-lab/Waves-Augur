@@ -28,7 +28,6 @@ $red_cl: #FF7171;
     $red_cl: #FF7171;
 }
 
-
 $desktop-bp: 1200px;
 
 .EntityPageLayout {
@@ -254,11 +253,10 @@ $desktop-bp: 1200px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        max-width: $desktop-bp + 24px;
+        max-width: $desktop-bp + 72px;
         margin: auto;
         padding: 24px 0;
     }
-
 
     &__main-body {
         display: flex;
@@ -324,6 +322,8 @@ $desktop-bp: 1200px;
     }
 
     &__details {
-        
+        & > :first-child {
+            border-radius: 10px;
+        }
     }
 }
