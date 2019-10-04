@@ -6,16 +6,16 @@ class KeeperHandler {
     constructor () {
         this.algorithm = 'aes-192-ctr';
 
-        this.initialVectorSize = Buffer.alloc(16, 0);
+        this.initialVectorSize = 16; // in octets
 
         this.encodingForHashed = 'hex';
         this.encodingForUnhashed = 'utf8';
     }
 
     async getEncryptedPass (password, salt = 'salt') {
-        const { algorithm, encodingForHashed } = this;
+        const { algorithm, encodingForHashed, initialVectorSize } = this;
 
-        const iv = Buffer.alloc(16, 0);
+        const iv = Buffer.alloc(initialVectorSize, 0);
         const key = await scrypt.async(password, salt, Math.pow(2, 10), 8, 1, 24);
 
         const cipher = crypto.createCipheriv(algorithm, key, iv);
@@ -38,9 +38,9 @@ class KeeperHandler {
     }
 
     async getDecryptedPass (key, hash) {
-        const { algorithm, encodingForUnhashed } = this;
+        const { algorithm, encodingForHashed, encodingForUnhashed, initialVectorSize } = this;
 
-        const iv = Buffer.alloc(16, 0);
+        const iv = Buffer.alloc(initialVectorSize, 0);
 
         const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
@@ -52,7 +52,7 @@ class KeeperHandler {
             }
         });
 
-        decipher.write(hash, 'hex');
+        decipher.write(hash, encodingForHashed);
         decipher.end();
 
         return { decrypted };
@@ -70,4 +70,4 @@ async function main () {
     console.log({ encrypted, decrypted });
 }
 
-main();
+export default KeeperHandler;
