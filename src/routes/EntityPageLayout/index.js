@@ -3,6 +3,8 @@ import { html } from 'components';
 import SvgIcon from 'ui/global/SvgIcon';
 import coverAvatar from 'static/images/default/campaign_avt.png';
 import coverImg from 'static/images/default/campaign_cover.png';
+import campaignDetailsImgOne from 'static/images/default/campaign_details-1.png';
+import campaignDetailsImgTwo from 'static/images/default/campaign_details-2.png';
 
 const warningIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/warning.svg');
 const rocketIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/rocket.svg');
@@ -138,42 +140,13 @@ class EntityPageLayout extends React.Component {
     };
 
     _getCampaignView () {
-        const teamMembers = this._getTeamMembers();
-        const associatedPages = this._getTeamMembers();
-
         return (
-            <div className={bem.element('body-flex')}>
-                <div className={bem.element('main-body')}>
-                    <CampaignItem/>
-                    <CampaignItem/>
-                    <CampaignItem/>
-                </div>
-                <div className={bem.element('side-body')}>
-                    <InfoBlock title='INFO'>
-                        <PageMainInfo
-                            location='Moscow'
-                            foundDate='27.04.22'
-                        />
-                    </InfoBlock>
-                    <InfoBlock title='CONTACTS'>
-                        <PageMainSocials
-                            url='https://ventuary.com/profiles/immla/'
-                            links={{
-                                twitter: '#',
-                                facebook: '#',
-                                linkedin: '#',
-                            }}
-                        />
-                    </InfoBlock>
-                    <InfoBlock title='TEAM MEMBERS'>
-                        {teamMembers}
-                    </InfoBlock>
-                    <InfoBlock title='ASSOCIATED PAGES'>
-                        {associatedPages}
-                    </InfoBlock>
-                </div>
-            </div>
-        )
+            <>
+                <CampaignItem/>
+                <CampaignItem/>
+                <CampaignItem/>
+            </>
+        );
     }
 
     _getNewsView () {
@@ -181,7 +154,36 @@ class EntityPageLayout extends React.Component {
     }
 
     _getDetailsView () {
-        return null;
+        const text = (
+            <>
+                <h4>Who we are</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                    mollit anim id est laborum.
+                </p>
+            </>
+        );
+
+        return (
+            <InfoBlock title='ABOUT'>
+                <div className={bem.element('details')}>
+                    {text}
+                    {text}
+                    <div>
+                        <img src={campaignDetailsImgOne}/>
+                    </div>
+                    {text}
+                    <div>
+                        <img src={campaignDetailsImgTwo}/>
+                    </div>
+                </div>
+            </InfoBlock>
+        )
     }
 
     _getCurrentView () {
@@ -201,6 +203,8 @@ class EntityPageLayout extends React.Component {
 
     render () {
         const pageTabs = this.tabs.map(this._mapTab);
+        const teamMembers = this._getTeamMembers();
+        const associatedPages = this._getTeamMembers();
 
         return (
             <div className={bem.element('root')}>
@@ -243,7 +247,35 @@ class EntityPageLayout extends React.Component {
                 </div>
 
                 <div className={bem.element('page-body')}>
-                    {this._getCurrentView()}
+                    <div className={bem.element('body-flex')}>
+                        <div className={bem.element('main-body')}>
+                            {this._getCurrentView()}
+                        </div>
+                        <div className={bem.element('side-body')}>
+                            <InfoBlock title='INFO'>
+                                <PageMainInfo
+                                    location='Moscow'
+                                    foundDate='27.04.22'
+                                />
+                            </InfoBlock>
+                            <InfoBlock title='CONTACTS'>
+                                <PageMainSocials
+                                    url='https://ventuary.com/profiles/immla/'
+                                    links={{
+                                        twitter: '#',
+                                        facebook: '#',
+                                        linkedin: '#',
+                                    }}
+                                />
+                            </InfoBlock>
+                            <InfoBlock title='TEAM MEMBERS'>
+                                {teamMembers}
+                            </InfoBlock>
+                            <InfoBlock title='ASSOCIATED PAGES'>
+                                {associatedPages}
+                            </InfoBlock>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
