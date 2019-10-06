@@ -22,6 +22,7 @@ import GrantForm from 'shared/GrantForm';
 import DalHelper from 'components/dal/DalHelper';
 
 import ActionButtonBlock from '../ActionButtonBlock';
+import KeeperCreateModal from 'shared/KeeperCreateModal';
 
 const bem = html.bem('ProjectLayout');
 
@@ -76,6 +77,7 @@ export default class ProjectLayout extends React.PureComponent {
             <section className={bem.block()}>
                 <div className={'wrapper'}>
                     <div className={'row'}>
+                        <KeeperCreateModal />
                         <div className={'col col_tablet-count-4'}>
                             <div className={bem.element('sidebar')}>
                                 <ProjectSidebar
