@@ -1,8 +1,10 @@
 import React from 'react';
-import { html, keeperHandler } from 'components';
+import { html, dal, store } from 'components';
 import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
+import { openModal } from 'yii-steroids/actions/modal';
 import BaseInput from 'ui/form/BaseInput';
+import ProfileWizardModal from 'modals/ProfileWizardModal';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
@@ -77,6 +79,9 @@ class KeeperCreateModal extends React.Component {
             `
         };
 
+        this.daoAccount = null;
+        this.seedInstance = null;
+
         this.accountCreateInfoProps = {
             ...this.welcomeInfoProps,
             heading: 'Create new Waves account'
@@ -104,7 +109,8 @@ class KeeperCreateModal extends React.Component {
                 password: null,
                 passwordConfirm: null,
                 accAddress: null,
-                seed: null
+                accountName: '',
+                seedPhrase: '',
             }
         };
     }
@@ -184,8 +190,28 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getImportFromSeedView () {
-        const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
-        
+        const { accAddress } = this.state.formState;
+
+        const onContinue = () => {
+            if (accAddress) {
+                this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
+            }
+        };
+        const onChangeSeed = (e) => {
+            const value = e.target.value;
+
+            try {
+                const seed = seedUtils.Seed.fromExistingPhrase(value);
+
+                this._updateFormState({ 
+                    seedPhrase: seed.phrase,
+                    accAddress: seed.address
+                });
+            } catch (err) {
+                console.log({ err });
+            }
+        };
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this._getCurrentViewInfoProps())}
@@ -196,13 +222,16 @@ class KeeperCreateModal extends React.Component {
                     >
                         <BaseInput
                             asTextArea
+                            onChange={onChangeSeed}
                             label='Seed phrase'
                             placeholder='Your seed is 15 words you saved when creating your account'
                         />
-                        <div className={bem.element('success-alert')}>
-                            <span>Address</span>
-                            <span>8N3Tz2sZLpex5fH26zxd3E9ToEkm2GVM9VQ</span>
-                        </div>
+                        {accAddress && (
+                            <div className={bem.element('success-alert')}>
+                                <span>Address</span>
+                                <span>{accAddress}</span>
+                            </div>
+                        )}
                         <Button
                             type='submit'
                             color='primary'
@@ -216,7 +245,16 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getSuccessfulAccountCreateView () {
-        const onCreate = () => this.setState({ ...this._getInitialState() });
+        const onCreate = async () => {
+            this.daoAccount = await dal.constructAccountInstance(this.state.formState.accountName, this.seedInstance);
+
+            window.localStorage.setItem('dao_account', JSON.stringify(this.daoAccount));
+
+            this.setState(this._getInitialState());
+            this._closeModal();
+
+            store.dispatch(openModal(ProfileWizardModal));
+        };
         const heading = this._checkIsImportView() ? 'Waves account has been imported!' : 'Waves account has been created!';
 
         return (
@@ -240,6 +278,7 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountSavePhraseView () {
+        const { seedPhrase } = this.state.formState;
         const onContinue = () => this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
 
         return (
@@ -254,8 +293,8 @@ class KeeperCreateModal extends React.Component {
                             <span>
                                 Copy your backup phrase and store it somewhere safe:
                             </span>
-                            <BaseInput type='password' />
-                            <CopyToClipboard>
+                            <BaseInput type='password' value={seedPhrase}/>
+                            <CopyToClipboard message='Copied!' copyText={seedPhrase}>
                                 <img src={copyToIcon} />
                             </CopyToClipboard>
                             <Button
@@ -309,6 +348,9 @@ class KeeperCreateModal extends React.Component {
         const onContinue = () => this.setState({ 
             currentViewName: this._checkIsImportView() ? ACCOUNT_CREATED_VIEW : ACCOUNT_BACKUP_VIEW
         });
+        const onAccountNameChange = (e) => {
+            this._updateFormState({ accountName: e.target.value })
+        };
 
         return (
             <div className={bem.element('base-view')}>
@@ -319,6 +361,7 @@ class KeeperCreateModal extends React.Component {
                         body='The account name will be known only to you'
                     >
                         <BaseInput
+                            onChange={onAccountNameChange}
                             label='Enter account name'
                         />
                         <Button
@@ -391,12 +434,17 @@ class KeeperCreateModal extends React.Component {
                 return;
             };
 
-            const words = await seedUtils.generateNewSeed(16);
-            const seed = seedUtils.Seed.fromExistingPhrase(words);
+            const isImportView = this._checkIsImportView();
+            const chainId = dal.isTestMode() === 'main' ? 'W' : 'T';
+            const words = seedUtils.generateNewSeed(16);
+            this.seedInstance = new seedUtils.Seed(words, chainId);
 
-            this._updateFormState({ accAddress: seed.address });
+            if (!isImportView) {
+                this._updateFormState({ accAddress: this.seedInstance.address, seedPhrase: words });
+            }
+
             this.setState({
-                currentViewName: this._checkIsImportView() ? IMPORT_FROM_SEED_VIEW : ACCOUNT_ADDRESS_VIEW
+                currentViewName: isImportView ? IMPORT_FROM_SEED_VIEW : ACCOUNT_ADDRESS_VIEW
             });
         };
 

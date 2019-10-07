@@ -77,53 +77,51 @@ export default class DalComponent {
         return !!keeper;
     }
 
-    async getAccountFromLocal () { 
-        //     "acc":{ 
-        //        "name":"Sham227",
-        //        "publicKey":"GFm7drEX13XZLtqPLbuP5phYZ2G9jkyfSwRRB5ZuPitz",
-        //        "address":"3P6LsCKZbvBj7PNFbV72AcMvqCoGaAkvMh8",
-        //        "networkCode":"W",
-        //        "network":"mainnet",
-        //        "type":"seed",
-        //        "balance":{ 
-        //           "available":"4462200000",
-        //           "leasedOut":"0",
-        //           "network":"mainnet"
-        //        }
-        //     }
+    async constructAccountInstance (accountName, seed) {
+        const isMainnet = !this.isTestMode();
+        const network = isMainnet ? 'mainnet' : 'testnet';
 
-        // { 
-        //     "acc":{ 
-        //        "name":"Account1",
-        //        "publicKey":"29h3dLGNTLSn8y4pn4JjZSQs4bgVy2eEay16y1gup1Ei",
-        //        "address":"3N2xrvLJ2HPgYmNHRbgtpFZszRKyVxBhhVc",
-        //        "networkCode":"T",
-        //        "network":"testnet",
-        //        "type":"seed",
-        //        "balance":{ 
-        //           "available":"774900000",
-        //           "leasedOut":"0",
-        //           "network":"testnet"
-        //        }
-        //     }
-        //  }
-        return {
+        try {
+            const url = this.transport.getNodeUrl() + '/addresses/balance/' + seed.address;
+            const availableBalanceRes = await axios.get(url);
+            const availableBalance = availableBalanceRes.data.balance;
 
+            return {
+                name: accountName,
+                publicKey: seed.keyPair.publicKey,
+                address: seed.address,
+                networkCode: isMainnet ? 'W' : 'T',
+                network,
+                type: 'seed',
+                balance:{ 
+                    available: availableBalance,
+                    leasedOut: '0',
+                    network
+                }
+            };
+        } catch (err) {
+            return this.getAccountFromLocalStorage();
+        }
+    }
+
+    getAccountFromLocalStorage () { 
+        try {
+            const account = window.localStorage.getItem('dao_account');
+            return JSON.parse(account);
+        } catch (err) {
+            return {};
         }
     }
 
     async getAccount() {
         const keeper = await this.transport.getKeeper();
-        if (!keeper) {
-            return {};
-        }
 
         try {
             const userData = await keeper.publicState();
-            console.log({ acc: userData.account });
+
             return userData.account;
         } catch {
-            return this.getAccountFromLocal();
+            return this.getAccountFromLocalStorage();
         }
     }
 
@@ -134,6 +132,7 @@ export default class DalComponent {
     async auth() {
         try {
             const account = await this.getAccount();
+
             let user = await this.getUser(account.address);
             user = {
                 ...user,
