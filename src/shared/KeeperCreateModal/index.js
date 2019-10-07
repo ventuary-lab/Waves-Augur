@@ -41,19 +41,11 @@ class KeeperCreateModal extends React.Component {
         this._getAccountSavePhraseView = this._getAccountSavePhraseView.bind(this);
         this._getAccountNameView = this._getAccountNameView.bind(this);
         this._getSuccessfulAccountCreateView = this._getSuccessfulAccountCreateView.bind(this);
+        this._getImportFromSeedView = this._getImportFromSeedView.bind(this);
         this._getLeftSideView = this._getLeftSideView.bind(this);
         this._getView = this._getView.bind(this);
 
         this._mapButton = this._mapButton.bind(this);
-
-        this.accountCreateInfoProps = {
-            heading: 'Create new Waves account',
-            body: `
-                Congratulations, you have received an invitation from a DAO’s member.
-                Now, we will guide you step-by-step as you register.
-                To use our platform, you require a Waves account — let’s set it up first.
-            `
-        };
 
         this.welcomeInfoProps = {
             heading: 'Welcome to the DAO',
@@ -63,6 +55,16 @@ class KeeperCreateModal extends React.Component {
                 To use our platform, you require a Waves account — let’s set it up first.
             `
         };
+
+        this.accountCreateInfoProps = {
+            ...this.welcomeInfoProps,
+            heading: 'Create new Waves account'
+        };
+
+        this.importAccountInfoProps = {
+            ...this.welcomeInfoProps,
+            heading: 'Import an account via Seed'
+        }
 
         this.state = {
             isVisible: true,
@@ -121,8 +123,11 @@ class KeeperCreateModal extends React.Component {
         );
     }
 
-    _getSuccessfulAccountCreateView () {
+    _getImportFromSeedView () {
+        
+    }
 
+    _getSuccessfulAccountCreateView () {
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
