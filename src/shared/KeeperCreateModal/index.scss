@@ -2,8 +2,6 @@
 @import 'style/helpers/mixins';
 
 .KeeperCreateModal {
-    
-
     &__base-view {
         display: flex;
         flex-direction: row;
@@ -17,6 +15,10 @@
         top: 50%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
+
+        & button {
+            margin-top: 10px;
+        }
     }
 
     &__left {
@@ -30,6 +32,7 @@
 
         & > img {
             margin-right: auto;
+            margin-bottom: 47px;
         }
 
         & > h4 {
@@ -56,6 +59,27 @@
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
+
+        &_child {
+            max-width: 320px;
+
+            & > :nth-child(1) {
+                margin-bottom: 10px;
+                margin-top: 0;
+            }
+            & > :nth-child(3) {
+                margin-top: 29px;
+            }
+            & > :nth-child(4) {
+                margin-top: 13px;
+            }
+            & > :nth-child(5) {
+                margin-top: 14px
+            }
+            & > :nth-child(6) {
+                margin-top: 40px
+            }
+        }
     }
 
     &__import-create {
@@ -92,6 +116,40 @@
             & > :nth-child(2) {
                 padding: 22px 0;
             }
+        }
+    }
+
+    &__account-address {
+        position: relative;
+
+        & > :nth-child(2) {
+            background: #0BC91F;
+            padding: 16px 20px;
+            border-radius: 2px;
+            margin: 1px;
+            position: absolute;
+            right: -24px;
+            top: 4px;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        & > button {
+            margin-top: 10px;
+        }
+    }
+
+    &__account-backup {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        text-align: center;
+
+        & > * { margin: 0; }
+
+        & > :nth-child(1) {
+            padding: 8px 0;
+            font-weight: 500;
         }
     }
 }

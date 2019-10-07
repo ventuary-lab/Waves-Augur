@@ -3,13 +3,26 @@ import { html } from 'components';
 import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import BaseInput from 'ui/form/BaseInput';
+import CopyToClipboard from 'shared/CopyToClipboard';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
+import copyToIcon from 'static/icons/button/copy.svg';
 import logoSvg from 'static/icons/dao-logo-white.svg';
 import Button from 'yii-steroids/ui/form/Button';
 
 const bem = html.bem('KeeperCreateModal');
 
 import './index.scss';
+
+function RightFormContainer ({ heading, body, children }) {
+
+    return (
+        <div className={bem.element('right-form-container')}>
+            <h4>{heading}</h4>
+            <p>{body}</p>
+            {children}
+        </div>
+    )
+}
 
 class KeeperCreateModal extends React.Component {
     constructor(props) {
@@ -18,9 +31,29 @@ class KeeperCreateModal extends React.Component {
         this._triggerModal = this._triggerModal.bind(this);
         this._setTabIndex = this._setTabIndex.bind(this);
         this._getInviteStartView = this._getInviteStartView.bind(this);
+        this._getAccountAddressView = this._getAccountAddressView.bind(this);
+        this._getAccountNameView = this._getAccountNameView.bind(this);
         this._getLeftSideView = this._getLeftSideView.bind(this);
         this._mapButton = this._mapButton.bind(this);
         this._getView = this._getView.bind(this);
+
+        this.accountCreateInfoProps = {
+            heading: 'Create new Waves account',
+            body: `
+                Congratulations, you have received an invitation from a DAO’s member.
+                Now, we will guide you step-by-step as you register.
+                To use our platform, you require a Waves account — let’s set it up first.
+            `
+        };
+
+        this.welcomeInfoProps = {
+            heading: 'Welcome to the DAO',
+            body: `
+                Congratulations, you have received an invitation from a DAO’s member.
+                Now, we will guide you step-by-step as you register.
+                To use our platform, you require a Waves account — let’s set it up first.
+            `
+        };
 
         this.state = {
             isVisible: true,
@@ -66,15 +99,89 @@ class KeeperCreateModal extends React.Component {
         );
     }
 
+    _getAccountBackupView () {
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.accountCreateInfoProps)}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='No Backup, No Money'
+                        body='You should save the Seed phrase. It is crucial for accessing your account in the future if you lose your password.'
+                    >
+                        <div className={bem.element('account-backup')}>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                onClick={() => alert(1)}
+                                label='Back up now'
+                            />
+                            <span>or</span>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                onClick={() => alert(1)}
+                                label='Do it later'
+                                outline
+                            />
+                        </div>
+                    </RightFormContainer>
+                </div>
+            </div>
+        );
+    }
+
+    _getAccountNameView () {
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.accountCreateInfoProps)}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='Account name'
+                        body='The account name will be known only to you'
+                    >
+                        <BaseInput
+                            label='Enter account name'
+                        />
+                        <Button
+                            type='submit'
+                            color='primary'
+                            onClick={() => alert(1)}
+                            label='Continue'
+                        />
+                    </RightFormContainer>
+                </div>
+            </div>
+        );
+    }
+
+    _getAccountAddressView () {
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.accountCreateInfoProps)}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='Account address'
+                        body='This is the address of your newly generated wallet'
+                    >
+                        <div className={bem.element('account-address')}>
+                            <BaseInput />
+                            <CopyToClipboard>
+                                <img src={copyToIcon}/>
+                            </CopyToClipboard>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                onClick={() => alert(1)}
+                                label='Continue'
+                            />
+                        </div>
+                    </RightFormContainer>
+                </div>
+            </div>
+        );
+    }
+
     _getAccountCreateView () {
-        const leftSideProps = {
-            heading: 'Create new account',
-            body: `
-                Congratulations, you have received an invitation from a DAO’s member.
-                Now, we will guide you step-by-step as you register.
-                To use our platform, you require a Waves account — let’s set it up first.
-            `
-        };
         const bodyClassName = [
             bem.element('right'),
             bem.element('right_acc_create')
@@ -82,24 +189,32 @@ class KeeperCreateModal extends React.Component {
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(leftSideProps)}
+                {this._getLeftSideView(this.accountCreateInfoProps)}
                 <div className={bodyClassName}>
-                    <h4>Protect your account</h4>
-                    <span>Set a master password for all your accounts</span>
-                    <BaseInput
-                        label='Create a password'
-                        warningText='Must be at least 8 characters'
-                        icon={eyeIcon}
-                        type='password'
-                    />
-                    <BaseInput
-                        label='Confirm password'
-                        icon={eyeIcon}
-                        type='password'
-                    />
-                    <BaseCheckbox
-                        label='12312312'
-                    />
+                    <div className={bem.element('right_acc_create_child')}>
+                        <h4>Protect your account</h4>
+                        <span>Set a master password for all your accounts</span>
+                        <BaseInput
+                            label='Create a password'
+                            warningText='Must be at least 8 characters'
+                            icon={eyeIcon}
+                            type='password'
+                        />
+                        <BaseInput
+                            label='Confirm password'
+                            icon={eyeIcon}
+                            type='password'
+                        />
+                        <BaseCheckbox
+                            label='I have read and agree with Terms  and Conditions & Privacy Policy.'
+                        />
+                        <Button
+                            type='submit'
+                            color='primary'
+                            onClick={() => alert(1)}
+                            label='Continue'
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -115,18 +230,9 @@ class KeeperCreateModal extends React.Component {
             { label: 'Import Waves account', onClick: importWavesAccount },
         ].map(mapButton);
 
-        const leftSideProps = {
-            heading: 'Welcome to the DAO',
-            body: `
-                Congratulations, you have received an invitation from a DAO’s member.
-                Now, we will guide you step-by-step as you register.
-                To use our platform, you require a Waves account — let’s set it up first.
-            `
-        };
-
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(leftSideProps)}
+                {this._getLeftSideView(this.welcomeInfoProps)}
                 <div className={`${bem.element('right')} centered`}>
                     <div className={bem.element('import-create')}>
                         <div>
@@ -147,7 +253,7 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getView () {
-        return this._getAccountCreateView();
+        return this._getAccountBackupView();
     }
 
     render () {
