@@ -22,8 +22,17 @@ function RightFormContainer ({ heading, body, children }) {
             <p>{body}</p>
             {children}
         </div>
-    )
+    );
 }
+
+const INVITE_START_VIEW = 'inviteStartView';
+const ACCOUNT_CREATE_VIEW = 'accountCreateView';
+const ACCOUNT_ADDRESS_VIEW = 'accountAddressView';
+const ACCOUNT_SAVE_PHRASE_VIEW = 'accountSavePhraseView';
+const ACCOUNT_NAME_VIEW = 'accountNameView';
+const ACCOUNT_CREATED_VIEW = 'accountCreatedView';
+const ACCOUNT_BACKUP_VIEW = 'accountBackupView';
+const IMPORT_FROM_SEED_VIEW = 'importFromSeedView';
 
 class KeeperCreateModal extends React.Component {
     constructor(props) {
@@ -35,6 +44,10 @@ class KeeperCreateModal extends React.Component {
         this._triggerModal = this._triggerModal.bind(this);
         this._setTabIndex = this._setTabIndex.bind(this);
 
+        // Common methods
+        this._onCreateNewAccount = this._onCreateNewAccount.bind(this);
+        this._getInitialState = this._getInitialState.bind(this);
+
         // View getters
         this._getInviteStartView = this._getInviteStartView.bind(this);
         this._getAccountAddressView = this._getAccountAddressView.bind(this);
@@ -42,6 +55,8 @@ class KeeperCreateModal extends React.Component {
         this._getAccountNameView = this._getAccountNameView.bind(this);
         this._getSuccessfulAccountCreateView = this._getSuccessfulAccountCreateView.bind(this);
         this._getImportFromSeedView = this._getImportFromSeedView.bind(this);
+        this._getAccountCreateView = this._getAccountCreateView.bind(this);
+        this._getAccountBackupView = this._getAccountBackupView.bind(this);
         this._getLeftSideView = this._getLeftSideView.bind(this);
         this._getView = this._getView.bind(this);
 
@@ -64,14 +79,25 @@ class KeeperCreateModal extends React.Component {
         this.importAccountInfoProps = {
             ...this.welcomeInfoProps,
             heading: 'Import an account via Seed'
-        }
+        };
 
         this.state = {
+            ...this._getInitialState()
+        };
+    }
+
+    _getInitialState () {
+        return {
+            currentViewName: INVITE_START_VIEW,
             isVisible: true,
             inviteStart: {
                 tabIndex: 0
+            },
+            formState: {
+                password: null,
+                accAddress: null
             }
-        };
+        }
     }
 
     _setModalVisibility (isVisible) {
@@ -128,6 +154,8 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getSuccessfulAccountCreateView () {
+        const onCreate = () => this.setState({ ...this._getInitialState() });
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
@@ -139,15 +167,18 @@ class KeeperCreateModal extends React.Component {
                         <Button
                             type='submit'
                             color='primary'
-                            label='Create new account'
+                            label='Create DAO profile'
+                            onClick={onCreate}
                         />
                     </RightFormContainer>
                 </div>
             </div>
-        )
+        );
     }
 
     _getAccountSavePhraseView () {
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
@@ -160,14 +191,14 @@ class KeeperCreateModal extends React.Component {
                             <span>
                                 Copy your backup phrase and store it somewhere safe:
                             </span>
-                            <BaseInput type='password'/>
+                            <BaseInput type='password' />
                             <CopyToClipboard>
-                                <img src={copyToIcon}/>
+                                <img src={copyToIcon} />
                             </CopyToClipboard>
                             <Button
                                 type='submit'
                                 color='primary'
-                                onClick={() => alert(1)}
+                                onClick={onContinue}
                                 label='Continue'
                             />
                         </div>
@@ -178,6 +209,9 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountBackupView () {
+        const onBackupNow = () => this.setState({ currentViewName: ACCOUNT_SAVE_PHRASE_VIEW });
+        const onDoItLater = () => this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
@@ -190,14 +224,14 @@ class KeeperCreateModal extends React.Component {
                             <Button
                                 type='submit'
                                 color='primary'
-                                onClick={() => alert(1)}
+                                onClick={onBackupNow}
                                 label='Back up now'
                             />
                             <span>or</span>
                             <Button
                                 type='submit'
                                 color='primary'
-                                onClick={() => alert(1)}
+                                onClick={onDoItLater}
                                 label='Do it later'
                                 outline
                             />
@@ -209,6 +243,8 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountNameView () {
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_BACKUP_VIEW });
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
@@ -223,7 +259,7 @@ class KeeperCreateModal extends React.Component {
                         <Button
                             type='submit'
                             color='primary'
-                            onClick={() => alert(1)}
+                            onClick={onContinue}
                             label='Continue'
                         />
                     </RightFormContainer>
@@ -233,6 +269,8 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountAddressView () {
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_ADDRESS_VIEW });
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.accountCreateInfoProps)}
@@ -249,7 +287,7 @@ class KeeperCreateModal extends React.Component {
                             <Button
                                 type='submit'
                                 color='primary'
-                                onClick={() => alert(1)}
+                                onClick={onContinue}
                                 label='Continue'
                             />
                         </div>
@@ -264,6 +302,8 @@ class KeeperCreateModal extends React.Component {
             bem.element('right'),
             bem.element('right_acc_create')
         ].join(' ');
+
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
 
         return (
             <div className={bem.element('base-view')}>
@@ -284,18 +324,31 @@ class KeeperCreateModal extends React.Component {
                             type='password'
                         />
                         <BaseCheckbox
-                            label='I have read and agree with Terms  and Conditions & Privacy Policy.'
+                            label='I have read and agree with Terms and Conditions & Privacy Policy.'
                         />
                         <Button
                             type='submit'
                             color='primary'
-                            onClick={() => alert(1)}
+                            onClick={onContinue}
                             label='Continue'
                         />
                     </div>
                 </div>
             </div>
         );
+    }
+
+    _onCreateNewAccount () {
+        const { tabIndex } = this.state.inviteStart;
+
+        switch (tabIndex) {
+            case 0:
+                this.setState({ currentViewName: ACCOUNT_CREATE_VIEW });
+                break;
+            case 1:
+                this.setState({ currentViewName: ACCOUNT_CREATE_VIEW });
+                break;
+        }
     }
 
     _getInviteStartView () {
@@ -320,6 +373,7 @@ class KeeperCreateModal extends React.Component {
                             If you do not own a Waves account yet, create it right now in a matter of minutes.
                         </p>
                         <Button
+                            onClick={this._onCreateNewAccount}
                             type='submit'
                             color='primary'
                             label='Create new account'
@@ -331,7 +385,28 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getView () {
-        return this._getSuccessfulAccountCreateView();
+        const { currentViewName } = this.state;
+
+        switch (currentViewName) {
+            case INVITE_START_VIEW:
+                return this._getInviteStartView();
+            case ACCOUNT_ADDRESS_VIEW:
+                return this._getAccountAddressView();
+            case ACCOUNT_SAVE_PHRASE_VIEW:
+                return this._getAccountSavePhraseView();
+            case ACCOUNT_NAME_VIEW:
+                return this._getAccountNameView();
+            case ACCOUNT_CREATED_VIEW:
+                return this._getSuccessfulAccountCreateView();
+            case IMPORT_FROM_SEED_VIEW:
+                return this._getView();
+            case ACCOUNT_CREATE_VIEW:
+                return this._getAccountCreateView();
+            case ACCOUNT_BACKUP_VIEW:
+                return this._getAccountBackupView();
+        };
+
+        return null;
     }
 
     render () {
