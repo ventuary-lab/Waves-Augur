@@ -43,10 +43,13 @@ class KeeperCreateModal extends React.Component {
         this._setModalVisibility = this._setModalVisibility.bind(this);
         this._triggerModal = this._triggerModal.bind(this);
         this._setTabIndex = this._setTabIndex.bind(this);
+        this._checkIsImportView = this._checkIsImportView.bind(this);
 
         // Common methods
         this._onCreateNewAccount = this._onCreateNewAccount.bind(this);
         this._getInitialState = this._getInitialState.bind(this);
+
+        this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
 
         // View getters
         this._getInviteStartView = this._getInviteStartView.bind(this);
@@ -129,6 +132,25 @@ class KeeperCreateModal extends React.Component {
         ));
     }
 
+    _getCurrentViewInfoProps () {
+        const { tabIndex } = this.state.inviteStart;
+
+        switch (tabIndex) {
+            case 0:
+                return this.accountCreateInfoProps;
+            case 1:
+                return this.importAccountInfoProps;
+        };
+    }
+
+    _checkIsImportView () {
+        try {
+            return this.state.inviteStart.tabIndex === 1;
+        } catch (err) {
+            return false;
+        }
+    }
+
     _getLeftSideView ({ heading, body }) {
         return (
             <div className={bem.element('left')}>
@@ -150,18 +172,47 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getImportFromSeedView () {
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
         
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='Import from seed'
+                        body='Enter your Seed phrase or to access your wallet'
+                    >
+                        <BaseInput
+                            asTextArea
+                            label='Seed phrase'
+                            placeholder='Your seed is 15 words you saved when creating your account'
+                        />
+                        <div className={bem.element('success-alert')}>
+                            <span>Address</span>
+                            <span>8N3Tz2sZLpex5fH26zxd3E9ToEkm2GVM9VQ</span>
+                        </div>
+                        <Button
+                            type='submit'
+                            color='primary'
+                            label='Continue'
+                            onClick={onContinue}
+                        />
+                    </RightFormContainer>
+                </div>
+            </div>
+        )
     }
 
     _getSuccessfulAccountCreateView () {
         const onCreate = () => this.setState({ ...this._getInitialState() });
+        const heading = this._checkIsImportView() ? 'Waves account has been imported!' : 'Waves account has been created!';
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={`${bem.element('right')} left-centered`}>
                     <RightFormContainer
-                        heading='Waves account has been created!'
+                        heading={heading}
                         body='Now you need to  create your DAO profile'
                     >
                         <Button
@@ -181,7 +232,7 @@ class KeeperCreateModal extends React.Component {
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bem.element('right')}>
                     <RightFormContainer
                         heading='Save backup phrase'
@@ -214,7 +265,7 @@ class KeeperCreateModal extends React.Component {
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bem.element('right')}>
                     <RightFormContainer
                         heading='No Backup, No Money'
@@ -243,11 +294,13 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountNameView () {
-        const onContinue = () => this.setState({ currentViewName: ACCOUNT_BACKUP_VIEW });
+        const onContinue = () => this.setState({ 
+            currentViewName: this._checkIsImportView() ? ACCOUNT_CREATED_VIEW : ACCOUNT_BACKUP_VIEW
+        });
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bem.element('right')}>
                     <RightFormContainer
                         heading='Account name'
@@ -273,7 +326,7 @@ class KeeperCreateModal extends React.Component {
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bem.element('right')}>
                     <RightFormContainer
                         heading='Account address'
@@ -303,11 +356,15 @@ class KeeperCreateModal extends React.Component {
             bem.element('right_acc_create')
         ].join(' ');
 
-        const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
+        const onContinue = () => {
+            this.setState({
+                currentViewName: this._checkIsImportView() ? IMPORT_FROM_SEED_VIEW : ACCOUNT_NAME_VIEW
+            });
+        };
 
         return (
             <div className={bem.element('base-view')}>
-                {this._getLeftSideView(this.accountCreateInfoProps)}
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bodyClassName}>
                     <div className={bem.element('right_acc_create_child')}>
                         <h4>Protect your account</h4>
@@ -399,7 +456,7 @@ class KeeperCreateModal extends React.Component {
             case ACCOUNT_CREATED_VIEW:
                 return this._getSuccessfulAccountCreateView();
             case IMPORT_FROM_SEED_VIEW:
-                return this._getView();
+                return this._getImportFromSeedView();
             case ACCOUNT_CREATE_VIEW:
                 return this._getAccountCreateView();
             case ACCOUNT_BACKUP_VIEW:

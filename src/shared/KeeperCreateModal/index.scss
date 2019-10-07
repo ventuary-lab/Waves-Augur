@@ -170,4 +170,23 @@
             top: 68px;
         }
     }
+
+    &__success-alert {
+        padding: 20px;
+        padding-bottom: 26px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        background: #E2FAE4;
+
+        & > * {
+            font-weight: 300;
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+        & > :last-child {
+            color: #7D8199;
+        }
+    }
 }
