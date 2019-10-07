@@ -1,6 +1,6 @@
 import React from 'react';
 import { html } from 'components';
-import CheckboxFieldView from 'yii-steroids/ui/form/CheckboxField/CheckboxFieldView';
+import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import BaseInput from 'ui/form/BaseInput';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
@@ -90,15 +90,16 @@ class KeeperCreateModal extends React.Component {
                         label='Create a password'
                         warningText='Must be at least 8 characters'
                         icon={eyeIcon}
+                        type='password'
                     />
                     <BaseInput
                         label='Confirm password'
                         icon={eyeIcon}
+                        type='password'
                     />
-                    {/* <CheckboxFieldView
-                        label='123123'
-                        inputProps={{onChange: e => console.log({ e }) }}
-                    /> */}
+                    <BaseCheckbox
+                        label='12312312'
+                    />
                 </div>
             </div>
         );
