@@ -77,6 +77,41 @@ export default class DalComponent {
         return !!keeper;
     }
 
+    async getAccountFromLocal () { 
+        //     "acc":{ 
+        //        "name":"Sham227",
+        //        "publicKey":"GFm7drEX13XZLtqPLbuP5phYZ2G9jkyfSwRRB5ZuPitz",
+        //        "address":"3P6LsCKZbvBj7PNFbV72AcMvqCoGaAkvMh8",
+        //        "networkCode":"W",
+        //        "network":"mainnet",
+        //        "type":"seed",
+        //        "balance":{ 
+        //           "available":"4462200000",
+        //           "leasedOut":"0",
+        //           "network":"mainnet"
+        //        }
+        //     }
+
+        // { 
+        //     "acc":{ 
+        //        "name":"Account1",
+        //        "publicKey":"29h3dLGNTLSn8y4pn4JjZSQs4bgVy2eEay16y1gup1Ei",
+        //        "address":"3N2xrvLJ2HPgYmNHRbgtpFZszRKyVxBhhVc",
+        //        "networkCode":"T",
+        //        "network":"testnet",
+        //        "type":"seed",
+        //        "balance":{ 
+        //           "available":"774900000",
+        //           "leasedOut":"0",
+        //           "network":"testnet"
+        //        }
+        //     }
+        //  }
+        return {
+
+        }
+    }
+
     async getAccount() {
         const keeper = await this.transport.getKeeper();
         if (!keeper) {
@@ -85,9 +120,10 @@ export default class DalComponent {
 
         try {
             const userData = await keeper.publicState();
+            console.log({ acc: userData.account });
             return userData.account;
         } catch {
-            return {};
+            return this.getAccountFromLocal();
         }
     }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { html } from 'components';
+import { html, keeperHandler } from 'components';
 import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import BaseInput from 'ui/form/BaseInput';
@@ -9,6 +9,7 @@ import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
 import copyToIcon from 'static/icons/button/copy.svg';
 import logoSvg from 'static/icons/dao-logo-white.svg';
 import Button from 'yii-steroids/ui/form/Button';
+import { seedUtils } from '@waves/waves-transactions';
 
 const bem = html.bem('KeeperCreateModal');
 
@@ -47,7 +48,9 @@ class KeeperCreateModal extends React.Component {
 
         // Common methods
         this._onCreateNewAccount = this._onCreateNewAccount.bind(this);
+        this._isPassValid = this._isPassValid.bind(this);
         this._getInitialState = this._getInitialState.bind(this);
+        this._updateFormState = this._updateFormState.bind(this);
 
         this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
 
@@ -97,10 +100,19 @@ class KeeperCreateModal extends React.Component {
                 tabIndex: 0
             },
             formState: {
+                policyApproved: false,
                 password: null,
-                accAddress: null
+                passwordConfirm: null,
+                accAddress: null,
+                seed: null
             }
-        }
+        };
+    }
+
+    _isPassValid () {
+        const { password, passwordConfirm } = this.state.formState;
+
+        return password && passwordConfirm && passwordConfirm === password;
     }
 
     _setModalVisibility (isVisible) {
@@ -322,7 +334,8 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getAccountAddressView () {
-        const onContinue = () => this.setState({ currentViewName: ACCOUNT_ADDRESS_VIEW });
+        const { accAddress } = this.state.formState;
+        const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
 
         return (
             <div className={bem.element('base-view')}>
@@ -333,8 +346,11 @@ class KeeperCreateModal extends React.Component {
                         body='This is the address of your newly generated wallet'
                     >
                         <div className={bem.element('account-address')}>
-                            <BaseInput />
-                            <CopyToClipboard>
+                            <BaseInput value={accAddress || ''}/>
+                            <CopyToClipboard 
+                                copyText={accAddress || ''}
+                                message='Address copied!'
+                            >
                                 <img src={copyToIcon}/>
                             </CopyToClipboard>
                             <Button
@@ -350,16 +366,45 @@ class KeeperCreateModal extends React.Component {
         );
     }
 
+    _updateFormState (updatedForm) {
+        this.setState(prevState => (
+            {
+                ...prevState,
+                formState: {
+                    ...prevState.formState,
+                    ...updatedForm
+                }
+            }
+        ));
+    }
+
     _getAccountCreateView () {
         const bodyClassName = [
             bem.element('right'),
             bem.element('right_acc_create')
         ].join(' ');
+        const { policyApproved, password } = this.state.formState;
+        const triggerCheckbox = () => this._updateFormState({ policyApproved: !policyApproved });
 
-        const onContinue = () => {
+        const onContinue = async () => {
+            if (!this._isPassValid() || !policyApproved || password.length < 8) {
+                return;
+            };
+
+            const words = await seedUtils.generateNewSeed(16);
+            const seed = seedUtils.Seed.fromExistingPhrase(words);
+
+            this._updateFormState({ accAddress: seed.address });
             this.setState({
-                currentViewName: this._checkIsImportView() ? IMPORT_FROM_SEED_VIEW : ACCOUNT_NAME_VIEW
+                currentViewName: this._checkIsImportView() ? IMPORT_FROM_SEED_VIEW : ACCOUNT_ADDRESS_VIEW
             });
+        };
+
+        const onPasswordChange = (event) => {
+            this._updateFormState({ password: event.target.value })
+        };
+        const onPasswordChangeConfirm = (event) => {
+            this._updateFormState({ passwordConfirm: event.target.value });
         };
 
         return (
@@ -374,13 +419,17 @@ class KeeperCreateModal extends React.Component {
                             warningText='Must be at least 8 characters'
                             icon={eyeIcon}
                             type='password'
+                            onChange={onPasswordChange}
                         />
                         <BaseInput
                             label='Confirm password'
                             icon={eyeIcon}
                             type='password'
+                            onChange={onPasswordChangeConfirm}
                         />
                         <BaseCheckbox
+                            value={policyApproved}
+                            onChange={triggerCheckbox}
                             label='I have read and agree with Terms and Conditions & Privacy Policy.'
                         />
                         <Button

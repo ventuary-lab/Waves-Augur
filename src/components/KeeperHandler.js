@@ -37,7 +37,7 @@ class KeeperHandler {
         };
     }
 
-    async getDecryptedPass (key, hash) {
+    getDecryptedPass (key, hash) {
         const { algorithm, encodingForHashed, encodingForUnhashed, initialVectorSize } = this;
 
         const iv = Buffer.alloc(initialVectorSize, 0);
@@ -65,7 +65,7 @@ async function main () {
     const salt = 'asdsfsdad3123vk)(#*$d';
 
     const { encrypted, key } = await kHandler.getEncryptedPass(password, salt);
-    const { decrypted } = await kHandler.getDecryptedPass(key, encrypted);
+    const { decrypted } = kHandler.getDecryptedPass(key, encrypted);
 
     console.log({ encrypted, decrypted });
 }
