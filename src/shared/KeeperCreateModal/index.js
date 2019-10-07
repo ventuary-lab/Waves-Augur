@@ -4,6 +4,7 @@ import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import BaseInput from 'ui/form/BaseInput';
 import CopyToClipboard from 'shared/CopyToClipboard';
+import OutsideAlerter from 'ui/global/OutsideAlerter';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
 import copyToIcon from 'static/icons/button/copy.svg';
 import logoSvg from 'static/icons/dao-logo-white.svg';
@@ -28,14 +29,22 @@ class KeeperCreateModal extends React.Component {
     constructor(props) {
         super(props);
 
+        this._closeModal = this._closeModal.bind(this);
+        this._openModal = this._openModal.bind(this);
+        this._setModalVisibility = this._setModalVisibility.bind(this);
         this._triggerModal = this._triggerModal.bind(this);
         this._setTabIndex = this._setTabIndex.bind(this);
+
+        // View getters
         this._getInviteStartView = this._getInviteStartView.bind(this);
         this._getAccountAddressView = this._getAccountAddressView.bind(this);
+        this._getAccountSavePhraseView = this._getAccountSavePhraseView.bind(this);
         this._getAccountNameView = this._getAccountNameView.bind(this);
+        this._getSuccessfulAccountCreateView = this._getSuccessfulAccountCreateView.bind(this);
         this._getLeftSideView = this._getLeftSideView.bind(this);
-        this._mapButton = this._mapButton.bind(this);
         this._getView = this._getView.bind(this);
+
+        this._mapButton = this._mapButton.bind(this);
 
         this.accountCreateInfoProps = {
             heading: 'Create new Waves account',
@@ -63,8 +72,21 @@ class KeeperCreateModal extends React.Component {
         };
     }
 
+    _setModalVisibility (isVisible) {
+        this.setState({ isVisible });
+    }
+
+    _closeModal () {
+        this._setModalVisibility(false);
+    }
+
+    _openModal () {
+        this._setModalVisibility(true);
+    }
+
     _triggerModal () {
-        this.setState(prevState => ({ ...prevState, isVisible: !prevState.isVisible }))
+        const { isVisible } = this.state;
+        this._setModalVisibility(!isVisible);
     }
 
     _setTabIndex (tabIndex) {
@@ -95,6 +117,57 @@ class KeeperCreateModal extends React.Component {
         return  (
             <div className={btnIndex === tabIndex ? 'selected' : ''}>
                 <a onClick={onClick}>{label}</a>
+            </div>
+        );
+    }
+
+    _getSuccessfulAccountCreateView () {
+
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.accountCreateInfoProps)}
+                <div className={`${bem.element('right')} left-centered`}>
+                    <RightFormContainer
+                        heading='Waves account has been created!'
+                        body='Now you need to  create your DAO profile'
+                    >
+                        <Button
+                            type='submit'
+                            color='primary'
+                            label='Create new account'
+                        />
+                    </RightFormContainer>
+                </div>
+            </div>
+        )
+    }
+
+    _getAccountSavePhraseView () {
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.accountCreateInfoProps)}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='Save backup phrase'
+                        body='Since only you control your money, you’ll need to save your backup phrase in case this app is deleted or go back'
+                    >
+                        <div className={bem.element('account-save-phrase')}>
+                            <span>
+                                Copy your backup phrase and store it somewhere safe:
+                            </span>
+                            <BaseInput type='password'/>
+                            <CopyToClipboard>
+                                <img src={copyToIcon}/>
+                            </CopyToClipboard>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                onClick={() => alert(1)}
+                                label='Continue'
+                            />
+                        </div>
+                    </RightFormContainer>
+                </div>
             </div>
         );
     }
@@ -253,21 +326,24 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getView () {
-        return this._getAccountBackupView();
+        return this._getSuccessfulAccountCreateView();
     }
 
     render () {
+        const { _closeModal } = this;
         const { isVisible } = this.state;
 
         return (
             <div className={bem.element('root')}>
                 <button onClick={this._triggerModal}>1</button>
                 <BaseModal isVisible={isVisible}>
-                    {this._getView()}
+                    <OutsideAlerter onOutsideClick={_closeModal}>
+                        {this._getView()}
+                    </OutsideAlerter>
                 </BaseModal>
             </div>
         )
-    }
+    };
 }
 
 export default KeeperCreateModal;

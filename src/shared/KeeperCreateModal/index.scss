@@ -19,6 +19,18 @@
         & button {
             margin-top: 10px;
         }
+
+        & .CopyToClipboard {
+            background: #0BC91F;
+            padding: 16px 20px;
+            border-radius: 2px;
+            margin: 1px;
+            position: absolute;
+            right: -24px;
+            top: 4px;
+            z-index: 2;
+            cursor: pointer;
+        }
     }
 
     &__left {
@@ -51,6 +63,10 @@
 
         &.centered {
             justify-content: center;
+            align-items: center;
+        }
+        &.left-centered {
+            justify-content: flex-start;
             align-items: center;
         }
     }
@@ -122,18 +138,6 @@
     &__account-address {
         position: relative;
 
-        & > :nth-child(2) {
-            background: #0BC91F;
-            padding: 16px 20px;
-            border-radius: 2px;
-            margin: 1px;
-            position: absolute;
-            right: -24px;
-            top: 4px;
-            z-index: 2;
-            cursor: pointer;
-        }
-
         & > button {
             margin-top: 10px;
         }
@@ -150,6 +154,20 @@
         & > :nth-child(1) {
             padding: 8px 0;
             font-weight: 500;
+        }
+    }
+
+    &__account-save-phrase {
+        position: relative;
+
+        & > :first-child {
+            display: block;
+            padding: 20px 0;
+        }
+
+        & > :nth-child(3) {
+            right: 219px;
+            top: 68px;
         }
     }
 }
