@@ -1,0 +1,65 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.BaseInput {
+
+
+    &__root {
+        & * {
+            font-family: Roboto;
+        }
+        width: 100%;
+        max-width: 320px;
+
+        & > :first-child {
+            display: flex;
+            flex-direction: column;
+            // width: 320px;
+            position: relative;
+
+            & > label {
+                color: #7D8199;
+                font-size: 13px;
+                line-height: 14px;
+                padding-bottom: 4px;
+            }
+
+            & > input {
+                background: #FFFFFF;
+                border: 1px solid rgba(11, 201, 31, 0.5);
+                box-sizing: border-box;
+                border-radius: 3px;
+                padding: 18px;
+                width: 320px;
+                font-weight: 300;
+                font-size: 18px;
+                line-height: 24px;
+                
+                &.with-icon {
+                    padding-right: 40px;
+                }
+
+                &:focus {
+                    outline: none;
+                    border: 1px solid #0BC91F;
+                }
+            }
+
+            & > :nth-child(3) {
+                position: absolute;
+                right: 12px;
+                top: 34px;
+            }
+        }
+    }
+
+    &__warning {
+        font-weight: 300;
+        font-size: 13px;
+        line-height: 14px;
+        text-align: right;
+        color: #7D8199;
+        display: block;
+        padding-top: 2px;
+    }
+}

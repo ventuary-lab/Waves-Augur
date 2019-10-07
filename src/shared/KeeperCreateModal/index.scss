@@ -43,10 +43,19 @@
     &__right {
         background: #fff;
         display: flex;
-        justify-content: center;
-        align-items: center;
         padding: 40px;
         width: 680px;
+
+        &.centered {
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    &__right_acc_create {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
     }
 
     &__import-create {
