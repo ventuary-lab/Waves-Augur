@@ -1,18 +1,11 @@
 
 import React from 'react';
-import { html, dal, store } from 'components';
-import BaseCheckbox from 'ui/form/BaseCheckbox';
+import { html } from 'components';
 import BaseModal from 'ui/modal/BaseModal';
-import { openModal } from 'yii-steroids/actions/modal';
 import BaseInput from 'ui/form/BaseInput';
-import ProfileWizardModal from 'modals/ProfileWizardModal';
-import CopyToClipboard from 'shared/CopyToClipboard';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
-import copyToIcon from 'static/icons/button/copy.svg';
-import logoSvg from 'static/icons/dao-logo-white.svg';
 import Button from 'yii-steroids/ui/form/Button';
-import { seedUtils } from '@waves/waves-transactions';
 import AlertBadge from 'shared/AlertBadge';
 
 import './index.scss';
@@ -122,7 +115,6 @@ class TransactionApproveModal extends React.Component {
 
         return (
             <div className={bem.element('root')}>
-                {/* <button onClick={this._triggerModal}></button> */}
                 <BaseModal isVisible={isVisible}>
                     <OutsideAlerter onOutsideClick={_closeModal}>
                         {this._getView()}

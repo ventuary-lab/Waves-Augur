@@ -28,6 +28,7 @@ function RightFormContainer ({ heading, body, children }) {
     );
 }
 
+const NO_INVITE_START_VIEW = 'noInviteStartView';
 const INVITE_START_VIEW = 'inviteStartView';
 const ACCOUNT_CREATE_VIEW = 'accountCreateView';
 const ACCOUNT_ADDRESS_VIEW = 'accountAddressView';
@@ -65,6 +66,7 @@ class KeeperCreateModal extends React.Component {
         this._getImportFromSeedView = this._getImportFromSeedView.bind(this);
         this._getAccountCreateView = this._getAccountCreateView.bind(this);
         this._getAccountBackupView = this._getAccountBackupView.bind(this);
+        this._getNoInviteStartView = this._getNoInviteStartView.bind(this);
         this._getLeftSideView = this._getLeftSideView.bind(this);
         this._getView = this._getView.bind(this);
 
@@ -78,6 +80,8 @@ class KeeperCreateModal extends React.Component {
                 To use our platform, you require a Waves account — let’s set it up first.
             `
         };
+
+        this.inviteProvided = false;
 
         this.daoAccount = null;
         this.seedInstance = null;
@@ -98,8 +102,10 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getInitialState () {
+        const currentViewName = this.inviteProvided ? INVITE_START_VIEW : NO_INVITE_START_VIEW;
+
         return {
-            currentViewName: INVITE_START_VIEW,
+            currentViewName,
             isVisible: true,
             inviteStart: {
                 tabIndex: 0
@@ -170,11 +176,24 @@ class KeeperCreateModal extends React.Component {
     }
 
     _getLeftSideView ({ heading, body }) {
+        const smallHint = (
+            <div className={bem.element('left-side-hint')}>
+                <span>You can also:</span>
+                <a href='#'>
+                    <span>Import accounts via seed</span>
+                </a>
+                <a href='#'>
+                    <span>Import accounts from Keeper</span>
+                </a>
+            </div>
+        );
+
         return (
             <div className={bem.element('left')}>
                 <img src={logoSvg}/>
                 <h4>{heading}</h4>
                 <p>{body}</p>
+                {smallHint}
             </div>
         );
     }
@@ -189,6 +208,41 @@ class KeeperCreateModal extends React.Component {
         );
     }
 
+    _getNoInviteStartView () {
+        const onImport = () => {
+            this.setState({ inviteStart: { tabIndex: 1 }, currentViewName: ACCOUNT_CREATE_VIEW });
+        };
+
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this._getCurrentViewInfoProps())}
+                <div className={bem.element('right')}>
+                    <RightFormContainer
+                        heading='Import Waves account'
+                        body='If you already own a Waves wallet, click the button below to import it or connect it with the platform.'
+                    >
+                        <div className={bem.element('account-backup')}>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                label='Import account via SEED phrase'
+                                onClick={onImport}
+                            />
+                            <span>or</span>
+                            <Button
+                                type='submit'
+                                color='primary'
+                                label='Use Waves Keeper'
+                                onClick={() => window.open('https://wavesplatform.com/technology/keeper')}
+                                outline
+                            />
+                        </div>
+                    </RightFormContainer>
+                </div>
+            </div>
+        )
+    }
+
     _getImportFromSeedView () {
         const { accAddress } = this.state.formState;
 
@@ -199,6 +253,14 @@ class KeeperCreateModal extends React.Component {
         };
         const onChangeSeed = (e) => {
             const value = e.target.value;
+
+            if (!value) {
+                this._updateFormState({ 
+                    seedPhrase: null,
+                    accAddress: null
+                });
+                return;
+            }
 
             try {
                 const seed = seedUtils.Seed.fromExistingPhrase(value);
@@ -212,8 +274,30 @@ class KeeperCreateModal extends React.Component {
             }
         };
 
+        const walletWarning = (
+            <div className={bem.element('wallet-warning')}>
+                <p>
+                    Make sure that your Waves Wallet‘s balance is equal to at least 0.01 WAVES — 
+                    you will need to spend a 0.009 fee to register your profile on the blockchain
+                </p>
+                <div>
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Learn how to fund your Waves wallet'
+                        outline
+                    />
+                    <Button
+                        type='submit'
+                        color='primary'
+                        label='Fund your wallet'
+                    />
+                </div>
+            </div>
+        )
+
         return (
-            <div className={bem.element('base-view')}>
+            <div className={bem.element('base-view')} style={{ maxHeight: 604 }}>
                 {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={bem.element('right')}>
                     <RightFormContainer
@@ -232,6 +316,7 @@ class KeeperCreateModal extends React.Component {
                                 <span>{accAddress}</span>
                             </div>
                         )}
+                        {!this.inviteProvided && walletWarning}
                         <Button
                             type='submit'
                             color='primary'
@@ -255,21 +340,25 @@ class KeeperCreateModal extends React.Component {
 
             store.dispatch(openModal(ProfileWizardModal));
         };
-        const heading = this._checkIsImportView() ? 'Waves account has been imported!' : 'Waves account has been created!';
+        const buttonProps = {
+            label: this.inviteProvided ? 'Create DAO profile' : 'Ask for an invitation link',
+            onClick: onCreate,
+        };
+
+        const rightFormProps = {
+            heading: this._checkIsImportView() ? 'Waves account has been imported!' : 'Waves account has been created!',
+            body: this.inviteProvided ? 'Now you need to create your DAO profile' : 'Now you need to ask for an invitation link'
+        };
 
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this._getCurrentViewInfoProps())}
                 <div className={`${bem.element('right')} left-centered`}>
-                    <RightFormContainer
-                        heading={heading}
-                        body='Now you need to  create your DAO profile'
-                    >
+                    <RightFormContainer {...rightFormProps}>
                         <Button
                             type='submit'
                             color='primary'
-                            label='Create DAO profile'
-                            onClick={onCreate}
+                            {...buttonProps}
                         />
                     </RightFormContainer>
                 </div>
@@ -558,6 +647,8 @@ class KeeperCreateModal extends React.Component {
                 return this._getAccountCreateView();
             case ACCOUNT_BACKUP_VIEW:
                 return this._getAccountBackupView();
+            case NO_INVITE_START_VIEW:
+                return this._getNoInviteStartView();
         };
 
         return null;
@@ -569,7 +660,7 @@ class KeeperCreateModal extends React.Component {
 
         return (
             <div className={bem.element('root')}>
-                <button onClick={this._triggerModal}>1</button>
+                {/* <button onClick={this._triggerModal}></button> */}
                 <BaseModal isVisible={isVisible}>
                     <OutsideAlerter onOutsideClick={_closeModal}>
                         {this._getView()}

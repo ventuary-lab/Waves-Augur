@@ -23,6 +23,7 @@ import DalHelper from 'components/dal/DalHelper';
 
 import ActionButtonBlock from '../ActionButtonBlock';
 import KeeperCreateModal from 'shared/KeeperCreateModal';
+import TransactionApproveModal from 'shared/TransactionApproveModal';
 
 const bem = html.bem('ProjectLayout');
 
