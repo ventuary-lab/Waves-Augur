@@ -86,6 +86,8 @@ export default class DalComponent {
             const availableBalanceRes = await axios.get(url);
             const availableBalance = availableBalanceRes.data.balance;
 
+            this.transport.noKeeper.seedPhrase = seed.phrase;
+
             return {
                 name: accountName,
                 publicKey: seed.keyPair.publicKey,
@@ -100,7 +102,11 @@ export default class DalComponent {
                 }
             };
         } catch (err) {
-            return this.getAccountFromLocalStorage();
+            const account = this.getAccountFromLocalStorage();
+
+            this.transport.noKeeper.seedPhrase = account.seed;
+
+            return account;
         }
     }
 
@@ -118,9 +124,12 @@ export default class DalComponent {
 
         try {
             const userData = await keeper.publicState();
+            this.transport.noKeeper.provided = false;
 
             return userData.account;
         } catch {
+            this.transport.noKeeper.provided = true;
+
             return this.getAccountFromLocalStorage();
         }
     }

@@ -176,7 +176,7 @@ class KeeperCreateModal extends React.Component {
                 <h4>{heading}</h4>
                 <p>{body}</p>
             </div>
-        )
+        );
     }
 
     _mapButton ({ label, onClick }, btnIndex) {
@@ -248,7 +248,7 @@ class KeeperCreateModal extends React.Component {
         const onCreate = async () => {
             this.daoAccount = await dal.constructAccountInstance(this.state.formState.accountName, this.seedInstance);
 
-            window.localStorage.setItem('dao_account', JSON.stringify(this.daoAccount));
+            window.localStorage.setItem('dao_account', JSON.stringify({ ...this.daoAccount, seed: this.seedInstance.phrase }));
 
             this.setState(this._getInitialState());
             this._closeModal();

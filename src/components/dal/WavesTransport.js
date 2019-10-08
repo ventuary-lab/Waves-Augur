@@ -1,6 +1,6 @@
 // This is class also used in nodejs application!
 
-const {broadcast, nodeInteraction, invokeScript, waitForTx} = require('@waves/waves-transactions');
+const { broadcast, nodeInteraction, invokeScript, waitForTx } = require('@waves/waves-transactions');
 const _isString = require('lodash/isString');
 const _isInteger = require('lodash/isInteger');
 const _isObject = require('lodash/isObject');
@@ -20,6 +20,12 @@ export default class WavesTransport {
         this.dal = dal;
         this.fee = 0.009;
         this.isKeeperAvailable = null;
+
+        this.noKeeper = {
+            provided: false,
+            seedPhrase: null
+        };
+
         this.start = Date.now();
 
         this._cacheData = null;
@@ -190,6 +196,11 @@ export default class WavesTransport {
      * @returns {Promise}
      */
     async nodePublish(method, args, payment, waitTx = true) {
+        if (this.noKeeper.provided) {
+            await this.nodePublishBySeed(method, args, payment, this.noKeeper.seedPhrase);
+            return;
+        }
+
         const keeper = await this.getKeeper();
         const result = await keeper.signAndPublishTransaction(this._buildTransaction(method, args, payment));
         if (result) {
@@ -230,6 +241,7 @@ export default class WavesTransport {
      */
     async nodePublishBySeed(method, args, payment, seed) {
         return invokeScript({
+            chainId: this.dal.dAppNetwork === 'main' ? 'W' : 'T',
             dApp: this.dal.dApp,
             call: this._buildTransaction(method, args, payment).call,
         }, seed);
