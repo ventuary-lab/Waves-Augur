@@ -197,7 +197,11 @@ export default class WavesTransport {
      */
     async nodePublish(method, args, payment, waitTx = true) {
         if (this.noKeeper.provided) {
-            await this.nodePublishBySeed(method, args, payment, this.noKeeper.seedPhrase);
+            const tx = await this.nodePublishBySeed(method, args, payment, this.noKeeper.seedPhrase);
+            const broadCastResponse = await broadcast(tx, this.getNodeUrl());
+            await waitForTx(tx.id);
+            console.log({ tx, broadCastResponse });
+
             return;
         }
 
@@ -243,7 +247,7 @@ export default class WavesTransport {
         return invokeScript({
             chainId: this.dal.dAppNetwork === 'main' ? 'W' : 'T',
             dApp: this.dal.dApp,
-            call: this._buildTransaction(method, args, payment).call,
+            call: this._buildTransaction(method, args, payment).data.call,
         }, seed);
     }
 
