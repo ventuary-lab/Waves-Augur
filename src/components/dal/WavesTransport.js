@@ -9,6 +9,8 @@ const _escapeRegExp = require('lodash/escapeRegExp');
 const axios = require('axios');
 const _isArray = require('lodash/isArray');
 
+import LoggedInEnum from 'enums/LoggedInEnum';
+
 const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
     : resp;
@@ -22,7 +24,6 @@ export default class WavesTransport {
         this.isKeeperAvailable = null;
 
         this.noKeeper = {
-            provided: false,
             seedPhrase: null,
             onNodePublish: () => {}
         };
@@ -197,16 +198,28 @@ export default class WavesTransport {
      * @returns {Promise}
      */
     async nodePublish(method, args, payment, waitTx = true) {
-        if (this.noKeeper.provided) {
-            const seed = this.noKeeper.seedPhrase;
+        const accountFromLocalStorage = this.dal.getAccountFromLocalStorage();
 
-            const tx = await this.nodePublishBySeed(method, args, payment, seed);
-            const broadCastResponse = await broadcast(tx, this.getNodeUrl());
-            await waitForTx(tx.id);
+        if (accountFromLocalStorage.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            try {
+                const seed = await this.noKeeper.onNodePublish({ method, payment });
 
-            console.log({ tx, broadCastResponse });
+                const tx = await this.nodePublishBySeed(method, args, payment, seed);
 
-            return;
+                await broadcast(tx, this.getNodeUrl());
+                const resolvedTx = await waitForTx(tx.id, {
+                    apiBase: this.getNodeUrl()
+                });
+
+                this.noKeeper.onTransactionSuccess();
+
+                return resolvedTx;
+            } catch (err) {
+
+                this.noKeeper.onTransactionFailure();
+
+                return null;
+            }
         }
 
         const keeper = await this.getKeeper();
@@ -248,11 +261,37 @@ export default class WavesTransport {
      * @returns {Promise}
      */
     async nodePublishBySeed(method, args, payment, seed) {
-        return invokeScript({
-            chainId: this.dal.dAppNetwork === 'main' ? 'W' : 'T',
-            dApp: this.dal.dApp,
-            call: this._buildTransaction(method, args, payment).data.call,
+        return invokeScript({ 
+            ...this._buildTransactionForLibrary(method, args, payment)
         }, seed);
+    }
+
+    _buildTransactionForLibrary (method, args, payment) {
+        const transaction = {
+            type: 16,
+            dApp: this.dal.dApp,
+            fee: 9 * 100000,
+            chainId: this.dal.isTestMode() ? 84 : 87,
+            call: {
+                args: args.map(item => ({
+                    type: _isInteger(item) ? 'integer' : 'string',
+                    value: _isObject(item) ? JSON.stringify(item) : item,
+                })),
+                function: method
+            },
+            payment: !payment ? [] : [
+                {
+                    assetId: 'WAVES',
+                    amount: payment * 100000000,
+                }
+            ],
+        };
+
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Transaction:', transaction); // eslint-disable-line no-console
+        }
+
+        return transaction;
     }
 
     /**

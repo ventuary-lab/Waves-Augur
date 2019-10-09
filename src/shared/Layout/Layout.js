@@ -6,8 +6,10 @@ import _get from 'lodash-es/get';
 import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, { STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR } from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
+import { setUser } from 'yii-steroids/actions/auth';
+import { LOG_IN_USER, TRIGGER_AUTH_CHECKER } from 'actions/global';
 
-import {html, dal, store, ws} from 'components';
+import { html, dal, store, ws } from 'components';
 import {apiWsHandler} from 'actions/api';
 import Header from 'shared/Header';
 import Footer from 'shared/Footer';
@@ -34,7 +36,16 @@ const bem = html.bem('Layout');
         ws.open();
 
         const response = await axios.get('/api/v1/init');
+
         const user = await dal.auth();
+
+        if (user.address) {
+            store.dispatch({ type: LOG_IN_USER });
+            store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
+            store.dispatch(setUser(user));
+        };
+
+        console.log({ user });
 
         return {
             ...response.data,
@@ -80,8 +91,29 @@ export default class Layout extends React.PureComponent {
     };
 
     addConfirmationListener () {
-        dal.transport.noKeeper.onNodePublish = () => {
-            this._updateNestedState('approveModalProps', { isVisible: true });
+        dal.transport.noKeeper.onNodePublish = async ({ method, payment }) => {
+            return new Promise((resolve, reject) => {
+                this._updateNestedState(
+                    'approveModalProps', { 
+                        isVisible: true, 
+                        method, 
+                        payment,
+                        onSendPassword: resolve,
+                        onFailure: reject
+                    });
+            });
+        };
+
+        dal.transport.noKeeper.onTransactionSuccess = async () => {
+            this._updateNestedState('approveModalProps', { 
+                initialView: 'success'
+            });
+        };
+
+        dal.transport.noKeeper.onTransactionFailure = async () => {
+            this._updateNestedState('approveModalProps', { 
+                initialView: 'failure'
+            });
         };
     }
 
@@ -129,21 +161,6 @@ export default class Layout extends React.PureComponent {
                         isVisible: true,
                         isInviteProvided: true
                     });
-                    
-                    // const isKeeperInstalled = await dal.isKeeperInstalled();
-                    // if (isKeeperInstalled) {
-                    //     this.props.dispatch(openModal(ProfileWizardModal, {
-                    //         user: invitation.user,
-                    //         hash2: invitation.hash2
-                    //     }));
-                    // } else {
-                    //     this.setState({ 
-                    //         noKeeperModalProps: {
-                    //             isVisible: true,
-                    //             isInviteProvided: true
-                    //         }
-                    //     });
-                    // }
                 }
             }
         }
@@ -168,7 +185,6 @@ export default class Layout extends React.PureComponent {
     }
 
     _updateNestedState (keyName, newState) {
-        console.log({ keyName, newState });
         this.setState(prevState => ({ 
             [keyName]: {
                 ...prevState[keyName],

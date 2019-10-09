@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { html, dal, store, keeperHandler } from 'components';
 import { seedUtils } from '@waves/waves-transactions';
+import { setUser } from 'yii-steroids/actions/auth';
 
+import { LOG_IN_USER } from 'actions/global';
 import Button from 'yii-steroids/ui/form/Button';
 import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
@@ -52,7 +54,7 @@ export default function KeeperCreateModal (props) {
 class Wrapped extends React.Component {
     static propTypes = {
         onModalTrigger: PropTypes.function,
-        isInviteProvided: PropTypes.boolean
+        isInviteProvided: PropTypes.oneOf([PropTypes.boolean, PropTypes.undefined])
     }
 
     constructor(props) {
@@ -97,7 +99,8 @@ class Wrapped extends React.Component {
             `
         };
 
-        this.inviteProvided = this.props.isInviteProvided;
+
+        this.inviteProvided = true;
 
         this.chainId = dal.isTestMode() ? 'T' : 'W';
 
@@ -357,20 +360,18 @@ class Wrapped extends React.Component {
 
             window.localStorage.setItem('dao_account', JSON.stringify({
                 ...this.daoAccount,
-                seed: keeperHandler.getEncryptedPass(this.seedInstance.phrase),
+                // seed: keeperHandler.getEncryptedPass(this.seedInstance.phrase),
+                seed: this.seedInstance.phrase,
                 loginType: LoggedInEnum.LOGGED_BY_NO_KEEPER
             }));
 
+            const user = await dal.auth();
+
+            store.dispatch(setUser(user));
+            store.dispatch({ type: LOG_IN_USER });
+
             this.setState(this._getInitialState());
             this._closeModal();
-
-            const invitation = await dal.resolveInvitation();
-            console.log({ invitation }, 2);
-
-            store.dispatch(openModal(ProfileWizardModal, {
-                user: invitation.user,
-                hash2: invitation.hash2
-            }));
         };
         const buttonProps = {
             label: this.inviteProvided ? 'Create DAO profile' : 'Ask for an invitation link',
@@ -399,7 +400,9 @@ class Wrapped extends React.Component {
 
     _getAccountSavePhraseView () {
         const { seedPhrase } = this.state.formState;
-        const onContinue = () => this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
+        const onContinue = () => {
+            this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
+        };
 
         return (
             <div className={bem.element('base-view')}>
