@@ -1,5 +1,9 @@
 import React from 'react';
-import { html, dal, store } from 'components';
+import PropTypes from 'prop-types';
+import { html, dal, store, keeperHandler } from 'components';
+import { seedUtils } from '@waves/waves-transactions';
+
+import Button from 'yii-steroids/ui/form/Button';
 import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import { openModal } from 'yii-steroids/actions/modal';
@@ -7,11 +11,12 @@ import BaseInput from 'ui/form/BaseInput';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
+
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
 import copyToIcon from 'static/icons/button/copy.svg';
 import logoSvg from 'static/icons/dao-logo-white.svg';
-import Button from 'yii-steroids/ui/form/Button';
-import { seedUtils } from '@waves/waves-transactions';
+
+import LoggedInEnum from 'enums/LoggedInEnum';
 
 const bem = html.bem('KeeperCreateModal');
 
@@ -38,7 +43,18 @@ const ACCOUNT_CREATED_VIEW = 'accountCreatedView';
 const ACCOUNT_BACKUP_VIEW = 'accountBackupView';
 const IMPORT_FROM_SEED_VIEW = 'importFromSeedView';
 
-class KeeperCreateModal extends React.Component {
+export default function KeeperCreateModal (props) {
+    const { isVisible } = props;
+
+    return isVisible ? <Wrapped {...props}/> : null;
+}
+
+class Wrapped extends React.Component {
+    static propTypes = {
+        onModalTrigger: PropTypes.function,
+        isInviteProvided: PropTypes.boolean
+    }
+
     constructor(props) {
         super(props);
 
@@ -81,7 +97,9 @@ class KeeperCreateModal extends React.Component {
             `
         };
 
-        this.inviteProvided = false;
+        this.inviteProvided = this.props.isInviteProvided;
+
+        this.chainId = dal.isTestMode() ? 'T' : 'W';
 
         this.daoAccount = null;
         this.seedInstance = null;
@@ -129,6 +147,10 @@ class KeeperCreateModal extends React.Component {
 
     _setModalVisibility (isVisible) {
         this.setState({ isVisible });
+
+        if (this.props.onModalTrigger) {
+            this.props.onModalTrigger(isVisible);
+        }
     }
 
     _closeModal () {
@@ -263,7 +285,7 @@ class KeeperCreateModal extends React.Component {
             }
 
             try {
-                const seed = seedUtils.Seed.fromExistingPhrase(value);
+                const seed = new seedUtils.Seed(value, this.chainId);
 
                 this._updateFormState({ 
                     seedPhrase: seed.phrase,
@@ -326,25 +348,34 @@ class KeeperCreateModal extends React.Component {
                     </RightFormContainer>
                 </div>
             </div>
-        )
+        );
     }
 
     _getSuccessfulAccountCreateView () {
         const onCreate = async () => {
-            this.daoAccount = await dal.constructAccountInstance(this.state.formState.accountName, this.seedInstance);
+            this.daoAccount = await dal.constructAccountInstance(this.state.formState, this.seedInstance);
 
-            window.localStorage.setItem('dao_account', JSON.stringify({ ...this.daoAccount, seed: this.seedInstance.phrase }));
+            window.localStorage.setItem('dao_account', JSON.stringify({
+                ...this.daoAccount,
+                seed: keeperHandler.getEncryptedPass(this.seedInstance.phrase),
+                loginType: LoggedInEnum.LOGGED_BY_NO_KEEPER
+            }));
 
             this.setState(this._getInitialState());
             this._closeModal();
 
-            store.dispatch(openModal(ProfileWizardModal));
+            const invitation = await dal.resolveInvitation();
+            console.log({ invitation }, 2);
+
+            store.dispatch(openModal(ProfileWizardModal, {
+                user: invitation.user,
+                hash2: invitation.hash2
+            }));
         };
         const buttonProps = {
             label: this.inviteProvided ? 'Create DAO profile' : 'Ask for an invitation link',
-            onClick: onCreate,
+            onClick:  this.inviteProvided ? onCreate : () => {},
         };
-
         const rightFormProps = {
             heading: this._checkIsImportView() ? 'Waves account has been imported!' : 'Waves account has been created!',
             body: this.inviteProvided ? 'Now you need to create your DAO profile' : 'Now you need to ask for an invitation link'
@@ -524,9 +555,9 @@ class KeeperCreateModal extends React.Component {
             };
 
             const isImportView = this._checkIsImportView();
-            const chainId = dal.isTestMode() === 'main' ? 'W' : 'T';
-            const words = seedUtils.generateNewSeed(16);
-            this.seedInstance = new seedUtils.Seed(words, chainId);
+            const words = String(seedUtils.generateNewSeed(16)).trim();
+
+            this.seedInstance = new seedUtils.Seed(words, this.chainId);
 
             if (!isImportView) {
                 this._updateFormState({ accAddress: this.seedInstance.address, seedPhrase: words });
@@ -604,6 +635,9 @@ class KeeperCreateModal extends React.Component {
             { label: 'Import Waves account', onClick: importWavesAccount },
         ].map(mapButton);
 
+        const { tabIndex } = this.state.inviteStart;
+        const btnLabel = tabIndex === 0 ? 'Create new account' : 'Import Waves account';
+
         return (
             <div className={bem.element('base-view')}>
                 {this._getLeftSideView(this.welcomeInfoProps)}
@@ -619,7 +653,7 @@ class KeeperCreateModal extends React.Component {
                             onClick={this._onCreateNewAccount}
                             type='submit'
                             color='primary'
-                            label='Create new account'
+                            label={btnLabel}
                         />
                     </div>
                 </div>
@@ -669,6 +703,4 @@ class KeeperCreateModal extends React.Component {
             </div>
         )
     };
-}
-
-export default KeeperCreateModal;
+};

@@ -16,7 +16,13 @@ const INITIAL_VIEW = 'initialView';
 const REQUEST_SUCCESS_VIEW = 'requestSuccessView';
 const REQUEST_FAIL_VIEW = 'requestFailView';
 
-class TransactionApproveModal extends React.Component {
+export default function TransactionApproveModal (props) {
+    const { isVisible } = props;
+
+    return isVisible ? <Wrapped {...props}/> : null;
+}
+
+class Wrapped extends React.Component {
     constructor (props) {
         super(props);
 
@@ -24,7 +30,7 @@ class TransactionApproveModal extends React.Component {
         this._getView = this._getView.bind(this);
 
         this.state = {
-            isVisible: true,
+            isVisible: this.props.isVisible,
             currentView: INITIAL_VIEW
         };
     }
@@ -35,7 +41,13 @@ class TransactionApproveModal extends React.Component {
 
     _getView () {
         const { currentView } = this.state;
-        const onPasswordChange = () => {};
+        const onPasswordChange = (e) => {
+            const value = e.target.value;
+
+            if (!value || value.length < 24) {
+                return;
+            }
+        };
         const {
             methodName,
             payment,
@@ -49,7 +61,7 @@ class TransactionApproveModal extends React.Component {
         const badge = (
             currentView === REQUEST_SUCCESS_VIEW && (
                 <AlertBadge text='The transaction was successfully confirmed'/>
-            ) || 
+            ) ||
             currentView === REQUEST_FAIL_VIEW && (
                 <AlertBadge text='The transaction was denied' type='fail'/>
             )
@@ -124,6 +136,3 @@ class TransactionApproveModal extends React.Component {
         )
     }
 }
-
-export default TransactionApproveModal;
-

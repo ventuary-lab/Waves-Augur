@@ -25,6 +25,7 @@ import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import AddEntityIcon from 'shared/Header/AddEntityIcon';
 import UserHeaderInfo from 'shared/Header/UserHeaderInfo';
+import ModalsContext from 'shared/Layout/context';
 import {
     getUserNavItems,
     customRouteProps
@@ -145,39 +146,44 @@ export default class HeaderProfile extends React.PureComponent {
             };
 
             return (
-                <>
-                    {this.props.isPhone && (
-                        <a
-                            href='javascript:void(0)'
-                            className={bem.element('login-link')}
-                            onClick={() => {
-                                this.props.dispatch(openModal(MessageModal, {
-                                    icon: 'Icon__log-in-from-pc',
-                                    title: __('Log in from PC'),
-                                    color: 'success',
-                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                }));
-                            }}
-                        >
-                            {__('Login')}
-                        </a>
-                    ) || !this.props.isInternallyAuthorized &&(
-                        <div
-                            onClick={async () => {
-                                const user = await dal.auth();
-                                store.dispatch({ type: LOG_IN_USER });
-
-                                if (user === null) {
-                                    openLanding();
-                                } else {
-                                    store.dispatch(setUser(user));
-                                }
-                            }}
-                            className={bem.element('login-link')}>
-                            {__('Login')}
-                        </div>
+                <ModalsContext.Consumer>
+                    {({ noKeeperModal }) => (
+                        this.props.isPhone && (
+                            <a
+                                href='javascript:void(0)'
+                                className={bem.element('login-link')}
+                                onClick={() => {
+                                    this.props.dispatch(openModal(MessageModal, {
+                                        icon: 'Icon__log-in-from-pc',
+                                        title: __('Log in from PC'),
+                                        color: 'success',
+                                        description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                    }));
+                                }}
+                            >
+                                {__('Login')}
+                            </a>
+                        ) || (
+                            <div
+                                onClick={async () => {
+                                    if (!this.props.isInternallyAuthorized) {
+                                        const user = await dal.auth();
+    
+                                        if (user === null) {
+                                            noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                        } else {
+                                            store.dispatch({ type: LOG_IN_USER });
+                                            store.dispatch(setUser(user));
+                                        }
+                                    }
+                                }}
+                                className={bem.element('login-link')}>
+                                {__('Login')}
+                            </div>
+                        )
                     )}
-                </>
+                    {/* {} */}
+                </ModalsContext.Consumer>
             );
         }
 

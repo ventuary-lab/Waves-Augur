@@ -4,7 +4,7 @@ import {
 } from 'actions/global';
 
 const initialState = {
-    isLoggedIn: true,
+    isLoggedIn: false,
     authCheckerEnabled: true
 };
 

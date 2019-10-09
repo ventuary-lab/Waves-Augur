@@ -23,7 +23,8 @@ export default class WavesTransport {
 
         this.noKeeper = {
             provided: false,
-            seedPhrase: null
+            seedPhrase: null,
+            onNodePublish: () => {}
         };
 
         this.start = Date.now();
@@ -197,9 +198,12 @@ export default class WavesTransport {
      */
     async nodePublish(method, args, payment, waitTx = true) {
         if (this.noKeeper.provided) {
-            const tx = await this.nodePublishBySeed(method, args, payment, this.noKeeper.seedPhrase);
+            const seed = this.noKeeper.seedPhrase;
+
+            const tx = await this.nodePublishBySeed(method, args, payment, seed);
             const broadCastResponse = await broadcast(tx, this.getNodeUrl());
             await waitForTx(tx.id);
+
             console.log({ tx, broadCastResponse });
 
             return;

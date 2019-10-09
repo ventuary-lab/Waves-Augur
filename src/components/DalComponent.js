@@ -77,9 +77,10 @@ export default class DalComponent {
         return !!keeper;
     }
 
-    async constructAccountInstance (accountName, seed) {
+    async constructAccountInstance (accountForm, seed) {
         const isMainnet = !this.isTestMode();
         const network = isMainnet ? 'mainnet' : 'testnet';
+        const { accountName } = accountForm;
 
         try {
             const url = this.transport.getNodeUrl() + '/addresses/balance/' + seed.address;
@@ -317,6 +318,7 @@ export default class DalComponent {
 
         // Save
         const type = profile.isWhale ? 'whale' : '';
+
         const result = hash2
             ? await this.transport.nodePublish('signupbylink', [hash2, profile, type])
             : await this.transport.nodePublish(user.role === UserRole.INVITED ? 'signup' : 'userupdate', [profile, type]);
