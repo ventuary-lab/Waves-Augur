@@ -97,7 +97,7 @@ export default class HeaderProfile extends React.PureComponent {
     _mapNavItem (item) {
         const _item = item;
 
-        if (_item.label === 'My Favorites') {
+        if (_item.label === 'My Favorites' || _item.label === 'My Donations' && this.props.user && this.props.user.role === UserRole.ANONYMOUS) {
             _item.label = 'My Profile';
         }
 
@@ -141,10 +141,6 @@ export default class HeaderProfile extends React.PureComponent {
         const items = _items.map(this._mapNavItem);
 
         if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
-            const openLanding = (event) => {
-                event.preventDefault();
-                window.location.href = window.location.origin + '/openGuide=1';
-            };
 
             return (
                 <ModalsContext.Consumer>
