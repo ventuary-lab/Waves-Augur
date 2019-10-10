@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { html } from 'components';
+import { html, keeperHandler } from 'components';
 import BaseModal from 'ui/modal/BaseModal';
 import BaseInput from 'ui/form/BaseInput';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
@@ -64,8 +64,12 @@ class Wrapped extends React.Component {
             // fee: '0.009 WAVES'
         };
 
-        const onApprove = () => {
-            this.props.onSendPassword(this.state.password);
+        const onApprove = async () => {
+            const { seed: encryptedSeed } = JSON.parse(window.localStorage.getItem('dao_account'));
+
+            const { decrypted: seed } = await keeperHandler.getDecryptedPass(encryptedSeed, this.state.password);
+
+            this.props.onSendPassword(seed);
         };
 
         const currentView = this.views[this.props.initialView] || _currentView;

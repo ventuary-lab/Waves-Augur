@@ -12,11 +12,15 @@ class KeeperHandler {
         this.encodingForUnhashed = 'utf8';
     }
 
-    async getEncryptedPass (password, salt = 'salt') {
+    async getCipherKey (password) {
+        // return await scrypt.async(password, salt, Math.pow(2, 10), 8, 1, 24);
+    }
+
+    async getEncryptedPass (password, salt = 'asdsfsdad3123vk)(#*$d') {
         const { algorithm, encodingForHashed, initialVectorSize } = this;
 
         const iv = Buffer.alloc(initialVectorSize, 0);
-        const key = await scrypt.async(password, salt, Math.pow(2, 10), 8, 1, 24);
+        const key = await scrypt.async(password, 'salt', Math.pow(2, 10), 8, 1, 24);
 
         const cipher = crypto.createCipheriv(algorithm, key, iv);
 
@@ -28,21 +32,21 @@ class KeeperHandler {
             }
         });
 
-        cipher.write(password);
+        cipher.write(salt);
         cipher.end();
-
+        // toString('hex')
         return {
-            encrypted,
-            key
+            encrypted
         };
     }
 
-    getDecryptedPass (key, hash) {
+    async getDecryptedPass (hash, password) {
         const { algorithm, encodingForHashed, encodingForUnhashed, initialVectorSize } = this;
 
         const iv = Buffer.alloc(initialVectorSize, 0);
 
-        const decipher = crypto.createDecipheriv(algorithm, key, iv);
+        const key = await scrypt.async(password, 'salt', Math.pow(2, 10), 8, 1, 24);
+        const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key, 'hex'), iv);
 
         let decrypted = '';
         decipher.on('readable', () => {
@@ -62,10 +66,10 @@ class KeeperHandler {
 async function main () {
     const password = 'Lorem ipsum';
     const kHandler = new KeeperHandler();
-    const salt = 'asdsfsdad3123vk)(#*$d';
+    const seed = 'asdsfsdad3123vk)(#*$d';
 
-    const { encrypted, key } = await kHandler.getEncryptedPass(password, salt);
-    const { decrypted } = kHandler.getDecryptedPass(key, encrypted);
+    const { encrypted } = await kHandler.getEncryptedPass(password, seed);
+    const { decrypted } = await kHandler.getDecryptedPass(encrypted, password);
 
     console.log({ encrypted, decrypted });
 }

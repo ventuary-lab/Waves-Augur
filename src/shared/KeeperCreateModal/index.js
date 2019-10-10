@@ -384,11 +384,13 @@ class Wrapped extends React.Component {
     _getSuccessfulAccountCreateView () {
         const onCreate = async () => {
             this.daoAccount = await dal.constructAccountInstance(this.state.formState, this.seedInstance);
+            const password = this.state.formState.password;
+            
+            const { encrypted } = await keeperHandler.getEncryptedPass(password, this.seedInstance.phrase);
 
             window.localStorage.setItem('dao_account', JSON.stringify({
                 ...this.daoAccount,
-                // seed: keeperHandler.getEncryptedPass(this.seedInstance.phrase),
-                seed: this.seedInstance.phrase,
+                seed: encrypted,
                 loginType: LoggedInEnum.LOGGED_BY_NO_KEEPER
             }));
 

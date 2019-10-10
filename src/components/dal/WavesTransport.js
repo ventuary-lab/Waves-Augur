@@ -203,7 +203,7 @@ export default class WavesTransport {
         if (accountFromLocalStorage.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
             try {
                 const seed = await this.noKeeper.onNodePublish({ method, payment });
-
+                console.log({ seed });
                 const tx = await this.nodePublishBySeed(method, args, payment, seed);
 
                 await broadcast(tx, this.getNodeUrl());
