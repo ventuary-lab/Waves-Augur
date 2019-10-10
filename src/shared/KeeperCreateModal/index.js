@@ -13,7 +13,9 @@ import BaseInput from 'ui/form/BaseInput';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
+import MessageModal from 'modals/MessageModal';
 
+import loginWithKeeperIcon from 'static/icons/login-waves-keeper.svg';
 import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
 import copyToIcon from 'static/icons/button/copy.svg';
 import logoSvg from 'static/icons/dao-logo-white.svg';
@@ -72,6 +74,7 @@ class Wrapped extends React.Component {
         this._isPassValid = this._isPassValid.bind(this);
         this._getInitialState = this._getInitialState.bind(this);
         this._updateFormState = this._updateFormState.bind(this);
+        this._onLoginWithKeeper = this._onLoginWithKeeper.bind(this);
 
         this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
 
@@ -200,15 +203,39 @@ class Wrapped extends React.Component {
         }
     }
 
+    async _onLoginWithKeeper () {
+        // dal.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+        const user = await dal.auth();
+
+        if (user && user.role) {
+            store.dispatch({ type: LOG_IN_USER });
+            store.dispatch(setUser(user));
+        } else {
+            store.dispatch(openModal(MessageModal, {
+                icon: 'Icon__waves-keeper',
+                title: __('Install Waves Keeper'),
+                color: 'success',
+                description: __('You Need a WAVES Wallet to Join Us'),
+                submitLabel: __('Install'),
+                url: 'https://wavesplatform.com/products-keeper',
+            }));
+        }
+
+        this._closeModal();
+    }
+
     _getLeftSideView ({ heading, body }) {
+        const { _onLoginWithKeeper } = this;
+
         const smallHint = (
             <div className={bem.element('left-side-hint')}>
                 <span>You can also:</span>
                 <a href='#'>
                     <span>Import accounts via seed</span>
                 </a>
-                <a href='#'>
-                    <span>Import accounts from Keeper</span>
+                <span>or login with:</span>
+                <a href='#' className='keeper' onClick={_onLoginWithKeeper}>
+                    <img src={loginWithKeeperIcon}/>
                 </a>
             </div>
         );

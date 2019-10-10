@@ -198,7 +198,7 @@ export default class WavesTransport {
      * @returns {Promise}
      */
     async nodePublish(method, args, payment, waitTx = true) {
-        const accountFromLocalStorage = this.dal.getAccountFromLocalStorage();
+        const accountFromLocalStorage = this.dal.getAccountFromLocalStorage() || {};
 
         if (accountFromLocalStorage.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
             try {

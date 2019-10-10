@@ -133,13 +133,31 @@ export default class DalComponent {
         }
     }
 
+    setLoginTypeWithKeeper () {
+
+    }
+
+    setLoginTypeNoKeeper () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
+    }
+
     async getAccount() {
         const keeper = await this.transport.getKeeper();
+        const localAccount = this.getAccountFromLocalStorage();
 
         try {
+            if (!this.isKeeperInstalled() || localAccount && localAccount.address) {
+                throw new Error();
+            }
+
             const userData = await keeper.publicState();
 
             this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+
+            window.localStorage.setItem('dao_account', JSON.stringify({
+                ...this.getAccountFromLocalStorage(),
+                loginType: LoggedInEnum.LOGGED_BY_KEEPER
+            }));
 
             return userData.account;
         } catch {

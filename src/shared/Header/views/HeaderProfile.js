@@ -168,14 +168,15 @@ export default class HeaderProfile extends React.PureComponent {
                             <div
                                 onClick={async () => {
                                     if (!this.props.isInternallyAuthorized) {
-                                        const user = await dal.auth();
+                                        // const user = await dal.auth();
     
-                                        if (user === null) {
-                                            noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
-                                        } else {
-                                            store.dispatch({ type: LOG_IN_USER });
-                                            store.dispatch(setUser(user));
-                                        }
+                                        // if (user === null) {
+                                        //     noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                        // } else {
+                                        //     store.dispatch({ type: LOG_IN_USER });
+                                        //     store.dispatch(setUser(user));
+                                        // }
+                                        noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
                                     }
                                 }}
                                 className={bem.element('login-link')}>
