@@ -82,6 +82,7 @@ export default class HeaderProfile extends React.PureComponent {
                 label: 'Log out', onClick: () => {
                     store.dispatch({ type: LOG_OUT_USER });
                     store.dispatch(setUser(null));
+                    window.localStorage.removeItem('dao_account');
                     this.setState({ isMenuOpen: false });
                 }
             },

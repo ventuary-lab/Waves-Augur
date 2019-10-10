@@ -365,10 +365,11 @@ class Wrapped extends React.Component {
                 loginType: LoggedInEnum.LOGGED_BY_NO_KEEPER
             }));
 
+            store.dispatch({ type: LOG_IN_USER });
+
             const user = await dal.auth();
 
             store.dispatch(setUser(user));
-            store.dispatch({ type: LOG_IN_USER });
 
             this.setState(this._getInitialState());
             this._closeModal();

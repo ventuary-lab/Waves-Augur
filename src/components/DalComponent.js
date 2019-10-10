@@ -113,9 +113,12 @@ export default class DalComponent {
             };
         } catch (err) {
             const account = this.getAccountFromLocalStorage();
-            account.balance = await this.getAccountBalanceByAddress(account.address);
+            
+            if (account) {
+                account.balance = await this.getAccountBalanceByAddress(account.address);
 
-            this.transport.noKeeper.seedPhrase = account.seed;
+                this.transport.noKeeper.seedPhrase = account.seed;
+            }
 
             return account;
         }
@@ -143,7 +146,10 @@ export default class DalComponent {
             this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
 
             const account = this.getAccountFromLocalStorage();
-            account.balance = await this.getAccountBalanceByAddress(account.address);
+
+            if (account) {
+                // account.balance = await this.getAccountBalanceByAddress(account.address);
+            }
 
             return account;
         }
@@ -158,7 +164,6 @@ export default class DalComponent {
             const account = await this.getAccount();
 
             let user = await this.getUser(account.address);
-            console.log({ user }, 4)
 
             user = {
                 ...user,

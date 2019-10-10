@@ -37,19 +37,17 @@ const bem = html.bem('Layout');
 
         const response = await axios.get('/api/v1/init');
 
-        const user = await dal.auth();
+        // const user = await dal.auth();
 
-        if (user.address) {
-            store.dispatch({ type: LOG_IN_USER });
-            store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
-            store.dispatch(setUser(user));
-        };
-
-        console.log({ user });
+        // if (user && user.address) {
+        //     store.dispatch({ type: LOG_IN_USER });
+        //     store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
+        //     store.dispatch(setUser(user));
+        // };
 
         return {
             ...response.data,
-            user
+            // user
         };
     }
 )
@@ -72,6 +70,8 @@ export default class Layout extends React.PureComponent {
         this._triggerNoKeeperModal = this._triggerNoKeeperModal.bind(this);
         this._triggerApproveModal = this._triggerApproveModal.bind(this);
         this._updateNestedState = this._updateNestedState.bind(this);
+        this._checkForInvite = this._checkForInvite.bind(this);
+        this._getUser = this._getUser.bind(this);
 
         this.state = {
             approveModalProps: {
@@ -82,6 +82,8 @@ export default class Layout extends React.PureComponent {
                 isInviteProvided: false
             }
         };
+
+        console.log(this.props);
     }
 
     static propTypes = {
@@ -117,6 +119,18 @@ export default class Layout extends React.PureComponent {
         };
     }
 
+    async _getUser () {
+        const user = await dal.auth();
+
+        if (user && user.address) {
+            store.dispatch({ type: LOG_IN_USER });
+            store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
+            store.dispatch(setUser(user));
+        };
+
+        return user;
+    }
+
     async componentDidMount() {
         dal.voteReveralMonitor.start();
 
@@ -145,23 +159,32 @@ export default class Layout extends React.PureComponent {
             //         submitLabel: __('Ok, I understand'),
             //     }));
             // }
+
+            const requestedUser = await this._getUser();
+
+            if (requestedUser === null) {
+                this._updateNestedState('noKeeperModalProps', { isVisible: true, isInvitedProvided: false });
+            }
         }
     }
 
-    async componentWillReceiveProps(nextProps) {
-        if (this.props.status === STATUS_LOADING && nextProps.status !== STATUS_LOADING
-            && nextProps.user && nextProps.user.role === UserRole.ANONYMOUS
-        ) {
+    async _checkForInvite () {
+        const invitation = await dal.resolveInvitation();
+
+        if (invitation) {
+            this.props.dispatch(openModal(ProfileWizardModal, {
+                user: invitation.user,
+                hash2: invitation.hash2
+            }));
+        }
+    }
+
+    async componentDidUpdate(nextProps) {
+        console.log(this.props.user, nextProps);
+        if (nextProps.user && nextProps.user.role === UserRole.ANONYMOUS) {
             //not Phone
             if (window.innerWidth >= this.props.maxPhoneWidth) {
-                const invitation = await dal.resolveInvitation();
-
-                if (invitation) {
-                    this._updateNestedState('noKeeperModalProps', {
-                        isVisible: true,
-                        isInviteProvided: true
-                    });
-                }
+                await this._checkForInvite();
             }
         }
     }
