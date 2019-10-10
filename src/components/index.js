@@ -8,6 +8,7 @@ import StoreComponent from 'yii-steroids/components/StoreComponent';
 import UiComponent from 'yii-steroids/components/UiComponent';
 import DalComponent from './DalComponent';
 import WebSocketClient from './WebSocketClient';
+import KeeperHandler from './KeeperHandler';
 
 // Create instances
 const clientStorage = new ClientStorageComponent();
@@ -19,6 +20,7 @@ const store = new StoreComponent();
 const ui = new UiComponent();
 const dal = new DalComponent();
 const ws = new WebSocketClient();
+const keeperHandler = new KeeperHandler();
 
 // Apply configuration
 const customConfig = store.getState().config || {};
@@ -34,6 +36,7 @@ _merge(ws, customConfig.ws);
 
 export {
     clientStorage,
+    keeperHandler,
     http,
     html,
     locale,

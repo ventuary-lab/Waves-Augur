@@ -1,0 +1,53 @@
+
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.BaseCheckbox {
+    &__root {
+        display: block;
+    }
+
+    &__container {
+        display: inline-block;
+        padding-left: 30px;
+        position: relative;
+        cursor: pointer;
+        font-size: 25px;
+
+        & > :first-child {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            color: #333333;
+            margin-left: 10px;
+        }
+
+        & > span {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            left: 0;
+            top: 0;
+            position: absolute;
+            border: 1px solid rgba(11, 201, 31, 0.5);
+            border-radius: 3px;
+        }
+
+        &:hover {
+            & > span {
+                border: 1px solid #0BC91F;
+            }
+        }
+    }
+
+    // &__text {
+    //     font-family: Roboto;
+    //     font-style: normal;
+    //     font-weight: 300;
+    //     font-size: 16px;
+    //     line-height: 24px;
+    //     color: #333333;
+    // }
+}

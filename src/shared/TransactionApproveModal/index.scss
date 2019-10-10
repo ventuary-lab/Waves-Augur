@@ -1,0 +1,63 @@
+
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.TransactionApproveModal {
+    &__root {
+
+    }
+
+    &__base-view {
+        width: 100%;
+        background: #fff;
+        max-width: 380px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+    &__top-heading {
+        background: #F1F6F2;
+
+        & > h4 {
+            margin: 0;
+            padding: 29px 30px;
+        }
+
+        border-bottom: 1px solid rgba(0, 0, 0, .4);
+    }
+
+    &__card-body {
+        padding: 30px;
+    }
+
+    &__additional-info {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        & :not(.title) {
+            color: #7D8199;
+        }
+        & .title {
+            padding-top: 10px;
+        }
+
+        padding-bottom: 30px;
+    }
+
+    &__action-btn-cont {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 20px 0;
+
+        & > * {
+            width: 150px;
+            padding: 13px !important;
+        }
+    }
+}
+
