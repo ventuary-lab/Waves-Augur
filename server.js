@@ -1,4 +1,5 @@
 const express = require('express');
+const addGtagHelper = require('./add-gtag');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
@@ -15,14 +16,14 @@ if (process.env.DAPP) {
 }
 require('./node/contract')(app, httpServer);
 
-app.use(function(req, res, next) {
+app.use(async function(req, res, next) {
     if (/^\/\?invitation=/.test(req.url)) {
         res.redirect('/projects/feed?invitation=' + req.query.invitation);
         return;
     }
 
     if (req.url === '/') {
-        res.sendFile('index.html', { root : __dirname + '/landing'});
+        await gTagWrapper(res, 'landing/index.html');
         return;
     }
 
@@ -36,7 +37,12 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/landing'));
 app.use(express.static(__dirname + '/dist'));
 
-app.get('/*', (req, res) => {
-    res.sendFile('index.html', { root : __dirname + '/dist'});
+async function gTagWrapper (res, route) {
+    const html = await addGtagHelper(route);
+    res.send(html);
+}
+
+app.get('/*', async (req, res) => {
+    await gTagWrapper(res);
 });
 
