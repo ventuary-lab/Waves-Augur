@@ -14,8 +14,6 @@ COPY node /app/node
 COPY landing /app/landing
 COPY src /app/src
 COPY webpack.js /app
-COPY helpers.js /app
-RUN node helpers.js
 RUN node webpack production
 
 COPY server.js /app
