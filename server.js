@@ -39,7 +39,6 @@ app.use(express.static(__dirname + '/dist'));
 
 async function gTagWrapper (res, route) {
     const html = await addGtagHelper(route);
-    console.log({ html });
     res.send(html);
 }
 
