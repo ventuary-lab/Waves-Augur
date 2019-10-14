@@ -64,8 +64,8 @@ module.exports = class TransactionListener {
         try {
             response = await axios.get(`${this.app.nodeUrl}/transactions/address/${this.app.dApp}/limit/${pageSize}${query}`);
         } catch (e) {
-            console.error(`TransactionListener Error on fetch transactions: ${String(e)}`);
-            throw e;
+            console.warn(`TransactionListener Error on fetch transactions: ${String(e)}`);
+            // throw e;
         }
 
         // Get only new transactions
@@ -94,8 +94,8 @@ module.exports = class TransactionListener {
                 try {
                     result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
                 } catch (e) {
-                    console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
-                    throw e;
+                    console.warn(`TransactionListener Error on fetch transaction info: ${String(e)}`);
+                    // throw e;
                 }
 
                 transaction.info = result.data;

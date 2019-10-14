@@ -31,8 +31,8 @@ module.exports = class HeightListener {
         try {
             response = await axios.get(`${this.app.nodeUrl}/blocks/height`);
         } catch (e) {
-            console.error(`HeightListener Error on fetch height: ${String(e)}`);
-            throw e;
+            console.warn(`HeightListener Error on fetch height: ${String(e)}`);
+            // throw e;
         }
         const height = response.data.height;
 

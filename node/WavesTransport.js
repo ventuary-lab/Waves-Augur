@@ -18,7 +18,10 @@ class WavesTransport {
 
     constructor(dal) {
         this.dal = dal;
-        this.nodeUrl = process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode1.wavesnodes.com';
+        // this.nodeUrl = process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : 'https://testnode1.wavesnodes.com';
+        this.nodeUrl = process.env.APP_DAPP_NETWORK === 'main' ? 'https://nodes.wavesplatform.com' : (
+            process.env.NODE_URL  || 'https://testnodes.wavesnodes.com'
+        ),
         this.fee = 0.009;
 
         this._cacheData = null;
@@ -242,10 +245,10 @@ class WavesTransport {
         try {
             const data = await keeper.publicState();
             if (data && 'T' !== data.network.code) {
-                throw new Error('Change network');
+                console.warn('Change network');
             }
         } catch (e) {
-            throw e;
+            console.warn(e)
         }
     }
 

@@ -16,10 +16,10 @@ COPY node /app/node
 COPY src /app/src
 COPY landing /app/landing
 COPY webpack.js /app
-COPY add-gtag.js /app
 RUN node webpack production
 
 COPY server.js /app
+COPY add-gtag.js /app
 COPY aws-upload.js /app
 
 ENTRYPOINT ["forever", "/app/server.js"]

@@ -23,7 +23,7 @@ app.use(async function(req, res, next) {
     }
 
     if (req.url === '/') {
-        await gTagWrapper(res, 'landing/index.html');
+        await gTagWrapper(res, __dirname + 'landing/index.html');
         return;
     }
 
@@ -43,6 +43,6 @@ async function gTagWrapper (res, route) {
 }
 
 app.get('/*', async (req, res) => {
-    await gTagWrapper(res);
+    await gTagWrapper(res, __dirname + 'dist/index.html');
 });
 

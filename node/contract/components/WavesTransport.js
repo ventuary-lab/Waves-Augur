@@ -40,8 +40,8 @@ class WavesTransport {
         try {
             return await axios.get(url);
         } catch (e) {
-            console.error(`WavesTransport Error, url "${url}": ${String(e)}`);
-            throw e;
+            console.warn(`WavesTransport Error, url "${url}": ${String(e)}`);
+            // throw e;
         }
     }
 
