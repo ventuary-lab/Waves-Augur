@@ -4,6 +4,7 @@ const ContractApp = require('./ContractApp');
 const ProjectFilter = require('./enums/ProjectFilter');
 const ContestFilter = require('./enums/ContestFilter');
 const ResponseController = require('./controllers/ResponseController');
+const RedirectController = require('./controllers/RedirectController');
 const TelegramBotClient = require('../services/telegram-bot');
 
 module.exports = async (app, httpServer) => {
@@ -29,6 +30,9 @@ module.exports = async (app, httpServer) => {
                     }
                 },
             };
+        },
+        '/api/v1/redirect-to/:target': async (request, response) => {
+            return RedirectController.handleRedirectByRequest(request, response);
         },
         [`/api/v1/contests/:filter(${ContestFilter.getKeys().join('|')})?`]: async (request) => {
             return contract.collections.contests.getContests(request.params.filter);
@@ -127,7 +131,7 @@ module.exports = async (app, httpServer) => {
         app.get(url, async (request, response) => {
             let content = {};
             try {
-                content = await routes[url](request);
+                content = await routes[url](request, response);
             } catch(e) {
                 contract.logger.error(e, e.stack);
                 content = {
