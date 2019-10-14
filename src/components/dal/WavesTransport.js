@@ -13,7 +13,6 @@ const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
     : resp;
 const validateStatus = status => status === 400 || status >= 200 && status < 300;
-
 export default class WavesTransport {
 
     constructor(dal) {
