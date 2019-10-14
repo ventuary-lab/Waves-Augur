@@ -8,7 +8,8 @@ class RedirectController {
         { href: 'https://www.facebook.com/VentuaryDAO', alt: 'Facebook' },
         { href: 'https://medium.com/@VentuaryDAO', alt: 'Medium' },
         { href: 'https://www.youtube.com/channel/UCOTTc5eiq7nAYF47kDD3Rdg', alt: 'YouTube' },
-        { href: 'https://www.reddit.com/user/Ventuary-DAO', alt: 'Reddit' }
+        { href: 'https://www.reddit.com/user/Ventuary-DAO', alt: 'Reddit' },
+        { href: 'https://discord.gg/CbHBfC9', alt: 'Discord' }
     ];
 
     static handleRedirectByRequest (request, response) {
