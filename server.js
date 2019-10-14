@@ -22,7 +22,7 @@ app.use(async function(req, res, next) {
         return;
     }
 
-    if (req.url === '/') {
+    if (req._parsedUrl.pathname === '/') {
         await gTagWrapper(res, 'landing/index.html');
         return;
     }
@@ -39,6 +39,7 @@ app.use(express.static(__dirname + '/dist'));
 
 async function gTagWrapper (res, route) {
     const html = await addGtagHelper(route);
+    console.log({ html });
     res.send(html);
 }
 
