@@ -10,7 +10,7 @@ import enhanceWithClickOutside from 'react-click-outside';
 import { setUser } from 'yii-steroids/actions/auth';
 
 import { dal, html, store } from 'components';
-import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
+import { LOG_OUT_USER } from 'actions/global';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
@@ -25,6 +25,7 @@ import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import AddEntityIcon from 'shared/Header/AddEntityIcon';
 import UserHeaderInfo from 'shared/Header/UserHeaderInfo';
+import ModalsContext from 'shared/Layout/context';
 import {
     getUserNavItems,
     customRouteProps
@@ -81,6 +82,9 @@ export default class HeaderProfile extends React.PureComponent {
                 label: 'Log out', onClick: () => {
                     store.dispatch({ type: LOG_OUT_USER });
                     store.dispatch(setUser(null));
+                    window.localStorage.removeItem('dao_account');
+                    dal.setLoginTypeLoggedOut();
+
                     this.setState({ isMenuOpen: false });
                 }
             },
@@ -95,7 +99,7 @@ export default class HeaderProfile extends React.PureComponent {
     _mapNavItem (item) {
         const _item = item;
 
-        if (_item.label === 'My Favorites') {
+        if (_item.label === 'My Favorites' || _item.label === 'My Donations' && this.props.user && this.props.user.role === UserRole.ANONYMOUS) {
             _item.label = 'My Profile';
         }
 
@@ -139,45 +143,46 @@ export default class HeaderProfile extends React.PureComponent {
         const items = _items.map(this._mapNavItem);
 
         if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
-            const openLanding = (event) => {
-                event.preventDefault();
-                window.location.href = window.location.origin + '/openGuide=1';
-            };
 
             return (
-                <>
-                    {this.props.isPhone && (
-                        <a
-                            href='javascript:void(0)'
-                            className={bem.element('login-link')}
-                            onClick={() => {
-                                this.props.dispatch(openModal(MessageModal, {
-                                    icon: 'Icon__log-in-from-pc',
-                                    title: __('Log in from PC'),
-                                    color: 'success',
-                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                }));
-                            }}
-                        >
-                            {__('Login')}
-                        </a>
-                    ) || !this.props.isInternallyAuthorized &&(
-                        <div
-                            onClick={async () => {
-                                const user = await dal.auth();
-                                store.dispatch({ type: LOG_IN_USER });
-
-                                if (user === null) {
-                                    openLanding();
-                                } else {
-                                    store.dispatch(setUser(user));
-                                }
-                            }}
-                            className={bem.element('login-link')}>
-                            {__('Login')}
-                        </div>
+                <ModalsContext.Consumer>
+                    {({ noKeeperModal }) => (
+                        this.props.isPhone && (
+                            <a
+                                href='javascript:void(0)'
+                                className={bem.element('login-link')}
+                                onClick={() => {
+                                    this.props.dispatch(openModal(MessageModal, {
+                                        icon: 'Icon__log-in-from-pc',
+                                        title: __('Log in from PC'),
+                                        color: 'success',
+                                        description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                                    }));
+                                }}
+                            >
+                                {__('Login')}
+                            </a>
+                        ) || (
+                            <div
+                                onClick={async () => {
+                                    if (!this.props.isInternallyAuthorized) {
+                                        // const user = await dal.auth();
+                                        // if (user === null) {
+                                        //     noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                        // } else {
+                                        //     store.dispatch({ type: LOG_IN_USER });
+                                        //     store.dispatch(setUser(user));
+                                        // }
+                                        noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                    }
+                                }}
+                                className={bem.element('login-link')}>
+                                {__('Login')}
+                            </div>
+                        )
                     )}
-                </>
+                    {/* {} */}
+                </ModalsContext.Consumer>
             );
         }
 

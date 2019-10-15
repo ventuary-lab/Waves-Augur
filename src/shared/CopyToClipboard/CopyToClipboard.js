@@ -24,6 +24,8 @@ export default class CopyToClipboard extends React.PureComponent {
     }
 
     render() {
+        const { message = 'Link copied to clipboard' } = this.props;
+
         return (
             <div className={bem.block()}>
                 <CopyToBuffer
@@ -41,7 +43,7 @@ export default class CopyToClipboard extends React.PureComponent {
                 </CopyToBuffer>
                 {this.state.isCopied && (
                     <div className={bem.element('message')}>
-                        {__('Link copied to clipboard')}
+                        {__(message)}
                     </div>
                 )}
             </div>

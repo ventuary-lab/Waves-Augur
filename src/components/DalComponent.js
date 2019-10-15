@@ -16,17 +16,19 @@ import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
 import DalHelper from './dal/DalHelper';
 import fetchHoc from './dal/fetchHoc';
+import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
-import ProjectVoteEnum from 'enums/ProjectVoteEnum';
+import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import { openModal } from 'yii-steroids/actions/modal';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
+import LoggedInEnum from 'enums/LoggedInEnum';
 
 export default class DalComponent {
     constructor() {
-        this.dAppNetwork = 'main';
+        this.dAppNetwork = 'test';
         this.dApp = '3P8Fvy1yDwNHvVrabe4ek5b9dAwxFjDKV7R';
         this.adminAddress = '3P9NDxt9Y6ePfM9hkQysgSvbHJvihr56Z18';
 
@@ -44,10 +46,15 @@ export default class DalComponent {
             MULTIPLIER: 150,
         };
 
+        this.CancelToken = axios.CancelToken;
+        this.balanceRequestTokenSource = this.CancelToken.source(); 
+        this._isBalanceFetching = false;
+
         this._authInterval = null;
         this._authChecker = this._authChecker.bind(this);
+        this._isProduction = process.env.NODE_ENV === 'production';
 
-        if (process.env.NODE_ENV !== 'production') {
+        if (!this._isProduction) {
             window.dal = this;
         }
     }
@@ -77,17 +84,128 @@ export default class DalComponent {
         return !!keeper;
     }
 
-    async getAccount() {
-        const keeper = await this.transport.getKeeper();
-        if (!keeper) {
-            return {};
+    async getAccountBalanceByAddress (address) {
+        const url = this.transport.getNodeUrl() + '/addresses/balance/' + address;
+
+        if (this._isBalanceFetching) {
+            return;
         }
 
+        this._isBalanceFetching = true;
+
         try {
+            const availableBalanceRes = await axios.get(url, {
+                cancelToken: this.balanceRequestTokenSource.token
+            });
+
+            return availableBalanceRes.data.balance;
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.warn(err.message);
+            }
+        } finally {
+            this._isBalanceFetching = false;
+        }
+    }
+
+    async constructAccountInstance (accountForm, seed) {        
+        const isMainnet = !this.isTestMode();
+        const network = isMainnet ? 'mainnet' : 'testnet';
+        const { accountName } = accountForm;
+
+        try {
+            const availableBalance = await this.getAccountBalanceByAddress(seed.address);
+
+            this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
+            this.transport.noKeeper.seedPhrase = seed.phrase;
+
+            return {
+                name: accountName,
+                publicKey: seed.keyPair.publicKey,
+                address: seed.address,
+                networkCode: isMainnet ? 'W' : 'T',
+                network,
+                type: 'seed',
+                balance:{ 
+                    available: availableBalance,
+                    leasedOut: '0',
+                    network
+                }
+            };
+        } catch (err) {
+            const account = this.getAccountFromLocalStorage();
+
+            if (account) {
+                account.balance = await this.getAccountBalanceByAddress(account.address);
+
+                this.transport.noKeeper.seedPhrase = account.seed;
+            }
+
+            return account;
+        }
+    }
+
+    getAccountFromLocalStorage () { 
+        try {
+            const account = window.localStorage.getItem('dao_account');
+            return JSON.parse(account);
+        } catch (err) {
+            return null;
+        }
+    }
+
+    getCurrentLoginType () {
+        return this.transport.noKeeper.loginType;
+    }
+
+    setLoginTypeLoggedOut () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_OUT;
+    }
+
+    setLoginTypeWithKeeper () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+    }
+
+    setLoginTypeNoKeeper () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
+    }
+
+    async getAccount() {
+        const keeper = await this.transport.getKeeper();
+        const localAccount = this.getAccountFromLocalStorage();
+        const errorMessage = 'No keeper approach';
+
+        try {
+            if (!this.isKeeperInstalled() || localAccount && localAccount.address || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+                throw new Error(errorMessage);
+            }
+
             const userData = await keeper.publicState();
+            const networkCode = userData.network.code;
+            const isTest = this.isTestMode();
+
+            if (isTest && networkCode === 'W' || !isTest && networkCode === 'T') {
+                throw new Error(errorMessage);
+            }
+
+            this.setLoginTypeWithKeeper();
+
+            window.localStorage.setItem('dao_account', JSON.stringify({
+                loginType: LoggedInEnum.LOGGED_BY_KEEPER
+            }));
+
             return userData.account;
-        } catch {
-            return {};
+        } catch (err) {
+            console.log({ err });
+            this.setLoginTypeNoKeeper();
+
+            const account = this.getAccountFromLocalStorage();
+
+            if (account) {
+                account.balance = await this.getAccountBalanceByAddress(account.address);
+            }
+
+            return account;
         }
     }
 
@@ -98,7 +216,9 @@ export default class DalComponent {
     async auth() {
         try {
             const account = await this.getAccount();
+
             let user = await this.getUser(account.address);
+
             user = {
                 ...user,
                 profile: {
@@ -109,13 +229,18 @@ export default class DalComponent {
 
             if (this._authInterval) {
                 clearInterval(this._authInterval);
-            }
+            };
 
-            this._authInterval = setInterval(this._authChecker, 1000);
+            const authCheckerTimeout = this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER ? 5000 : 1000;
+
+            this._authInterval = setInterval(
+                this._authChecker,
+                authCheckerTimeout
+            );
 
             return user;
         } catch (e) {
-            console.error(e); // eslint-disable-line no-console
+            console.error(e, 'Auth error'); // eslint-disable-line no-console
             return null;
         }
     }
@@ -173,6 +298,10 @@ export default class DalComponent {
         };
     }
 
+    mapWavesAmount (amount) {
+        return Math.floor(_toInteger(amount) / Math.pow(10, 8))
+    }
+
     /**
      * Get user data by address
      * @param {string} address
@@ -187,15 +316,21 @@ export default class DalComponent {
         // negative_fund_{uid}_{address}
 
         const account = await this.getAccount();
-        const balance = account.address === address
-            ? Math.floor(_toInteger(account.balance.available) / Math.pow(10, 8))
-            : null;
+
+        const balance = account.address === address ? (
+            this.isAccountLoggedByNoKeeper(account) ? (
+                this.mapWavesAmount(account.balance)
+            ) : (
+                this.mapWavesAmount(account.balance.available)
+            )
+        ) : null;
 
         const user = await http.get(`/api/v1/users/${address}`);
+
         return {
-            balance,
             address: _trim(address),
             ...user,
+            balance,
             /*activity: await this.getUserActivity(address),
             role: address === this.dApp || address === this.adminAddress
                 ? this.specialRoles[address]
@@ -205,6 +340,10 @@ export default class DalComponent {
                 ...(await this.transport.nodeFetchKey('wl_bio_' + address)),
             },*/
         };
+    }
+
+    isAccountLoggedByNoKeeper (account) {
+        return account.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER;
     }
 
     /**
@@ -273,6 +412,7 @@ export default class DalComponent {
 
         // Save
         const type = profile.isWhale ? 'whale' : '';
+
         const result = hash2
             ? await this.transport.nodePublish('signupbylink', [hash2, profile, type])
             : await this.transport.nodePublish(user.role === UserRole.INVITED ? 'signup' : 'userupdate', [profile, type]);
@@ -1001,7 +1141,7 @@ export default class DalComponent {
     }
 
     log() {
-        if (this.isTestMode() || process.env.NODE_ENV !== 'production') {
+        if (this.isTestMode() || !this._isProduction) {
             console.log.apply(console, arguments); // eslint-disable-line no-console
         }
     }
@@ -1053,7 +1193,7 @@ export default class DalComponent {
         const account = await this.getAccount();
         const nextAddress = account.address;
 
-        if (prevAddress !== nextAddress) {
+        if (prevAddress !== nextAddress || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
             const user = await this.auth();
             store.dispatch(setUser(user));
         }

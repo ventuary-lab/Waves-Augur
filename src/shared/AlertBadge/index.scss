@@ -14,5 +14,9 @@
         & > :first-child {
             margin-right: 10px;
         }
+
+        &.fail {
+            background: #F1F6F2;
+        }
     }
 }
