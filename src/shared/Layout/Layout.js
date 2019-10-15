@@ -108,6 +108,7 @@ export default class Layout extends React.PureComponent {
 
     async _getUser () {
         const user = await dal.auth();
+        console.log({ user });
 
         if (user && user.address) {
             store.dispatch({ type: LOG_IN_USER });
@@ -123,34 +124,31 @@ export default class Layout extends React.PureComponent {
         this.addConfirmationListener();
 
         //not Phone
-        if (window.innerWidth >= this.props.maxPhoneWidth) {
-            //not installed keeper
-            // const isKeeperInstalled = await dal.isKeeperInstalled();
-            // if (!isKeeperInstalled) {
-            // this.props.dispatch(openModal(MessageModal, {
-            //     icon: 'Icon__waves-keeper',
-            //     title: __('Install Waves Keeper'),
-            //     color: 'success',
-            //     description: __('You Need a WAVES Wallet to Join Us'),
-            //     submitLabel: __('Install'),
-            //     url: 'https://wavesplatform.com/products-keeper',
-            // }));
-            // no account
-            // if (!_get(await dal.getAccount(), 'address')) {
-            //     this.props.dispatch(openModal(MessageModal, {
-            //         icon: 'Icon__keeper-no-account',
-            //         title: __('Create your Waves wallet'),
-            //         color: 'success',
-            //         description: __('Click “Add account” in Waves Keeper extension in your browser'),
-            //         submitLabel: __('Ok, I understand'),
-            //     }));
-            // }
+        //not installed keeper
+        // const isKeeperInstalled = await dal.isKeeperInstalled();
+        // if (!isKeeperInstalled) {
+        // this.props.dispatch(openModal(MessageModal, {
+        //     icon: 'Icon__waves-keeper',
+        //     title: __('Install Waves Keeper'),
+        //     color: 'success',
+        //     description: __('You Need a WAVES Wallet to Join Us'),
+        //     submitLabel: __('Install'),
+        //     url: 'https://wavesplatform.com/products-keeper',
+        // }));
+        // no account
+        // if (!_get(await dal.getAccount(), 'address')) {
+        //     this.props.dispatch(openModal(MessageModal, {
+        //         icon: 'Icon__keeper-no-account',
+        //         title: __('Create your Waves wallet'),
+        //         color: 'success',
+        //         description: __('Click “Add account” in Waves Keeper extension in your browser'),
+        //         submitLabel: __('Ok, I understand'),
+        //     }));
+        // }
+        const requestedUser = await this._getUser();
 
-            const requestedUser = await this._getUser();
-
-            if (requestedUser === null) {
-                this._updateNestedState('noKeeperModalProps', { isVisible: true, isInvitedProvided: false });
-            }
+        if (requestedUser === null) {
+            this._updateNestedState('noKeeperModalProps', { isVisible: true, isInvitedProvided: false });
         }
     }
 

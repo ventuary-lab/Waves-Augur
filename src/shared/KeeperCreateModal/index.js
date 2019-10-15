@@ -298,10 +298,11 @@ class Wrapped extends React.Component {
     _getImportFromSeedView (props) {
         const { values, setFieldValue, errors, isValid } = props;
 
-        const onContinue = () => (
-            this.setState({ currentViewName: ACCOUNT_NAME_VIEW })
-        );
+        const onContinue = () => {
+            this.seedInstance = new seedUtils.Seed(values.seedPhrase, this.chainId);
 
+            this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
+        };
 
         const onChangeSeed = (e) => {
             const value = e.target.value;
@@ -583,6 +584,7 @@ class Wrapped extends React.Component {
             this.seedInstance = new seedUtils.Seed(words, this.chainId);
 
             if (!isImportView) {
+                
                 setFieldValue('accAddress', this.seedInstance.address, true);
                 setFieldValue('seedPhrase', words, true);
             }

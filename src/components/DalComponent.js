@@ -173,13 +173,20 @@ export default class DalComponent {
     async getAccount() {
         const keeper = await this.transport.getKeeper();
         const localAccount = this.getAccountFromLocalStorage();
+        const errorMessage = 'No keeper approach';
 
         try {
             if (!this.isKeeperInstalled() || localAccount && localAccount.address || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
-                throw new Error();
+                throw new Error(errorMessage);
             }
 
             const userData = await keeper.publicState();
+            const networkCode = userData.network.code;
+            const isTest = this.isTestMode();
+
+            if (isTest && networkCode === 'W' || !isTest && networkCode === 'T') {
+                throw new Error(errorMessage);
+            }
 
             this.setLoginTypeWithKeeper();
 
@@ -188,7 +195,8 @@ export default class DalComponent {
             }));
 
             return userData.account;
-        } catch {
+        } catch (err) {
+            console.log({ err });
             this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
