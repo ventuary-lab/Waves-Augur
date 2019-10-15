@@ -145,10 +145,11 @@ export default class DalComponent {
 
     async getAccount() {
         const keeper = await this.transport.getKeeper();
-        // const localAccount = this.getAccountFromLocalStorage();
+        const localAccount = this.getAccountFromLocalStorage();
 
         try {
             if (!this.isKeeperInstalled() ||
+                localAccount && localAccount.address ||
                 this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER ||
                 this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
                 throw new Error();

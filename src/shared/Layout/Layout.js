@@ -37,14 +37,6 @@ const bem = html.bem('Layout');
 
         const response = await axios.get('/api/v1/init');
 
-        // const user = await dal.auth();
-
-        // if (user && user.address) {
-        //     store.dispatch({ type: LOG_IN_USER });
-        //     store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
-        //     store.dispatch(setUser(user));
-        // };
-
         return {
             ...response.data,
             // user

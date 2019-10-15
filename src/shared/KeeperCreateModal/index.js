@@ -76,7 +76,6 @@ class Wrapped extends React.Component {
         this._onCreateNewAccount = this._onCreateNewAccount.bind(this);
         this._isPassValid = this._isPassValid.bind(this);
         this._getInitialState = this._getInitialState.bind(this);
-        this._updateFormState = this._updateFormState.bind(this);
         this._onLoginWithKeeper = this._onLoginWithKeeper.bind(this);
 
         this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
@@ -380,11 +379,14 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getSuccessfulAccountCreateView () {
+    _getSuccessfulAccountCreateView (props) {
+        const { values } = props;
+
         const onCreate = async () => {
-            this.daoAccount = await dal.constructAccountInstance(this.state.formState, this.seedInstance);
-            const password = this.state.formState.password;
-            
+            this.daoAccount = await dal.constructAccountInstance(values, this.seedInstance);
+
+            const { password } = values;
+
             const { encrypted } = await keeperHandler.getEncryptedPass(password, this.seedInstance.phrase);
 
             window.localStorage.setItem('dao_account', JSON.stringify({
@@ -427,8 +429,8 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getAccountSavePhraseView () {
-        const { seedPhrase } = this.state.formState;
+    _getAccountSavePhraseView (props) {
+        const { values } = props;
         const onContinue = () => {
             this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
         };
@@ -445,8 +447,8 @@ class Wrapped extends React.Component {
                             <span>
                                 Copy your backup phrase and store it somewhere safe:
                             </span>
-                            <BaseInput type='password' value={seedPhrase}/>
-                            <CopyToClipboard message='Copied!' copyText={seedPhrase}>
+                            <BaseInput type='password' value={values.seedPhrase}/>
+                            <CopyToClipboard message='Copied!' copyText={values.seedPhrase}>
                                 <img src={copyToIcon} />
                             </CopyToClipboard>
                             <Button
@@ -531,8 +533,8 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getAccountAddressView () {
-        const { accAddress } = this.state.formState;
+    _getAccountAddressView (props) {
+        const { values } = props;
         const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
 
         return (
@@ -544,9 +546,9 @@ class Wrapped extends React.Component {
                         body='This is the address of your newly generated wallet'
                     >
                         <div className={bem.element('account-address')}>
-                            <BaseInput value={accAddress || ''}/>
+                            <BaseInput value={values.accAddress || ''}/>
                             <CopyToClipboard 
-                                copyText={accAddress || ''}
+                                copyText={values.accAddress || ''}
                                 message='Address copied!'
                             >
                                 <img src={copyToIcon}/>
@@ -581,8 +583,8 @@ class Wrapped extends React.Component {
             this.seedInstance = new seedUtils.Seed(words, this.chainId);
 
             if (!isImportView) {
-                // setFieldValue('accAddress', this.seedInstance.address, true);
-                // setFieldValue('seedPhrase', words, true);
+                setFieldValue('accAddress', this.seedInstance.address, true);
+                setFieldValue('seedPhrase', words, true);
             }
 
             this.setState({
