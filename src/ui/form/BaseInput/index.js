@@ -13,13 +13,21 @@ function BaseInput (props) {
         // value,
         icon = false,
         warningText = false,
+        errorText = false,
         asTextArea = false,
         ...restProps
     } = props;
 
+    const computeClassName = () => {
+        return [
+            icon ? 'with-icon' : '',
+            errorText ? 'error' : ''
+        ].join(' ');
+    };
+
     const inputProps = {
         ...restProps,
-        className: icon ? 'with-icon' : '',
+        className: computeClassName()
     };
     const inputComponent = asTextArea ? <textarea {...inputProps}/> : <input {...inputProps}/>;
 
@@ -31,6 +39,7 @@ function BaseInput (props) {
                 {icon && <SvgIcon icon={icon}/>}
             </div>
             {warningText && <span className={bem.element('warning')}>{warningText}</span>}
+            <span className={bem.element('error')}>{errorText || ''}</span>
         </div>
     );
 }

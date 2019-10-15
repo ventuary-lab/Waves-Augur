@@ -25,7 +25,8 @@ export default class WavesTransport {
 
         this.noKeeper = {
             seedPhrase: null,
-            onNodePublish: () => {}
+            onNodePublish: () => {},
+            loginType: LoggedInEnum.LOGGED_OUT
         };
 
         this.start = Date.now();

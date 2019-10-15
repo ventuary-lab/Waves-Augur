@@ -91,8 +91,6 @@ export default class DalComponent {
         const { accountName } = accountForm;
 
         try {
-            // const url = this.transport.getNodeUrl() + '/addresses/balance/' + seed.address;
-            // const availableBalanceRes = await axios.get(url);
             const availableBalance = await this.getAccountBalanceByAddress(seed.address);
 
             this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
@@ -133,8 +131,12 @@ export default class DalComponent {
         }
     }
 
-    setLoginTypeWithKeeper () {
+    getCurrentLoginType () {
+        return this.transport.noKeeper.loginType;
+    }
 
+    setLoginTypeWithKeeper () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
     }
 
     setLoginTypeNoKeeper () {
@@ -143,16 +145,18 @@ export default class DalComponent {
 
     async getAccount() {
         const keeper = await this.transport.getKeeper();
-        const localAccount = this.getAccountFromLocalStorage();
+        // const localAccount = this.getAccountFromLocalStorage();
 
         try {
-            if (!this.isKeeperInstalled() || localAccount && localAccount.address) {
+            if (!this.isKeeperInstalled() ||
+                this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER ||
+                this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
                 throw new Error();
             }
 
             const userData = await keeper.publicState();
 
-            this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+            this.setLoginTypeWithKeeper();
 
             window.localStorage.setItem('dao_account', JSON.stringify({
                 ...this.getAccountFromLocalStorage(),
@@ -161,7 +165,7 @@ export default class DalComponent {
 
             return userData.account;
         } catch {
-            this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
+            this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
 
