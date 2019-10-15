@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Formik } from 'formik';
 import { html, dal, store, keeperHandler } from 'components';
 import { seedUtils } from '@waves/waves-transactions';
 import { setUser } from 'yii-steroids/actions/auth';
@@ -10,7 +11,7 @@ import BaseCheckbox from 'ui/form/BaseCheckbox';
 import BaseModal from 'ui/modal/BaseModal';
 import { openModal } from 'yii-steroids/actions/modal';
 import BaseInput from 'ui/form/BaseInput';
-import ProfileWizardModal from 'modals/ProfileWizardModal';
+// import ProfileWizardModal from 'modals/ProfileWizardModal';
 import CopyToClipboard from 'shared/CopyToClipboard';
 import OutsideAlerter from 'ui/global/OutsideAlerter';
 import MessageModal from 'modals/MessageModal';
@@ -68,12 +69,13 @@ class Wrapped extends React.Component {
         this._triggerModal = this._triggerModal.bind(this);
         this._setTabIndex = this._setTabIndex.bind(this);
         this._checkIsImportView = this._checkIsImportView.bind(this);
+        this._formValidate = this._formValidate.bind(this);
+        this._onSubmit = this._onSubmit.bind(this);
 
         // Common methods
         this._onCreateNewAccount = this._onCreateNewAccount.bind(this);
         this._isPassValid = this._isPassValid.bind(this);
         this._getInitialState = this._getInitialState.bind(this);
-        this._updateFormState = this._updateFormState.bind(this);
         this._onLoginWithKeeper = this._onLoginWithKeeper.bind(this);
 
         this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
@@ -136,18 +138,16 @@ class Wrapped extends React.Component {
             },
             formState: {
                 policyApproved: false,
-                password: null,
-                passwordConfirm: null,
-                accAddress: null,
+                password: '',
+                passwordConfirm: '',
+                accAddress: '',
                 accountName: '',
                 seedPhrase: '',
             }
         };
     }
 
-    _isPassValid () {
-        const { password, passwordConfirm } = this.state.formState;
-
+    _isPassValid (password, passwordConfirm) {
         return password && passwordConfirm && passwordConfirm === password;
     }
 
@@ -211,14 +211,14 @@ class Wrapped extends React.Component {
             store.dispatch({ type: LOG_IN_USER });
             store.dispatch(setUser(user));
         } else {
-            store.dispatch(openModal(MessageModal, {
-                icon: 'Icon__waves-keeper',
-                title: __('Install Waves Keeper'),
-                color: 'success',
-                description: __('You Need a WAVES Wallet to Join Us'),
-                submitLabel: __('Install'),
-                url: 'https://wavesplatform.com/products-keeper',
-            }));
+            // store.dispatch(openModal(MessageModal, {
+            //     icon: 'Icon__waves-keeper',
+            //     title: __('Install Waves Keeper'),
+            //     color: 'success',
+            //     description: __('You Need a WAVES Wallet to Join Us'),
+            //     submitLabel: __('Install'),
+            //     url: 'https://wavesplatform.com/products-keeper',
+            // }));
         }
 
         this._closeModal();
@@ -292,37 +292,32 @@ class Wrapped extends React.Component {
                     </RightFormContainer>
                 </div>
             </div>
-        )
+        );
     }
 
-    _getImportFromSeedView () {
-        const { accAddress } = this.state.formState;
+    _getImportFromSeedView (props) {
+        const { values, setFieldValue, errors, isValid } = props;
 
-        const onContinue = () => {
-            if (accAddress) {
-                this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
-            }
-        };
+        const onContinue = () => (
+            this.setState({ currentViewName: ACCOUNT_NAME_VIEW })
+        );
+
+
         const onChangeSeed = (e) => {
             const value = e.target.value;
 
-            if (!value) {
-                this._updateFormState({ 
-                    seedPhrase: null,
-                    accAddress: null
-                });
-                return;
-            }
-
             try {
-                const seed = new seedUtils.Seed(value, this.chainId);
+                if (!value) {
+                    throw new Error();
+                }
 
-                this._updateFormState({ 
-                    seedPhrase: seed.phrase,
-                    accAddress: seed.address
-                });
+                const seed = new seedUtils.Seed(value.trim(), this.chainId);
+
+                setFieldValue('seedPhrase', seed.phrase, true);
+                setFieldValue('accAddress', seed.address, true);
+                // eslint-disable-next-line no-empty
             } catch (err) {
-                console.log({ err });
+                setFieldValue('accAddress', '', true);
             }
         };
 
@@ -360,12 +355,14 @@ class Wrapped extends React.Component {
                             asTextArea
                             onChange={onChangeSeed}
                             label='Seed phrase'
+                            name='seedPhrase'
                             placeholder='Your seed is 15 words you saved when creating your account'
+                            errorText={errors.seedPhrase}
                         />
-                        {accAddress && (
+                        {values.accAddress && (
                             <div className={bem.element('success-alert')}>
                                 <span>Address</span>
-                                <span>{accAddress}</span>
+                                <span>{values.accAddress}</span>
                             </div>
                         )}
                         {!this.inviteProvided && walletWarning}
@@ -373,6 +370,7 @@ class Wrapped extends React.Component {
                             type='submit'
                             color='primary'
                             label='Continue'
+                            disabled={!isValid || !values.accAddress}
                             onClick={onContinue}
                         />
                     </RightFormContainer>
@@ -381,11 +379,14 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getSuccessfulAccountCreateView () {
+    _getSuccessfulAccountCreateView (props) {
+        const { values } = props;
+
         const onCreate = async () => {
-            this.daoAccount = await dal.constructAccountInstance(this.state.formState, this.seedInstance);
-            const password = this.state.formState.password;
-            
+            this.daoAccount = await dal.constructAccountInstance(values, this.seedInstance);
+
+            const { password } = values;
+
             const { encrypted } = await keeperHandler.getEncryptedPass(password, this.seedInstance.phrase);
 
             window.localStorage.setItem('dao_account', JSON.stringify({
@@ -428,8 +429,8 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getAccountSavePhraseView () {
-        const { seedPhrase } = this.state.formState;
+    _getAccountSavePhraseView (props) {
+        const { values } = props;
         const onContinue = () => {
             this.setState({ currentViewName: ACCOUNT_CREATED_VIEW });
         };
@@ -446,8 +447,8 @@ class Wrapped extends React.Component {
                             <span>
                                 Copy your backup phrase and store it somewhere safe:
                             </span>
-                            <BaseInput type='password' value={seedPhrase}/>
-                            <CopyToClipboard message='Copied!' copyText={seedPhrase}>
+                            <BaseInput type='password' value={values.seedPhrase}/>
+                            <CopyToClipboard message='Copied!' copyText={values.seedPhrase}>
                                 <img src={copyToIcon} />
                             </CopyToClipboard>
                             <Button
@@ -497,13 +498,13 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getAccountNameView () {
-        const onContinue = () => this.setState({ 
-            currentViewName: this._checkIsImportView() ? ACCOUNT_CREATED_VIEW : ACCOUNT_BACKUP_VIEW
-        });
-        const onAccountNameChange = (e) => {
-            this._updateFormState({ accountName: e.target.value })
-        };
+    _getAccountNameView (props) {
+        const { handleChange, isValid, errors, values } = props;
+        const onContinue = () => (
+            this.setState({
+                currentViewName: this._checkIsImportView() ? ACCOUNT_CREATED_VIEW : ACCOUNT_BACKUP_VIEW
+            })
+        );
 
         return (
             <div className={bem.element('base-view')}>
@@ -514,12 +515,15 @@ class Wrapped extends React.Component {
                         body='The account name will be known only to you'
                     >
                         <BaseInput
-                            onChange={onAccountNameChange}
+                            onChange={handleChange}
+                            name='accountName'
                             label='Enter account name'
+                            errorText={errors.accountName}
                         />
                         <Button
                             type='submit'
                             color='primary'
+                            disabled={!isValid || !values.accountName}
                             onClick={onContinue}
                             label='Continue'
                         />
@@ -529,8 +533,8 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getAccountAddressView () {
-        const { accAddress } = this.state.formState;
+    _getAccountAddressView (props) {
+        const { values } = props;
         const onContinue = () => this.setState({ currentViewName: ACCOUNT_NAME_VIEW });
 
         return (
@@ -542,9 +546,9 @@ class Wrapped extends React.Component {
                         body='This is the address of your newly generated wallet'
                     >
                         <div className={bem.element('account-address')}>
-                            <BaseInput value={accAddress || ''}/>
+                            <BaseInput value={values.accAddress || ''}/>
                             <CopyToClipboard 
-                                copyText={accAddress || ''}
+                                copyText={values.accAddress || ''}
                                 message='Address copied!'
                             >
                                 <img src={copyToIcon}/>
@@ -562,30 +566,16 @@ class Wrapped extends React.Component {
         );
     }
 
-    _updateFormState (updatedForm) {
-        this.setState(prevState => (
-            {
-                ...prevState,
-                formState: {
-                    ...prevState.formState,
-                    ...updatedForm
-                }
-            }
-        ));
-    }
-
-    _getAccountCreateView () {
+    _getAccountCreateView (props) {
         const bodyClassName = [
             bem.element('right'),
             bem.element('right_acc_create')
         ].join(' ');
-        const { policyApproved, password } = this.state.formState;
-        const triggerCheckbox = () => this._updateFormState({ policyApproved: !policyApproved });
+
+        const { values, handleChange, errors, validateForm, isValid, setFieldValue } = props;
 
         const onContinue = async () => {
-            if (!this._isPassValid() || !policyApproved || password.length < 8) {
-                return;
-            };
+            await validateForm();
 
             const isImportView = this._checkIsImportView();
             const words = String(seedUtils.generateNewSeed(16)).trim();
@@ -593,19 +583,13 @@ class Wrapped extends React.Component {
             this.seedInstance = new seedUtils.Seed(words, this.chainId);
 
             if (!isImportView) {
-                this._updateFormState({ accAddress: this.seedInstance.address, seedPhrase: words });
+                setFieldValue('accAddress', this.seedInstance.address, true);
+                setFieldValue('seedPhrase', words, true);
             }
 
             this.setState({
                 currentViewName: isImportView ? IMPORT_FROM_SEED_VIEW : ACCOUNT_ADDRESS_VIEW
             });
-        };
-
-        const onPasswordChange = (event) => {
-            this._updateFormState({ password: event.target.value })
-        };
-        const onPasswordChangeConfirm = (event) => {
-            this._updateFormState({ passwordConfirm: event.target.value });
         };
 
         return (
@@ -619,23 +603,32 @@ class Wrapped extends React.Component {
                             label='Create a password'
                             warningText='Must be at least 8 characters'
                             icon={eyeIcon}
+                            value={values.password}
                             type='password'
-                            onChange={onPasswordChange}
+                            name='password'
+                            onChange={handleChange}
+                            errorText={errors.password}
                         />
                         <BaseInput
                             label='Confirm password'
                             icon={eyeIcon}
+                            value={values.passwordConfirm}
                             type='password'
-                            onChange={onPasswordChangeConfirm}
+                            name='passwordConfirm'
+                            onChange={handleChange}
+                            errorText={errors.passwordConfirm}
                         />
                         <BaseCheckbox
-                            value={policyApproved}
-                            onChange={triggerCheckbox}
+                            value={values.policyApproved}
+                            onChange={handleChange}
+                            name='policyApproved'
                             label='I have read and agree with Terms and Conditions & Privacy Policy.'
+                            errorText={errors.policyApproved}
                         />
                         <Button
                             type='submit'
                             color='primary'
+                            disabled={!isValid}
                             onClick={onContinue}
                             label='Continue'
                         />
@@ -694,46 +687,82 @@ class Wrapped extends React.Component {
         );
     }
 
-    _getView () {
+    _getView (props) {
         const { currentViewName } = this.state;
 
         switch (currentViewName) {
             case INVITE_START_VIEW:
-                return this._getInviteStartView();
+                return this._getInviteStartView(props);
             case ACCOUNT_ADDRESS_VIEW:
-                return this._getAccountAddressView();
+                return this._getAccountAddressView(props);
             case ACCOUNT_SAVE_PHRASE_VIEW:
-                return this._getAccountSavePhraseView();
+                return this._getAccountSavePhraseView(props);
             case ACCOUNT_NAME_VIEW:
-                return this._getAccountNameView();
+                return this._getAccountNameView(props);
             case ACCOUNT_CREATED_VIEW:
-                return this._getSuccessfulAccountCreateView();
+                return this._getSuccessfulAccountCreateView(props);
             case IMPORT_FROM_SEED_VIEW:
-                return this._getImportFromSeedView();
+                return this._getImportFromSeedView(props);
             case ACCOUNT_CREATE_VIEW:
-                return this._getAccountCreateView();
+                return this._getAccountCreateView(props);
             case ACCOUNT_BACKUP_VIEW:
-                return this._getAccountBackupView();
+                return this._getAccountBackupView(props);
             case NO_INVITE_START_VIEW:
-                return this._getNoInviteStartView();
+                return this._getNoInviteStartView(props);
         };
 
         return null;
     }
 
+    _onSubmit () {}
+
+    _formValidate (values) {
+        const errors = {};
+        const { currentViewName } = this.state;
+
+        if (currentViewName === ACCOUNT_CREATE_VIEW) {
+            if (!values.password || !values.passwordConfirm) {
+                errors.password = 'Password is mandatory';
+            }
+            if (values.password.length < 8) {
+                errors.password = 'Min pass length is 8';
+            }
+            if (values.password !== values.passwordConfirm) {
+                errors.password = 'Passwords should be equal';
+            }
+            if (!values.policyApproved) {
+                errors.policyApproved = 'Approve is mandatory';
+            }
+        }
+
+        if (!values.accountName && currentViewName === ACCOUNT_NAME_VIEW) {
+            errors.accountName = 'Account name is mandatory';
+        }
+        if ((!values.seedPhrase || !values.accAddress) && currentViewName === IMPORT_FROM_SEED_VIEW) {
+            errors.seedPhrase = 'Enter valid seed';
+        }
+
+        return errors;
+    }
+
     render () {
         const { _closeModal } = this;
         const { isVisible } = this.state;
+        const formProps = {
+            onSubmit: this._onSubmit,
+            validate: this._formValidate,
+            initialValues: this._getInitialState().formState,
+            render: props => this._getView(props)
+        };
 
         return (
             <div className={bem.element('root')}>
-                {/* <button onClick={this._triggerModal}></button> */}
                 <BaseModal isVisible={isVisible}>
                     <OutsideAlerter onOutsideClick={_closeModal}>
-                        {this._getView()}
+                        <Formik {...formProps} />
                     </OutsideAlerter>
                 </BaseModal>
             </div>
-        )
+        );
     };
 };

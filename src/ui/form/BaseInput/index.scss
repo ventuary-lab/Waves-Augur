@@ -2,8 +2,6 @@
 @import 'style/helpers/mixins';
 
 .BaseInput {
-
-
     &__root {
         & * {
             font-family: Roboto;
@@ -14,7 +12,6 @@
         & > :first-child {
             display: flex;
             flex-direction: column;
-            // width: 320px;
             position: relative;
 
             & > label {
@@ -41,7 +38,14 @@
 
                 &:focus {
                     outline: none;
-                    border: 1px solid #0BC91F;
+                    border: 1px solid $color-brand-green;
+                }
+
+                &.error {
+                    border: 1px solid rgba(207, 42, 42, .5)
+                }
+                &.error:focus {
+                    border: 1px solid $color-brand-red;
                 }
             }
 
@@ -53,13 +57,22 @@
         }
     }
 
-    &__warning {
+    @mixin additional {
         font-weight: 300;
         font-size: 13px;
         line-height: 14px;
         text-align: right;
-        color: #7D8199;
         display: block;
         padding-top: 2px;
+    }
+
+    &__warning {
+        @include additional;
+        color: #7D8199;
+    }
+
+    &__error {
+        @include additional;
+        color: red;
     }
 }

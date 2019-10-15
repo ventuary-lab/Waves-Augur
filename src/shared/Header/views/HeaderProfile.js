@@ -10,7 +10,7 @@ import enhanceWithClickOutside from 'react-click-outside';
 import { setUser } from 'yii-steroids/actions/auth';
 
 import { dal, html, store } from 'components';
-import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
+import { LOG_OUT_USER } from 'actions/global';
 import UserRole from 'enums/UserRole';
 import NavItemSchema from 'types/NavItemSchema';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
@@ -83,6 +83,8 @@ export default class HeaderProfile extends React.PureComponent {
                     store.dispatch({ type: LOG_OUT_USER });
                     store.dispatch(setUser(null));
                     window.localStorage.removeItem('dao_account');
+                    dal.setLoginTypeLoggedOut();
+
                     this.setState({ isMenuOpen: false });
                 }
             },
@@ -165,7 +167,6 @@ export default class HeaderProfile extends React.PureComponent {
                                 onClick={async () => {
                                     if (!this.props.isInternallyAuthorized) {
                                         // const user = await dal.auth();
-    
                                         // if (user === null) {
                                         //     noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
                                         // } else {

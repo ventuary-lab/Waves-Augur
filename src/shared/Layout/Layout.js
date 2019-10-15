@@ -37,18 +37,7 @@ const bem = html.bem('Layout');
 
         const response = await axios.get('/api/v1/init');
 
-        // const user = await dal.auth();
-
-        // if (user && user.address) {
-        //     store.dispatch({ type: LOG_IN_USER });
-        //     store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
-        //     store.dispatch(setUser(user));
-        // };
-
-        return {
-            ...response.data,
-            // user
-        };
+        return response.data;
     }
 )
 @connect(
@@ -82,8 +71,6 @@ export default class Layout extends React.PureComponent {
                 isInviteProvided: false
             }
         };
-
-        console.log(this.props);
     }
 
     static propTypes = {
@@ -124,7 +111,6 @@ export default class Layout extends React.PureComponent {
 
         if (user && user.address) {
             store.dispatch({ type: LOG_IN_USER });
-            store.dispatch({ type: TRIGGER_AUTH_CHECKER, state: false  });
             store.dispatch(setUser(user));
         };
 
@@ -168,6 +154,10 @@ export default class Layout extends React.PureComponent {
         }
     }
 
+    componentDidUnmount () {
+        clearInterval(this._userChecker);
+    }
+
     async _checkForInvite () {
         const invitation = await dal.resolveInvitation();
 
@@ -180,7 +170,6 @@ export default class Layout extends React.PureComponent {
     }
 
     async componentDidUpdate(nextProps) {
-        console.log(this.props.user, nextProps);
         if (nextProps.user && nextProps.user.role === UserRole.ANONYMOUS) {
             //not Phone
             if (window.innerWidth >= this.props.maxPhoneWidth) {

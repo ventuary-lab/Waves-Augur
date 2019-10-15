@@ -19,7 +19,7 @@ import fetchHoc from './dal/fetchHoc';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
-import ProjectVoteEnum from 'enums/ProjectVoteEnum';
+import { LOG_IN_USER, LOG_OUT_USER } from 'actions/global';
 import VoteReveralMonitor from 'components/dal/VoteReveralMonitor';
 import { openModal } from 'yii-steroids/actions/modal';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
@@ -45,10 +45,15 @@ export default class DalComponent {
             MULTIPLIER: 150,
         };
 
+        this.CancelToken = axios.CancelToken;
+        this.balanceRequestTokenSource = this.CancelToken.source(); 
+        this._isBalanceFetching = false;
+
         this._authInterval = null;
         this._authChecker = this._authChecker.bind(this);
+        this._isProduction = process.env.NODE_ENV === 'production';
 
-        if (process.env.NODE_ENV !== 'production') {
+        if (!this._isProduction) {
             window.dal = this;
         }
     }
@@ -80,19 +85,36 @@ export default class DalComponent {
 
     async getAccountBalanceByAddress (address) {
         const url = this.transport.getNodeUrl() + '/addresses/balance/' + address;
-        const availableBalanceRes = await axios.get(url);
 
-        return availableBalanceRes.data.balance;
+        if (this._isBalanceFetching) {
+            return;
+        }
+
+        this._isBalanceFetching = true;
+
+        try {
+            const availableBalanceRes = await axios.get(url, {
+                cancelToken: this.balanceRequestTokenSource.token
+            });
+
+            return availableBalanceRes.data.balance;
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.warn(err.message);
+            }
+            console.log(err);
+
+        } finally {
+            this._isBalanceFetching = false;
+        }
     }
 
-    async constructAccountInstance (accountForm, seed) {
+    async constructAccountInstance (accountForm, seed) {        
         const isMainnet = !this.isTestMode();
         const network = isMainnet ? 'mainnet' : 'testnet';
         const { accountName } = accountForm;
 
         try {
-            // const url = this.transport.getNodeUrl() + '/addresses/balance/' + seed.address;
-            // const availableBalanceRes = await axios.get(url);
             const availableBalance = await this.getAccountBalanceByAddress(seed.address);
 
             this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
@@ -113,7 +135,7 @@ export default class DalComponent {
             };
         } catch (err) {
             const account = this.getAccountFromLocalStorage();
-            
+
             if (account) {
                 account.balance = await this.getAccountBalanceByAddress(account.address);
 
@@ -129,12 +151,20 @@ export default class DalComponent {
             const account = window.localStorage.getItem('dao_account');
             return JSON.parse(account);
         } catch (err) {
-            return {};
+            return null;
         }
     }
 
-    setLoginTypeWithKeeper () {
+    getCurrentLoginType () {
+        return this.transport.noKeeper.loginType;
+    }
 
+    setLoginTypeLoggedOut () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_OUT;
+    }
+
+    setLoginTypeWithKeeper () {
+        this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
     }
 
     setLoginTypeNoKeeper () {
@@ -146,27 +176,26 @@ export default class DalComponent {
         const localAccount = this.getAccountFromLocalStorage();
 
         try {
-            if (!this.isKeeperInstalled() || localAccount && localAccount.address) {
+            if (!this.isKeeperInstalled() || localAccount && localAccount.address || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
                 throw new Error();
             }
 
             const userData = await keeper.publicState();
 
-            this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+            this.setLoginTypeWithKeeper();
 
             window.localStorage.setItem('dao_account', JSON.stringify({
-                ...this.getAccountFromLocalStorage(),
                 loginType: LoggedInEnum.LOGGED_BY_KEEPER
             }));
 
             return userData.account;
         } catch {
-            this.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_NO_KEEPER;
+            this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
 
             if (account) {
-                // account.balance = await this.getAccountBalanceByAddress(account.address);
+                account.balance = await this.getAccountBalanceByAddress(account.address);
             }
 
             return account;
@@ -1100,7 +1129,7 @@ export default class DalComponent {
     }
 
     log() {
-        if (this.isTestMode() || process.env.NODE_ENV !== 'production') {
+        if (this.isTestMode() || !this._isProduction) {
             console.log.apply(console, arguments); // eslint-disable-line no-console
         }
     }
@@ -1142,7 +1171,7 @@ export default class DalComponent {
         // Get prev address
         const store = require('components').store;
         const state = store.getState();
-        const prevAddress = _get(getUser(store.getState()), 'address');
+        // const prevAddress = _get(getUser(store.getState()), 'address');
 
         if (!state.global.authCheckerEnabled) {
             return;
@@ -1150,12 +1179,13 @@ export default class DalComponent {
 
         // Get next address
         const account = await this.getAccount();
-        const nextAddress = account.address;
+        // const nextAddress = account.address;
 
-        if (prevAddress !== nextAddress) {
-            const user = await this.auth();
-            store.dispatch(setUser(user));
-        }
+        // if (prevAddress !== nextAddress) {
+    
+        // }
+        const user = await this.auth();
+        store.dispatch(setUser(user));
     }
 
     async transferFunds(address, amount) {
