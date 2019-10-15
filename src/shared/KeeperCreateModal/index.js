@@ -211,14 +211,14 @@ class Wrapped extends React.Component {
             store.dispatch({ type: LOG_IN_USER });
             store.dispatch(setUser(user));
         } else {
-            store.dispatch(openModal(MessageModal, {
-                icon: 'Icon__waves-keeper',
-                title: __('Install Waves Keeper'),
-                color: 'success',
-                description: __('You Need a WAVES Wallet to Join Us'),
-                submitLabel: __('Install'),
-                url: 'https://wavesplatform.com/products-keeper',
-            }));
+            // store.dispatch(openModal(MessageModal, {
+            //     icon: 'Icon__waves-keeper',
+            //     title: __('Install Waves Keeper'),
+            //     color: 'success',
+            //     description: __('You Need a WAVES Wallet to Join Us'),
+            //     submitLabel: __('Install'),
+            //     url: 'https://wavesplatform.com/products-keeper',
+            // }));
         }
 
         this._closeModal();
