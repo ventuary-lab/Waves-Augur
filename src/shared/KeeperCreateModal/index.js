@@ -303,22 +303,23 @@ class Wrapped extends React.Component {
             this.setState({ currentViewName: ACCOUNT_NAME_VIEW })
         );
 
+
         const onChangeSeed = (e) => {
             const value = e.target.value;
 
-            if (!value) {
-                setFieldValue('seedPhrase', '', true);
-                setFieldValue('accAddress', '', true);
-                return;
-            }
-
             try {
+                if (!value) {
+                    throw new Error();
+                }
+
                 const seed = new seedUtils.Seed(value.trim(), this.chainId);
 
                 setFieldValue('seedPhrase', seed.phrase, true);
                 setFieldValue('accAddress', seed.address, true);
                 // eslint-disable-next-line no-empty
-            } catch (err) {}
+            } catch (err) {
+                setFieldValue('accAddress', '', true);
+            }
         };
 
         const walletWarning = (
@@ -496,7 +497,7 @@ class Wrapped extends React.Component {
     }
 
     _getAccountNameView (props) {
-        const { handleChange, isValid, errors } = props;
+        const { handleChange, isValid, errors, values } = props;
         const onContinue = () => (
             this.setState({
                 currentViewName: this._checkIsImportView() ? ACCOUNT_CREATED_VIEW : ACCOUNT_BACKUP_VIEW
@@ -520,7 +521,7 @@ class Wrapped extends React.Component {
                         <Button
                             type='submit'
                             color='primary'
-                            disabled={!isValid}
+                            disabled={!isValid || !values.accountName}
                             onClick={onContinue}
                             label='Continue'
                         />
@@ -563,25 +564,13 @@ class Wrapped extends React.Component {
         );
     }
 
-    _updateFormState (updatedForm) {
-        this.setState(prevState => (
-            {
-                ...prevState,
-                formState: {
-                    ...prevState.formState,
-                    ...updatedForm
-                }
-            }
-        ));
-    }
-
     _getAccountCreateView (props) {
         const bodyClassName = [
             bem.element('right'),
             bem.element('right_acc_create')
         ].join(' ');
 
-        const { values, handleChange, errors, validateForm, isValid } = props;
+        const { values, handleChange, errors, validateForm, isValid, setFieldValue } = props;
 
         const onContinue = async () => {
             await validateForm();
@@ -592,7 +581,8 @@ class Wrapped extends React.Component {
             this.seedInstance = new seedUtils.Seed(words, this.chainId);
 
             if (!isImportView) {
-                this._updateFormState({ accAddress: this.seedInstance.address, seedPhrase: words });
+                // setFieldValue('accAddress', this.seedInstance.address, true);
+                // setFieldValue('seedPhrase', words, true);
             }
 
             this.setState({
@@ -746,7 +736,7 @@ class Wrapped extends React.Component {
         if (!values.accountName && currentViewName === ACCOUNT_NAME_VIEW) {
             errors.accountName = 'Account name is mandatory';
         }
-        if (!values.seedPhrase && currentViewName === IMPORT_FROM_SEED_VIEW) {
+        if ((!values.seedPhrase || !values.accAddress) && currentViewName === IMPORT_FROM_SEED_VIEW) {
             errors.seedPhrase = 'Enter valid seed';
         }
 
