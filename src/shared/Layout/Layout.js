@@ -154,10 +154,6 @@ export default class Layout extends React.PureComponent {
         }
     }
 
-    componentDidUnmount () {
-        clearInterval(this._userChecker);
-    }
-
     async _checkForInvite () {
         const invitation = await dal.resolveInvitation();
 

@@ -16,6 +16,7 @@ import validate from 'shared/validate';
 import WavesTransport from './dal/WavesTransport';
 import DalHelper from './dal/DalHelper';
 import fetchHoc from './dal/fetchHoc';
+import ProjectVoteEnum from 'enums/ProjectVoteEnum';
 import ProjectStatusEnum from 'enums/ProjectStatusEnum';
 import moment from 'moment';
 import FeedTypeEnum from 'enums/FeedTypeEnum';
@@ -102,8 +103,6 @@ export default class DalComponent {
             if (axios.isCancel(err)) {
                 console.warn(err.message);
             }
-            console.log(err);
-
         } finally {
             this._isBalanceFetching = false;
         }
@@ -222,9 +221,14 @@ export default class DalComponent {
 
             if (this._authInterval) {
                 clearInterval(this._authInterval);
-            }
+            };
 
-            this._authInterval = setInterval(this._authChecker, 1000);
+            const authCheckerTimeout = this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER ? 5000 : 1000;
+
+            this._authInterval = setInterval(
+                this._authChecker,
+                authCheckerTimeout
+            );
 
             return user;
         } catch (e) {
@@ -1171,7 +1175,7 @@ export default class DalComponent {
         // Get prev address
         const store = require('components').store;
         const state = store.getState();
-        // const prevAddress = _get(getUser(store.getState()), 'address');
+        const prevAddress = _get(getUser(store.getState()), 'address');
 
         if (!state.global.authCheckerEnabled) {
             return;
@@ -1179,13 +1183,12 @@ export default class DalComponent {
 
         // Get next address
         const account = await this.getAccount();
-        // const nextAddress = account.address;
+        const nextAddress = account.address;
 
-        // if (prevAddress !== nextAddress) {
-    
-        // }
-        const user = await this.auth();
-        store.dispatch(setUser(user));
+        if (prevAddress !== nextAddress || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            const user = await this.auth();
+            store.dispatch(setUser(user));
+        }
     }
 
     async transferFunds(address, amount) {
