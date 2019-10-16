@@ -181,12 +181,6 @@ export default class DalComponent {
             }
 
             const userData = await keeper.publicState();
-            const networkCode = userData.network.code;
-            const isTest = this.isTestMode();
-
-            if (isTest && networkCode === 'W' || !isTest && networkCode === 'T') {
-                throw new Error(errorMessage);
-            }
 
             this.setLoginTypeWithKeeper();
 
@@ -196,7 +190,6 @@ export default class DalComponent {
 
             return userData.account;
         } catch (err) {
-            console.log({ err });
             this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
