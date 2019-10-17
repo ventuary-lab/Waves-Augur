@@ -174,20 +174,28 @@ export default class DalComponent {
         const keeper = await this.transport.getKeeper();
         const localAccount = this.getAccountFromLocalStorage();
         const errorMessage = 'No keeper approach';
+        // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 1);
 
-        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
-        //     return;
+        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+        //     this.setLoginTypeNoKeeper();
+        // } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_KEEPER) {
+        //     this.setLoginTypeWithKeeper();
         // }
-        // console.log(this.getCurrentLoginType());
+
+        // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 2);
+
+        if (!localAccount && this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
+            return;
+        }
 
         try {
-            if (!this.isKeeperInstalled() || localAccount && localAccount.address || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            if (localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
                 throw new Error(errorMessage);
             }
 
             const userData = await keeper.publicState();
 
-            this.setLoginTypeWithKeeper();
+            // this.setLoginTypeWithKeeper();
 
             window.localStorage.setItem('dao_account', JSON.stringify({
                 loginType: LoggedInEnum.LOGGED_BY_KEEPER
@@ -195,7 +203,7 @@ export default class DalComponent {
 
             return userData.account;
         } catch (err) {
-            this.setLoginTypeNoKeeper();
+            // this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
 
