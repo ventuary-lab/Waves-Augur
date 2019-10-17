@@ -178,7 +178,7 @@ export default class DalComponent {
         // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
         //     return;
         // }
-        console.log(this.getCurrentLoginType());
+        // console.log(this.getCurrentLoginType());
 
         try {
             if (!this.isKeeperInstalled() || localAccount && localAccount.address || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
