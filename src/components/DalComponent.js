@@ -175,9 +175,9 @@ export default class DalComponent {
         const localAccount = this.getAccountFromLocalStorage();
         const errorMessage = 'No keeper approach';
 
-        if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
-            return;
-        }
+        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
+        //     return;
+        // }
         console.log(this.getCurrentLoginType());
 
         try {
