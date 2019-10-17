@@ -17,6 +17,7 @@ import userAvatarStub from 'static/images/user-avatar-stub.png';
 import whaleAvatarStub from 'static/images/whale-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 import UserSchema from 'types/UserSchema';
+import LoggedInEnum from 'enums/LoggedInEnum';
 import MessageModal from 'modals/MessageModal';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 
@@ -165,6 +166,14 @@ export default class HeaderProfile extends React.PureComponent {
                         ) || (
                             <div
                                 onClick={async () => {
+                                    // const localAccount = dal.getAccountFromLocalStorage();
+
+                                    // if (localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER && dal.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
+                                    //     dal.setLoginTypeNoKeeper();
+                                    //     await dal.auth();
+                                    //     return;
+                                    // }
+
                                     if (!this.props.isInternallyAuthorized) {
                                         // const user = await dal.auth();
                                         // if (user === null) {
