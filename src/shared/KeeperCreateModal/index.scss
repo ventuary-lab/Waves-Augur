@@ -213,8 +213,21 @@
             }
         }
 
+        & button {
+            padding: 12px;
+        }
+
         & a {
             color: rgba(0, 0, 0, .5);
+        }
+
+        & > :first-child {
+            margin: 0;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        & > :nth-child(2) {
+            margin-bottom: 14px;
         }
     }
 
@@ -232,6 +245,21 @@
             & > button {
                 padding: 13px;
             }
+        }
+    }
+
+    &__initial-view {
+        max-width: 400px;
+        margin-top: auto;
+
+        & button {
+            width: 100%;
+            margin: 16px 0;
+            padding: 13px 4px;
+            font-size: 16px;
+        }
+        & p {
+            margin: 16px 0;
         }
     }
 }

@@ -166,14 +166,6 @@ export default class HeaderProfile extends React.PureComponent {
                         ) || (
                             <div
                                 onClick={async () => {
-                                    // const localAccount = dal.getAccountFromLocalStorage();
-
-                                    // if (localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER && dal.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
-                                    //     dal.setLoginTypeNoKeeper();
-                                    //     await dal.auth();
-                                    //     return;
-                                    // }
-
                                     if (!this.props.isInternallyAuthorized) {
                                         // const user = await dal.auth();
                                         // if (user === null) {

@@ -38,6 +38,7 @@ function RightFormContainer ({ heading, body, children }) {
     );
 }
 
+const INITIAL_VIEW = 'initialView';
 const NO_INVITE_START_VIEW = 'noInviteStartView';
 const INVITE_START_VIEW = 'inviteStartView';
 const ACCOUNT_CREATE_VIEW = 'accountCreateView';
@@ -81,6 +82,7 @@ class Wrapped extends React.Component {
         this._getCurrentViewInfoProps = this._getCurrentViewInfoProps.bind(this);
 
         // View getters
+        this._getInitialView = this._getInitialView.bind(this);
         this._getInviteStartView = this._getInviteStartView.bind(this);
         this._getAccountAddressView = this._getAccountAddressView.bind(this);
         this._getAccountSavePhraseView = this._getAccountSavePhraseView.bind(this);
@@ -96,9 +98,8 @@ class Wrapped extends React.Component {
         this._mapButton = this._mapButton.bind(this);
 
         this.welcomeInfoProps = {
-            heading: 'Welcome to the DAO',
+            heading: 'Create new Waves account',
             body: `
-                Congratulations, you have received an invitation from a DAO’s member.
                 Now, we will guide you step-by-step as you register.
                 To use our platform, you require a Waves account — let’s set it up first.
             `
@@ -128,7 +129,7 @@ class Wrapped extends React.Component {
     }
 
     _getInitialState () {
-        const currentViewName = this.inviteProvided ? INVITE_START_VIEW : NO_INVITE_START_VIEW;
+        const currentViewName = this.inviteProvided ? INITIAL_VIEW : NO_INVITE_START_VIEW;
 
         return {
             currentViewName,
@@ -225,17 +226,18 @@ class Wrapped extends React.Component {
     }
 
     _getLeftSideView ({ heading, body }) {
-        const { _onLoginWithKeeper } = this;
-
         const smallHint = (
             <div className={bem.element('left-side-hint')}>
+                <h4>Please use Waves Keeper to sign up (Recommended):</h4>
+                <Button
+                    type='submit'
+                    color='primary'
+                    label='Waves Keeper'
+                    onClick={this._onLoginWithKeeper}
+                />
                 <span>You can also:</span>
                 <a href='#'>
                     <span>Import accounts via seed</span>
-                </a>
-                <span>or login with:</span>
-                <a href='#' className='keeper' onClick={_onLoginWithKeeper}>
-                    <img src={loginWithKeeperIcon}/>
                 </a>
             </div>
         );
@@ -359,6 +361,7 @@ class Wrapped extends React.Component {
                             name='seedPhrase'
                             placeholder='Your seed is 15 words you saved when creating your account'
                             errorText={errors.seedPhrase}
+                            type='password'
                         />
                         {values.accAddress && (
                             <div className={bem.element('success-alert')}>
@@ -653,6 +656,52 @@ class Wrapped extends React.Component {
         }
     }
 
+    _getInitialView () {
+        const onImportSeed = () => {
+            this._setTabIndex(1);
+            this.setState({ currentViewName: ACCOUNT_CREATE_VIEW });
+        };
+        const onCreateNewAccount = () => {
+            this._setTabIndex(0);
+            this.setState({ currentViewName: ACCOUNT_CREATE_VIEW });
+        };
+
+        return (
+            <div className={bem.element('base-view')}>
+                {this._getLeftSideView(this.welcomeInfoProps)}
+                <div className={`${bem.element('right')}`}>
+                    <div className={bem.element('initial-view')}>
+                        <p>If you already own a Waves account, click the button below to import it or connect it with the platform.</p>
+                        <Button
+                            type='submit'
+                            color='primary'
+                            label='Use Waves Keeper'
+                            onClick={this._onLoginWithKeeper}
+                        />
+                        <p>Alternatively, you can create a Waves account or import one via seed.
+                            Please keep in mind that you can use this option only if you want use the DAO on a trial basis without warranty.
+                            We encourage you to install and use Waves Keeper for more serious work with the platform.
+                        </p>
+                        <Button
+                            type='submit'
+                            color='primary'
+                            label='Import account via Seed phrase (not recommended)'
+                            onClick={onImportSeed}
+                            outline
+                        />
+                        <Button
+                            type='submit'
+                            color='primary'
+                            label='Create new account (not recommended)'
+                            onClick={onCreateNewAccount}
+                            outline
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     _getInviteStartView () {
         const createWavesAccount = () => this._setTabIndex(0);
         const importWavesAccount = () => this._setTabIndex(1);
@@ -693,6 +742,8 @@ class Wrapped extends React.Component {
         const { currentViewName } = this.state;
 
         switch (currentViewName) {
+            case INITIAL_VIEW:
+                return this._getInitialView(props);
             case INVITE_START_VIEW:
                 return this._getInviteStartView(props);
             case ACCOUNT_ADDRESS_VIEW:
