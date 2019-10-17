@@ -205,7 +205,7 @@ class Wrapped extends React.Component {
     }
 
     async _onLoginWithKeeper () {
-        // dal.transport.noKeeper.loginType = LoggedInEnum.LOGGED_BY_KEEPER;
+        dal.setLoginTypeWithKeeper();
         const user = await dal.auth();
 
         if (user && user.role) {
@@ -344,7 +344,7 @@ class Wrapped extends React.Component {
                     />
                 </div>
             </div>
-        )
+        );
 
         return (
             <div className={bem.element('base-view')} style={{ maxHeight: 604 }}>
@@ -401,6 +401,7 @@ class Wrapped extends React.Component {
 
             store.dispatch({ type: LOG_IN_USER });
 
+            dal.setLoginTypeWithKeeper();
             const user = await dal.auth();
 
             store.dispatch(setUser(user));

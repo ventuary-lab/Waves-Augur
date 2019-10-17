@@ -174,17 +174,19 @@ export default class DalComponent {
         const keeper = await this.transport.getKeeper();
         const localAccount = this.getAccountFromLocalStorage();
         const errorMessage = 'No keeper approach';
+        // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 1);
 
-        console.log(1, this.getCurrentLoginType(), localAccount.loginType, 1);
+        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+        //     this.setLoginTypeNoKeeper();
+        // } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_KEEPER) {
+        //     this.setLoginTypeWithKeeper();
+        // }
 
-        if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && 
-            localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
-            this.setLoginTypeNoKeeper();
-        } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && localAccount.loginType === LoggedInEnum.LOGGED_BY_KEEPER) {
-            this.setLoginTypeWithKeeper();
+        // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 2);
+
+        if (!localAccount && this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
+            return;
         }
-
-        console.log(1, this.getCurrentLoginType(), localAccount.loginType, 2);
 
         try {
             if (localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
@@ -193,7 +195,7 @@ export default class DalComponent {
 
             const userData = await keeper.publicState();
 
-            this.setLoginTypeWithKeeper();
+            // this.setLoginTypeWithKeeper();
 
             window.localStorage.setItem('dao_account', JSON.stringify({
                 loginType: LoggedInEnum.LOGGED_BY_KEEPER
@@ -201,7 +203,7 @@ export default class DalComponent {
 
             return userData.account;
         } catch (err) {
-            this.setLoginTypeNoKeeper();
+            // this.setLoginTypeNoKeeper();
 
             const account = this.getAccountFromLocalStorage();
 
