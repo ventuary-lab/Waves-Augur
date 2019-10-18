@@ -175,36 +175,33 @@ export default class DalComponent {
         const localAccount = this.getAccountFromLocalStorage();
         const errorMessage = 'No keeper approach';
         // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 1);
+        const loginType = _get(localAccount, 'loginType');
 
-        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
-        //     this.setLoginTypeNoKeeper();
-        // } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_KEEPER) {
-        //     this.setLoginTypeWithKeeper();
-        // }
-
-        // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 2);
+        if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            this.setLoginTypeNoKeeper();
+        } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && loginType === LoggedInEnum.LOGGED_BY_KEEPER) {
+            this.setLoginTypeWithKeeper();
+        }
 
         if (!localAccount && this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT) {
             return;
         }
 
         try {
-            if (localAccount && localAccount.loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            if (loginType === LoggedInEnum.LOGGED_BY_NO_KEEPER || this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
                 throw new Error(errorMessage);
             }
 
             const userData = await keeper.publicState();
 
-            // this.setLoginTypeWithKeeper();
-
-            window.localStorage.setItem('dao_account', JSON.stringify({
-                loginType: LoggedInEnum.LOGGED_BY_KEEPER
-            }));
+            if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_KEEPER) {
+                window.localStorage.setItem('dao_account', JSON.stringify({
+                    loginType: LoggedInEnum.LOGGED_BY_KEEPER
+                }));
+            }
 
             return userData.account;
         } catch (err) {
-            // this.setLoginTypeNoKeeper();
-
             const account = this.getAccountFromLocalStorage();
 
             if (account) {
