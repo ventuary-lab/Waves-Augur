@@ -176,11 +176,11 @@ export default class DalComponent {
         const errorMessage = 'No keeper approach';
         // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 1);
 
-        // if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
-        //     this.setLoginTypeNoKeeper();
-        // } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_KEEPER) {
-        //     this.setLoginTypeWithKeeper();
-        // }
+        if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_NO_KEEPER) {
+            this.setLoginTypeNoKeeper();
+        } else if (this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT && _get(localAccount, 'loginType') === LoggedInEnum.LOGGED_BY_KEEPER) {
+            this.setLoginTypeWithKeeper();
+        }
 
         // console.log(1, this.getCurrentLoginType(), localAccount.loginType, 2);
 
