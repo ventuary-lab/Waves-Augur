@@ -1,0 +1,31 @@
+
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.BaseWarning {
+
+    &__view {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 16px 40px 24px 40px;
+        position: relative;
+
+        & > h4 {
+            margin: 0;
+        }
+
+        & > * {
+            color: white;
+        }
+
+        & > :last-child {
+            float: right;
+            position: absolute;
+            top: 29px;
+            right: 53px;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+    }
+}
+

@@ -7,7 +7,7 @@ import ModalWrapper from 'yii-steroids/ui/modal/ModalWrapper';
 import layoutHoc, { STATUS_ACCESS_DENIED, STATUS_LOADING, STATUS_RENDER_ERROR } from 'yii-steroids/ui/layoutHoc';
 import screenWatcherHoc from 'yii-steroids/ui/screenWatcherHoc';
 import { setUser } from 'yii-steroids/actions/auth';
-import { LOG_IN_USER, TRIGGER_AUTH_CHECKER } from 'actions/global';
+import { LOG_IN_USER } from 'actions/global';
 
 import { html, dal, store, ws } from 'components';
 import {apiWsHandler} from 'actions/api';
@@ -18,10 +18,12 @@ import coverStub from 'static/images/cover-stub.jpg';
 import './Layout.scss';
 import TransactionApproveModal from 'shared/TransactionApproveModal';
 import KeeperCreateModal from 'shared/KeeperCreateModal';
+import BaseWarning from 'shared/BaseWarning';
 import { openModal } from 'yii-steroids/actions/modal';
 import ProfileWizardModal from 'modals/ProfileWizardModal';
 import { getUser } from 'yii-steroids/reducers/auth';
 import MessageModal from 'modals/MessageModal';
+import Button from 'yii-steroids/ui/form/Button';
 import UserRole from 'enums/UserRole';
 import { getCurrentItemParam } from 'yii-steroids/reducers/navigation';
 import ModalsContext, { initialContextState } from './context';
@@ -108,7 +110,6 @@ export default class Layout extends React.PureComponent {
 
     async _getUser () {
         const user = await dal.auth();
-        console.log({ user });
 
         if (user && user.address) {
             store.dispatch({ type: LOG_IN_USER });
@@ -233,6 +234,18 @@ export default class Layout extends React.PureComponent {
             noKeeperModalProps,
             approveModalProps
         } = this.state;
+
+        const baseWarning = (
+            <BaseWarning
+                heading='Not recommended!'
+                body='This is not a recommended way to manage your DAO account. Please use Waves Keeper browser extension instead.'>
+                <Button
+                    type='submit'
+                    color='primary'
+                    label='Waves Keeper'
+                />
+            </BaseWarning>
+        );
 
         return (
             <div className={bem.block()}>
