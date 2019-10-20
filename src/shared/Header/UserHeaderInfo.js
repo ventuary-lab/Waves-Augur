@@ -15,8 +15,9 @@ function UserHeaderInfo (props) {
     const avatar = _.get(user, 'profile.avatar', altImg);
     const name = _.get(user, 'profile.name', 'Anonymous');
     const waves = user.balance;
-    const imgClassName = !user || user.role === 'anonymous' ? 'no-drop' : '';
-    const imgLink = imgClassName === '' ? '/profile/inbox' : '#';
+    const imgClassName = !user ? 'no-drop' : '';
+    const imgLink = imgClassName === '' ? '/profile/donation' : '#';
+
     const onImgClick = () => {
         if (onAvatarClick) {
             onAvatarClick();
