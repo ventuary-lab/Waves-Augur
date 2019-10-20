@@ -1,0 +1,265 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.KeeperCreateModal {
+    &__base-view {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        max-width: 1000px;
+        max-height: 500px;
+        height: 100%;
+        width: 100%;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+
+        & button {
+            margin-top: 10px;
+        }
+
+        & .CopyToClipboard {
+            background: #0BC91F;
+            padding: 16px 20px;
+            border-radius: 2px;
+            margin: 1px;
+            position: absolute;
+            right: -24px;
+            top: 4px;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        & textarea {
+            resize: none;
+        }
+    }
+
+    &__left {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        background-color: #F1F6F2;
+        max-width: 320px;
+        padding: 40px;
+
+        & > img {
+            margin-right: auto;
+            margin-bottom: 30px;
+        }
+
+        & > h4 {
+            margin: 0;
+        }
+        & > p {
+            margin-top: 10px;
+        }
+    }
+
+    &__right {
+        background: #fff;
+        display: flex;
+        padding: 40px;
+        width: 680px;
+
+        &.centered {
+            justify-content: center;
+            align-items: center;
+        }
+        &.left-centered {
+            justify-content: flex-start;
+            align-items: center;
+        }
+    }
+
+    &__right_acc_create {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        &_child {
+            max-width: 320px;
+
+            & > :nth-child(1) {
+                margin-bottom: 10px;
+                margin-top: 0;
+            }
+            & > :nth-child(3) {
+                margin-top: 29px;
+            }
+            & > :nth-child(4) {
+                margin-top: 13px;
+            }
+            & > :nth-child(5) {
+                margin-top: 14px
+            }
+            & > :nth-child(6) {
+                margin-top: 40px
+            }
+        }
+    }
+
+    &__import-create {
+        margin-right: auto;
+
+        & p {
+            max-width: 400px;
+        }
+
+        & > :first-child {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            font-size: 16px;
+
+            box-shadow: inset 0px -1px #C4C4C4;
+            max-width: 400px;
+            width: 100%;
+
+            & a {
+                cursor: pointer;
+                font-weight: normal;
+            }
+
+            & .selected {
+                border-bottom: 2px solid #0BC91F;
+            }
+
+            & > :nth-child(1) {
+                padding: 22px 0;
+                margin-right: auto;
+            }
+
+            & > :nth-child(2) {
+                padding: 22px 0;
+            }
+        }
+    }
+
+    &__account-address {
+        position: relative;
+
+        & > button {
+            margin-top: 10px;
+        }
+    }
+
+    &__account-backup {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        text-align: center;
+
+        & > * { margin: 0; }
+
+        & > :nth-child(1) {
+            padding: 8px 0;
+            font-weight: 500;
+        }
+    }
+
+    &__account-save-phrase {
+        position: relative;
+
+        & > :first-child {
+            display: block;
+            padding: 20px 0;
+        }
+
+        & > :nth-child(3) {
+            right: 219px;
+            top: 68px;
+        }
+    }
+
+    &__success-alert {
+        padding: 20px;
+        padding-bottom: 26px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        background: #E2FAE4;
+
+        & > * {
+            font-weight: 300;
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+        & > :last-child {
+            color: #7D8199;
+        }
+    }
+
+    &__left-side-hint {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        margin-top: auto;
+
+        & .keeper {
+            text-align: center;
+            padding: 13px 20px;
+            background: #fff;
+            width: 100%;
+            border-radius: 3px;
+            margin: 10px 4px;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        & button {
+            padding: 12px;
+        }
+
+        & a {
+            color: rgba(0, 0, 0, .5);
+        }
+
+        & > :first-child {
+            margin: 0;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        & > :nth-child(2) {
+            margin-bottom: 14px;
+        }
+    }
+
+    &__wallet-warning {
+        max-width: 500px;
+       
+        & > :nth-child(2) {
+            display: flex;
+            flex-direction: row;
+    
+            & > :first-child {
+                margin-right: 10px;
+            }
+
+            & > button {
+                padding: 13px;
+            }
+        }
+    }
+
+    &__initial-view {
+        max-width: 400px;
+        margin-top: auto;
+
+        & button {
+            width: 100%;
+            margin: 16px 0;
+            padding: 13px 4px;
+            font-size: 16px;
+        }
+        & p {
+            margin: 16px 0;
+        }
+    }
+}
