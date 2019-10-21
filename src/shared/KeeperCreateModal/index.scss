@@ -34,6 +34,7 @@
 
         & textarea {
             resize: none;
+            -webkit-text-security: disc;
         }
     }
 
@@ -72,6 +73,60 @@
         &.left-centered {
             justify-content: flex-start;
             align-items: center;
+        }
+    }
+
+    $max-mobile-width: 320px;
+
+    @media screen and (max-width: $mqw-desktop) {
+        
+        &__base-view {
+            max-width: $max-mobile-width;
+            flex-wrap: wrap;
+
+            & input,
+            & textarea {
+                max-width: $max-mobile-width - 40px;
+            }
+        }
+
+        &__left {
+            width: 100%;
+            padding: 16px;
+
+            & > :nth-child(n + 3) {
+                display: none;
+            }
+        }
+
+        &__right {
+            width: 100%;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+        &__success-alert {
+            max-width: $max-mobile-width - 40px;
+
+            & > :nth-child(2) {
+                text-overflow: ellipsis;
+                width: 240px;
+                word-wrap: break-word;
+            }
+        }
+
+        &__account-address {
+            & input {
+                max-width: 226px;
+            }
+            & .CopyToClipboard {
+                right: 0;
+            }
+        }
+
+        &__account-backup {
+            max-width: $max-mobile-width - 40px;
         }
     }
 
@@ -158,6 +213,10 @@
         & > :nth-child(1) {
             padding: 8px 0;
             font-weight: 500;
+        }
+
+        & > :nth-child(2) {
+            margin-top: 8px;
         }
     }
 

@@ -2,20 +2,20 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {isPhone} from 'yii-steroids/reducers/screen';
-import {getNavItem, getNavUrl} from 'yii-steroids/reducers/navigation';
-import {openModal} from 'yii-steroids/actions/modal';
-import {getUser} from 'yii-steroids/reducers/auth';
+import { isPhone } from 'yii-steroids/reducers/screen';
+import { getNavItem, getNavUrl } from 'yii-steroids/reducers/navigation';
+import { openModal } from 'yii-steroids/actions/modal';
+import { getUser } from 'yii-steroids/reducers/auth';
 import Link from 'yii-steroids/ui/nav/Link';
 import { faTelegramPlane, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
-import {html} from 'components';
+import { html } from 'components';
 import SocialLinks from 'shared/SocialLinks';
-import MessageModal from 'modals/MessageModal';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import ventuaryLogo from 'static/icons/dao-logo-bw.svg';
-import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS, ROUTE_ROOT} from 'routes';
+import { ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS, ROUTE_ROOT } from 'routes';
 import heartImg from 'static/images/huge_heart.png';
+import { ReduxModalContext } from 'shared/Layout/context';
 
 import './Footer.scss';
 
@@ -91,26 +91,25 @@ export default class Footer extends React.PureComponent {
                                 </strong>
                                 <ul className={bem.element('helper')}>
                                     {this.props.canAddProject && (
-                                        <li className={bem.element('helper-item')}>
-                                            <Link
-                                                className={bem.element('helper-link')}
-                                                onClick={() => {
-                                                    if (this.props.isPhone) {
-                                                        this.props.dispatch(openModal(MessageModal, {
-                                                            icon: 'Icon__log-in-from-pc',
-                                                            title: __('Log in from PC'),
-                                                            color: 'success',
-                                                            description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                                        }));
-                                                    } else {
-                                                        this.props.dispatch(openModal(ProjectWizardModal));
-                                                    }
-                                                }}
-                                                noStyles
-                                            >
-                                                {__('Add project')}
-                                            </Link>
-                                        </li>
+                                        <ReduxModalContext.Consumer>
+                                            {({ openLoginModal }) => (
+                                                <li className={bem.element('helper-item')}>
+                                                    <Link
+                                                        className={bem.element('helper-link')}
+                                                        onClick={() => {
+                                                            if (this.props.isPhone) {
+                                                                openLoginModal();
+                                                            } else {
+                                                                this.props.dispatch(openModal(ProjectWizardModal));
+                                                            }
+                                                        }}
+                                                        noStyles
+                                                    >
+                                                        {__('Add project')}
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </ReduxModalContext.Consumer>
                                     )}
                                     <li className={bem.element('helper-item')}>
                                         <Link
