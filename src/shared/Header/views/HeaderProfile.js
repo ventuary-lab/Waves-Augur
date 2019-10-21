@@ -147,34 +147,19 @@ export default class HeaderProfile extends React.PureComponent {
         if (!this.props.isAuthorized || !this.props.isInternallyAuthorized || items.length === 0) {
 
             return (
-                <ReduxModalContext.Consumer>
-                    {({ openLoginModal }) => (
-                        <ModalsContext.Consumer>
-                            {({ noKeeperModal }) => (
-                                this.props.isPhone && (
-                                    <a
-                                        href='javascript:void(0)'
-                                        className={bem.element('login-link')}
-                                        onClick={openLoginModal}
-                                    >
-                                        {__('Login')}
-                                    </a>
-                                ) || (
-                                    <div
-                                        onClick={async () => {
-                                            if (!this.props.isInternallyAuthorized) {
-                                                noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
-                                            }
-                                        }}
-                                        className={bem.element('login-link')}>
-                                        {__('Login')}
-                                    </div>
-                                )
-                            )}
-                            {/* {} */}
-                        </ModalsContext.Consumer>
+                <ModalsContext.Consumer>
+                    {({ noKeeperModal }) => (
+                        <div
+                            onClick={async () => {
+                                if (!this.props.isInternallyAuthorized) {
+                                    noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                }
+                            }}
+                            className={bem.element('login-link')}>
+                            {__('Login')}
+                        </div>
                     )}
-                </ReduxModalContext.Consumer>
+                </ModalsContext.Consumer>
             );
         }
 

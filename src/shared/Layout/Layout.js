@@ -87,7 +87,7 @@ export default class Layout extends React.PureComponent {
             return new Promise((resolve, reject) => {
                 this._updateNestedState(
                     'approveModalProps', { 
-                        isVisible: true, 
+                        isVisible: true,
                         method, 
                         payment,
                         onSendPassword: resolve,
@@ -98,13 +98,15 @@ export default class Layout extends React.PureComponent {
 
         dal.transport.noKeeper.onTransactionSuccess = async () => {
             this._updateNestedState('approveModalProps', { 
-                initialView: 'success'
+                isRequestPending: false,
+                initialView: 'success',
             });
         };
 
         dal.transport.noKeeper.onTransactionFailure = async () => {
             this._updateNestedState('approveModalProps', { 
-                initialView: 'failure'
+                isRequestPending: false,
+                initialView: 'failure',
             });
         };
     }

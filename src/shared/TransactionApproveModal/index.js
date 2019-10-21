@@ -8,6 +8,7 @@ import eyeIcon from '!svg-inline-loader?classPrefix!static/icons/input/eye.svg';
 import Button from 'yii-steroids/ui/form/Button';
 import AlertBadge from 'shared/AlertBadge';
 import ModalsContext from 'shared/Layout/context';
+import { Loader as BaseLoader } from 'ui/anims';
 
 import './index.scss';
 
@@ -27,6 +28,7 @@ class Wrapped extends React.Component {
     constructor (props) {
         super(props);
 
+        this._getInitialState = this._getInitialState.bind(this);
         this._closeModal = this._closeModal.bind(this);
         this._getView = this._getView.bind(this);
 
@@ -36,10 +38,15 @@ class Wrapped extends React.Component {
             failure: REQUEST_FAIL_VIEW
         };
 
-        this.state = {
+        this.state = this._getInitialState();
+    }
+
+    _getInitialState () {
+        return {
             isVisible: this.props.isVisible,
             currentView: this.views.initial,
-            password: ''
+            password: '',
+            isRequestPending: false,
         };
     }
 
@@ -48,7 +55,11 @@ class Wrapped extends React.Component {
     }
 
     _getView () {
-        const { currentView: _currentView } = this.state;
+        const { 
+            currentView: _currentView,
+            isRequestPending
+        } = this.state;
+
         const onPasswordChange = (e) => {
             const value = e.target.value;
 
@@ -65,6 +76,7 @@ class Wrapped extends React.Component {
         };
 
         const onApprove = async () => {
+            this.setState({ isRequestPending: true });
             const { seed: encryptedSeed } = JSON.parse(window.localStorage.getItem('dao_account'));
 
             const { decrypted: seed } = await keeperHandler.getDecryptedPass(encryptedSeed, this.state.password);
@@ -73,6 +85,9 @@ class Wrapped extends React.Component {
         };
 
         const currentView = this.views[this.props.initialView] || _currentView;
+        if (isRequestPending && (currentView === REQUEST_SUCCESS_VIEW || currentView === REQUEST_FAIL_VIEW)) {
+            this.setState({ isRequestPending: false });
+        }
 
         const badge = (
             currentView === REQUEST_SUCCESS_VIEW && (
@@ -82,11 +97,15 @@ class Wrapped extends React.Component {
                 <AlertBadge text='The transaction was denied' type='fail'/>
             )
         );
+        const rootClassName = [
+            bem.element('base-view'),
+            isRequestPending ? 'loading' : ''
+        ].join(' ');
 
         return (
             <ModalsContext.Consumer>
                 {({ approveModal }) => (
-                    <div className={bem.element('base-view')}>
+                    <div className={rootClassName}>
                         <div className={bem.element('top-heading')}>
                             <h4>Confirmation request</h4>
                         </div>
@@ -125,8 +144,6 @@ class Wrapped extends React.Component {
                                 <span>{methodName}</span>
                                 <span className='title'>Payment</span>
                                 <span>{payment}</span>
-                                {/* <span className='title'>Fee</span>
-                                <span>{fee}</span> */}
                             </div>
                             {currentView !== INITIAL_VIEW && (
                                 <Button
@@ -139,6 +156,7 @@ class Wrapped extends React.Component {
                                 />
                             )}
                         </div>
+                        {isRequestPending && <BaseLoader />}
                     </div>
                 )}
             </ModalsContext.Consumer>
