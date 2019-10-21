@@ -18,7 +18,7 @@ import {ROUTE_PROFILE_PROJECTS, ROUTE_PROJECTS} from 'routes/index';
 import {getUser} from 'yii-steroids/reducers/auth';
 import {getNavItem} from 'yii-steroids/reducers/navigation';
 import {isPhone} from 'yii-steroids/reducers/screen';
-import MessageModal from '../../modals/MessageModal';
+import { ReduxModalContext } from 'shared/Layout/context';
 
 const bem = html.bem('IndexPage');
 
@@ -57,24 +57,22 @@ export default class IndexPage extends React.PureComponent {
                                 </div>
                                 <div className={bem.element('hero-actions')}>
                                     {this.props.canAddProject && (
-                                        <Button
-                                            className={bem.element('hero-action', 'primary')}
-                                            onClick={() => {
-                                                if (this.props.isPhone) {
-                                                    this.props.dispatch(openModal(MessageModal, {
-                                                        icon: 'Icon__log-in-from-pc',
-                                                        title: __('Log in from PC'),
-                                                        color: 'success',
-                                                        description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                                    }));
-                                                } else {
-                                                    this.props.dispatch(openModal(ProjectWizardModal));
-                                                }
-                                            }}
-                                            noStyles
-                                        >
-                                            {__('Add project')}
-                                        </Button>
+                                        <ReduxModalContext.Consumer>
+                                            {({ openLoginModal }) => (
+                                                <Button
+                                                    className={bem.element('hero-action', 'primary')}
+                                                    onClick={() => {
+                                                        if (this.props.isPhone) {
+                                                            openLoginModal();
+                                                        } else {
+                                                            this.props.dispatch(openModal(ProjectWizardModal));
+                                                        }
+                                                    }}
+                                                    noStyles>
+                                                    {__('Add project')}
+                                                </Button>
+                                            )}
+                                        </ReduxModalContext.Consumer>
                                     )}
                                     <Link
                                         className={bem.element('hero-action', 'secondary')}

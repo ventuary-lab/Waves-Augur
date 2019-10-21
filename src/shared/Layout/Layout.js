@@ -26,7 +26,7 @@ import MessageModal from 'modals/MessageModal';
 import Button from 'yii-steroids/ui/form/Button';
 import UserRole from 'enums/UserRole';
 import { getCurrentItemParam } from 'yii-steroids/reducers/navigation';
-import ModalsContext, { initialContextState } from './context';
+import ModalsContext, { initialContextState, ReduxModalContext } from './context';
 
 const bem = html.bem('Layout');
 
@@ -57,6 +57,7 @@ export default class Layout extends React.PureComponent {
         super(props);
 
         this.addConfirmationListener = this.addConfirmationListener.bind(this);
+        this.getReduxModalContextValue = this.getReduxModalContextValue.bind(this);
         this.getModalContextValue = this.getModalContextValue.bind(this);
         this._triggerNoKeeperModal = this._triggerNoKeeperModal.bind(this);
         this._triggerApproveModal = this._triggerApproveModal.bind(this);
@@ -221,12 +222,26 @@ export default class Layout extends React.PureComponent {
         };
     }
 
+    getReduxModalContextValue () {
+        return {
+            openLoginModal: () => {
+                store.dispatch(openModal(MessageModal, {
+                    icon: 'Icon__log-in-from-pc',
+                    title: __('Log in from PC'),
+                    color: 'success',
+                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
+                }));
+            }
+        };
+    }
+
     render() {
         if (this.props.status === STATUS_RENDER_ERROR) {
             return null;
         }
         const {
             getModalContextValue,
+            getReduxModalContextValue,
             _triggerNoKeeperModal,
             _triggerApproveModal
         } = this;
@@ -250,30 +265,32 @@ export default class Layout extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 <ModalsContext.Provider value={getModalContextValue()}>
-                    <Header/>
-                    <TransactionApproveModal {...approveModalProps} onModalTrigger={_triggerApproveModal}/>
-                    <KeeperCreateModal {...noKeeperModalProps} onModalTrigger={_triggerNoKeeperModal}/>
-                    <main className={bem.element('content')}>
-                        {this.props.status === STATUS_ACCESS_DENIED && (
-                            <div>
-                                Access denied
-                            </div>
-                        ) || (
-                            <>
-                                {this.props.isShowImageLine && (
-                                    <div
-                                        className={bem.element('image-line')}
-                                        style={{
-                                            backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
-                                        }}
-                                    />
-                                )}
-                                {this.props.status !== STATUS_LOADING && this.props.children}
-                            </>
-                        )}
-                    </main>
-                    <Footer/>
-                    <ModalWrapper/>
+                    <ReduxModalContext.Provider value={getReduxModalContextValue()}>
+                        <Header/>
+                        <TransactionApproveModal {...approveModalProps} onModalTrigger={_triggerApproveModal}/>
+                        <KeeperCreateModal {...noKeeperModalProps} onModalTrigger={_triggerNoKeeperModal}/>
+                        <main className={bem.element('content')}>
+                            {this.props.status === STATUS_ACCESS_DENIED && (
+                                <div>
+                                    Access denied
+                                </div>
+                            ) || (
+                                <>
+                                    {this.props.isShowImageLine && (
+                                        <div
+                                            className={bem.element('image-line')}
+                                            style={{
+                                                backgroundImage: `url(${this.props.coverUrl ? this.props.coverUrl : coverStub})`
+                                            }}
+                                        />
+                                    )}
+                                    {this.props.status !== STATUS_LOADING && this.props.children}
+                                </>
+                            )}
+                        </main>
+                        <Footer/>
+                        <ModalWrapper/>
+                    </ReduxModalContext.Provider>
                 </ModalsContext.Provider>
             </div>
         );
