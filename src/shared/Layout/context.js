@@ -11,4 +11,8 @@ export const initialContextState = {
     }
 };
 
+export const ReduxModalContext = createContext({
+    openLoginModal: () => {}
+});
+
 export default createContext(initialContextState);

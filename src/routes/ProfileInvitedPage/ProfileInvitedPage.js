@@ -14,7 +14,8 @@ import UserSchema from 'types/UserSchema';
 import {ROUTE_PROJECTS_REDIRECT} from '../index';
 import Link from 'yii-steroids/ui/nav/Link';
 import MessageModal from '../../modals/MessageModal';
-import {isPhone} from 'yii-steroids/reducers/screen';
+import { isPhone } from 'yii-steroids/reducers/screen';
+import { ReduxModalContext } from 'shared/Layout/context';
 
 const bem = html.bem('ProfileInvitedPage');
 
@@ -41,23 +42,22 @@ export default class ProfileInvitedPage extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 {this.props.isMe && (
-                    <ActionButtonBlock
-                        title={__('Invite New User')}
-                        iconClass={'Icon__invite-user_small'}
-                        onClick={() => {
-
-                            if (this.props.isPhone) {
-                                this.props.dispatch(openModal(MessageModal, {
-                                    icon: 'Icon__log-in-from-pc',
-                                    title: __('Log in from PC'),
-                                    color: 'success',
-                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                }));
-                            } else {
-                                this.props.dispatch(openModal(InviteUserModal));
-                            }
-                        }}
-                    />
+                    <ReduxModalContext.Consumer>
+                        {({ openLoginModal }) => (
+                            <ActionButtonBlock
+                                title={__('Invite New User')}
+                                iconClass={'Icon__invite-user_small'}
+                                onClick={() => {
+        
+                                    if (this.props.isPhone) {
+                                        openLoginModal();
+                                    } else {
+                                        this.props.dispatch(openModal(InviteUserModal));
+                                    }
+                                }}
+                            />
+                        )}
+                    </ReduxModalContext.Consumer>
                 ) || (
                     <Link
                         toRoute={ROUTE_PROJECTS_REDIRECT}
