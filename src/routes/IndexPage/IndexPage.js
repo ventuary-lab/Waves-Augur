@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {html} from 'components';
+import { html, dal } from 'components';
 import Button from 'yii-steroids/ui/form/Button';
 import Link from 'yii-steroids/ui/nav/Link';
 import {openModal} from 'yii-steroids/actions/modal';
@@ -62,7 +62,7 @@ export default class IndexPage extends React.PureComponent {
                                                 <Button
                                                     className={bem.element('hero-action', 'primary')}
                                                     onClick={() => {
-                                                        if (this.props.isPhone) {
+                                                        if (dal.isLoggedOut()) {
                                                             openLoginModal();
                                                         } else {
                                                             this.props.dispatch(openModal(ProjectWizardModal));
