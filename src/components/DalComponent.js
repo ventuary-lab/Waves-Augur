@@ -936,8 +936,7 @@ export default class DalComponent {
                     this.dateToHeight(data.expireCrowd),
                     this.dateToHeight(data.expireWhale),
                     data,
-                ],
-                this.contract.LISTINGFEE
+                ]
             );
 
             await this.notifyOnProjectCreate(data.uid);

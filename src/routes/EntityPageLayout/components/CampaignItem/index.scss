@@ -1,0 +1,89 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.CampaignItem {
+    &__root {
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    &__avatar {
+        & > img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 1px solid grey;
+        }
+    }
+
+    &__info {
+        margin-left: 13px;
+        line-height: 24px;
+
+        & > :first-child {
+            font-weight: 300;
+            font-size: 14px;
+            color: #0BC91F;
+        }
+
+        & > :nth-child(2) {
+            margin: 0;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        & > :nth-child(3) {
+            font-size: 16px;
+        }
+    }
+
+    &__bookmark {
+        margin-left: auto;
+    }
+
+    &__achievements-cont {
+        padding: 16px 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        & > * {
+            margin-right: 25px;
+        }
+
+        & > :last-child {
+            margin-top: auto;
+
+            & > :first-child {
+                margin-bottom: 3px;
+
+                & > :nth-child(2) {
+                    width: 14px;
+                    height: 14px;
+                    margin: -2px 8px;
+                }
+            }
+        }
+    
+    }
+
+    &__achievement-badge {
+        color: rgba(0, 0, 0, 0.75);
+
+        & svg * {
+            fill: rgba(0, 0, 0, 0.75) !important;
+        }
+
+        & > :first-child {
+            display: flex;
+            flex-wrap: nowrap;
+
+            & > :first-child {
+                margin: auto 0;
+                font-family: Roboto;
+            }
+        }
+    }
+}
