@@ -86,21 +86,28 @@ module.exports = class TransactionListener {
         if (lastTransactionId && !isLastFined && transactions.length > 0) {
             afterId = transactions[transactions.length - 1].id;
             transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 2));
-        }
+        };
+
+        const ignoredTransactions = (
+            process.env.IGNORE_TRANSACTION_IDS || ''
+        ).split(' ');
 
         return Promise.all(
-            transactions.map(async transaction => {
-                let result = null;
-                try {
-                    result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
-                } catch (e) {
-                    console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
-                    throw e;
-                }
+            transactions
+                // .filter(transaction => transaction.id !== 'y7FjzDvbSXDYMHSFpmfAvne3YEFN33csfLBWk7megd7')
+                .filter(transaction => ignoredTransactions.indexOf(transaction) !== -1)
+                .map(async transaction => {
+                    let result = null;
+                    try {
+                        result = await axios.get(`${this.app.nodeUrl}/debug/stateChanges/info/${transaction.id}`);
+                    } catch (e) {
+                        console.error(`TransactionListener Error on fetch transaction info: ${String(e)}`);
+                        throw e;
+                    }
 
-                transaction.info = result.data;
-                return transaction;
-            })
+                    transaction.info = result.data;
+                    return transaction;
+                })
         );
     }
 
