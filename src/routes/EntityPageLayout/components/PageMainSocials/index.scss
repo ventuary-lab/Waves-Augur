@@ -4,4 +4,14 @@
 
 .PageMainSocials {
     
+    &__icons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding-top: 8px;
+
+        & > * {
+            padding-right: 16px;
+        }
+    }
 }

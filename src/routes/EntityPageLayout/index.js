@@ -214,6 +214,7 @@ class EntityPageLayout extends React.Component {
                     <BaseButton icon={warningIcon}>Report</BaseButton>
                     <img src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
+                    <div className={bem.element('heading-cover-secondary')}></div>
                 </div>
                 <div className={bem.element('head-cont')}>
                     <div className={bem.element('head-info')}>

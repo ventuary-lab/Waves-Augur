@@ -1,10 +1,13 @@
 import React from 'react';
-import SvgIcon from 'ui/global/SvgIcon';
+import { html } from 'components';
 
-const facebookIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/facebook.svg');
-const linkedinIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/linkedin.svg');
-const twitterIcon = require('!svg-inline-loader?classPrefix!static/icons/custom-outline/twitter.svg');
+const bem = html.bem('PageMainSocials');
 
+import './index.scss';
+
+import facebookIcon from 'static/icons/custom-outline/facebook.svg';
+import linkedinIcon from 'static/icons/custom-outline/linkedin.svg';
+import twitterIcon from 'static/icons/custom-outline/twitter.svg';
 
 const socialsKeyToIconMapping = {
     facebook: facebookIcon,
@@ -12,33 +15,32 @@ const socialsKeyToIconMapping = {
     twitter: twitterIcon,
 };
 function PageMainSocials (props) {
-    const { links = {} } = props;
-    const mappedIcons = [];
+    const { links = {}, url } = props;
     const keys = Object.keys(links);
 
-    for (const key of keys) {
+    const mapFunc = key => {
         const val = links[key];
         const socialIcon = socialsKeyToIconMapping[key];
 
-        if (!val || !socialIcon) {
-            continue;
-        };
-
-        const comp = (
+        return (
             <div>
                 <a href={val}>
-                    <SvgIcon icon={socialIcon}/>
+                    <img src={socialIcon}/>
                 </a>
             </div>
         );
+    };
 
-        mappedIcons.push(comp);
-    }
+    const mappedIcons = keys
+        .filter(key => links[key])
+        .map(mapFunc);
 
     return (
         <>
-            <span></span>
-            <div>{mappedIcons}</div>
+            <span className={bem.element('url')}>
+                {url && <a href={url}>{url}</a>}
+            </span>
+            <div className={bem.element('icons')}>{mappedIcons}</div>
         </>
     );
 }
