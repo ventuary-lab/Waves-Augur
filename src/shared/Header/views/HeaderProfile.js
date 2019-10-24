@@ -26,7 +26,8 @@ import './HeaderProfile.scss';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import AddEntityIcon from 'shared/Header/AddEntityIcon';
 import UserHeaderInfo from 'shared/Header/UserHeaderInfo';
-import ModalsContext from 'shared/Layout/context';
+import ModalsContext, { ReduxModalContext } from 'shared/Layout/context';
+
 import {
     getUserNavItems,
     customRouteProps
@@ -148,41 +149,16 @@ export default class HeaderProfile extends React.PureComponent {
             return (
                 <ModalsContext.Consumer>
                     {({ noKeeperModal }) => (
-                        this.props.isPhone && (
-                            <a
-                                href='javascript:void(0)'
-                                className={bem.element('login-link')}
-                                onClick={() => {
-                                    this.props.dispatch(openModal(MessageModal, {
-                                        icon: 'Icon__log-in-from-pc',
-                                        title: __('Log in from PC'),
-                                        color: 'success',
-                                        description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                    }));
-                                }}
-                            >
-                                {__('Login')}
-                            </a>
-                        ) || (
-                            <div
-                                onClick={async () => {
-                                    if (!this.props.isInternallyAuthorized) {
-                                        // const user = await dal.auth();
-                                        // if (user === null) {
-                                        //     noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
-                                        // } else {
-                                        //     store.dispatch({ type: LOG_IN_USER });
-                                        //     store.dispatch(setUser(user));
-                                        // }
-                                        noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
-                                    }
-                                }}
-                                className={bem.element('login-link')}>
-                                {__('Login')}
-                            </div>
-                        )
+                        <div
+                            onClick={async () => {
+                                if (!this.props.isInternallyAuthorized) {
+                                    noKeeperModal.setState({ isVisible: true, isInvitedProvided: false });
+                                }
+                            }}
+                            className={bem.element('login-link')}>
+                            {__('Login')}
+                        </div>
                     )}
-                    {/* {} */}
                 </ModalsContext.Consumer>
             );
         }
