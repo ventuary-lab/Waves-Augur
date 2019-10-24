@@ -150,16 +150,14 @@ export default class ProfileSidebar extends React.PureComponent {
                             : this.props.user.profile.title
                         }
                     </span>
-                    {!isPhone && (
-                        <div className={bem.element('send-funds')}>
-                            <Button
-                                outline
-                                color='primary'
-                                label={!this.props.isMe ? 'Send funds' : 'Create an invoice'}
-                                onClick={() => this._triggerSendFundsModal(true)}
-                            />
-                        </div>
-                    )}
+                    <div className={bem.element('send-funds')}>
+                        <Button
+                            outline
+                            color='primary'
+                            label={!this.props.isMe ? 'Send funds' : 'Create an invoice'}
+                            onClick={() => this._triggerSendFundsModal(true)}
+                        />
+                    </div>
                     {this.props.user.profile.socials && (
                         <div className={bem.element('social-links')}>
                             <SocialLinks urls={this.props.user.profile.socials}/>
@@ -224,7 +222,7 @@ export default class ProfileSidebar extends React.PureComponent {
                                         <Link
                                             className={bem.element('edit')}
                                             onClick={() => {
-                                                if (this.props.isPhone) {
+                                                if (dal.isLoggedOut()) {
                                                     openLoginModal();
                                                 } else {
                                                     this.props.dispatch(openModal(ProfileWizardModal));

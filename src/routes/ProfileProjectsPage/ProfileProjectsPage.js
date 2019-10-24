@@ -49,7 +49,7 @@ export default class ProfileProjectsPage extends React.PureComponent {
                                 title={__('Add New Project')}
                                 iconClass='Icon__new-project'
                                 onClick={() => {
-                                    if (this.props.isPhone) {
+                                    if (dal.isLoggedOut()) {
                                         openLoginModal();
                                     } else {
                                         this.props.dispatch(openModal(ProjectWizardModal));

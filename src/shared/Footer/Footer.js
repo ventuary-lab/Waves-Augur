@@ -9,7 +9,7 @@ import { getUser } from 'yii-steroids/reducers/auth';
 import Link from 'yii-steroids/ui/nav/Link';
 import { faTelegramPlane, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
-import { html } from 'components';
+import { html, dal } from 'components';
 import SocialLinks from 'shared/SocialLinks';
 import ProjectWizardModal from 'modals/ProjectWizardModal';
 import ventuaryLogo from 'static/icons/dao-logo-bw.svg';
@@ -97,7 +97,7 @@ export default class Footer extends React.PureComponent {
                                                     <Link
                                                         className={bem.element('helper-link')}
                                                         onClick={() => {
-                                                            if (this.props.isPhone) {
+                                                            if (dal.isLoggedOut()) {
                                                                 openLoginModal();
                                                             } else {
                                                                 this.props.dispatch(openModal(ProjectWizardModal));

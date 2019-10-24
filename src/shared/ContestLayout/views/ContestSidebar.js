@@ -102,7 +102,7 @@ export default class ContestSidebar extends React.PureComponent {
                                 <Link
                                     className={bem.element('edit')}
                                     onClick={() => {
-                                        if (this.props.isPhone) {
+                                        if (dal.isLoggedOut()) {
                                             openLoginModal();
                                         } else {
                                             this.props.dispatch(openModal(ContestWizardModal, {

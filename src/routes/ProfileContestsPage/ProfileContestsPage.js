@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {openModal} from 'yii-steroids/actions/modal';
+import { connect } from 'react-redux';
+import { openModal } from 'yii-steroids/actions/modal';
 
-import {dal, html} from 'components';
+import { dal, html } from 'components';
 import ActionButtonBlock from 'shared/ActionButtonBlock';
 import ContestCard from 'shared/ContestCard';
 
 import './ProfileContestsPage.scss';
 import List from 'yii-steroids/ui/list/List';
 import ContestSchema from 'types/ContestSchema';
-import {ROUTE_PROJECTS_REDIRECT} from '../index';
+import { ROUTE_PROJECTS_REDIRECT } from '../index';
 import Link from 'yii-steroids/ui/nav/Link';
-import MessageModal from 'modals/MessageModal';
-import {isPhone} from 'yii-steroids/reducers/screen';
+import { isPhone } from 'yii-steroids/reducers/screen';
 import ContestWizardModal from 'modals/ContestWizardModal';
 import { ReduxModalContext } from 'shared/Layout/context';
 
@@ -48,8 +47,7 @@ export default class ProfileContestsPage extends React.PureComponent {
                                 title={__('New Contest')}
                                 iconClass={'Icon__invite-user_small'}
                                 onClick={() => {
-
-                                    if (this.props.isPhone) {
+                                    if (dal.isLoggedOut()) {
                                         openLoginModal();
                                     } else {
                                         this.props.dispatch(openModal(ContestWizardModal));

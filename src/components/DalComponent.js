@@ -154,6 +154,14 @@ export default class DalComponent {
         }
     }
 
+    isLoggedOut () {
+        return this.getCurrentLoginType() === LoggedInEnum.LOGGED_OUT;
+    }
+
+    isLoggedInByNoKeeper () {
+        return this.getCurrentLoginType() === LoggedInEnum.LOGGED_BY_NO_KEEPER;
+    }
+
     getCurrentLoginType () {
         return this.transport.noKeeper.loginType;
     }

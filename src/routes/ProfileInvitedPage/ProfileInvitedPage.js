@@ -13,7 +13,6 @@ import List from 'yii-steroids/ui/list/List';
 import UserSchema from 'types/UserSchema';
 import {ROUTE_PROJECTS_REDIRECT} from '../index';
 import Link from 'yii-steroids/ui/nav/Link';
-import MessageModal from '../../modals/MessageModal';
 import { isPhone } from 'yii-steroids/reducers/screen';
 import { ReduxModalContext } from 'shared/Layout/context';
 
@@ -48,8 +47,7 @@ export default class ProfileInvitedPage extends React.PureComponent {
                                 title={__('Invite New User')}
                                 iconClass={'Icon__invite-user_small'}
                                 onClick={() => {
-        
-                                    if (this.props.isPhone) {
+                                    if (dal.isLoggedOut()) {
                                         openLoginModal();
                                     } else {
                                         this.props.dispatch(openModal(InviteUserModal));

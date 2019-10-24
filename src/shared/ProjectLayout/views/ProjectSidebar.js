@@ -130,7 +130,7 @@ export default class ProjectSidebar extends React.PureComponent {
                                     <Button
                                         label={__('Choose as a Winner')}
                                         onClick={() => {
-                                            if (this.props.isPhone) {
+                                            if (dal.isLoggedOut()) {
                                                 openLoginModal();
                                             } else {
                                                 dal.chooseProjectAsContestWinner(this.props.project.uid, this.props.project.contest);
@@ -145,7 +145,8 @@ export default class ProjectSidebar extends React.PureComponent {
                                     <Button
                                         label={status === ProjectStatusEnum.VOTING ? __('Vote') : __('Contribute')}
                                         onClick={() => {
-                                            if (this.props.isPhone) {
+                                            console.log(dal, dal.isLoggedOut());
+                                            if (dal.isLoggedOut()) {
                                                 openLoginModal();
                                             } else {
                                                 window.scrollTo(0, 200);
@@ -161,7 +162,7 @@ export default class ProjectSidebar extends React.PureComponent {
                                 <Link
                                     className={bem.element('edit')}
                                     onClick={() => {
-                                        if (this.props.isPhone) {
+                                        if (dal.isLoggedOut()) {
                                             openLoginModal();
                                         } else {
                                             this.props.dispatch(openModal(ProjectWizardModal, {
