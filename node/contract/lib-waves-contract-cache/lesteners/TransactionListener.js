@@ -86,11 +86,16 @@ module.exports = class TransactionListener {
         if (lastTransactionId && !isLastFined && transactions.length > 0) {
             afterId = transactions[transactions.length - 1].id;
             transactions = transactions.concat(await this._fetch(lastTransactionId, afterId, 2));
-        }
+        };
+
+        const ignoredTransactions = (
+            process.env.IGNORE_TRANSACTION_IDS || ''
+        ).split(' ');
 
         return Promise.all(
             transactions
-                .filter(transaction => transaction.id !== 'y7FjzDvbSXDYMHSFpmfAvne3YEFN33csfLBWk7megd7')
+                // .filter(transaction => transaction.id !== 'y7FjzDvbSXDYMHSFpmfAvne3YEFN33csfLBWk7megd7')
+                .filter(transaction => ignoredTransactions.indexOf(transaction) !== -1)
                 .map(async transaction => {
                     let result = null;
                     try {
