@@ -1,0 +1,40 @@
+
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+
+.DropdownItem {
+    $root: &;
+
+    &__root {
+        &.opened {
+            #{$root}__item {
+                & > img {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+
+    &__item {
+        padding: 24px 16px;
+        padding-right: 24px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+
+        & > span {
+            font-size: 15px;
+            line-height: 24px;
+            color: #7D8199;
+        }
+        & > img {
+            cursor: pointer;
+        }
+    }
+
+    &__body {
+        padding: 16px;
+    }
+}
+

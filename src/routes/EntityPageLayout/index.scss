@@ -385,6 +385,10 @@ $mobile-breakpoint: 862px;
         }
     }
 
+    .DropdownItem__root {
+        display: none;
+    }
+
     @media screen and (max-width: $mqw-tablet) {
         &__heading-cover,
         &__heading-cover-secondary {
@@ -441,8 +445,32 @@ $mobile-breakpoint: 862px;
             flex-wrap: nowrap;
             justify-content: space-between;
             margin: 0;
+            margin-left: -18px;
 
             & > * {
+                margin: 0;
+            }
+        }
+        &__body-flex {
+            padding: 0;
+            border-top: 1px solid #E8ECF1;
+        }
+        &__main-body {
+            margin: 0;
+        }
+        &__side-body {
+            margin: 0;
+
+            & > :first-child {
+                border-radius: 0;
+            }
+            & > * {
+                margin: 0;
+                border-radius: 0;
+                border-top: 1px solid #E8ECF1;
+            }
+
+            & > :not(:last-child) {
                 margin: 0;
             }
         }

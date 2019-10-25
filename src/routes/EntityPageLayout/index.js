@@ -1,5 +1,7 @@
 import React from 'react';
 import { html } from 'components';
+import { connect } from 'react-redux';
+import { isPhone } from 'yii-steroids/reducers/screen';
 import SvgIcon from 'ui/global/SvgIcon';
 import coverAvatar from 'static/images/default/campaign_avt.png';
 import coverImg from 'static/images/default/campaign_cover.png';
@@ -19,6 +21,7 @@ import CampaignItem from './components/CampaignItem';
 import InfoBlock from './components/InfoBlock';
 import PageTeamMember from './components/PageTeamMember';
 import PageMainSocials from './components/PageMainSocials';
+import DropdownItem from './components/DropdownItem';
 
 import './index.scss';
 
@@ -85,12 +88,19 @@ export const DETAILS_TAB = 0;
 export const CAMPAIGN_TAB = 1;
 export const NEWS_TAB = 2;
 
+// Worst scenario
+@connect(
+    state => ({
+        isPhone: isPhone(state)
+    })
+)
 class EntityPageLayout extends React.Component {
     constructor(props) {
         super(props);
 
         this._mapTab = this._mapTab.bind(this);
         this._setTab = this._setTab.bind(this);
+        this._getSideBodyView = this._getSideBodyView.bind(this);
         this._getTeamMembers = this._getTeamMembers.bind(this);
         this._getCampaignView = this._getCampaignView.bind(this);
         this._getDetailsView = this._getDetailsView.bind(this);
@@ -132,7 +142,7 @@ class EntityPageLayout extends React.Component {
             { title: 'James May', desc: 'Node Developer' },
         ].map(item => (
             <PageTeamMember
-                isAdmin={true}
+                isAdmin={Math.random()}
                 title={item.title}
                 desc={item.desc}
             />
@@ -169,9 +179,11 @@ class EntityPageLayout extends React.Component {
             </>
         );
 
+        const Item = this.props.isPhone ? DropdownItem : InfoBlock;
+
         return (
             <div className={bem.element('details')}>
-                <InfoBlock title='ABOUT'>
+                <Item title='ABOUT'>
                     <div>
                         {text}
                         {text}
@@ -183,9 +195,47 @@ class EntityPageLayout extends React.Component {
                             <img src={campaignDetailsImgTwo}/>
                         </div>
                     </div>
-                </InfoBlock>
+                </Item>
             </div>
-        )
+        );
+    }
+
+    _getSideBodyView () {
+        const teamMembers = this._getTeamMembers();
+        const associatedPages = this._getTeamMembers();
+
+        if (this.props.isPhone && this.state.tabIndex === 2) {
+            return null;
+        }
+
+        const Item = this.props.isPhone ? DropdownItem : InfoBlock;
+
+        return (
+            <>
+                <Item title='INFO'>
+                    <PageMainInfo
+                        location='Moscow'
+                        foundDate='27.04.22'
+                    />
+                </Item>
+                <Item title='CONTACTS'>
+                    <PageMainSocials
+                        url='https://ventuary.com/profiles/immla/'
+                        links={{
+                            twitter: '#',
+                            facebook: '#',
+                            linkedin: '#',
+                        }}
+                    />
+                </Item>
+                <Item title='TEAM MEMBERS'>
+                    {teamMembers}
+                </Item>
+                <Item title='ASSOCIATED PAGES'>
+                    {associatedPages}
+                </Item>
+            </>
+        );
     }
 
     _getCurrentView () {
@@ -205,8 +255,6 @@ class EntityPageLayout extends React.Component {
 
     render () {
         const pageTabs = this.tabs.map(this._mapTab);
-        const teamMembers = this._getTeamMembers();
-        const associatedPages = this._getTeamMembers();
 
         return (
             <div className={bem.element('root')}>
@@ -255,28 +303,7 @@ class EntityPageLayout extends React.Component {
                             {this._getCurrentView()}
                         </div>
                         <div className={bem.element('side-body')}>
-                            <InfoBlock title='INFO'>
-                                <PageMainInfo
-                                    location='Moscow'
-                                    foundDate='27.04.22'
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='CONTACTS'>
-                                <PageMainSocials
-                                    url='https://ventuary.com/profiles/immla/'
-                                    links={{
-                                        twitter: '#',
-                                        facebook: '#',
-                                        linkedin: '#',
-                                    }}
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='TEAM MEMBERS'>
-                                {teamMembers}
-                            </InfoBlock>
-                            <InfoBlock title='ASSOCIATED PAGES'>
-                                {associatedPages}
-                            </InfoBlock>
+                            {this._getSideBodyView()}
                         </div>
                     </div>
                 </div>
