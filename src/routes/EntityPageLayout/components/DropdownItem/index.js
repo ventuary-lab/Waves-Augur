@@ -16,6 +16,8 @@ class DropdownItem extends React.Component {
         super(props);
 
         this._triggerDropdown = this._triggerDropdown.bind(this);
+        this._getPreviews = this._getPreviews.bind(this);
+        this._mapPreview = this._mapPreview.bind(this);
 
         this.state = {
             isOpened: false
@@ -30,9 +32,31 @@ class DropdownItem extends React.Component {
         return title[0].toUpperCase() + title.slice(1).toLowerCase();
     }
 
+    _mapPreview (item) {
+        return (
+            <div>
+                <img src={item}/>
+            </div>
+        );
+    }
+
+    _getPreviews () {
+        const { previews } = this.props;
+
+        if (!previews || !Array.isArray(previews)) {
+            return null;
+        }
+
+        return (
+            <div className={bem.element('previews-cont')}>
+                {previews.slice(0, 6).map(this._mapPreview)}
+            </div>
+        )
+    }
+
     render () {
         const { isOpened } = this.state;
-        const { children, title } = this.props;
+        const { children, title, mobileTitle } = this.props;
         const { _triggerDropdown, _adjustTitle } = this;
 
         const className = [
@@ -40,10 +64,14 @@ class DropdownItem extends React.Component {
             isOpened ? 'opened' : ''
         ].join(' ');
 
+
+        const computedTitle = mobileTitle ? mobileTitle : _adjustTitle(title);
+
         return (
             <div className={className}>
                 <div className={bem.element('item')} onClick={_triggerDropdown}>
-                    <span>{_adjustTitle(title)}</span>
+                    {!isOpened && this._getPreviews()}
+                    <span>{computedTitle}</span>
                     <img src={dropdownIcon} />
                 </div>
                 {isOpened && (
