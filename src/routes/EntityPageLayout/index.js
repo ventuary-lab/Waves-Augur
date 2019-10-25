@@ -212,29 +212,29 @@ class EntityPageLayout extends React.Component {
             <div className={bem.element('root')}>
                 <div className={bem.element('heading')}>
                     <BaseButton icon={warningIcon}>Report</BaseButton>
-                    <img src={coverImg}/>
+                    <img className={bem.element('heading-image')} src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
                     <div className={bem.element('heading-cover-secondary')}></div>
                 </div>
                 <div className={bem.element('head-cont')}>
                     <div className={bem.element('head-info')}>
-                        <div>
+                        <div className={bem.element('head-avatar')}>
                             <img src={coverAvatar} />
                         </div>
-                        <div>
+                        <div className={bem.element('head-details')}>
                             <span>Ventuary LAB</span>
                             <span>LIGA is a platform with tokenized sport events, 
                                 enabling you to deal with real-time rates and 
                                 to trade your personal predictions with others
                             </span>
-                            <div>
+                            <div className={bem.element('badges-flex')}>
                                 <EntityBadge icon={rocketIcon} title='1' desc='grans won'/>
                                 <EntityBadge icon={cupIcon} title='51' desc='cups won'/>
                                 <EntityBadge icon={starIcon} title='231' desc='reviews'/>
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div className={bem.element('contribute-btn')}>
                         <BaseButton className='green'>Contribute</BaseButton>
                     </div>
                 </div>
@@ -243,7 +243,7 @@ class EntityPageLayout extends React.Component {
                     <div className={bem.element('tabs-flex')}>
                         {pageTabs}
                     </div>
-                    <div>
+                    <div className={bem.element('action-buttons')}>
                         <BaseButton icon={bookmarkIcon} className='grey'>Save</BaseButton>
                         <BaseButton icon={shareIcon} className='grey'>Share</BaseButton>
                     </div>
