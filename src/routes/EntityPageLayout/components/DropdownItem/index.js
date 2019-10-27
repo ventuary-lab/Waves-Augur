@@ -51,7 +51,7 @@ class DropdownItem extends React.Component {
             <div className={bem.element('previews-cont')}>
                 {previews.slice(0, 6).map(this._mapPreview)}
             </div>
-        )
+        );
     }
 
     render () {

@@ -1,7 +1,7 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
 
-$dark-theme: false !default;
+$dark-theme: true !default;
 $text: #000000;
 $text_tr: rgba(0, 0, 0, 0.75);
 $text_lt: #7D8199;
@@ -38,36 +38,16 @@ $mobile-breakpoint: 862px;
         font-family: Roboto;
     }
 
-    &__base-button {
-        padding: 8px 32px;
-        display: flex;
-        flex-direction: row;
-        width: max-content;
-        border-radius: 20px;
-        // border: 1px solid grey;
-        max-height: 45px;
+    &__root {
+        background-color: $accent_cl;
+        color: $text_tr;
 
-        & > button {
-            border: none;
-            background: unset;
-            font-size: 16px;
-            line-height: 24px;
-            text-align: center;
+        & a {
+            color: $green_cl;
+            font-weight: 500;
         }
-
-        &.green {
-            background-color: $green_cl;
-
-            & > button {
-                color: #fff;
-            }
-        }
-        &.grey {
-            background-color: $page_bg;
-
-            // & > button {
-            //     color: #fff;
-            // }
+        & h4 {
+            color: $text_tr;
         }
     }
 
@@ -131,7 +111,7 @@ $mobile-breakpoint: 862px;
         & > img {
             min-width: 160px;
             min-height: 160px;
-            border: 8px solid white;
+            border: 8px solid $accent_cl;
             border-radius: 50%;
         }
     }
@@ -187,7 +167,7 @@ $mobile-breakpoint: 862px;
             width: 40px;
             height: 40px;
             margin: 2px 16px 10px;
-            background: #fff;
+            background: $widget_cl;
 
             & > :first-child {
                 position: relative;
@@ -223,7 +203,16 @@ $mobile-breakpoint: 862px;
         }
     }
 
+    &__tab-placeholder {
+        width: 100%;
+        height: 72px;
+        position: absolute;
+        background-color: $widget_cl;
+    }
+
     &__actions-tab {
+        position: relative;
+        background-color: $widget_cl;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -461,9 +450,6 @@ $mobile-breakpoint: 862px;
         &__side-body {
             margin: 0;
 
-            & > :first-child {
-                border-radius: 0;
-            }
             & > * {
                 margin: 0;
                 border-radius: 0;
@@ -472,6 +458,11 @@ $mobile-breakpoint: 862px;
 
             & > :not(:last-child) {
                 margin: 0;
+            }
+        }
+        &__details {
+            & > :first-child {
+                border-radius: 0;
             }
         }
     }

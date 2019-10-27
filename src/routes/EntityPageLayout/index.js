@@ -3,10 +3,12 @@ import { html } from 'components';
 import { connect } from 'react-redux';
 import { isPhone } from 'yii-steroids/reducers/screen';
 import SvgIcon from 'ui/global/SvgIcon';
+import BaseButton from 'ui/form/BaseButton';
 import coverAvatar from 'static/images/default/campaign_avt.png';
 import coverImg from 'static/images/default/campaign_cover.png';
 import campaignDetailsImgOne from 'static/images/default/campaign_details-1.png';
 import campaignDetailsImgTwo from 'static/images/default/campaign_details-2.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 
 const warningIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/warning.svg');
 const rocketIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/rocket.svg');
@@ -24,17 +26,6 @@ import PageMainSocials from './components/PageMainSocials';
 import DropdownItem from './components/DropdownItem';
 
 import './index.scss';
-
-function BaseButton ({ children, icon, className, ...restProps }) {
-    const classList = [bem.element('base-button'), className].filter(Boolean).join(' ');
-
-    return (
-        <div className={classList}>
-            {icon && <SvgIcon icon={icon} />}
-            <button {...restProps}>{children}</button>
-        </div>
-    );
-}
 
 function EntityBadge ({ title, desc, icon }) {
     return (
@@ -113,9 +104,16 @@ class EntityPageLayout extends React.Component {
             { label: 'News' }
         ];
 
+        this.teamMembers = [
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+        ];
+
         this.state = {
-            // theme: 'dark',
-            theme: 'light',
+            theme: 'dark',
+            // theme: 'light',
             tabIndex: 0
         };
     }
@@ -134,13 +132,8 @@ class EntityPageLayout extends React.Component {
         );
     }
 
-    _getTeamMembers () {
-        return [
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-        ].map(item => (
+    _getTeamMembers (members) {
+        return members.map(item => (
             <PageTeamMember
                 isAdmin={Math.random()}
                 title={item.title}
@@ -201,10 +194,10 @@ class EntityPageLayout extends React.Component {
     }
 
     _getSideBodyView () {
-        const teamMembers = this._getTeamMembers();
-        const associatedPages = this._getTeamMembers();
+        const teamMembers = this._getTeamMembers(this.teamMembers);
+        const associatedPages = this._getTeamMembers(this.teamMembers);
 
-        if (this.props.isPhone && this.state.tabIndex === 2) {
+        if (this.props.isPhone && this.state.tabIndex !== 0) {
             return null;
         }
 
@@ -228,10 +221,18 @@ class EntityPageLayout extends React.Component {
                         }}
                     />
                 </Item>
-                <Item title='TEAM MEMBERS'>
+                <Item 
+                    title='TEAM MEMBERS' 
+                    mobileTitle={`${teamMembers.length} team members`}
+                    previews={this.teamMembers.map(item => item.avatar)}
+                >
                     {teamMembers}
                 </Item>
-                <Item title='ASSOCIATED PAGES'>
+                <Item 
+                    title='ASSOCIATED PAGES'
+                    mobileTitle={`${associatedPages.length} associated pages`}
+                    previews={this.teamMembers.map(item => item.avatar)}
+                >
                     {associatedPages}
                 </Item>
             </>
@@ -287,6 +288,7 @@ class EntityPageLayout extends React.Component {
                     </div>
                 </div>
 
+                <div className={bem.element('tab-placeholder')}></div>
                 <div className={bem.element('actions-tab')}>
                     <div className={bem.element('tabs-flex')}>
                         {pageTabs}

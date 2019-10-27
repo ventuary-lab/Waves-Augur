@@ -6,7 +6,7 @@
 .InfoBlock {
     &__root {
         padding: 24px;
-        background-color: #fff;
+        // background-color: $accent_cl;
 
         & > :first-child {
             color: $text_lt;
