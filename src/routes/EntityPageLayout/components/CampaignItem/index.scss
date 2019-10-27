@@ -1,5 +1,6 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
+@import '../../index.scss';
 
 .CampaignItem {
     &__root {
@@ -83,6 +84,30 @@
             & > :first-child {
                 margin: auto 0;
                 font-family: Roboto;
+            }
+        }
+    }
+
+    @media screen and (max-width: $mqw-tablet) {
+        &__root {
+            display: block;
+            position: relative;
+        }
+        &__bookmark {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+        }
+        &__avatar {
+            float: left;
+            
+            & > img {
+                margin-right: 13px;
+            }
+        }
+        &__info {
+            & > :nth-child(2) {
+                margin-right: 36px;
             }
         }
     }

@@ -1,7 +1,7 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
 
-$dark-theme: false !default;
+$dark-theme: true !default;
 $text: #000000;
 $text_tr: rgba(0, 0, 0, 0.75);
 $text_lt: #7D8199;
@@ -30,42 +30,24 @@ $red_cl: #FF7171;
 
 $desktop-bp: 1200px;
 $grid-breakpoint: 1223px;
+$mobile-breakpoint: 862px;
+// $mqw-tablet  : 768px;
 
 .EntityPageLayout {
     & * {
         font-family: Roboto;
     }
 
-    &__base-button {
-        padding: 8px 32px;
-        display: flex;
-        flex-direction: row;
-        width: max-content;
-        border-radius: 20px;
-        // border: 1px solid grey;
-        max-height: 45px;
+    &__root {
+        background-color: $accent_cl;
+        color: $text_tr;
 
-        & > button {
-            border: none;
-            background: unset;
-            font-size: 16px;
-            line-height: 24px;
-            text-align: center;
+        & a {
+            color: $green_cl;
+            font-weight: 500;
         }
-
-        &.green {
-            background-color: $green_cl;
-
-            & > button {
-                color: #fff;
-            }
-        }
-        &.grey {
-            background-color: $page_bg;
-
-            // & > button {
-            //     color: #fff;
-            // }
+        & h4 {
+            color: $text_tr;
         }
     }
 
@@ -81,6 +63,8 @@ $grid-breakpoint: 1223px;
         }
         & > img {
             width: 100vw;
+            max-height: 250px;
+            object-fit: cover;
         }
     }
 
@@ -89,15 +73,20 @@ $grid-breakpoint: 1223px;
         position: absolute;
         width: 100%;
         bottom: 60px;
-        background: linear-gradient(180deg, transparent 0%, $widget_cl 100%);
+        background: linear-gradient(180deg, transparent 0%, $accent_cl 100%);
     }
     &__heading-cover-secondary {
         // background-color: #fff;
-        background-color: $widget_cl;
+        background-color: $accent_cl;
         position: absolute;
         bottom: 0;
         width: 100%;
         height: 61px;
+    }
+
+    &__contribute-btn {
+        margin-top: auto;
+        margin-bottom: 16px;
     }
 
     &__head-cont {
@@ -106,11 +95,24 @@ $grid-breakpoint: 1223px;
         flex-wrap: nowrap;
         max-width: 1200px;
         margin: auto;
+        background-color: $accent_cl;
 
-        // Contribute btn
-        & > :nth-child(3) {
-            margin-top: auto;
-            margin-bottom: 16px;
+        @media screen and (max-width: $grid-breakpoint) {
+            & > :nth-child(2) {
+                padding-right: 8px;
+            }
+        }
+    }
+
+    // Page avatar
+    &__head-avatar {
+        margin-left: 50px;
+
+        & > img {
+            min-width: 160px;
+            min-height: 160px;
+            border: 8px solid $accent_cl;
+            border-radius: 50%;
         }
     }
 
@@ -122,48 +124,36 @@ $grid-breakpoint: 1223px;
         position: relative;
         background: transparent;
         margin-top: -182px;
+    }
 
-        // Page avatar
+    // Page info
+    &__head-details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 48px;
+        justify-content: space-evenly;
+
         & > :first-child {
-            margin-left: 50px;
-
-            & > img {
-                min-width: 160px;
-                min-height: 160px;
-                border: 8px solid white;
-                border-radius: 50%;
-            }
+            font-weight: 500;
+            font-size: 32px;
+            line-height: 48px;
         }
 
-        // Page info
         & > :nth-child(2) {
-            display: flex;
-            flex-direction: column;
-            margin-left: 48px;
-            justify-content: space-evenly;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
 
-            & > :first-child {
-                font-weight: 500;
-                font-size: 32px;
-                line-height: 48px;
-            }
+    &__badges-flex {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding-top: 16px;
+        margin-left: -16px;
 
-            & > :nth-child(2) {
-                font-size: 16px;
-                line-height: 24px;
-            }
-
-            & > :nth-child(3) {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                padding-top: 16px;
-                margin-left: -16px;
-
-                & > * {
-                    margin-right: 20px;
-                }
-            }
+        & > * {
+            margin-right: 20px;
         }
     }
 
@@ -177,7 +167,7 @@ $grid-breakpoint: 1223px;
             width: 40px;
             height: 40px;
             margin: 2px 16px 10px;
-            background: #fff;
+            background: $widget_cl;
 
             & > :first-child {
                 position: relative;
@@ -213,23 +203,39 @@ $grid-breakpoint: 1223px;
         }
     }
 
+    &__tab-placeholder {
+        width: 100%;
+        height: 72px;
+        position: absolute;
+        background-color: $widget_cl;
+    }
+
     &__actions-tab {
+        position: relative;
+        background-color: $widget_cl;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: space-between;
         max-width: 1200px;
         margin: auto;
+    }
 
-        & > :nth-child(2) {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            padding: 8px 0;
 
-            & > * {
-                margin-left: 4px;
-            }
+    &__action-buttons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 8px 0;
+
+        & > * {
+            margin-left: 4px;
+        }
+    }
+
+    @media screen and (max-width: $grid-breakpoint) {
+        &__action-buttons {
+            padding-right: 8px;
         }
     }
 
@@ -347,6 +353,117 @@ $grid-breakpoint: 1223px;
     &__details {
         & > :first-child {
             border-radius: 10px;
+        }
+    }
+    
+    @media screen and (max-width: $mobile-breakpoint) {
+
+        &__head-cont,
+        &__head-info {
+            flex-direction: column;
+        }
+        &__head-cont {
+
+            & > :nth-child(2) {
+                padding: 8px;
+
+                & :first-child {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .DropdownItem__root {
+        display: none;
+    }
+
+    @media screen and (max-width: $mqw-tablet) {
+        &__heading-cover,
+        &__heading-cover-secondary {
+            display: none;
+        }
+        &__heading-image {
+            max-height: 104px;
+        }
+        &__head-info {
+            margin: 16px;
+            margin-top: -34px;
+            flex-direction: column;
+        }
+        &__head-cont {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        &__head-details {
+            margin-left: 0;
+
+            & > :nth-child(1) {
+                font-size: 28px;
+                line-height: 32px;
+            }
+            & > :nth-child(2) {
+                font-size: 15px;
+                line-height: 24px;
+            }
+            & > :nth-child(3) {
+                flex-wrap: nowrap;
+            }
+        }
+        &__head-avatar {
+            margin-left: 0;
+            margin-bottom: 0;
+            
+            & > img {
+                min-height: unset;
+                min-width: unset;
+                width: 80px;
+                height: 80px;
+                border: 4px solid #fff;
+            }
+        }
+        &__action-buttons {
+            display: none;
+        }
+        &__contribute-btn {
+            margin: 0;
+            padding: 16px;
+        }
+
+        &__badges-flex {
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            margin: 0;
+            margin-left: -18px;
+
+            & > * {
+                margin: 0;
+            }
+        }
+        &__body-flex {
+            padding: 0;
+            border-top: 1px solid #E8ECF1;
+        }
+        &__main-body {
+            margin: 0;
+        }
+        &__side-body {
+            margin: 0;
+
+            & > * {
+                margin: 0;
+                border-radius: 0;
+                border-top: 1px solid #E8ECF1;
+            }
+
+            & > :not(:last-child) {
+                margin: 0;
+            }
+        }
+        &__details {
+            & > :first-child {
+                border-radius: 0;
+            }
         }
     }
 }

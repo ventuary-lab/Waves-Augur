@@ -1,10 +1,14 @@
 import React from 'react';
 import { html } from 'components';
+import { connect } from 'react-redux';
+import { isPhone } from 'yii-steroids/reducers/screen';
 import SvgIcon from 'ui/global/SvgIcon';
+import BaseButton from 'ui/form/BaseButton';
 import coverAvatar from 'static/images/default/campaign_avt.png';
 import coverImg from 'static/images/default/campaign_cover.png';
 import campaignDetailsImgOne from 'static/images/default/campaign_details-1.png';
 import campaignDetailsImgTwo from 'static/images/default/campaign_details-2.png';
+import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 
 const warningIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/warning.svg');
 const rocketIcon = require('!svg-inline-loader?classPrefix!static/icons/campaign/rocket.svg');
@@ -19,19 +23,9 @@ import CampaignItem from './components/CampaignItem';
 import InfoBlock from './components/InfoBlock';
 import PageTeamMember from './components/PageTeamMember';
 import PageMainSocials from './components/PageMainSocials';
+import DropdownItem from './components/DropdownItem';
 
 import './index.scss';
-
-function BaseButton ({ children, icon, className, ...restProps }) {
-    const classList = [bem.element('base-button'), className].filter(Boolean).join(' ');
-
-    return (
-        <div className={classList}>
-            {icon && <SvgIcon icon={icon} />}
-            <button {...restProps}>{children}</button>
-        </div>
-    );
-}
 
 function EntityBadge ({ title, desc, icon }) {
     return (
@@ -85,12 +79,19 @@ export const DETAILS_TAB = 0;
 export const CAMPAIGN_TAB = 1;
 export const NEWS_TAB = 2;
 
+// Worst scenario
+@connect(
+    state => ({
+        isPhone: isPhone(state)
+    })
+)
 class EntityPageLayout extends React.Component {
     constructor(props) {
         super(props);
 
         this._mapTab = this._mapTab.bind(this);
         this._setTab = this._setTab.bind(this);
+        this._getSideBodyView = this._getSideBodyView.bind(this);
         this._getTeamMembers = this._getTeamMembers.bind(this);
         this._getCampaignView = this._getCampaignView.bind(this);
         this._getDetailsView = this._getDetailsView.bind(this);
@@ -103,9 +104,16 @@ class EntityPageLayout extends React.Component {
             { label: 'News' }
         ];
 
+        this.teamMembers = [
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+            { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
+        ];
+
         this.state = {
-            // theme: 'dark',
-            theme: 'light',
+            theme: 'dark',
+            // theme: 'light',
             tabIndex: 0
         };
     }
@@ -124,15 +132,10 @@ class EntityPageLayout extends React.Component {
         );
     }
 
-    _getTeamMembers () {
-        return [
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-            { title: 'James May', desc: 'Node Developer' },
-        ].map(item => (
+    _getTeamMembers (members) {
+        return members.map(item => (
             <PageTeamMember
-                isAdmin={true}
+                isAdmin={Math.random()}
                 title={item.title}
                 desc={item.desc}
             />
@@ -169,9 +172,11 @@ class EntityPageLayout extends React.Component {
             </>
         );
 
+        const Item = this.props.isPhone ? DropdownItem : InfoBlock;
+
         return (
             <div className={bem.element('details')}>
-                <InfoBlock title='ABOUT'>
+                <Item title='ABOUT'>
                     <div>
                         {text}
                         {text}
@@ -183,9 +188,55 @@ class EntityPageLayout extends React.Component {
                             <img src={campaignDetailsImgTwo}/>
                         </div>
                     </div>
-                </InfoBlock>
+                </Item>
             </div>
-        )
+        );
+    }
+
+    _getSideBodyView () {
+        const teamMembers = this._getTeamMembers(this.teamMembers);
+        const associatedPages = this._getTeamMembers(this.teamMembers);
+
+        if (this.props.isPhone && this.state.tabIndex !== 0) {
+            return null;
+        }
+
+        const Item = this.props.isPhone ? DropdownItem : InfoBlock;
+
+        return (
+            <>
+                <Item title='INFO'>
+                    <PageMainInfo
+                        location='Moscow'
+                        foundDate='27.04.22'
+                    />
+                </Item>
+                <Item title='CONTACTS'>
+                    <PageMainSocials
+                        url='https://ventuary.com/profiles/immla/'
+                        links={{
+                            twitter: '#',
+                            facebook: '#',
+                            linkedin: '#',
+                        }}
+                    />
+                </Item>
+                <Item 
+                    title='TEAM MEMBERS' 
+                    mobileTitle={`${teamMembers.length} team members`}
+                    previews={this.teamMembers.map(item => item.avatar)}
+                >
+                    {teamMembers}
+                </Item>
+                <Item 
+                    title='ASSOCIATED PAGES'
+                    mobileTitle={`${associatedPages.length} associated pages`}
+                    previews={this.teamMembers.map(item => item.avatar)}
+                >
+                    {associatedPages}
+                </Item>
+            </>
+        );
     }
 
     _getCurrentView () {
@@ -205,45 +256,44 @@ class EntityPageLayout extends React.Component {
 
     render () {
         const pageTabs = this.tabs.map(this._mapTab);
-        const teamMembers = this._getTeamMembers();
-        const associatedPages = this._getTeamMembers();
 
         return (
             <div className={bem.element('root')}>
                 <div className={bem.element('heading')}>
                     <BaseButton icon={warningIcon}>Report</BaseButton>
-                    <img src={coverImg}/>
+                    <img className={bem.element('heading-image')} src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
                     <div className={bem.element('heading-cover-secondary')}></div>
                 </div>
                 <div className={bem.element('head-cont')}>
                     <div className={bem.element('head-info')}>
-                        <div>
+                        <div className={bem.element('head-avatar')}>
                             <img src={coverAvatar} />
                         </div>
-                        <div>
+                        <div className={bem.element('head-details')}>
                             <span>Ventuary LAB</span>
                             <span>LIGA is a platform with tokenized sport events, 
                                 enabling you to deal with real-time rates and 
                                 to trade your personal predictions with others
                             </span>
-                            <div>
+                            <div className={bem.element('badges-flex')}>
                                 <EntityBadge icon={rocketIcon} title='1' desc='grans won'/>
                                 <EntityBadge icon={cupIcon} title='51' desc='cups won'/>
                                 <EntityBadge icon={starIcon} title='231' desc='reviews'/>
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div className={bem.element('contribute-btn')}>
                         <BaseButton className='green'>Contribute</BaseButton>
                     </div>
                 </div>
 
+                <div className={bem.element('tab-placeholder')}></div>
                 <div className={bem.element('actions-tab')}>
                     <div className={bem.element('tabs-flex')}>
                         {pageTabs}
                     </div>
-                    <div>
+                    <div className={bem.element('action-buttons')}>
                         <BaseButton icon={bookmarkIcon} className='grey'>Save</BaseButton>
                         <BaseButton icon={shareIcon} className='grey'>Share</BaseButton>
                     </div>
@@ -255,28 +305,7 @@ class EntityPageLayout extends React.Component {
                             {this._getCurrentView()}
                         </div>
                         <div className={bem.element('side-body')}>
-                            <InfoBlock title='INFO'>
-                                <PageMainInfo
-                                    location='Moscow'
-                                    foundDate='27.04.22'
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='CONTACTS'>
-                                <PageMainSocials
-                                    url='https://ventuary.com/profiles/immla/'
-                                    links={{
-                                        twitter: '#',
-                                        facebook: '#',
-                                        linkedin: '#',
-                                    }}
-                                />
-                            </InfoBlock>
-                            <InfoBlock title='TEAM MEMBERS'>
-                                {teamMembers}
-                            </InfoBlock>
-                            <InfoBlock title='ASSOCIATED PAGES'>
-                                {associatedPages}
-                            </InfoBlock>
+                            {this._getSideBodyView()}
                         </div>
                     </div>
                 </div>
