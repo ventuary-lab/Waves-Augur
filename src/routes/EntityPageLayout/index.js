@@ -111,11 +111,29 @@ class EntityPageLayout extends React.Component {
             { title: 'James May', desc: 'Node Developer', avatar: anonymousAvatarStub },
         ];
 
+        // <BaseButton icon={warningIcon} className={bem.element('report-btn')}>Report</BaseButton>
+        this.actionButtons = [
+            { icon: warningIcon, label: 'Report' },
+            { icon: bookmarkIcon, className: 'grey', label: 'Save' },
+            { icon: shareIcon, className: 'grey', label: 'Share' }
+        ];
+
         this.state = {
             theme: 'dark',
             // theme: 'light',
             tabIndex: 0
         };
+    }
+
+    _mapActionButtons (type) {
+        switch (type) {
+            case 'desktop':
+                return this.actionButtons.slice(1).map(({ label, ...restProps }) => (<BaseButton {...restProps}>{label}</BaseButton>));
+            case 'mobile':
+                return this.actionButtons.map(({ label, ...restProps }) => (<BaseButton {...restProps}></BaseButton>));
+        }
+
+        return null;
     }
 
     _setTab (tabIndex) {
@@ -260,7 +278,7 @@ class EntityPageLayout extends React.Component {
         return (
             <div className={bem.element('root')}>
                 <div className={bem.element('heading')}>
-                    <BaseButton icon={warningIcon}>Report</BaseButton>
+                    <BaseButton icon={warningIcon} className={bem.element('report-btn')}>Report</BaseButton>
                     <img className={bem.element('heading-image')} src={coverImg}/>
                     <div className={bem.element('heading-cover')}></div>
                     <div className={bem.element('heading-cover-secondary')}></div>
@@ -282,6 +300,9 @@ class EntityPageLayout extends React.Component {
                                 <EntityBadge icon={starIcon} title='231' desc='reviews'/>
                             </div>
                         </div>
+                        <div className={bem.element('mobile-action-buttons')}>
+                            {this._mapActionButtons('mobile')}
+                        </div>
                     </div>
                     <div className={bem.element('contribute-btn')}>
                         <BaseButton className='green'>Contribute</BaseButton>
@@ -294,8 +315,7 @@ class EntityPageLayout extends React.Component {
                         {pageTabs}
                     </div>
                     <div className={bem.element('action-buttons')}>
-                        <BaseButton icon={bookmarkIcon} className='grey'>Save</BaseButton>
-                        <BaseButton icon={shareIcon} className='grey'>Share</BaseButton>
+                        {this._mapActionButtons('desktop')}
                     </div>
                 </div>
 

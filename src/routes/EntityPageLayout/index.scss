@@ -1,7 +1,7 @@
 @import 'style/helpers/vars';
 @import 'style/helpers/mixins';
 
-$dark-theme: true !default;
+$dark-theme: false !default;
 $text: #000000;
 $text_tr: rgba(0, 0, 0, 0.75);
 $text_lt: #7D8199;
@@ -281,6 +281,7 @@ $mobile-breakpoint: 862px;
         border-radius: 10px;
         width: 808px;
         height: max-content;
+        margin-left: auto;
 
         & > :not(:last-child) {
             border-bottom: 1px solid $page_bg;
@@ -378,8 +379,18 @@ $mobile-breakpoint: 862px;
         display: none;
     }
 
+    &__report-btn {
+        z-index: 1;
+    }
+
+    &__mobile-action-buttons {
+        display: none;
+    }
+
     @media screen and (max-width: $mqw-tablet) {
         &__heading-cover,
+        &__report-btn,
+        &__action-buttons,
         &__heading-cover-secondary {
             display: none;
         }
@@ -390,6 +401,30 @@ $mobile-breakpoint: 862px;
             margin: 16px;
             margin-top: -34px;
             flex-direction: column;
+            position: relative;
+        }
+        &__mobile-action-buttons {
+            position: absolute;
+            right: 0;
+            top: 28px + 16px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+
+            & > button {
+                padding: 8px 15px;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+
+                margin-left: 4px;
+
+                & > span {
+                    position: relative;
+                    top: -4px;
+                    right: 0;
+                }
+            }
         }
         &__head-cont {
             flex-direction: column;
@@ -422,14 +457,10 @@ $mobile-breakpoint: 862px;
                 border: 4px solid #fff;
             }
         }
-        &__action-buttons {
-            display: none;
-        }
         &__contribute-btn {
             margin: 0;
             padding: 16px;
         }
-
         &__badges-flex {
             flex-wrap: nowrap;
             justify-content: space-between;
