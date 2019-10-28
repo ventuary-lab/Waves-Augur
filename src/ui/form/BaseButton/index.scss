@@ -20,6 +20,8 @@
         font-size: 16px;
         line-height: 24px;
         background: #4EFFA1;
+
+        outline: 0;
         cursor: pointer;
 
         & > button {
@@ -32,10 +34,7 @@
 
         &.green {
             background-color: $green_cl;
-
-            & > button {
-                color: #fff;
-            }
+            color: #fff;
         }
         &.grey {
             background-color: $page_bg;

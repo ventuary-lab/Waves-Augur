@@ -465,10 +465,23 @@ $mobile-breakpoint: 862px;
             flex-wrap: nowrap;
             justify-content: space-between;
             margin: 0;
-            margin-left: -18px;
 
             & > * {
                 margin: 0;
+            }
+        }
+        &__ent-badge {
+            & > :nth-child(1) {
+                display: none;
+            }
+            & > :nth-child(2) {
+                & > :nth-child(1) {
+                    color: $text;
+                    padding-bottom: 3px;
+                }
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 24px;
             }
         }
         &__body-flex {

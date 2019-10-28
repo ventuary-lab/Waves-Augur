@@ -113,7 +113,7 @@ class EntityPageLayout extends React.Component {
 
         // <BaseButton icon={warningIcon} className={bem.element('report-btn')}>Report</BaseButton>
         this.actionButtons = [
-            { icon: warningIcon, label: 'Report' },
+            { icon: warningIcon, className: 'grey', label: 'Report' },
             { icon: bookmarkIcon, className: 'grey', label: 'Save' },
             { icon: shareIcon, className: 'grey', label: 'Share' }
         ];
