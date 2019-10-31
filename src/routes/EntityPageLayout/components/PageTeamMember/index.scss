@@ -1,0 +1,45 @@
+@import 'style/helpers/vars';
+@import 'style/helpers/mixins';
+@import './../../index';
+
+.PageTeamMember {
+
+    &__root {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-top: 16px;
+    }
+
+    &__avatar {
+        & img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+    }
+
+    &__text {
+        margin-left: 16px;
+
+        & > :first-child {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            cursor: pointer;
+
+            & > :first-child {
+                color: #000;
+
+                & > :first-child {
+                    margin: 0;
+                    margin-right: 6px;
+                }
+            }
+
+            & > :nth-child(2) {
+                color: #0BC91F;
+            }
+        }
+    }
+}

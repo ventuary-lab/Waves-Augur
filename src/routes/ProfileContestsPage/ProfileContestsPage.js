@@ -15,6 +15,7 @@ import Link from 'yii-steroids/ui/nav/Link';
 import MessageModal from 'modals/MessageModal';
 import {isPhone} from 'yii-steroids/reducers/screen';
 import ContestWizardModal from 'modals/ContestWizardModal';
+import { ReduxModalContext } from 'shared/Layout/context';
 
 const bem = html.bem('ProfileContestsPage');
 
@@ -41,23 +42,22 @@ export default class ProfileContestsPage extends React.PureComponent {
         return (
             <div className={bem.block()}>
                 {this.props.isMe && (
-                    <ActionButtonBlock
-                        title={__('New Contest')}
-                        iconClass={'Icon__invite-user_small'}
-                        onClick={() => {
+                    <ReduxModalContext.Consumer>
+                        {({ openLoginModal }) => (
+                            <ActionButtonBlock
+                                title={__('New Contest')}
+                                iconClass={'Icon__invite-user_small'}
+                                onClick={() => {
 
-                            if (this.props.isPhone) {
-                                this.props.dispatch(openModal(MessageModal, {
-                                    icon: 'Icon__log-in-from-pc',
-                                    title: __('Log in from PC'),
-                                    color: 'success',
-                                    description: __('This functionality is currently only available in the desktop version of Ventuary DAO. Sorry for the inconvenience.'),
-                                }));
-                            } else {
-                                this.props.dispatch(openModal(ContestWizardModal));
-                            }
-                        }}
-                    />
+                                    if (this.props.isPhone) {
+                                        openLoginModal();
+                                    } else {
+                                        this.props.dispatch(openModal(ContestWizardModal));
+                                    }
+                                }}
+                            />
+                        )}
+                    </ReduxModalContext.Consumer>
                 ) || (
                     <Link
                         toRoute={ROUTE_PROJECTS_REDIRECT}

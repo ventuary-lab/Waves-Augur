@@ -3,10 +3,6 @@
 @import 'style/helpers/mixins';
 
 .TransactionApproveModal {
-    &__root {
-
-    }
-
     &__base-view {
         width: 100%;
         background: #fff;
@@ -15,6 +11,18 @@
         top: 50%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
+
+        &.loading {
+
+            & > :nth-child(2) {
+                opacity: .1;
+            }
+            & > :nth-child(3) {
+                position: absolute;
+                top: 150px;
+                transform: scale(1.5);
+            }
+        }
     }
 
     &__top-heading {
