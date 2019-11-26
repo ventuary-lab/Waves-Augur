@@ -1,7 +1,6 @@
 FROM node:12-alpine
 
-RUN apk add python python-dev py-pip vips-dev fftw-dev build-base --update \
-    --repository https://alpine.global.ssl.fastly.net/alpine/edge/community/
+RUN apk add vips-dev fftw-dev build-base --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/main/ --repository https://dl-3.alpinelinux.org/alpine/edge/testing
 
 RUN apk add --update nodejs yarn tzdata
 ENV TZ Europe/Moscow
