@@ -1,8 +1,8 @@
 FROM node:12-stretch-slim
 
-RUN apk add vips-dev fftw-dev build-base --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/main/ --repository https://dl-3.alpinelinux.org/alpine/edge/testing
+# RUN apk add vips-dev fftw-dev build-base --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/main/ --repository https://dl-3.alpinelinux.org/alpine/edge/testing
 
-RUN apk add --update nodejs yarn tzdata
+# RUN apk add --update nodejs yarn tzdata
 ENV TZ Europe/Moscow
 
 COPY package.json yarn.lock server-wrap.sh /app/
