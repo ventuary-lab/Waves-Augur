@@ -185,7 +185,8 @@
     "dev": "node webpack",
     "heroku-postbuild": "node webpack production",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
