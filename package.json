@@ -169,7 +169,7 @@
     "reselect": "^4.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "scryptsy": "^2.1.0",
-    "sharp": "^0.22.1",
+    "sharp": "^0.23.3",
     "styled-components": "^4.3.2",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-webpack-plugin": "^0.10.5",
@@ -185,7 +185,8 @@
     "dev": "node webpack",
     "heroku-postbuild": "node webpack production",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
