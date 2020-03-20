@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AssetIcon from 'ui/global/AssetIcon';
 
 import {html} from 'components';
 
@@ -23,10 +24,10 @@ export default class ProjectProgress extends React.PureComponent {
                 <div className={bem.element('progress')}>
                     <div className={bem.element('progress-info')}>
                         <span className={bem.element('current-waves')}>
-                            {this.props.positiveBalance || 0} 🔹
+                            {this.props.positiveBalance || 0} <AssetIcon/>
                         </span>
                         <span className={bem.element('against-waves')}>
-                            {this.props.negativeBalance || 0} 🔹 {__('against')}
+                            {this.props.negativeBalance || 0} <AssetIcon/> {__('against')}
                         </span>
                         <span className={bem.element('percent')}>
                             {percent}%

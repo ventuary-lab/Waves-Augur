@@ -13,7 +13,7 @@ export const StyledSvgIcon = styled.span`
 
         * {
             ${({ fillColor, strokeColor }) => `
-                fill: ${fillColor ? fillColor : 'grey' };
+                fill: ${fillColor ? fillColor : '' };
                 stroke: ${strokeColor ? strokeColor : '' };
             `}
         }

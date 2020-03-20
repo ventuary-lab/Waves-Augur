@@ -8,6 +8,7 @@ import Hint from 'shared/Hint';
 import projectAvatarStub from 'static/images/project-avatar-stub.png';
 import ContestStatusEnum from 'enums/ContestStatusEnum';
 import DalHelper from 'components/dal/DalHelper';
+import AssetIcon from 'ui/global/AssetIcon';
 
 import ContestSchema from 'types/ContestSchema';
 import './ContestSidebar.scss';
@@ -92,7 +93,7 @@ export default class ContestSidebar extends React.PureComponent {
                     <div className={bem.element('reward')}>
                         <span>{__('Reward')}</span>
                         <span>
-                            {this.props.contest.rewardWaves} 🔹
+                            {this.props.contest.rewardWaves} <AssetIcon/>
                         </span>
                     </div>
 

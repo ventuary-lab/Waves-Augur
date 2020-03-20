@@ -207,7 +207,7 @@ export default class ProfileSidebar extends React.PureComponent {
                             <div className={bem.element('balance')}>
                                 <span>{__('DAO Balance')}: </span>
                                 <span>
-                                    {internalBalance} 🔹
+                                    {internalBalance}
                                 </span>
                                 <Hint text='This is your funds on DAO dApp.  You can withdraw it on your  Waves Keeper account at any time.'/>
                             </div>

@@ -16,6 +16,7 @@ import './GrantForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
 import _get from 'lodash/get';
 import validate from 'shared/validate';
+import AssetIcon from 'ui/global/AssetIcon';
 
 const FORM_ID = 'GrantForm';
 
@@ -101,7 +102,7 @@ export default class GrantForm extends React.PureComponent {
                 {(this.state.tierHovered || this.state.tierValue > 0) && (
                     <div className={bem.element('percent-block')}>
                         <span className={bem.element('balance')}>
-                            {this.props.project.positiveBalance} 🔹
+                            {this.props.project.positiveBalance} <AssetIcon/>
                         </span>
                         <span className={bem.element('percent')}>
                             +{(this.state.tierHovered || this.state.tierValue) * 10}%

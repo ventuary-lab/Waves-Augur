@@ -18,6 +18,7 @@ import './DonateForm.scss';
 import ProjectSchema from 'types/ProjectSchema';
 import validate from 'shared/validate';
 import UserRole from '../../enums/UserRole';
+import AssetIcon from 'ui/global/AssetIcon';
 
 const FORM_ID = 'DonateForm';
 
@@ -129,7 +130,7 @@ export default class DonateForm extends React.PureComponent {
             <>
                 {(this.state.wavesHovered || this.state.wavesValue) && (
                     <span className={bem.element('value')}>
-                        {this.state.wavesHovered || this.state.wavesValue} 🔹
+                        {this.state.wavesHovered || this.state.wavesValue} <AssetIcon/>
                     </span>
                 )}
                 <div className={bem.element('direction')}>

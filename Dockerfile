@@ -1,4 +1,4 @@
-FROM node:12-stretch-slim
+FROM node:12-alpine
 
 # RUN apk add vips-dev fftw-dev build-base --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/main/ --repository https://dl-3.alpinelinux.org/alpine/edge/testing
 
