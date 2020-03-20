@@ -11,7 +11,7 @@ const _isArray = require('lodash/isArray');
 
 import LoggedInEnum from 'enums/LoggedInEnum';
 
-const neutrinoAssetId = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p'
+const neutrinoAssetId = 'DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p';
 
 const process400 = resp => resp.status === 400
     ? Promise.reject(Object.assign(new Error(), resp.data))
