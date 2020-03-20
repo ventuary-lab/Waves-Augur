@@ -154,5 +154,12 @@
     top: -2px;
     right: 103px;
     text-align: center;
+    width: 31px;
+
+    & > :nth-child(2) {
+      width: 20px;
+      height: 20px;
+      margin: 6px auto;
+    }
   }
 }

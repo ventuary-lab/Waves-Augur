@@ -1,16 +1,16 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {getFormValues, change} from 'redux-form';
-import {getUser} from 'yii-steroids/reducers/auth';
+import { getFormValues, change } from 'redux-form';
+import { getUser } from 'yii-steroids/reducers/auth';
 import _isFunction from 'lodash-es/isFunction';
 
 import TextField from 'yii-steroids/ui/form/TextField';
 import Button from 'yii-steroids/ui/form/Button';
 import Form from 'yii-steroids/ui/form/Form';
 
-import {dal, html} from 'components';
+import { dal, html } from 'components';
 import userAvatarStub from 'static/images/user-avatar-stub.png';
 import anonymousAvatarStub from 'static/images/anonymous-avatar-stub.jpeg';
 
@@ -26,14 +26,11 @@ const bem = html.bem('DonateForm');
 const POSITIVE_DIRECTION = 'positive';
 const NEGATIVE_DIRECTION = 'negative';
 
-@connect(
-    state => ({
-        formValues: getFormValues(FORM_ID)(state),
-        user: getUser(state),
-    })
-)
+@connect(state => ({
+    formValues: getFormValues(FORM_ID)(state),
+    user: getUser(state),
+}))
 export default class DonateForm extends React.PureComponent {
-
     static propTypes = {
         project: ProjectSchema,
         formValues: PropTypes.object,
@@ -55,9 +52,8 @@ export default class DonateForm extends React.PureComponent {
     }
 
     render() {
-        const avatarStub = this.props.user.role === UserRole.REGISTERED
-            ? userAvatarStub
-            : anonymousAvatarStub;
+        const avatarStub =
+            this.props.user.role === UserRole.REGISTERED ? userAvatarStub : anonymousAvatarStub;
 
         const isAnonReview = [UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role);
 
@@ -75,13 +71,8 @@ export default class DonateForm extends React.PureComponent {
                     <div className={bem.element('donate-control')}>
                         {this.renderDonateControl()}
                     </div>
-
                 </div>
-                <Form
-                    className={bem.element('form')}
-                    formId={FORM_ID}
-                    onSubmit={this._onSubmit}
-                >
+                <Form className={bem.element('form')} formId={FORM_ID} onSubmit={this._onSubmit}>
                     <div className={bem.element('text-field')}>
                         <TextField
                             attribute={'review'}
@@ -90,10 +81,7 @@ export default class DonateForm extends React.PureComponent {
                         />
                     </div>
                     <div className={bem.element('actions')}>
-                        <Button
-                            type='submit'
-                            label={__('Contribute')}
-                        />
+                        <Button type="submit" label={__('Contribute')} />
                     </div>
                 </Form>
             </div>
@@ -102,20 +90,19 @@ export default class DonateForm extends React.PureComponent {
 
     _onSubmit(values) {
         const isAnonReview = [UserRole.ANONYMOUS, UserRole.INVITED].includes(this.props.user.role);
-        const anonReviewText = this.state.directionValue === POSITIVE_DIRECTION
-            ? 'Anonymous donation...'
-            : 'Anonymous bet...';
+        const anonReviewText =
+            this.state.directionValue === POSITIVE_DIRECTION
+                ? 'Anonymous donation...'
+                : 'Anonymous bet...';
 
-        validate(values,[
-            !isAnonReview && ['review', 'required'],
-        ]);
+        validate(values, [!isAnonReview && ['review', 'required']]);
 
-        const amount = (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
-        return dal.donateProject(this.props.project.uid, amount, {
-            comment: isAnonReview
-                ? anonReviewText
-                : values.review,
-        })
+        const amount =
+            (this.state.directionValue === POSITIVE_DIRECTION ? 1 : -1) * this.state.wavesValue;
+        return dal
+            .donateProject(this.props.project.uid, amount, {
+                comment: isAnonReview ? anonReviewText : values.review,
+            })
             .then(() => {
                 this.props.dispatch(change(FORM_ID, 'review', ''));
 
@@ -130,7 +117,8 @@ export default class DonateForm extends React.PureComponent {
             <>
                 {(this.state.wavesHovered || this.state.wavesValue) && (
                     <span className={bem.element('value')}>
-                        {this.state.wavesHovered || this.state.wavesValue} <AssetIcon/>
+                        <span>{this.state.wavesHovered || this.state.wavesValue}</span>
+                        <AssetIcon />
                     </span>
                 )}
                 <div className={bem.element('direction')}>
@@ -145,7 +133,8 @@ export default class DonateForm extends React.PureComponent {
                             key={index}
                             onClick={() => {
                                 this.setState({
-                                    wavesValue: this.state.wavesValue === tier ? this._tiers[0] : tier,
+                                    wavesValue:
+                                        this.state.wavesValue === tier ? this._tiers[0] : tier,
                                 });
                             }}
                             onMouseOver={() => {
@@ -159,7 +148,7 @@ export default class DonateForm extends React.PureComponent {
                                 });
                             }}
                         >
-                            <div className={bem.element('count-item')}/>
+                            <div className={bem.element('count-item')} />
                         </div>
                     ))}
                 </div>
@@ -168,9 +157,11 @@ export default class DonateForm extends React.PureComponent {
                         className={bem.element('unlike', {
                             hovered: this.state.directionHovered,
                         })}
-                        onClick={() => this.setState({
-                            directionValue: NEGATIVE_DIRECTION,
-                        })}
+                        onClick={() =>
+                            this.setState({
+                                directionValue: NEGATIVE_DIRECTION,
+                            })
+                        }
                         onMouseOver={() => {
                             this.setState({
                                 directionHovered: NEGATIVE_DIRECTION,
@@ -182,14 +173,15 @@ export default class DonateForm extends React.PureComponent {
                             });
                         }}
                     >
-                        {this.state.directionValue === POSITIVE_DIRECTION && (
-                            <span className={'Icon Icon__unlike'}/>
-                        ) || (
+                        {(this.state.directionValue === POSITIVE_DIRECTION && (
+                            <span className={'Icon Icon__unlike'} />
+                        )) || (
                             <>
-                                {this.state.directionHovered === POSITIVE_DIRECTION
-                                    ? <span className={'Icon Icon__unlike_filled'}/>
-                                    : <span className={'Icon Icon__unlike_filled_red'}/>
-                                }
+                                {this.state.directionHovered === POSITIVE_DIRECTION ? (
+                                    <span className={'Icon Icon__unlike_filled'} />
+                                ) : (
+                                    <span className={'Icon Icon__unlike_filled_red'} />
+                                )}
                             </>
                         )}
                     </div>
@@ -197,9 +189,11 @@ export default class DonateForm extends React.PureComponent {
                         className={bem.element('like', {
                             hovered: this.state.directionHovered,
                         })}
-                        onClick={() => this.setState({
-                            directionValue: POSITIVE_DIRECTION,
-                        })}
+                        onClick={() =>
+                            this.setState({
+                                directionValue: POSITIVE_DIRECTION,
+                            })
+                        }
                         onMouseOver={() => {
                             this.setState({
                                 directionHovered: POSITIVE_DIRECTION,
@@ -211,16 +205,15 @@ export default class DonateForm extends React.PureComponent {
                             });
                         }}
                     >
-                        {this.state.directionValue === POSITIVE_DIRECTION && (
+                        {(this.state.directionValue === POSITIVE_DIRECTION && (
                             <>
-                                {this.state.directionHovered === NEGATIVE_DIRECTION
-                                    ? <span className={'Icon Icon__like_filled'}/>
-                                    : <span className={'Icon Icon__like_filled_green'}/>
-                                }
+                                {this.state.directionHovered === NEGATIVE_DIRECTION ? (
+                                    <span className={'Icon Icon__like_filled'} />
+                                ) : (
+                                    <span className={'Icon Icon__like_filled_green'} />
+                                )}
                             </>
-                        ) || (
-                            <span className={'Icon Icon__like'}/>
-                        )}
+                        )) || <span className={'Icon Icon__like'} />}
                     </div>
                 </div>
             </>
