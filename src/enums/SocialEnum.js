@@ -40,7 +40,7 @@ export default class SocialEnum extends Enum {
             [this.FACEBOOK]: /(www\.)?facebook\.com\//,
             [this.LINKEDIN]: /(www\.)?linkedin\.com\//,
             // [this.INSTAGRAM]: /(www\.)?instagram\.com\//,
-            [this.TELEGRAM]: /((www\.)?t\.me\/|(www\.)?tg\.me\/)/,
+            [this.TELEGRAM]: /((www\.)?t\.me\//,
             [this.REDDIT]: /(www\.)?reddit\.com\//,
             [this.WEBSITE]: /[a-z]+\:\/\//,
             //[this.VK]: /(www\.)?vk\.com\//,
